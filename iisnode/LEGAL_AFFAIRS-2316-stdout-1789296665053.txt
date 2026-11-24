@@ -1,0 +1,168 @@
+◇ injected env (4) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+📄 DB_SERVER from .env: 172.16.13.57
+📄 DB_PASSWORD from .env: 1
+ Final Config: { server: '172.16.13.57', database: 'law_project', user: 'sa' }
+🚀 الخادم يعمل على: http://localhost:\\.\pipe\783b6b5f-1d34-46a9-ad7c-321055c40e18
+📊 قاعدة البيانات: law_project
+✅ الاتصال بقاعدة البيانات ناجح!
+✅ تم التأكد من جدول الأرشيف.
+✅ تم التأكد من جدول المحامين.
+✅ تم التأكد من جدول التصنيفات الفرعية.
+✅ تم التأكد من جدول إعدادات النظام.
+✅ تم التأكد من جدول سجل التتبعات وتحديث تصنيف Category بالكامل.
+ℹ️ تم تجاوز اليوزر IT — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر admin — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر CEO — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر sessions — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر reports — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+✅ تم التأكد من نظام صلاحيات التحقيقات (Users/Roles/Modules).
+✅ تم التأكد من جدول إشعارات التحقيقات.
+✅ تم التأكد من عمود أقوال الموظفين.
+✅ تم التأكد من عمود LitigationLevelId في جدول Sessions.
+✅ تم التأكد من عمود SessionCaseNumber في جدول Sessions.
+✅ تم التأكد من عمود ClaimAmount في جدول Cases.
+✅ تم التأكد من عمود ClaimAmount في جدول LitigationLevels.
+✅ تم التأكد من عمود ClaimAmount في جدول Sessions.
+✅ تم التأكد من عمود LawsuitExpenses (قيمة الحكم) في جدول Sessions.
+✅ تم التأكد من عمود CaseExpenses (مصاريف الدعوة) في جدول Cases.
+✅ تم التأكد من عمود Subject في جدول LitigationLevels.
+✅ تم التأكد من عمود RequestedByOpponent في جدول LitigationLevels.
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+✅ تم التأكد من عمود Plaintiff في جدول LitigationLevels.
+✅ تم التأكد من عمود Defendant في جدول LitigationLevels.
+✅ تم التأكد من عمود ReceiptDate في جدول Investigations.
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2560, fromCompany: 2416, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2560, fromCompany: 2416, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم إغلاق جلسات الدرجات initial للقضية 3608 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 23541 للقضية 4560/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23541
+✅ تم تحديث بيانات القضية 4560/2026
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+🗑️ حذف القضية رقم 123000/2026 (ID: 3608)
+✅ تم إنشاء القضية برقم ID: 3610
+✅ تم إضافة أطراف القضية
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2560, fromCompany: 2416, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2560, fromCompany: 2416, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم إغلاق جلسات الدرجات initial للقضية 3610 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2917 },
+  appeal: { total: 2561, fromCompany: 2417, fromOpponent: 144 },
+  cassation: { total: 279, fromCompany: 261, fromOpponent: 18 }
+}
+🗑️ حذف القضية رقم 0000/2026 (ID: 3610)

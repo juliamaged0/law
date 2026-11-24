@@ -1,0 +1,2670 @@
+◇ injected env (4) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+📄 DB_SERVER from .env: 172.16.13.57
+📄 DB_PASSWORD from .env: 1
+ Final Config: { server: '172.16.13.57', database: 'law_project', user: 'sa' }
+🚀 الخادم يعمل على: http://localhost:\\.\pipe\2bab0f94-0f17-4f9a-b578-98a1b23060d7
+🌐 افتح الصفحات من رابط الخادم (مثال: http://localhost:\\.\pipe\2bab0f94-0f17-4f9a-b578-98a1b23060d7/litigation-level.html) وليس كملف مباشر
+📊 قاعدة البيانات: law_project
+✅ الاتصال بقاعدة البيانات ناجح!
+✅ تم التأكد من جدول الأرشيف.
+✅ تم التأكد من جدول المحامين.
+✅ تم التأكد من جدول التصنيفات الفرعية.
+✅ تم التأكد من جدول إعدادات النظام.
+✅ تم التأكد من جدول سجل التتبعات وتحديث تصنيف Category بالكامل.
+ℹ️ تم تجاوز اليوزر IT — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر admin — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر CEO — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر sessions — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر reports — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+✅ تم التأكد من نظام صلاحيات التحقيقات (Users/Roles/Modules).
+✅ تم التأكد من جدول إشعارات التحقيقات.
+✅ تم التأكد من عمود أقوال الموظفين.
+✅ تم التأكد من عمود LitigationLevelId في جدول Sessions.
+✅ تم التأكد من عمود SessionCaseNumber في جدول Sessions.
+✅ تم التأكد من عمود ClaimAmount في جدول Cases.
+✅ تم التأكد من عمود ClaimAmount في جدول LitigationLevels.
+✅ تم التأكد من عمود ClaimAmount في جدول Sessions.
+✅ تم التأكد من عمود LawsuitExpenses (قيمة الحكم) في جدول Sessions.
+✅ تم التأكد من عمود CaseExpenses (مصاريف الدعوة) في جدول Cases.
+✅ تم التأكد من عمود Subject في جدول LitigationLevels.
+✅ تم التأكد من عمود RequestedByOpponent في جدول LitigationLevels.
+✅ تم التأكد من عمود Plaintiff في جدول LitigationLevels.
+✅ تم التأكد من عمود Defendant في جدول LitigationLevels.
+✅ تم التأكد من عمود ReceiptDate في جدول Investigations.
+✅ تم التأكد من اتساع عمود Plaintiff في جدول LitigationLevels.
+✅ تم التأكد من اتساع عمود Defendant في جدول LitigationLevels.
+✅ تم التأكد من اتساع عمود Plaintiff في جدول Cases.
+✅ تم التأكد من اتساع عمود Defendant في جدول Cases.
+🔍 جلب قضية برقم ID: 2426
+🔍 جلب قضية برقم ID: 2426
+✏️ تحديث القضية (ID: 2426 ): {
+  caseNumber: '2460/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'العلاوات',
+  courtName: 'استئناف اسكندرية',
+  circuitName: ' 40',
+  opponent: 'ايمن عرفه شتا السمان واخرين22',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '593/2026',
+  sessionDate: '2026-10-20',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '1 مدنى',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2949, TrackingCode=593/2026
+✅ تم تحديث درجة التقاضي 89320
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '594/2026',
+  sessionDate: '2026-10-20',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '1 مدنى',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2951, TrackingCode=594/2026
+✅ تم تحديث درجة التقاضي 89317
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1245/2026',
+  sessionDate: '2026-09-28',
+  sessionTime: undefined,
+  stage: 'إشكال في التنفيذ',
+  court: 'تنفيذ',
+  circuit: '1',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2178, TrackingCode=1245/2026
+✅ تم تحديث درجة التقاضي 92874
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '5936/82 ق',
+  sessionDate: '2026-11-19',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '47',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3081, TrackingCode=5936/82 ق
+✅ تم تحديث درجة التقاضي 89547
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '4075/2026',
+  sessionDate: '2026-10-25',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: ' 52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3567
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '4156/2026',
+  sessionDate: '2026-10-13',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: ' 42',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3649
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3626/2026',
+  sessionDate: '2026-11-11',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3532
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 23623 للقضية 3272/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23623
+✅ تم تحديث بيانات القضية 3272/2026
+📝 إضافة جلسة جديدة: {
+  caseNumber: '162/82 ق',
+  sessionDate: '2026-11-14',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '48',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2221, TrackingCode=162/82 ق
+✅ تم تحديث درجة التقاضي 87880
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '541/82 ق',
+  sessionDate: '2026-09-29',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '42',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2867, TrackingCode=541/82 ق
+✅ تم تحديث درجة التقاضي 87992
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '103/82 ق',
+  sessionDate: '2026-10-27',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '46',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=1954, TrackingCode=103/82 ق
+✅ تم تحديث درجة التقاضي 87900
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '385/2025',
+  sessionDate: '2026-09-22',
+  sessionTime: undefined,
+  stage: 'first_instance',
+  court: 'باب شرق',
+  circuit: '40 ',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2949, TrackingCode=385/2025
+✅ تم تحديث درجة التقاضي 92187
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+⚖️ إعادة حساب نتيجة القضية 2178: لا توجد جلسات محسومة، تم مسح Agginst
+📝 تحديث الجلسة 14118 للقضية 1575/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14118
+✅ تم تحديث بيانات القضية 1575/2025
+⚠️ تم تعليق القضية 1575/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2968: Agginst = الخصم (آخر جلسة محسومة بتاريخ Tue May 12 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 14347 للقضية 1575/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14347
+⚠️ تم تعليق القضية 1575/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2968: Agginst = الخصم (آخر جلسة محسومة بتاريخ Tue May 12 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 22841 للقضية 714/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22841
+⚠️ تم تعليق القضية 714/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2758: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sun Aug 02 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+🔍 جلب قضية برقم ID: 2758
+🔍 جلب قضية برقم ID: 2758
+🔍 جلب قضية برقم ID: 2758
+✏️ تحديث القضية (ID: 2758 ): {
+  caseNumber: '714/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 77-78-16 لسنة 2017',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: ' 52',
+  opponent: 'شريف السيد احمد طايل',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🔍 جلب قضية برقم ID: 2508
+🔍 جلب قضية برقم ID: 2508
+✏️ تحديث القضية (ID: 2508 ): {
+  caseNumber: '3031/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 77-78-16 لسنة 2017',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: ' 52',
+  opponent: 'منير لبيب فرج لويس',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📝 تحديث الجلسة 22583 للقضية 3031/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22583
+✅ تم تحديث بيانات القضية 3031/2025
+⚠️ تم تعليق القضية 3031/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2508: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Aug 03 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 22583 للقضية 3031/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22583
+⚠️ تم تعليق القضية 3031/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2508: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Aug 03 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 22583 للقضية 3031/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22583
+✅ تم تحديث بيانات القضية 3031/2025
+✅ تم تحديث بيانات درجة التقاضي 88110 لمطابقة تعديل الجلسة
+📝 تحديث الجلسة 12867 للقضية 3031/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 12867
+⚠️ تم تعليق القضية 3031/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2508: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Aug 03 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+🔍 جلب قضية برقم ID: 2753
+🔍 جلب قضية برقم ID: 2753
+✏️ تحديث القضية (ID: 2753 ): {
+  caseNumber: '516/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'العلاوات',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: ' 52',
+  opponent: 'زكية محمد محمد سرحان (ع.2018',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2876, fromCompany: 80, fromOpponent: 2796 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 317, fromCompany: 299, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2876, fromCompany: 80, fromOpponent: 2796 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 317, fromCompany: 299, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 2753 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial, appeal للقضية 2753 بسبب إضافة درجة cassation
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2875, fromCompany: 80, fromOpponent: 2795 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 318, fromCompany: 300, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2875, fromCompany: 80, fromOpponent: 2795 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 318, fromCompany: 300, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2875, fromCompany: 80, fromOpponent: 2795 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 318, fromCompany: 300, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2875, fromCompany: 80, fromOpponent: 2795 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 318, fromCompany: 300, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 2256 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial, appeal للقضية 2256 بسبب إضافة درجة cassation
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2874, fromCompany: 80, fromOpponent: 2794 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 319, fromCompany: 301, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2874, fromCompany: 80, fromOpponent: 2794 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 319, fromCompany: 301, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2874, fromCompany: 80, fromOpponent: 2794 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 319, fromCompany: 301, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2874, fromCompany: 80, fromOpponent: 2794 },
+  appeal: { total: 2616, fromCompany: 2461, fromOpponent: 155 },
+  cassation: { total: 319, fromCompany: 301, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث درجة التقاضي: UPDATE LitigationLevels SET TrackingCode = @p0, StageType = @p1, StageNumber = @p2, CourtName = @p3, [الدائرة] = @p4, Subject = @p5, RequestedBy = @p6, Plaintiff = @p7, Defendant = @p8, LaunchDate = @p9, [Status] = @p10, Notes = @p11, UpdatedAt = GETDATE() WHERE Id = @p12 [
+  '460/82 ق',
+  'appeal',
+  '460/82 ق',
+  'استئناف اسكندرية',
+  '41',
+  'استئناف الحكم الصادر في الدعوي رقم 2431/2025 عمالية ',
+  'الخصم',
+  'محمد ابراهيم جابر و اخرين 8 (علاوات2020)',
+  'شركة الصرف الصحى بالأسكندرية',
+  '2026-09-24',
+  'open',
+  'استئناف الحكم الصادر في الدعوي رقم 2431/2025 بشان العلاوات ',
+  '88021'
+]
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2874, fromCompany: 80, fromOpponent: 2794 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 319, fromCompany: 301, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2874, fromCompany: 80, fromOpponent: 2794 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 319, fromCompany: 301, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2874, fromCompany: 80, fromOpponent: 2794 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 319, fromCompany: 301, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2874, fromCompany: 80, fromOpponent: 2794 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 319, fromCompany: 301, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 2367 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial, appeal للقضية 2367 بسبب إضافة درجة cassation
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2873, fromCompany: 80, fromOpponent: 2793 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 320, fromCompany: 302, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2873, fromCompany: 80, fromOpponent: 2793 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 320, fromCompany: 302, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2873, fromCompany: 80, fromOpponent: 2793 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 320, fromCompany: 302, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2873, fromCompany: 80, fromOpponent: 2793 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 320, fromCompany: 302, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 2258 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial, appeal للقضية 2258 بسبب إضافة درجة cassation
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2872, fromCompany: 80, fromOpponent: 2792 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 321, fromCompany: 303, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2872, fromCompany: 80, fromOpponent: 2792 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 321, fromCompany: 303, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2872, fromCompany: 80, fromOpponent: 2792 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 321, fromCompany: 303, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2872, fromCompany: 80, fromOpponent: 2792 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 321, fromCompany: 303, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 2917 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial, appeal للقضية 2917 بسبب إضافة درجة cassation
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2871, fromCompany: 80, fromOpponent: 2791 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 322, fromCompany: 304, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2871, fromCompany: 80, fromOpponent: 2791 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 322, fromCompany: 304, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2871, fromCompany: 80, fromOpponent: 2791 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 322, fromCompany: 304, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2871, fromCompany: 80, fromOpponent: 2791 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 322, fromCompany: 304, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 2937 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial, appeal للقضية 2937 بسبب إضافة درجة cassation
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2870, fromCompany: 80, fromOpponent: 2790 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 323, fromCompany: 305, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2870, fromCompany: 80, fromOpponent: 2790 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 323, fromCompany: 305, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2870, fromCompany: 80, fromOpponent: 2790 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 323, fromCompany: 305, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2870, fromCompany: 80, fromOpponent: 2790 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 323, fromCompany: 305, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 2382 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial, appeal للقضية 2382 بسبب إضافة درجة cassation
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2869, fromCompany: 80, fromOpponent: 2789 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2869, fromCompany: 80, fromOpponent: 2789 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2733/81 ق',
+  sessionDate: '2026-08-30',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '64 ',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2207, TrackingCode=2733/81 ق
+✅ تم تحديث درجة التقاضي 87755
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3523/2026',
+  sessionDate: '2026-10-19',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3561
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1300/82 ق',
+  sessionDate: '2026-11-12',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '40 ',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2703, TrackingCode=1300/82 ق
+✅ تم تحديث درجة التقاضي 88227
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3693/2026',
+  sessionDate: '2026-10-01',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: ' 42',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3590
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1768/82 ق',
+  sessionDate: '2026-10-26',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '64 ',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2944, TrackingCode=1768/82 ق
+✅ تم تحديث درجة التقاضي 89282
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 23724 للقضية 3619/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23724
+✅ تم تحديث بيانات القضية 3619/2026
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2568/82 ق',
+  sessionDate: '2026-09-15',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '27 عمال',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2773, TrackingCode=2568/82 ق
+✅ تم تحديث درجة التقاضي 89452
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2568/82 ق',
+  sessionDate: '2026-11-11',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '27 عمال',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2773, TrackingCode=2568/82 ق
+✅ تم تحديث درجة التقاضي 89452
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 22534 للقضية 2271/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22534
+⚠️ تم تعليق القضية 2271/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2327: Agginst = الخصم (آخر جلسة محسومة بتاريخ Thu Jun 11 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1533/82 ق',
+  sessionDate: '2026-11-04',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '50',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2804, TrackingCode=1533/82 ق
+✅ تم تحديث درجة التقاضي 88232
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3541/2026',
+  sessionDate: '2026-10-19',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: ' 52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3596
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1843//2025',
+  sessionDate: '2026-09-30',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3020
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3947*/2026',
+  sessionDate: '2026-10-18',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3513
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3809/2026',
+  sessionDate: '2026-10-19',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3564
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '65/2026',
+  sessionDate: '2026-09-30',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3043
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 14971 للقضية 3152/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14971
+✅ تم تحديث بيانات القضية 3152/2026
+✅ تم تحديث بيانات درجة التقاضي 92678 لمطابقة تعديل الجلسة
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3152/2026',
+  sessionDate: '2026-09-19',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3450
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14119 للقضية 1055/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14119
+⚠️ تم تعليق القضية 1055/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2861: Agginst = الخصم (آخر جلسة محسومة بتاريخ Tue Apr 28 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3152/2026',
+  sessionDate: '2026-10-24',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3450
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '291/2026',
+  sessionDate: '2026-10-15',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3050
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3080/2026',
+  sessionDate: '2026-10-11',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3412
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3103/2026',
+  sessionDate: '2026-09-19',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3426
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3103/2026',
+  sessionDate: '2026-10-24',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3426
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '4058/2026',
+  sessionDate: '2026-10-10',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: ' 52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3547
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '4058/2026',
+  sessionDate: '2026-09-19',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: ' 52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3547
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2838/82 ق',
+  sessionDate: '2026-11-18',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '70',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3203, TrackingCode=2838/82 ق
+✅ تم تحديث درجة التقاضي 89480
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '578/82 ق',
+  sessionDate: '2026-11-14',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2592, TrackingCode=578/82 ق
+✅ تم تحديث درجة التقاضي 88043
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2943/2026',
+  sessionDate: '2026-10-11',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3388
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+🔍 جلب قضية برقم ID: 2600
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2869, fromCompany: 80, fromOpponent: 2789 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2869, fromCompany: 80, fromOpponent: 2789 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3309/2026',
+  sessionDate: '2026-11-05',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3453
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2826/82 ق',
+  sessionDate: '2026-10-20',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '48',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3212, TrackingCode=2826/82 ق
+✅ تم تحديث درجة التقاضي 89501
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3485/2026',
+  sessionDate: '2026-11-03',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3459
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 22814 للقضية 29/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22814
+⚠️ تم تعليق القضية 29/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2547: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Jun 15 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+🔍 جلب قضية برقم ID: 2547
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2648/82 ق',
+  sessionDate: '2026-11-18',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '41',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3241, TrackingCode=2648/82 ق
+✅ تم تحديث درجة التقاضي 89509
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+✏️ تحديث القضية (ID: 2547 ): {
+  caseNumber: '29/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 77-78-16 لسنة 2017',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: ' 52',
+  opponent: 'شركة الصرف الصحى بالأسكندرية',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '986/82 ق',
+  sessionDate: '2026-10-20',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '47',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2673, TrackingCode=986/82 ق
+✅ تم تحديث درجة التقاضي 88115
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+🔍 جلب قضية برقم ID: 2899
+⚖️ إعادة حساب نتيجة القضية 2673: لا توجد جلسات محسومة، تم مسح Agginst
+✏️ تحديث القضية (ID: 2899 ): {
+  caseNumber: '1274/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'العلاوات',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'ياسر واصف السيد صبح واخرين 25 (ع.2018',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '122/82 ق',
+  sessionDate: '2026-09-19',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2336, TrackingCode=122/82 ق
+✅ تم تحديث درجة التقاضي 87937
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '122/82 ق',
+  sessionDate: '2026-10-19',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+📌 القضية 122/82 ق غير موجودة، سيتم إنشاؤها
+✅ تم إنشاء قضية جديدة برقم ID: 3670
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 13186 للقضية 337/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 13186
+⚠️ تم تعليق القضية 337/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2725: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sat Feb 28 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+🔍 جلب قضية برقم ID: 2725
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2330/82 ق',
+  sessionDate: '2026-09-08',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '44',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3094, TrackingCode=2330/82 ق
+✅ تم تحديث درجة التقاضي 89357
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+✏️ تحديث القضية (ID: 2725 ): {
+  caseNumber: '337/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'العلاوات',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: ' 52',
+  opponent: 'شعبان رمضان سعدى محمد واخرين25(ع.2020',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2825/82 ق',
+  sessionDate: '2026-11-15',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '47',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3141, TrackingCode=2825/82 ق
+✅ تم تحديث درجة التقاضي 89497
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1524/82 ق',
+  sessionDate: '2026-09-22',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '70',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2880, TrackingCode=1524/82 ق
+✅ تم تحديث درجة التقاضي 88239
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 23351 للقضية 2072/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23351
+✅ تم تحديث بيانات القضية 2072/2025
+✅ تم تحديث بيانات درجة التقاضي 88165 لمطابقة تعديل الجلسة
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 23056 للقضية 1992/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23056
+✅ تم تحديث بيانات القضية 1992/2025
+✅ تم تحديث بيانات درجة التقاضي 87794 لمطابقة تعديل الجلسة
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 23328 للقضية 388//2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23328
+✅ تم تحديث بيانات القضية 388//2025
+✅ تم تحديث بيانات درجة التقاضي 88173 لمطابقة تعديل الجلسة
+📝 إضافة جلسة جديدة: {
+  caseNumber: '307/82 ق',
+  sessionDate: '2026-10-29',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '46',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2428, TrackingCode=307/82 ق
+✅ تم تحديث درجة التقاضي 87932
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3070/2026',
+  sessionDate: '2026-10-12',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3418
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1625/2026',
+  sessionDate: '2026-11-18',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3268
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '4177/2026',
+  sessionDate: '2026-12-02',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3655
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1503/82 ق',
+  sessionDate: '2026-10-18',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2872, TrackingCode=1503/82 ق
+✅ تم تحديث درجة التقاضي 88248
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '4099/2026',
+  sessionDate: '2026-10-21',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: ' 42',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3653
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '4077/2026',
+  sessionDate: '2026-11-02',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: ' 42',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3577
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3789/2026',
+  sessionDate: '2026-11-17',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3522
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1296/82 ق',
+  sessionDate: '2026-10-29',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '46',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2695, TrackingCode=1296/82 ق
+✅ تم تحديث درجة التقاضي 88225
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3250/2026',
+  sessionDate: '2026-10-03',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3452
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3539/2026',
+  sessionDate: '2026-11-03',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3509
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1293/82 ق',
+  sessionDate: '2026-10-07',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '49 ',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2813, TrackingCode=1293/82 ق
+✅ تم تحديث درجة التقاضي 88211
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1827/82 ق',
+  sessionDate: '2026-10-04',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '44',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2943, TrackingCode=1827/82 ق
+✅ تم تحديث درجة التقاضي 89294
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3512/2026',
+  sessionDate: '2026-11-03',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3480
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3261/2026',
+  sessionDate: '2026-09-27',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3451
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+⚖️ إعادة حساب نتيجة القضية 3451: لا توجد جلسات محسومة، تم مسح Agginst
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3261/2026',
+  sessionDate: '2026-11-03',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3451
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14750 للقضية 2444/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14750
+⚠️ تم تعليق القضية 2444/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3348: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Jul 27 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2870, fromCompany: 81, fromOpponent: 2789 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2870, fromCompany: 81, fromOpponent: 2789 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3502/2026',
+  sessionDate: '2026-11-12',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3465
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2870, fromCompany: 81, fromOpponent: 2789 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2870, fromCompany: 81, fromOpponent: 2789 },
+  appeal: { total: 2616, fromCompany: 2460, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '457/2026',
+  sessionDate: '2026-10-27',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '18',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3049
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3351/2026',
+  sessionDate: '2026-10-12',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '52',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3464
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+✅ تم تحديث CurrentStage والبيانات للقضية 3348 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3348 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2869, fromCompany: 81, fromOpponent: 2788 },
+  appeal: { total: 2617, fromCompany: 2461, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2869, fromCompany: 81, fromOpponent: 2788 },
+  appeal: { total: 2617, fromCompany: 2461, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2828/82 ق',
+  sessionDate: '2026-11-04',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '49',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3017, TrackingCode=2828/82 ق
+✅ تم تحديث درجة التقاضي 89498
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2827/82 ق',
+  sessionDate: '2026-11-01',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '50',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3168, TrackingCode=2827/82 ق
+✅ تم تحديث درجة التقاضي 89499
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1207/82 ق',
+  sessionDate: '2026-09-15',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '27 عمال',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2451, TrackingCode=1207/82 ق
+✅ تم تحديث درجة التقاضي 88187
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14379 للقضية 948/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14379
+⚠️ تم تعليق القضية 948/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3178: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1310/82 ق',
+  sessionDate: '2026-11-18',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2791, TrackingCode=1310/82 ق
+✅ تم تحديث درجة التقاضي 88167
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+✅ تم تحديث CurrentStage والبيانات للقضية 3178 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3178 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2868, fromCompany: 81, fromOpponent: 2787 },
+  appeal: { total: 2618, fromCompany: 2462, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2868, fromCompany: 81, fromOpponent: 2787 },
+  appeal: { total: 2618, fromCompany: 2462, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '2328/82 ق',
+  sessionDate: '2026-10-21',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '41',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3027, TrackingCode=2328/82 ق
+✅ تم تحديث درجة التقاضي 89355
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3454/82 ق',
+  sessionDate: '2026-11-01',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '44',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3348, TrackingCode=3454/82 ق
+✅ تم تحديث درجة التقاضي 92918
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1072/82 ق',
+  sessionDate: '2026-11-18',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '41',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2679, TrackingCode=1072/82 ق
+✅ تم تحديث درجة التقاضي 88195
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '582/82 ق',
+  sessionDate: '2026-11-02',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '50',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2583, TrackingCode=582/82 ق
+✅ تم تحديث درجة التقاضي 88022
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3389/82 ق',
+  sessionDate: '2026-11-21',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '64',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3178, TrackingCode=3389/82 ق
+✅ تم تحديث درجة التقاضي 92919
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '4416/2026',
+  sessionDate: '2026-10-15',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '32',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3446
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 22862 للقضية 306/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22862
+✅ تم تحديث بيانات القضية 306/2025
+✅ تم تحديث بيانات درجة التقاضي 88034 لمطابقة تعديل الجلسة
+📝 تحديث الجلسة 14641 للقضية 2098/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14641
+⚠️ تم تعليق القضية 2098/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3317: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 إضافة جلسة جديدة: {
+  caseNumber: '558/82 ق',
+  sessionDate: '2026-09-27',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2414, TrackingCode=558/82 ق
+✅ تم تحديث درجة التقاضي 88004
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14641 للقضية 2098/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14641
+✅ تم تحديث بيانات القضية 2098/2026
+✅ تم تحديث بيانات درجة التقاضي 92545 لمطابقة تعديل الجلسة
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 24021 للقضية 2574/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 24021
+✅ تم تحديث بيانات القضية 2574/2025
+✅ تم تحديث بيانات درجة التقاضي 88004 لمطابقة تعديل الجلسة
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 12240 للقضية 4076/2023
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 12240
+✅ تم تحديث بيانات القضية 4076/2023
+✅ تم تحديث بيانات درجة التقاضي 91209 لمطابقة تعديل الجلسة
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 23811 للقضية 718/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23811
+✅ تم تحديث بيانات القضية 718/2025
+✅ تم تحديث بيانات درجة التقاضي 89398 لمطابقة تعديل الجلسة
+✅ تم تحديث CurrentStage والبيانات للقضية 3317 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3317 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2867, fromCompany: 81, fromOpponent: 2786 },
+  appeal: { total: 2619, fromCompany: 2463, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2867, fromCompany: 81, fromOpponent: 2786 },
+  appeal: { total: 2619, fromCompany: 2463, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 تحديث الجلسة 12240 للقضية 4076/2023
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 12240
+⚠️ تم تعليق القضية 4076/2023 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 1945: Agginst = الشركة (آخر جلسة محسومة بتاريخ Mon Dec 01 2025 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 12240 للقضية 4076/2023
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 12240
+⚠️ تم تعليق القضية 4076/2023 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 1945: Agginst = الشركة (آخر جلسة محسومة بتاريخ Mon Dec 01 2025 03:00:00 GMT+0300 (Arabian Standard Time))
+✅ تم إغلاق القضية 4076/2023 وجميع جلساتها يدوياً
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3390/82 ق ',
+  sessionDate: '2026-11-14',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '70',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3317, TrackingCode=3390/82 ق 
+✅ تم تحديث درجة التقاضي 92920
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2867, fromCompany: 81, fromOpponent: 2786 },
+  appeal: { total: 2619, fromCompany: 2463, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2867, fromCompany: 81, fromOpponent: 2786 },
+  appeal: { total: 2619, fromCompany: 2463, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1370/2026',
+  sessionDate: '2026-07-29',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3235
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 24023 للقضية 1370/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 24023
+⚠️ تم تعليق القضية 1370/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3235: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+✅ تم تحديث CurrentStage والبيانات للقضية 2781 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 2781 بسبب إضافة درجة appeal
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2866, fromCompany: 81, fromOpponent: 2785 },
+  appeal: { total: 2620, fromCompany: 2464, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2866, fromCompany: 81, fromOpponent: 2785 },
+  appeal: { total: 2620, fromCompany: 2464, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+✅ تم تحديث CurrentStage والبيانات للقضية 3235 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3235 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2865, fromCompany: 81, fromOpponent: 2784 },
+  appeal: { total: 2621, fromCompany: 2465, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2865, fromCompany: 81, fromOpponent: 2784 },
+  appeal: { total: 2621, fromCompany: 2465, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1499/82 ق',
+  sessionDate: '2026-06-08',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '40',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2781, TrackingCode=1499/82 ق
+✅ تم تحديث درجة التقاضي 92921
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3392/82 ق',
+  sessionDate: '2026-11-07',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '27',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3235, TrackingCode=3392/82 ق
+✅ تم تحديث درجة التقاضي 92922
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1499/82 ق',
+  sessionDate: '2026-07-11',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '40',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2781, TrackingCode=1499/82 ق
+✅ تم تحديث درجة التقاضي 92921
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1499/82 ق',
+  sessionDate: '2026-09-17',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '40',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1499/82 ق',
+  sessionDate: '2026-09-17',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '40',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2781, TrackingCode=1499/82 ق
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=2781, TrackingCode=1499/82 ق
+✅ تم تحديث درجة التقاضي 92921
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+✅ تم تحديث درجة التقاضي 92921
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+⚖️ إعادة حساب نتيجة القضية 2781: لا توجد جلسات محسومة، تم مسح Agginst
+⚖️ إعادة حساب نتيجة القضية 2781: لا توجد جلسات محسومة، تم مسح Agginst
+⚖️ إعادة حساب نتيجة القضية 2781: لا توجد جلسات محسومة، تم مسح Agginst
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 12857 للقضية 707/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 12857
+✅ تم تحديث بيانات القضية 707/2025
+✅ تم تحديث بيانات درجة التقاضي 88253 لمطابقة تعديل الجلسة
+📝 تحديث الجلسة 14515 للقضية 1313/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14515
+⚠️ تم تعليق القضية 1313/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3227: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+⚖️ إعادة حساب نتيجة القضية 2781: لا توجد جلسات محسومة، تم مسح Agginst
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+🔍 جلب قضية برقم ID: 2600
+✅ تم تحديث CurrentStage والبيانات للقضية 3227 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3227 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2864, fromCompany: 81, fromOpponent: 2783 },
+  appeal: { total: 2622, fromCompany: 2466, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2864, fromCompany: 81, fromOpponent: 2783 },
+  appeal: { total: 2622, fromCompany: 2466, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3399/82 ق',
+  sessionDate: '2026-11-02',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '49',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3227, TrackingCode=3399/82 ق
+✅ تم تحديث درجة التقاضي 92923
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+🔍 جلب قضية برقم ID: 2600
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2019',
+  caseYear: '2019',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📝 تحديث الجلسة 14890 للقضية 2425/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14890
+⚠️ تم تعليق القضية 2425/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3353: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sun Aug 16 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🔍 جلب قضية برقم ID: 2600
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🔍 جلب قضية برقم ID: 2600
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+✅ تم تحديث CurrentStage والبيانات للقضية 3353 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3353 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2863, fromCompany: 81, fromOpponent: 2782 },
+  appeal: { total: 2623, fromCompany: 2467, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2863, fromCompany: 81, fromOpponent: 2782 },
+  appeal: { total: 2623, fromCompany: 2467, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🔍 جلب قضية برقم ID: 2600
+✏️ تحديث القضية (ID: 2600 ): {
+  caseNumber: '128/2025',
+  caseYear: '2025',
+  caseType: 'ع',
+  subject: 'علاوات 76 لسنة 2019',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعودواخرين17(ع.19',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🗑️ حذف القضية رقم 128/2019 (ID: 2600)
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3468/82 ق',
+  sessionDate: '2026-11-17',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '48',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3353, TrackingCode=3468/82 ق
+✅ تم تحديث درجة التقاضي 92924
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14601 للقضية 1854/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14601
+⚠️ تم تعليق القضية 1854/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3280: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Jul 27 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+✅ تم تحديث CurrentStage والبيانات للقضية 3280 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3280 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 81, fromOpponent: 2780 },
+  appeal: { total: 2623, fromCompany: 2467, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 81, fromOpponent: 2780 },
+  appeal: { total: 2623, fromCompany: 2467, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3312/82 ق',
+  sessionDate: '2026-11-12',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '64',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3280, TrackingCode=3312/82 ق
+✅ تم تحديث درجة التقاضي 92925
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14614 للقضية 1762/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14614
+✅ تم تحديث بيانات القضية 1762/2025
+⚠️ تم تعليق القضية 1762/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3069: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 3069 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3069 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2860, fromCompany: 81, fromOpponent: 2779 },
+  appeal: { total: 2624, fromCompany: 2468, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2860, fromCompany: 81, fromOpponent: 2779 },
+  appeal: { total: 2624, fromCompany: 2468, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث درجة التقاضي: UPDATE LitigationLevels SET TrackingCode = @p0, StageType = @p1, StageNumber = @p2, CourtName = @p3, [الدائرة] = @p4, Subject = @p5, RequestedBy = @p6, Plaintiff = @p7, Defendant = @p8, LaunchDate = @p9, [Status] = @p10, Notes = @p11, UpdatedAt = GETDATE() WHERE Id = @p12 [
+  '3400/82 ق',
+  'appeal',
+  '3400/82 ق',
+  'استئناف اسكندرية',
+  '40',
+  'استئناف الحكم الصادر في الدعوي رقم 1762/2025 عمالية بشان فروق رصيد الاجازات +6ايام وجوبية ',
+  'الشركة (نحن)',
+  'شركة الصرف الصحى بالأسكندرية',
+  'خالد عبده ابراهيم عمر',
+  '2026-09-27',
+  'open',
+  '',
+  '92926'
+]
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2860, fromCompany: 81, fromOpponent: 2779 },
+  appeal: { total: 2624, fromCompany: 2468, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2860, fromCompany: 81, fromOpponent: 2779 },
+  appeal: { total: 2624, fromCompany: 2468, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+✅ تم إنشاء القضية برقم ID: 3671
+✅ تم إضافة أطراف القضية
+📝 تحديث الجلسة 22825 للقضية 3144/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22825
+⚠️ تم تعليق القضية 3144/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2546: Agginst = الخصم (آخر جلسة محسومة بتاريخ Tue Jun 23 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 22802 للقضية 538/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22802
+⚠️ تم تعليق القضية 538/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2766: Agginst = الخصم (آخر جلسة محسومة بتاريخ Tue Jun 23 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3400/82 ق',
+  sessionDate: '2026-11-07',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '40',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3069, TrackingCode=3400/82 ق
+✅ تم تحديث درجة التقاضي 92926
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '128*/2025',
+  sessionDate: '2026-01-27',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3671
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14954 للقضية 979/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14954
+✅ تم تحديث بيانات القضية 979/2026
+⚠️ تم تعليق القضية 979/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3159: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 81, fromOpponent: 2780 },
+  appeal: { total: 2624, fromCompany: 2468, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 81, fromOpponent: 2780 },
+  appeal: { total: 2624, fromCompany: 2468, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 3671 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3671 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2860, fromCompany: 81, fromOpponent: 2779 },
+  appeal: { total: 2625, fromCompany: 2469, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2860, fromCompany: 81, fromOpponent: 2779 },
+  appeal: { total: 2625, fromCompany: 2469, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '987/82 ق',
+  sessionDate: '2026-05-19',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '48',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3671, TrackingCode=987/82 ق
+✅ تم تحديث درجة التقاضي 92927
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 إضافة جلسة جديدة: {
+  caseNumber: '987/82 ق',
+  sessionDate: '2026-09-21',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '48',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3671, TrackingCode=987/82 ق
+✅ تم تحديث درجة التقاضي 92927
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 إضافة جلسة جديدة: {
+  caseNumber: '987/82 ق',
+  sessionDate: '2026-11-17',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '48',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3671, TrackingCode=987/82 ق
+✅ تم تحديث درجة التقاضي 92927
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+✅ تم تحديث CurrentStage والبيانات للقضية 3159 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3159 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2859, fromCompany: 81, fromOpponent: 2778 },
+  appeal: { total: 2626, fromCompany: 2470, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2859, fromCompany: 81, fromOpponent: 2778 },
+  appeal: { total: 2626, fromCompany: 2470, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 تحديث الجلسة 24033 للقضية 128*/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 24033
+⚠️ تم تعليق القضية 128*/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3671: Agginst = الخصم (آخر جلسة محسومة بتاريخ Tue Jan 27 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3401/82 ق',
+  sessionDate: '2026-11-14',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '41',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3159, TrackingCode=3401/82 ق
+✅ تم تحديث درجة التقاضي 92928
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 22583 للقضية 3031/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22583
+⚠️ تم تعليق القضية 3031/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2508: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Aug 03 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 23058 للقضية 2832/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23058
+⚠️ تم تعليق القضية 2832/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2517: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sun Jul 26 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 22825 للقضية 3144/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22825
+⚠️ تم تعليق القضية 3144/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2546: Agginst = الخصم (آخر جلسة محسومة بتاريخ Tue Jun 23 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 22534 للقضية 2271/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22534
+⚠️ تم تعليق القضية 2271/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2327: Agginst = الخصم (آخر جلسة محسومة بتاريخ Thu Jun 11 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+🔍 جلب قضية برقم ID: 3048
+⚖️ إعادة حساب نتيجة القضية 3231: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Jun 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+🔍 جلب قضية برقم ID: 2426
+✏️ تحديث القضية (ID: 2426 ): {
+  caseNumber: '2460/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'العلاوات',
+  courtName: 'استئناف اسكندرية',
+  circuitName: ' 40',
+  opponent: 'ايمن عرفه شتا السمان واخرين22',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📝 تحديث الجلسة 22931 للقضية 2460/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22931
+⚠️ تم تعليق القضية 2460/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2426: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Aug 10 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 22931 للقضية 2460/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22931
+✅ تم تحديث بيانات القضية 2460/2026
+✅ تم تحديث بيانات درجة التقاضي 87857 لمطابقة تعديل الجلسة
+📝 تحديث الجلسة 23151 للقضية 56/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23151
+⚠️ تم تعليق القضية 56/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2599: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sun Jul 26 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 22799 للقضية 1709/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22799
+⚠️ تم تعليق القضية 1709/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2258: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Jul 20 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 22599 للقضية 1760/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22599
+⚠️ تم تعليق القضية 1760/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2256: Agginst = الخصم (آخر جلسة محسومة بتاريخ Mon Aug 03 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 23155 للقضية 516/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23155
+⚠️ تم تعليق القضية 516/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2753: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sun Jul 26 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📝 تحديث الجلسة 22841 للقضية 714/2025
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 22841
+⚠️ تم تعليق القضية 714/2025 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 2758: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sun Aug 02 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2859, fromCompany: 81, fromOpponent: 2778 },
+  appeal: { total: 2626, fromCompany: 2470, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2859, fromCompany: 81, fromOpponent: 2778 },
+  appeal: { total: 2626, fromCompany: 2470, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2859, fromCompany: 81, fromOpponent: 2778 },
+  appeal: { total: 2626, fromCompany: 2470, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2859, fromCompany: 81, fromOpponent: 2778 },
+  appeal: { total: 2626, fromCompany: 2470, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 تحديث الجلسة 14987 للقضية 2303/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14987
+⚠️ تم تعليق القضية 2303/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3360: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sun Aug 16 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 14987 للقضية 2303/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14987
+✅ تم تحديث بيانات القضية 2303/2026
+✅ تم تحديث بيانات درجة التقاضي 92588 لمطابقة تعديل الجلسة
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 3360 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3360 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2858, fromCompany: 81, fromOpponent: 2777 },
+  appeal: { total: 2627, fromCompany: 2471, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2858, fromCompany: 81, fromOpponent: 2777 },
+  appeal: { total: 2627, fromCompany: 2471, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3479/82 ق',
+  sessionDate: '2026-11-25',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '46',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3360, TrackingCode=3479/82 ق
+✅ تم تحديث درجة التقاضي 92929
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14951 للقضية 2437/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14951
+⚠️ تم تعليق القضية 2437/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3362: Agginst = الخصم (آخر جلسة محسومة بتاريخ Sat Aug 15 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 3362 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3362 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2857, fromCompany: 81, fromOpponent: 2776 },
+  appeal: { total: 2628, fromCompany: 2472, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2857, fromCompany: 81, fromOpponent: 2776 },
+  appeal: { total: 2628, fromCompany: 2472, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3484/82 ق',
+  sessionDate: '2026-11-17',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '47',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3362, TrackingCode=3484/82 ق
+✅ تم تحديث درجة التقاضي 92930
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 14611 للقضية 111/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14611
+✅ تم تحديث بيانات القضية 111/2026
+⚠️ تم تعليق القضية 111/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3048: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 3048 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3048 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2856, fromCompany: 81, fromOpponent: 2775 },
+  appeal: { total: 2629, fromCompany: 2473, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2856, fromCompany: 81, fromOpponent: 2775 },
+  appeal: { total: 2629, fromCompany: 2473, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '1280/2026',
+  sessionDate: '2026-07-29',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3214
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+⚖️ إعادة حساب نتيجة القضية 3214: لا توجد جلسات محسومة، تم مسح Agginst
+📝 تحديث الجلسة 24040 للقضية 1280/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 24040
+⚠️ تم تعليق القضية 1280/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3214: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2856, fromCompany: 81, fromOpponent: 2775 },
+  appeal: { total: 2629, fromCompany: 2473, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2856, fromCompany: 81, fromOpponent: 2775 },
+  appeal: { total: 2629, fromCompany: 2473, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 3214 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3214 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2855, fromCompany: 81, fromOpponent: 2774 },
+  appeal: { total: 2630, fromCompany: 2474, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2855, fromCompany: 81, fromOpponent: 2774 },
+  appeal: { total: 2630, fromCompany: 2474, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3447/82 ق',
+  sessionDate: '2026-11-05',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '50',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3214, TrackingCode=3447/82 ق
+✅ تم تحديث درجة التقاضي 92932
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+✅ تم إنشاء القضية برقم ID: 3672
+✅ تم إضافة أطراف القضية
+🔍 جلب قضية برقم ID: 3672
+✏️ تحديث القضية (ID: 3672 ): {
+  caseNumber: '189/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'العلاوات',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'شركة الصرف الصحي بالإسكندرية',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🔍 جلب قضية برقم ID: 3672
+✏️ تحديث القضية (ID: 3672 ): {
+  caseNumber: '189/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'العلاوات',
+  courtName: 'اسكندرية الابتدائية',
+  circuitName: '45',
+  opponent: 'احمد محمد عبده ابو السعود',
+  claimValue: null,
+  defendant: 'احمد محمد عبده ابو السعود',
+  category: 'عمالي'
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '189/2026',
+  sessionDate: '2026-07-29',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3672
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📝 تحديث الجلسة 24042 للقضية 189/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 24042
+⚠️ تم تعليق القضية 189/2026 (إجراء متخذ فى الجلسة، بانتظار الإغلاق اليدوي)
+⚖️ إعادة حساب نتيجة القضية 3672: Agginst = الخصم (آخر جلسة محسومة بتاريخ Wed Jul 29 2026 03:00:00 GMT+0300 (Arabian Standard Time))
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2856, fromCompany: 82, fromOpponent: 2774 },
+  appeal: { total: 2630, fromCompany: 2474, fromOpponent: 156 },
+  cassation: { total: 324, fromCompany: 306, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}

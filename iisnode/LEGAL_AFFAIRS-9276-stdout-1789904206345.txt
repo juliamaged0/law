@@ -1,0 +1,51 @@
+◇ injected env (4) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+📄 DB_SERVER from .env: 172.16.13.57
+📄 DB_PASSWORD from .env: 1
+ Final Config: { server: '172.16.13.57', database: 'law_project', user: 'sa' }
+🚀 الخادم يعمل على: http://localhost:\\.\pipe\9aa76048-2e8b-40f8-b75d-eeedf082eb66
+📊 قاعدة البيانات: law_project
+✅ الاتصال بقاعدة البيانات ناجح!
+✅ تم التأكد من جدول الأرشيف.
+✅ تم التأكد من جدول المحامين.
+✅ تم التأكد من جدول التصنيفات الفرعية.
+✅ تم التأكد من جدول إعدادات النظام.
+✅ تم التأكد من جدول سجل التتبعات وتحديث تصنيف Category بالكامل.
+ℹ️ تم تجاوز اليوزر IT — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر admin — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر CEO — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر sessions — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر reports — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+✅ تم التأكد من نظام صلاحيات التحقيقات (Users/Roles/Modules).
+✅ تم التأكد من جدول إشعارات التحقيقات.
+✅ تم التأكد من عمود أقوال الموظفين.
+✅ تم التأكد من عمود LitigationLevelId في جدول Sessions.
+✅ تم التأكد من عمود SessionCaseNumber في جدول Sessions.
+✅ تم التأكد من عمود ClaimAmount في جدول Cases.
+✅ تم التأكد من عمود ClaimAmount في جدول LitigationLevels.
+✅ تم التأكد من عمود ClaimAmount في جدول Sessions.
+✅ تم التأكد من عمود LawsuitExpenses (قيمة الحكم) في جدول Sessions.
+✅ تم التأكد من عمود CaseExpenses (مصاريف الدعوة) في جدول Cases.
+✅ تم التأكد من عمود Subject في جدول LitigationLevels.
+✅ تم التأكد من عمود RequestedByOpponent في جدول LitigationLevels.
+✅ تم التأكد من عمود Plaintiff في جدول LitigationLevels.
+✅ تم التأكد من عمود Defendant في جدول LitigationLevels.
+✅ تم التأكد من عمود ReceiptDate في جدول Investigations.
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2942, fromCompany: 80, fromOpponent: 2862 },
+  appeal: { total: 2586, fromCompany: 2432, fromOpponent: 154 },
+  cassation: { total: 283, fromCompany: 265, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 45, fromCompany: 45, fromOpponent: 0 },
+  iltimas: { total: 0, fromCompany: 0, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2942, fromCompany: 80, fromOpponent: 2862 },
+  appeal: { total: 2586, fromCompany: 2432, fromOpponent: 154 },
+  cassation: { total: 283, fromCompany: 265, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 45, fromCompany: 45, fromOpponent: 0 },
+  iltimas: { total: 0, fromCompany: 0, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts

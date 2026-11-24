@@ -1,0 +1,237 @@
+◇ injected env (4) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+📄 DB_SERVER from .env: 172.16.13.57
+📄 DB_PASSWORD from .env: 1
+ Final Config: { server: '172.16.13.57', database: 'law_project', user: 'sa' }
+🚀 الخادم يعمل على: http://localhost:\\.\pipe\c5f949ad-8110-4074-91a7-467333abd513
+🌐 افتح الصفحات من رابط الخادم (مثال: http://localhost:\\.\pipe\c5f949ad-8110-4074-91a7-467333abd513/litigation-level.html) وليس كملف مباشر
+📊 قاعدة البيانات: law_project
+✅ الاتصال بقاعدة البيانات ناجح!
+✅ تم التأكد من جدول الأرشيف.
+✅ تم التأكد من جدول المحامين.
+✅ تم التأكد من جدول التصنيفات الفرعية.
+✅ تم التأكد من جدول إعدادات النظام.
+✅ تم التأكد من جدول سجل التتبعات وتحديث تصنيف Category بالكامل.
+ℹ️ تم تجاوز اليوزر IT — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر admin — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر CEO — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر sessions — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر reports — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+✅ تم التأكد من نظام صلاحيات التحقيقات (Users/Roles/Modules).
+✅ تم التأكد من جدول إشعارات التحقيقات.
+✅ تم التأكد من عمود أقوال الموظفين.
+✅ تم التأكد من عمود LitigationLevelId في جدول Sessions.
+✅ تم التأكد من عمود SessionCaseNumber في جدول Sessions.
+✅ تم التأكد من عمود ClaimAmount في جدول Cases.
+✅ تم التأكد من عمود ClaimAmount في جدول LitigationLevels.
+✅ تم التأكد من عمود ClaimAmount في جدول Sessions.
+✅ تم التأكد من عمود LawsuitExpenses (قيمة الحكم) في جدول Sessions.
+✅ تم التأكد من عمود CaseExpenses (مصاريف الدعوة) في جدول Cases.
+✅ تم التأكد من عمود Subject في جدول LitigationLevels.
+✅ تم التأكد من عمود RequestedByOpponent في جدول LitigationLevels.
+✅ تم التأكد من عمود Plaintiff في جدول LitigationLevels.
+✅ تم التأكد من عمود Defendant في جدول LitigationLevels.
+✅ تم التأكد من عمود ReceiptDate في جدول Investigations.
+✅ تم التأكد من اتساع عمود Plaintiff في جدول LitigationLevels.
+✅ تم التأكد من اتساع عمود Defendant في جدول LitigationLevels.
+✅ تم التأكد من اتساع عمود Plaintiff في جدول Cases.
+✅ تم التأكد من اتساع عمود Defendant في جدول Cases.
+✅ تم إنشاء القضية برقم ID: 3759
+✅ تم إضافة أطراف القضية
+🔍 جلب قضية برقم ID: 3759
+✏️ تحديث القضية (ID: 3759 ): {
+  caseNumber: '101010101010101010/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'مكافأه نهاية الخدمة',
+  courtName: 'استئناف اسكندرية',
+  circuitName: ' 70',
+  opponent: 'مارينا جورج اديب تكلا',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🔍 جلب قضية برقم ID: 3759
+✏️ تحديث القضية (ID: 3759 ): {
+  caseNumber: '101010101010101010/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'دعوى بطلان قرار وتحميل مبلغ',
+  courtName: 'استئناف اسكندرية',
+  circuitName: ' 70',
+  opponent: 'مارينا جورج اديب تكلا',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🗑️ حذف القضية رقم 101010101010101010/2026 (ID: 3759)
+🗑️ حذف القضية رقم 235/82 ق (ID: 3504)
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 84, fromOpponent: 2777 },
+  appeal: { total: 2651, fromCompany: 2474, fromOpponent: 177 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 84, fromOpponent: 2777 },
+  appeal: { total: 2651, fromCompany: 2474, fromOpponent: 177 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث درجة التقاضي: UPDATE LitigationLevels SET TrackingCode = @p0, StageType = @p1, StageNumber = @p2, CourtName = @p3, [الدائرة] = @p4, Subject = @p5, RequestedBy = @p6, Plaintiff = @p7, Defendant = @p8, LaunchDate = @p9, [Status] = @p10, Notes = @p11, UpdatedAt = GETDATE() WHERE Id = @p12 [
+  '235/82 ق',
+  'appeal',
+  '235/82 ق',
+  'استئناف اسكندرية',
+  '47',
+  'فروق رصيد اجازات +6 ايام الوجبية',
+  'الشركة (نحن)',
+  'شركة الصرف الصحى بالأسكندرية',
+  'مصطفى حامد البسيونى زعير',
+  '2026-08-29',
+  'open',
+  '',
+  '92739'
+]
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 84, fromOpponent: 2777 },
+  appeal: { total: 2651, fromCompany: 2475, fromOpponent: 176 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 84, fromOpponent: 2777 },
+  appeal: { total: 2651, fromCompany: 2475, fromOpponent: 176 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+✅ تم إنشاء القضية برقم ID: 3760
+✅ تم إضافة أطراف القضية
+🔍 جلب قضية برقم ID: 3760
+✏️ تحديث القضية (ID: 3760 ): {
+  caseNumber: '12333211122233121000/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'مكافأه نهاية الخدمة',
+  courtName: 'استئناف اسكندرية',
+  circuitName: ' 27',
+  opponent: 'شركة الصرف الصحي بالإسكندرية',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🗑️ حذف القضية رقم 12333211122233121000/2026 (ID: 3760)
+✅ تم إنشاء القضية برقم ID: 3761
+✅ تم إضافة أطراف القضية
+🔍 جلب قضية برقم ID: 3761
+✏️ تحديث القضية (ID: 3761 ): {
+  caseNumber: '123321123321000/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'فروق رصيد إجازات',
+  courtName: 'استئناف اسكندرية',
+  circuitName: ' 27',
+  opponent: 'مارينا جورج اديب تكلا',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2862, fromCompany: 84, fromOpponent: 2778 },
+  appeal: { total: 2651, fromCompany: 2475, fromOpponent: 176 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2862, fromCompany: 84, fromOpponent: 2778 },
+  appeal: { total: 2651, fromCompany: 2475, fromOpponent: 176 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 3761 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial للقضية 3761 بسبب إضافة درجة appeal
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 84, fromOpponent: 2777 },
+  appeal: { total: 2652, fromCompany: 2476, fromOpponent: 176 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 84, fromOpponent: 2777 },
+  appeal: { total: 2652, fromCompany: 2476, fromOpponent: 176 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث درجة التقاضي: UPDATE LitigationLevels SET TrackingCode = @p0, StageType = @p1, StageNumber = @p2, CourtName = @p3, [الدائرة] = @p4, Subject = @p5, RequestedBy = @p6, Plaintiff = @p7, Defendant = @p8, LaunchDate = @p9, [Status] = @p10, Notes = @p11, UpdatedAt = GETDATE() WHERE Id = @p12 [
+  '12356654321/test',
+  'appeal',
+  '12356654321/test',
+  'استئناف اسكندرية',
+  '64',
+  't',
+  'الشركة (نحن)',
+  'شركة الصرف الصحي بالإسكندرية',
+  'مارينا جورج اديب تكلا',
+  '2026-10-15',
+  'open',
+  'test',
+  '92983'
+]
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 84, fromOpponent: 2777 },
+  appeal: { total: 2652, fromCompany: 2476, fromOpponent: 176 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2861, fromCompany: 84, fromOpponent: 2777 },
+  appeal: { total: 2652, fromCompany: 2476, fromOpponent: 176 },
+  cassation: { total: 351, fromCompany: 332, fromOpponent: 19 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 44, fromOpponent: 2 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📝 إضافة جلسة جديدة: {
+  caseNumber: '12356654321/test',
+  sessionDate: '2026-10-15',
+  sessionTime: undefined,
+  stage: 'استئناف',
+  court: 'استئناف اسكندرية',
+  circuit: '64',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم إيجاد القضية عن طريق درجة التقاضي: CaseId=3761, TrackingCode=12356654321/test
+✅ تم تحديث درجة التقاضي 92983
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 24545 للقضية 123321123321000/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 24545
+✅ تم تحديث بيانات القضية 123321123321000/2026
+✅ تم تحديث بيانات درجة التقاضي 92983 لمطابقة تعديل الجلسة
+🗑️ حذف القضية رقم 123321123321000/2026 (ID: 3761)

@@ -1,0 +1,22 @@
+✅ تم تحديث الجلسة 23774
+✅ تم تحديث بيانات القضية 4148/2026
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم تحديث CurrentStage والبيانات للقضية 2650 في جدول Cases
+✅ تم إغلاق جلسات الدرجات initial, appeal للقضية 2650 بسبب إضافة درجة cassation
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2883, fromCompany: 80, fromOpponent: 2803 },
+  appeal: { total: 2615, fromCompany: 2460, fromOpponent: 155 },
+  cassation: { total: 311, fromCompany: 293, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2883, fromCompany: 80, fromOpponent: 2803 },
+  appeal: { total: 2615, fromCompany: 2460, fromOpponent: 155 },
+  cassation: { total: 311, fromCompany: 293, fromOpponent: 18 },
+  eshkal: { total: 0, fromCompany: 0, fromOpponent: 0 },
+  eshkalTanfeeth: { total: 46, fromCompany: 45, fromOpponent: 1 },
+  iltimas: { total: 1, fromCompany: 1, fromOpponent: 0 }
+}

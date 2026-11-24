@@ -1,0 +1,54 @@
+◇ injected env (4) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+📄 DB_SERVER from .env: 172.16.13.57
+📄 DB_PASSWORD from .env: 1
+ Final Config: { server: '172.16.13.57', database: 'law_project', user: 'sa' }
+🚀 الخادم يعمل على: http://localhost:\\.\pipe\454afc9f-7f2e-485a-a8fc-2e60eac169ee
+🌐 افتح الصفحات من رابط الخادم (مثال: http://localhost:\\.\pipe\454afc9f-7f2e-485a-a8fc-2e60eac169ee/litigation-level.html) وليس كملف مباشر
+📊 قاعدة البيانات: law_project
+✅ الاتصال بقاعدة البيانات ناجح!
+✅ تم التأكد من جدول الأرشيف.
+✅ تم التأكد من جدول المحامين.
+✅ تم التأكد من جدول التصنيفات الفرعية.
+✅ تم التأكد من جدول إعدادات النظام.
+✅ تم التأكد من جدول سجل التتبعات وتحديث تصنيف Category بالكامل.
+ℹ️ تم تجاوز اليوزر IT — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر admin — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر CEO — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر sessions — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر reports — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+✅ تم التأكد من نظام صلاحيات التحقيقات (Users/Roles/Modules).
+✅ تم التأكد من جدول إشعارات التحقيقات.
+✅ تم التأكد من عمود أقوال الموظفين.
+✅ تم التأكد من عمود LitigationLevelId في جدول Sessions.
+✅ تم التأكد من عمود SessionCaseNumber في جدول Sessions.
+✅ تم التأكد من عمود ClaimAmount في جدول Cases.
+✅ تم التأكد من عمود ClaimAmount في جدول LitigationLevels.
+✅ تم التأكد من عمود ClaimAmount في جدول Sessions.
+✅ تم التأكد من عمود LawsuitExpenses (قيمة الحكم) في جدول Sessions.
+✅ تم التأكد من عمود CaseExpenses (مصاريف الدعوة) في جدول Cases.
+✅ تم التأكد من عمود Subject في جدول LitigationLevels.
+✅ تم التأكد من عمود RequestedByOpponent في جدول LitigationLevels.
+✅ تم التأكد من عمود Plaintiff في جدول LitigationLevels.
+✅ تم التأكد من عمود Defendant في جدول LitigationLevels.
+✅ تم التأكد من عمود ReceiptDate في جدول Investigations.
+✅ تم التأكد من اتساع عمود Plaintiff في جدول LitigationLevels.
+✅ تم التأكد من اتساع عمود Defendant في جدول LitigationLevels.
+✅ تم التأكد من اتساع عمود Plaintiff في جدول Cases.
+✅ تم التأكد من اتساع عمود Defendant في جدول Cases.
+✅ تم إنشاء القضية برقم ID: 3758
+✅ تم إضافة أطراف القضية
+🔍 جلب قضية برقم ID: 3758
+✏️ تحديث القضية (ID: 3758 ): {
+  caseNumber: '12345678998765432100/2026',
+  caseYear: '2026',
+  caseType: 'ع',
+  subject: 'تسوية الحالة الوظيفية',
+  courtName: 'استئناف اسكندرية',
+  circuitName: '49',
+  opponent: 'مارينا جورج اديب تكلا',
+  claimValue: null,
+  defendant: 'شركة الصرف الصحي بالإسكندرية',
+  category: 'عمالي'
+}
+🗑️ حذف القضية رقم 12345678998765432100/2026 (ID: 3758)

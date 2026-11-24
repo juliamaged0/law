@@ -1,0 +1,3304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>قضية جديدة — الشؤون القانونية</title>
+  <script src="sidebar.js"></script>
+  <script src="activity-logger.js"></script>
+  <script src="permissions-guard.js"></script>
+  <style>
+
+    /* ══════════════════════════════════════
+       STICKY PROGRESS NAV
+    ══════════════════════════════════════ */
+    .progress-nav {
+      position: sticky;
+      top: 64px;
+      z-index: 100;
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 16px rgba(10,22,40,0.08);
+      display: flex;
+    }
+
+    .pnav-btn {
+      flex: 1;
+      padding: 16px 10px 13px;
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #94A3B8;
+      background: none;
+      border: none;
+      border-left: 1px solid #F1F5F9;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pnav-btn:last-child { border-left: none; }
+    .pnav-btn:hover { background: #F8FAFD; color: #475569; }
+
+    .pnav-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #F1F5F9;
+      font-size: 12px;
+      font-weight: 800;
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .pnav-btn.active   { color: #1a3a5c; background: #EEF4FF; }
+    .pnav-btn.active .pnav-num   { background: #1a3a5c; color: white; }
+    .pnav-btn.visited  { color: #059669; }
+    .pnav-btn.visited .pnav-num  { background: #059669; color: white; }
+
+    /* ══════════════════════════════════════
+       FORM SECTIONS
+    ══════════════════════════════════════ */
+    .form-section {
+      scroll-margin-top: 140px;
+      margin-bottom: 32px;
+    }
+
+    /* ══════════════════════════════════════
+       CARDS
+    ══════════════════════════════════════ */
+    .form-card {
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 16px;
+      overflow: visible;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(10,22,40,0.06);
+    }
+
+    .form-card-header {
+      padding: 14px 22px;
+      background: #F8FAFD;
+      border-bottom: 1px solid #E4EAF2;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-card-header h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1a3a5c;
+      margin: 0;
+    }
+
+    .section-icon { font-size: 18px; }
+    .form-card-body { padding: 22px; }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-num-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1a3a5c, #1e4976);
+      color: white;
+      font-size: 14px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-heading-text { font-size: 16px; font-weight: 800; color: #0F172A; }
+    .section-heading-sub  { font-size: 12px; color: #94A3B8; margin-top: 1px; }
+
+    /* ══════════════════════════════════════
+       GRID & FIELDS
+    ══════════════════════════════════════ */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-grid.cols-1 { grid-template-columns: 1fr; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .field label .req { color: #DC2626; }
+
+    .field input[type="text"],
+    .field input[type="date"],
+    .field input[type="number"],
+    .field input[type="tel"],
+    .field select,
+    .field textarea {
+      height: 40px;
+      border: 1.5px solid #E4EAF2;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: 'Cairo', sans-serif;
+      color: #0F172A;
+      background: #F8FAFD;
+      outline: none;
+      transition: all 0.2s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .field textarea {
+      height: 90px;
+      padding: 10px 12px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #1a3a5c;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(26,58,92,0.1);
+    }
+
+    .field input[readonly] {
+      background: #EEF4FF;
+      color: #1a3a5c;
+      font-weight: 800;
+      border-color: #C7D2FE;
+      cursor: default;
+    }
+
+    .field input.err,
+    .field select.err { border-color: #DC2626 !important; }
+
+    .ferr {
+      font-size: 11px;
+      color: #DC2626;
+      font-weight: 600;
+      display: none;
+    }
+    .ferr.show { display: block; }
+
+    .field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2394A3B8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 12px center;
+      background-color: #F8FAFD;
+      padding-left: 30px;
+    }
+
+    /* ══════════════════════════════════════
+       CASE TYPE CHIPS
+    ══════════════════════════════════════ */
+    .type-chips {
+      display: flex;
+      gap: 10px;
+    }
+
+    .type-chip {
+      flex: 1;
+      padding: 12px 10px;
+      border-radius: 10px;
+      border: 2px solid #E4EAF2;
+      background: white;
+      font-size: 14px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .type-chip:hover { border-color: #1a3a5c; color: #1a3a5c; background: #EEF4FF; }
+    .type-chip.selected { background: #1a3a5c; color: white; border-color: #1a3a5c; }
+    .type-chip .chip-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+
+    /* ══════════════════════════════════════
+       SUB-TYPE OPTIONS
+    ══════════════════════════════════════ */
+    .subtype-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .subtype-chip {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #E4EAF2;
+      background: white;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .subtype-chip:hover { border-color: #1a3a5c; color: #1a3a5c; background: #EEF4FF; }
+    .subtype-chip.selected { background: #EEF4FF; color: #1a3a5c; border-color: #1a3a5c; font-weight: 800; }
+
+    .subtype-chip.add-new {
+      border-style: dashed;
+      border-color: #94A3B8;
+      color: #64748B;
+      background: #F8FAFD;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .subtype-chip.add-new:hover { border-color: #1a3a5c; color: #1a3a5c; background: #EEF4FF; }
+
+    /* ══════════════════════════════════════
+       ADMIN CONTROLS FOR SUBTYPES (delete / edit / lock)
+       — تظهر فقط للأدمن (username = admin)
+    ══════════════════════════════════════ */
+    .subtype-chip-wrap { position: relative; }
+    .subtype-chip-wrap .subtype-chip { width: 100%; }
+    .subtype-chip-del {
+        position: absolute;
+        top: -7px;
+        left: -7px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #DC2626;
+        color: #fff;
+        border: 2px solid #fff;
+        font-size: 10px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+        z-index: 2;
+        padding: 0;
+    }
+    .subtype-chip-del:hover { background: #B91C1C; }
+
+    .subtype-lock-toggle {
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1.5px dashed #CBD5E1;
+        background: #F8FAFD;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #64748B;
+        cursor: pointer;
+        font-family: 'Cairo', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+    .subtype-lock-toggle.locked { border-color: #FCA5A5; color: #B91C1C; background: #FEF2F2; }
+    .subtype-lock-toggle:hover { border-color: #1a3a5c; color: #1a3a5c; background: #EEF4FF; }
+    .subtype-lock-toggle.locked:hover { border-color: #B91C1C; color: #B91C1C; background: #FEE2E2; }
+
+    .subtype-locked-note {
+        grid-column: 1 / -1;
+        font-size: 11.5px;
+        color: #B91C1C;
+        background: #FEF2F2;
+        border: 1px dashed #FCA5A5;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+    }
+
+    /* ══════════════════════════════════════
+       SUBTYPE MODAL (حذف / تعديل) — بديل عن confirm() و prompt() الافتراضيين
+    ══════════════════════════════════════ */
+    .subtype-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(10,22,40,0.65);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+        font-family: 'Cairo', sans-serif;
+    }
+    .subtype-modal-overlay.open { display: flex; }
+
+    .subtype-modal-box {
+        background: white;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 380px;
+        padding: 32px 32px 28px;
+        box-shadow: 0 24px 64px rgba(10,22,40,0.25);
+        text-align: center;
+        position: relative;
+        margin: 16px;
+    }
+
+    .subtype-modal-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 14px;
+        font-size: 24px;
+    }
+    .subtype-modal-icon.danger { background: #FEF2F2; color: #DC2626; }
+    .subtype-modal-icon.edit   { background: #EEF4FF; color: #1a3a5c; }
+
+    .subtype-modal-box h3 {
+        font-size: 17px;
+        font-weight: 800;
+        color: #1E293B;
+        margin: 0 0 6px;
+    }
+    .subtype-modal-box p {
+        color: #64748B;
+        font-size: 13px;
+        margin: 0 0 20px;
+        font-weight: 500;
+        line-height: 1.6;
+    }
+    .subtype-modal-box p strong { color: #1a3a5c; }
+
+    .subtype-modal-box input[type="text"] {
+        width: 100%;
+        height: 42px;
+        border: 1.5px solid #E4EAF2;
+        border-radius: 9px;
+        padding: 0 14px;
+        font-size: 13.5px;
+        font-family: 'Cairo', sans-serif;
+        color: #0F172A;
+        background: #F8FAFD;
+        outline: none;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .subtype-modal-box input[type="text"]:focus {
+        border-color: #1a3a5c;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(26,58,92,0.1);
+    }
+
+    .subtype-modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+    .subtype-modal-actions button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 20px;
+        height: 42px;
+        border-radius: 9px;
+        font-size: 13.5px;
+        font-weight: 700;
+        font-family: 'Cairo', sans-serif;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        flex: 1;
+    }
+    .subtype-modal-btn-outline {
+        background: #F8FAFD;
+        color: #475569;
+        border: 1.5px solid #E4EAF2 !important;
+    }
+    .subtype-modal-btn-outline:hover { background: #F1F5F9; }
+
+    .subtype-modal-btn-danger {
+        background: #DC2626;
+        color: white;
+    }
+    .subtype-modal-btn-danger:hover { background: #B91C1C; }
+
+    .subtype-modal-btn-primary {
+        background: #1a3a5c;
+        color: white;
+    }
+    .subtype-modal-btn-primary:hover { background: #14304d; }
+
+    .subtype-add-form {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: #F8FAFD;
+      border: 1.5px dashed #C7D2FE;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .subtype-add-form input[type="text"] {
+      flex: 1;
+      height: 38px;
+      border: 1.5px solid #E4EAF2;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: 'Cairo', sans-serif;
+      color: #0F172A;
+      background: white;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .subtype-add-form input[type="text"]:focus {
+      border-color: #1a3a5c;
+      box-shadow: 0 0 0 3px rgba(26,58,92,0.1);
+    }
+    .subtype-add-btn {
+      height: 38px;
+      padding: 0 16px;
+      border: none;
+      border-radius: 8px;
+      background: #1a3a5c;
+      color: white;
+      font-weight: 700;
+      font-size: 12.5px;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .subtype-add-btn:hover { background: #14304d; }
+    .subtype-add-cancel {
+      height: 38px;
+      width: 38px;
+      border: none;
+      border-radius: 8px;
+      background: #F1F5F9;
+      color: #64748B;
+      cursor: pointer;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .subtype-add-cancel:hover { background: #E2E8F0; color: #0F172A; }
+
+    /* ══════════════════════════════════════
+       ALLOWANCE BOX
+    ══════════════════════════════════════ */
+    .allowance-box {
+      background: #FFFBEB;
+      border: 1.5px solid #FDE68A;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    .allowance-box.show { display: block; }
+
+    .allowance-box-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #92400E;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ══════════════════════════════════════
+       PARTY SECTION
+    ══════════════════════════════════════ */
+    .company-banner {
+      background: linear-gradient(135deg, #EEF4FF, #E0E8F9);
+      border: 1px solid #C7D2FE;
+      border-radius: 10px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .company-banner-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #1a3a5c, #1e4976);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .company-banner-name { font-size: 13.5px; font-weight: 800; color: #1a3a5c; }
+    .company-banner-sub  { font-size: 11.5px; color: #475569; margin-top: 2px; }
+
+    /* ══════════════════════════════════════
+       SEARCH-SELECT
+    ══════════════════════════════════════ */
+    .ss-wrap { position: relative; }
+
+    .ss-input {
+      width: 100%;
+      height: 40px;
+      border: 1.5px solid #E4EAF2;
+      border-radius: 8px;
+      padding: 0 12px 0 38px;
+      font-size: 13px;
+      font-family: 'Cairo', sans-serif;
+      color: #0F172A;
+      background: #F8FAFD;
+      outline: none;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .ss-input:focus {
+      border-color: #1a3a5c;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(26,58,92,0.1);
+    }
+
+    .ss-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #94A3B8;
+      pointer-events: none;
+    }
+
+    .ss-drop {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0; left: 0;
+      background: white;
+      border: 1.5px solid #E4EAF2;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(10,22,40,0.12);
+      z-index: 600;
+      max-height: 350px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .ss-drop.open { display: block; }
+
+    .ss-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer;
+      color: #0F172A;
+      border-bottom: 1px solid #F1F5F9;
+      transition: background 0.15s;
+    }
+
+    .ss-item:last-child { border-bottom: none; }
+    .ss-item:hover { background: #EEF4FF; color: #1a3a5c; font-weight: 700; }
+    .ss-item.no-res { color: #94A3B8; cursor: default; font-style: italic; }
+    .ss-item.no-res:hover { background: none; }
+
+    /* ══════════════════════════════════════
+       AUTO-INFO CARD
+    ══════════════════════════════════════ */
+    .auto-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .ai-item {
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+
+    .ai-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 3px;
+    }
+
+    .ai-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a3a5c;
+    }
+
+    /* ══════════════════════════════════════
+       GROUP COUNTER BADGE
+    ══════════════════════════════════════ */
+    .group-counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #1a3a5c, #1e4976);
+      color: white;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 800;
+      margin: 14px 0 10px;
+    }
+
+    .group-counter-num {
+      background: rgba(255,255,255,0.25);
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    /* ══════════════════════════════════════
+       MEMBERS TABLE
+    ══════════════════════════════════════ */
+    .members-wrap { margin-top: 10px; overflow-x: auto; }
+
+    .members-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      text-align: right;
+    }
+
+    .members-table th {
+      background: #F8FAFD;
+      padding: 9px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 1px solid #E4EAF2;
+    }
+
+    .members-table td {
+      padding: 9px 12px;
+      color: #0F172A;
+      border-bottom: 1px solid #F1F5F9;
+      vertical-align: middle;
+    }
+
+    .members-table tr:last-child td { border-bottom: none; }
+
+    .members-table tr.leader-row td { background: #EEF4FF; }
+    .members-table tr.leader-row td:first-child { color: #1a3a5c; font-size: 16px; }
+
+    .role-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+
+    .role-badge.leader { background: #1a3a5c; color: white; }
+    .role-badge.member { background: #F1F5F9; color: #475569; }
+
+    .btn-rm {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      color: #DC2626;
+      border-radius: 5px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .btn-rm:hover { background: #DC2626; color: white; }
+
+    /* ══════════════════════════════════════
+       FILE UPLOAD
+    ══════════════════════════════════════ */
+    .file-drop {
+      border: 2px dashed #C7D2FE;
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #F8FAFD;
+    }
+
+    .file-drop:hover, .file-drop.dragover {
+      border-color: #1a3a5c;
+      background: #EEF4FF;
+    }
+
+    .file-drop-icon { font-size: 38px; margin-bottom: 10px; }
+    .file-drop-text { font-size: 13px; font-weight: 600; color: #475569; }
+    .file-drop-hint { font-size: 11.5px; color: #94A3B8; margin-top: 4px; }
+
+    .file-list { margin-top: 14px; }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 12.5px;
+    }
+
+    .file-item-name { flex: 1; font-weight: 600; }
+
+    .file-rm {
+      background: none;
+      border: none;
+      color: #DC2626;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .file-rm:hover { background: #FEF2F2; }
+
+    /* ══════════════════════════════════════
+       SUBMIT BAR
+    ══════════════════════════════════════ */
+    .submit-bar {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 14px;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 -4px 20px rgba(10,22,40,0.08);
+      z-index: 90;
+      margin-top: 8px;
+    }
+
+    .submit-bar-right { display: flex; gap: 10px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 20px;
+      height: 40px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+      line-height: 1;
+    }
+
+    .btn-primary {
+      background: #1a3a5c;
+      color: white;
+    }
+    .btn-primary:hover { background: #1e4976; }
+
+    .btn-ghost {
+      background: #F1F5F9;
+      color: #475569;
+    }
+    .btn-ghost:hover { background: #E2E6ED; }
+
+    /* ══════════════════════════════════════
+       DIVIDER
+    ══════════════════════════════════════ */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to left, transparent, #E4EAF2 20%, #E4EAF2 80%, transparent);
+      margin: 32px 0;
+    }
+
+    /* ══════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: #059669;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      opacity: 0;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast.err  { background: #DC2626; }
+
+    @media (max-width: 768px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .type-chips { flex-direction: column; }
+      .submit-bar { flex-direction: column-reverse; gap: 10px; }
+      .submit-bar-right { width: 100%; justify-content: flex-end; }
+      .auto-info { grid-template-columns: 1fr; }
+    }
+    /* حقل تاريخ مخصص بصيغة يوم/شهر/سنة */
+    .date-field-wrap { position: relative; display: inline-block; width: 100%; }
+    .date-field-wrap input[type="date"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    .date-field-wrap input[type="text"].date-display {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        cursor: pointer;
+        pointer-events: auto;
+        direction: ltr;
+        text-align: right;
+    }
+  </style>
+</head>
+<body>
+<div class="page-body">
+
+  <!-- STICKY PROGRESS NAV -->
+  <div class="progress-nav">
+    <button class="pnav-btn active" id="pnav1" onclick="scrollToSection(1)">
+      <div class="pnav-num">1</div>
+      البيانات الأساسية
+    </button>
+    <button class="pnav-btn" id="pnav2" onclick="scrollToSection(2)">
+      <div class="pnav-num">2</div>
+      أطراف القضية
+    </button>
+    <button class="pnav-btn" id="pnav3" onclick="scrollToSection(3)">
+      <div class="pnav-num">3</div>
+      المستندات
+    </button>
+    <button class="pnav-btn" id="pnav4" onclick="scrollToSection(4)">
+      <div class="pnav-num">4</div>
+      الملاحظات
+    </button>
+  </div>
+
+  <!-- Hidden field for editing -->
+  <input type="hidden" id="editingCaseId" value="">
+
+  <!-- SECTION 1 — البيانات الأساسية -->
+  <div class="form-section" id="section1">
+    <div class="section-heading">
+      <div class="section-num-badge">1</div>
+      <div>
+        <div class="section-heading-text">البيانات الأساسية للقضية</div>
+        <div class="section-heading-sub">أدخل بيانات تعريف القضية والمحكمة ودرجة التقاضي</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-body">
+
+        <div class="form-grid" style="margin-bottom:16px;">
+          <div class="field">
+            <label>رقم القضية <span class="req">*</span></label>
+            <input type="text" id="caseNumber" placeholder="مثال: 1024*" maxlength="20" autocomplete="off" oninput="enforceStarOnly(this); updateFinalCaseNumber()" />
+            <span class="ferr" id="e-caseNumber">يرجى إدخال رقم القضية</span>
+          </div>
+          <div class="field">
+            <label>السنة <span class="req">*</span></label>
+            <input type="number" id="caseYear" placeholder="مثال: 2026" oninput="updateFinalCaseNumber()" />
+            <span class="ferr" id="e-caseYear">يرجى إدخال السنة</span>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-bottom:16px;">
+          <div class="field">
+            <label>المحكمة <span class="req">*</span></label>
+            <select id="caseCourt" onchange="populateDivisions(); updateFinalCaseNumber();">
+              <option value="">-- اختر المحكمة --</option>
+            </select>
+            <span class="ferr" id="e-caseCourt">يرجى اختيار المحكمة</span>
+          </div>
+          <div class="field">
+            <label>الدائرة <span class="req">*</span></label>
+            <select id="caseDivision">
+              <option value="">-- اختر المحكمة أولاً --</option>
+            </select>
+            <span class="ferr" id="e-caseDivision">يرجى اختيار الدائرة</span>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:16px;">
+          <label>نوع القضية <span class="req">*</span></label>
+          <div class="type-chips">
+            <button type="button" class="type-chip" id="chip-madani" onclick="selectCaseType('مدني')">
+              <span class="chip-icon">👥</span>مدني
+            </button>
+            <button type="button" class="type-chip" id="chip-omali" onclick="selectCaseType('عمالي')">
+              <span class="chip-icon">👷</span>عمالي
+            </button>
+          </div>
+          <span class="ferr" id="e-caseType">يرجى اختيار نوع القضية</span>
+        </div>
+
+        <div id="subTypesSection" style="display:none;margin-bottom:16px;">
+          <div class="field">
+            <label>التصنيف الفرعي <span class="req">*</span></label>
+            <div class="subtype-grid" id="subTypeGrid"></div>
+            <span class="ferr" id="e-subType">يرجى اختيار التصنيف الفرعي</span>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:16px;" id="subjectSection">
+          <label>موضوع القضية <span class="req">*</span> <span style="font-size:11px;font-weight:600;color:#64748B;">(يمكنك الاختيار من التصنيفات أعلاه أو كتابة وتعديل الموضوع بحرية)</span></label>
+          <div id="subjectInputWrap">
+            <input type="text" id="caseSubject" placeholder="اختر تصنيفاً فرعياً أعلاه أو اكتب موضوع القضية هنا مباشرة..." 
+                   style="height:42px;border:1.5px solid #93C5FD;border-radius:8px;padding:0 12px;font-size:13.5px;font-family:Cairo,sans-serif;background:#FFFFFF;color:#1a3a5c;font-weight:700;outline:none;width:100%;box-sizing:border-box;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+          </div>
+          <span class="ferr" id="e-caseSubject">يرجى كتابة أو اختيار موضوع القضية</span>
+        </div>
+
+        <div class="allowance-box" id="allowanceBox" style="margin-top: 12px; background: #F8FAFC; border: 1.5px solid #CBD5E1; border-radius: 12px; padding: 16px;">
+          <div class="allowance-box-title" style="font-weight: 800; font-size: 14px; color: #1E293B; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-family: Cairo, sans-serif;">
+            <i class="fa-solid fa-scale-balanced" style="color: #4F46E5;"></i> القوانين والسنوات الخاصة بالعلاوة
+          </div>
+          
+          <!-- قائمة القوانين المضافة -->
+          <div id="addedAllowancesList" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;"></div>
+
+          <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+            <div class="field" style="flex: 2; min-width: 120px; margin-bottom: 0;">
+              <label style="font-size: 12px; color: #64748B; margin-bottom: 4px;">رقم القانون</label>
+              <input type="text" id="allowanceLawInput" placeholder="مثال: 10" style="height: 38px; font-size: 13px;" />
+            </div>
+            <div class="field" style="flex: 2; min-width: 120px; margin-bottom: 0;">
+              <label style="font-size: 12px; color: #64748B; margin-bottom: 4px;">سنة القانون</label>
+              <input type="number" id="allowanceYearInput" placeholder="مثال: 2023" style="height: 38px; font-size: 13px;" />
+            </div>
+            <button type="button" onclick="addAllowanceRow()" style="height: 38px; background: #4F46E5; color: white; border: none; border-radius: 8px; padding: 0 16px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s; font-family: Cairo, sans-serif;">
+              <i class="fa-solid fa-plus"></i> إضافة قانون
+            </button>
+          </div>
+        </div>
+
+        <!-- عرض رقم القضية بالصيغة النهائية -->
+        <div class="field" style="margin-bottom:16px;margin-top:8px;">
+          <label>رقم القضية النهائي (سيُحفظ بهذا الشكل)</label>
+          <input type="text" id="finalCaseNumber" readonly placeholder="1024/2026" style="background:#EEF4FF;color:#1a3a5c;font-weight:800;border-color:#C7D2FE;" />
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>تاريخ انشاء القضية<span class="req">*</span></label>
+            <div class="date-field-wrap">
+              <input type="text" class="date-display" id="firstSessionDate_display" placeholder="dd/mm/yyyy" readonly />
+              <input type="date" id="firstSessionDate" />
+            </div>
+            <span class="ferr" id="e-firstSession">يرجى اختيار تاريخ الجلسة الأولى</span>
+          </div>
+          <div class="field">
+            <label>درجة التقاضي <span class="req">*</span></label>
+            <select id="litigationDegree" disabled>
+              <option value="ابتدائي" selected>ابتدائي</option>
+            </select>
+            <input type="hidden" id="litigationDegreeHidden" value="ابتدائي">
+            <span class="ferr" id="e-litigationDegree">يرجى اختيار درجة التقاضي</span>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-top:16px;">
+          <div class="field">
+            <label>القيمة المادية للدعوى</label>
+            <input type="text" id="claimAmount" placeholder="مثال: 50,000 ج.م" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 2 — أطراف القضية -->
+  <div class="form-section" id="section2">
+    <div class="section-heading">
+      <div class="section-num-badge">2</div>
+      <div>
+        <div class="section-heading-text">أطراف القضية</div>
+        <div class="section-heading-sub">حدد الطرف الأول والطرف الثاني وبياناتهم ورصفاتهم الإجرائية</div>
+      </div>
+    </div>
+
+    <!-- بطاقة تحديد الأطراف والصفات الإجرائية -->
+    <div class="form-card" style="margin-bottom: 20px; border-right: 4px solid var(--navy-500);">
+      <div class="form-card-header">
+        <span class="section-icon">👥</span>
+        <h3>تحديد الأطراف والصفة الإجرائية (المدعى والمدعى عليه)</h3>
+      </div>
+      <div class="form-card-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>الطرف الأول <span class="req">*</span></label>
+            <select id="firstPartyTypeSelect" onchange="handlePartyConfigChange()">
+              <option value="الشركة" selected>شركة الصرف الصحي بالإسكندرية (الشركة)</option>
+              <option value="الخصم">الخصم</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>الطرف الثاني (تلقائي)</label>
+            <input type="text" id="secondPartyTypeDisplay" value="الخصم" readonly style="background:#F1F5F9;font-weight:700;" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- الطرف الأول (ثابت) -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="section-icon">🏛️</span>
+        <h3>الشركة</h3>
+      </div>
+      <div class="form-card-body">
+        <div class="company-banner">
+          <div class="company-banner-icon">🏢</div>
+          <div>
+            <div class="company-banner-name">شركة الصرف الصحي بالإسكندرية</div>
+            <div class="company-banner-sub">الطرف الأول</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field full">
+            <label>المحامي المسؤول عن القضية <span class="req">*</span></label>
+            <select id="assignedLawyer">
+              <option value="">-- اختر المحامي --</option>
+            </select>
+            <span class="ferr" id="e-lawyer">يرجى اختيار المحامي المسؤول</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- الطرف الثاني (ديناميكي) -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="section-icon">👤</span>
+        <h3>الخصم</h3>
+      </div>
+      <div class="form-card-body" id="party2Body">
+        <p style="color:#94A3B8;font-size:13px;text-align:center;padding:20px 0;">
+           اختر نوع القضية في القسم الأول أولاً
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 3 — المستندات -->
+  <div class="form-section" id="section3">
+    <div class="section-heading">
+      <div class="section-num-badge">3</div>
+      <div>
+        <div class="section-heading-text">المستندات والمرفقات</div>
+        <div class="section-heading-sub">أرفق المستندات والأوراق الرسمية المتعلقة بالقضية</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-body">
+        <div class="file-drop" id="dropZone"
+             onclick="document.getElementById('fileInput').click()"
+             ondragover="onDragOver(event)"
+             ondragleave="onDragLeave()"
+             ondrop="onDrop(event)">
+          <div class="file-drop-icon">📁</div>
+          <div class="file-drop-text">اضغط لرفع الملفات أو اسحبها هنا</div>
+          <div class="file-drop-hint">PDF, Word, صور — حد أقصى 10 ميجا للملف</div>
+          <input type="file" id="fileInput" multiple style="display:none" onchange="handleFiles(this.files)" />
+        </div>
+        <div class="file-list" id="fileList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 4 — الملاحظات -->
+  <div class="form-section" id="section4">
+    <div class="section-heading">
+      <div class="section-num-badge">4</div>
+      <div>
+        <div class="section-heading-text">ملاحظات ومعلومات إضافية</div>
+        <div class="section-heading-sub">أي معلومات أو تعليمات خاصة بهذه القضية</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-body">
+        <div class="form-grid cols-1">
+          <div class="field">
+            <label>ملخص القضية</label>
+            <textarea id="caseSummary" rows="4" placeholder="اكتب ملخصاً موجزاً لتفاصيل القضية وخلفيتها..."></textarea>
+          </div>
+          <div class="field">
+            <label>ملاحظات خاصة</label>
+            <textarea id="caseNotes" rows="3" placeholder="أي ملاحظات أو تعليمات خاصة بهذه القضية..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STICKY SUBMIT BAR -->
+  <div class="submit-bar">
+    <a href="Cases.html" class="btn btn-ghost">↩ إلغاء والعودة</a>
+    <div class="submit-bar-right">
+      <button class="btn btn-ghost" onclick="saveDraft()"> حفظ مسودة</button>
+      <button class="btn btn-primary" onclick="submitCase()"> حفظ وإنشاء القضية</button>
+    </div>
+  </div>
+
+</div><!-- /.page-body -->
+
+<div class="toast" id="toast"></div>
+
+<!-- SUBTYPE MODAL (حذف / تعديل تصنيف فرعي) -->
+<div class="subtype-modal-overlay" id="subTypeModalOverlay">
+  <div class="subtype-modal-box" id="subTypeModalBox"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// API URL
+// ═══════════════════════════════════════
+const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+let employeesDB = [];
+let courtsDB = {};
+let lawyersDB = [];
+
+const madaniSubTypes = [
+    "ضرائب عقارية",
+    "ضرائب كسب عمل",
+    "براءة ذمة",
+    "تعويضات",
+    "نزع ملكية"
+];
+
+const omaliSubjects  = ["رصيد إجازات","فروق رصيد إجازات","ضم مدة خدمة عسكرية","تسوية الحالة الوظيفية","العلاوات"];
+
+// ═══════════════════════════════════════
+// تصنيفات فرعية مخصّصة (يضيفها المستخدم) — تُحفظ بشكل دائم في قاعدة
+// البيانات عبر السيرفر، فتفضل موجودة لكل المستخدمين في كل مرة
+// ═══════════════════════════════════════
+let customSubTypesLoaded = false;
+
+// خريطة اسم التصنيف → Id بتاعه في قاعدة البيانات (لكل نوع)، مطلوبة لعمليات الحذف/التعديل
+const subTypeIds = { 'مدني': {}, 'عمالي': {} };
+
+// هل إضافة تصنيف فرعي جديد ممنوعة حالياً على المستخدمين العاديين؟ (يتحكم فيها الأدمن)
+let subTypesLocked = false;
+
+// ===== هل المستخدم الحالي "أدمن" (username = admin)؟ =====
+function isSubTypeAdmin() {
+    try {
+        const u = (window.getUsername ? window.getUsername() : (localStorage.getItem('username') || ''));
+        return String(u).trim().toLowerCase() === 'admin';
+    } catch (e) {
+        return false;
+    }
+}
+
+async function loadCustomSubTypesFromServer() {
+    try {
+        const response = await fetch(`${API_URL}/case-subtypes`);
+        const result = await response.json();
+        if (result.success && Array.isArray(result.data)) {
+            result.data.forEach(row => {
+                if (row.Category === 'مدني') {
+                    if (!madaniSubTypes.includes(row.Name)) madaniSubTypes.push(row.Name);
+                    subTypeIds['مدني'][row.Name] = row.Id;
+                } else if (row.Category === 'عمالي') {
+                    if (!omaliSubjects.includes(row.Name)) omaliSubjects.push(row.Name);
+                    subTypeIds['عمالي'][row.Name] = row.Id;
+                }
+            });
+        }
+    } catch (e) {
+        console.error('❌ خطأ في جلب التصنيفات الفرعية من السيرفر:', e);
+    }
+
+    try {
+        const lockRes = await fetch(`${API_URL}/case-subtypes/lock-status`);
+        const lockResult = await lockRes.json();
+        if (lockResult.success) subTypesLocked = !!lockResult.locked;
+    } catch (e) {
+        console.error('❌ خطأ في جلب حالة قفل التصنيفات:', e);
+    }
+
+    customSubTypesLoaded = true;
+    // لو المستخدم كان بالفعل على شاشة اختيار النوع، حدّث القائمة المعروضة
+    if (selectedCaseType) {
+        buildSubTypeGrid(selectedCaseType === 'عمالي' ? omaliSubjects : madaniSubTypes, selectedCaseType === 'عمالي');
+    }
+}
+
+async function addCustomSubType(category, value) {
+    try {
+        const response = await fetch(`${API_URL}/case-subtypes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category, name: value })
+        });
+        const result = await response.json();
+        if (result.success) {
+            if (result.id) subTypeIds[category][value] = result.id;
+        } else {
+            console.error('❌ فشل حفظ التصنيف على السيرفر:', result.message);
+            showToast('⚠️ تم استخدام التصنيف لكن لم يتم حفظه بشكل دائم: ' + (result.message || ''), true);
+        }
+    } catch (e) {
+        console.error('❌ خطأ في حفظ التصنيف الجديد على السيرفر:', e);
+        showToast('⚠️ تم استخدام التصنيف لكن تعذّر حفظه بشكل دائم (تحقق من الاتصال بالسيرفر)', true);
+    }
+}
+
+// ===== حذف تصنيف فرعي (أدمن فقط) =====
+function deleteSubType(name, isOmali, ev) {
+    if (ev) ev.stopPropagation();
+    openSubTypeModal('delete', name, isOmali);
+}
+
+async function performDeleteSubType(name, isOmali) {
+    const category = isOmali ? 'عمالي' : 'مدني';
+    const id = subTypeIds[category][name];
+    if (!id) {
+        showToast('⚠️ تعذر تحديد هوية التصنيف لحذفه', true);
+        return;
+    }
+
+    try {
+        const username = localStorage.getItem('username') || '';
+        const response = await fetch(`${API_URL}/case-subtypes/${id}`, {
+            method: 'DELETE',
+            headers: { 'X-Username': username }
+        });
+        const result = await response.json();
+        if (result.success) {
+            const list = isOmali ? omaliSubjects : madaniSubTypes;
+            const idx = list.indexOf(name);
+            if (idx > -1) list.splice(idx, 1);
+            delete subTypeIds[category][name];
+            if (selectedSubType === name) {
+                selectedSubType = '';
+                const subjInput = document.getElementById('caseSubject');
+                if (subjInput) subjInput.value = '';
+            }
+            buildSubTypeGrid(list, isOmali);
+            showToast('✅ تم حذف التصنيف "' + name + '"');
+        } else {
+            showToast('⚠️ تعذر حذف التصنيف: ' + (result.message || ''), true);
+        }
+    } catch (e) {
+        console.error('❌ خطأ في حذف التصنيف:', e);
+        showToast('⚠️ تعذر حذف التصنيف (تحقق من الاتصال بالسيرفر)', true);
+    }
+}
+
+// ===== تعديل (إعادة تسمية) تصنيف فرعي — بالدبل كليك (أدمن فقط) =====
+function startEditSubType(oldName, isOmali) {
+    openSubTypeModal('edit', oldName, isOmali);
+}
+
+async function saveEditSubType(id, oldName, newName, isOmali) {
+    const category = isOmali ? 'عمالي' : 'مدني';
+    try {
+        const username = localStorage.getItem('username') || '';
+        const response = await fetch(`${API_URL}/case-subtypes/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Username': username },
+            body: JSON.stringify({ name: newName })
+        });
+        const result = await response.json();
+        if (result.success) {
+            const list = isOmali ? omaliSubjects : madaniSubTypes;
+            const idx = list.indexOf(oldName);
+            if (idx > -1) list[idx] = newName;
+            delete subTypeIds[category][oldName];
+            subTypeIds[category][newName] = id;
+            if (selectedSubType === oldName) {
+                selectedSubType = newName;
+                const subjInput = document.getElementById('caseSubject');
+                if (subjInput) subjInput.value = newName;
+            }
+            buildSubTypeGrid(list, isOmali);
+            showToast('✅ تم تعديل التصنيف إلى "' + newName + '"');
+        } else {
+            showToast('⚠️ تعذر تعديل التصنيف: ' + (result.message || ''), true);
+        }
+    } catch (e) {
+        console.error('❌ خطأ في تعديل التصنيف:', e);
+        showToast('⚠️ تعذر تعديل التصنيف (تحقق من الاتصال بالسيرفر)', true);
+    }
+}
+
+// ===== مودال موحّد للحذف/التعديل بدل confirm() و prompt() الافتراضيين =====
+function openSubTypeModal(mode, name, isOmali) {
+    const overlay = document.getElementById('subTypeModalOverlay');
+    const box = document.getElementById('subTypeModalBox');
+    if (!overlay || !box) return;
+
+    const escapedName = name.replace(/'/g, "\\'");
+
+    if (mode === 'delete') {
+        box.innerHTML = `
+            <div class="subtype-modal-icon danger"><i class="fa-solid fa-trash-can"></i></div>
+            <h3>حذف التصنيف؟</h3>
+            <p>هل أنت متأكد من حذف التصنيف<br><strong>"${name}"</strong>؟<br>هذا الإجراء لا يمكن التراجع عنه.</p>
+            <div class="subtype-modal-actions">
+                <button type="button" class="subtype-modal-btn-outline" onclick="closeSubTypeModal()">إلغاء</button>
+                <button type="button" class="subtype-modal-btn-danger" onclick="closeSubTypeModal(); performDeleteSubType('${escapedName}', ${isOmali})">حذف</button>
+            </div>
+        `;
+    } else if (mode === 'edit') {
+        box.innerHTML = `
+            <div class="subtype-modal-icon edit"><i class="fa-solid fa-pen"></i></div>
+            <h3>تعديل التصنيف</h3>
+            <p>عدّل اسم التصنيف<br><strong>"${name}"</strong></p>
+            <input type="text" id="subTypeModalInput" value="${name.replace(/"/g, '&quot;')}">
+            <div class="subtype-modal-actions">
+                <button type="button" class="subtype-modal-btn-outline" onclick="closeSubTypeModal()">إلغاء</button>
+                <button type="button" class="subtype-modal-btn-primary" onclick="confirmEditSubType('${escapedName}', ${isOmali})">حفظ</button>
+            </div>
+        `;
+    }
+
+    overlay.classList.add('open');
+
+    if (mode === 'edit') {
+        setTimeout(() => {
+            const input = document.getElementById('subTypeModalInput');
+            if (input) {
+                input.focus();
+                input.select();
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        confirmEditSubType(escapedName, isOmali);
+                    } else if (e.key === 'Escape') {
+                        closeSubTypeModal();
+                    }
+                });
+            }
+        }, 30);
+    }
+
+    overlay.onclick = function (e) {
+        if (e.target === overlay) closeSubTypeModal();
+    };
+}
+
+function confirmEditSubType(oldName, isOmali) {
+    const input = document.getElementById('subTypeModalInput');
+    const newName = input ? input.value.trim() : '';
+    if (!newName) {
+        showToast('⚠️ يرجى كتابة اسم التصنيف', true);
+        return;
+    }
+    if (newName === oldName) {
+        closeSubTypeModal();
+        return;
+    }
+
+    const category = isOmali ? 'عمالي' : 'مدني';
+    const id = subTypeIds[category][oldName];
+    if (!id) {
+        showToast('⚠️ تعذر تحديد هوية التصنيف لتعديله', true);
+        closeSubTypeModal();
+        return;
+    }
+
+    closeSubTypeModal();
+    saveEditSubType(id, oldName, newName, isOmali);
+}
+
+function closeSubTypeModal() {
+    const overlay = document.getElementById('subTypeModalOverlay');
+    if (overlay) overlay.classList.remove('open');
+}
+
+// ===== منع/سماح إضافة تصنيف جديد لباقي المستخدمين (أدمن فقط) =====
+async function toggleSubTypeLock(isOmali) {
+    const newLocked = !subTypesLocked;
+    try {
+        const username = localStorage.getItem('username') || '';
+        const response = await fetch(`${API_URL}/case-subtypes/lock-status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Username': username },
+            body: JSON.stringify({ locked: newLocked })
+        });
+        const result = await response.json();
+        if (result.success) {
+            subTypesLocked = !!result.locked;
+            showToast(subTypesLocked ? '🔒 تم منع باقي المستخدمين من إضافة تصنيف جديد' : '🔓 تم السماح لباقي المستخدمين بإضافة تصنيف جديد');
+            buildSubTypeGrid(isOmali ? omaliSubjects : madaniSubTypes, isOmali);
+        } else {
+            showToast('⚠️ تعذر تحديث الإعداد: ' + (result.message || ''), true);
+        }
+    } catch (e) {
+        console.error('❌ خطأ في تحديث حالة القفل:', e);
+        showToast('⚠️ تعذر تحديث الإعداد (تحقق من الاتصال بالسيرفر)', true);
+    }
+}
+
+// تحميل التصنيفات المخصصة فور فتح الصفحة
+loadCustomSubTypesFromServer();
+
+let selectedCaseType = '';
+let selectedSubType  = '';
+let groupMembers     = [];
+let leaderData       = null;
+
+// ═══════════════════════════════════════
+// جلب المحامين من API
+// ═══════════════════════════════════════
+async function loadLawyers() {
+    try {
+        const response = await fetch(`${API_URL}/lawyers`);
+        const result = await response.json();
+        if (result.success) {
+            lawyersDB = result.data;
+            populateLawyerSelect();
+        } else {
+            console.error('❌ فشل جلب المحامين:', result.message);
+            useMockLawyers();
+        }
+    } catch (error) {
+        console.error('❌ خطأ في الاتصال:', error);
+        useMockLawyers();
+    }
+}
+
+// ═══════════════════════════════════════
+// جلب الموظفين (قاعدة البيانات الرئيسية)
+// ═══════════════════════════════════════
+async function loadEmployees() {
+    try {
+        const response = await fetch(`${API_URL}/employees`);
+        const result = await response.json();
+        if (result.success && result.data.length > 0) {
+            employeesDB = result.data.map(e => ({
+                Id: e.employeeCode,
+                code: e.employeeCode,
+                name: e.employeeName,
+                nationalId: e.nationalId || '—',
+                address: e.address || '—',
+                mobile: e.mobile || '—',
+                workArea: e.workArea || '—'
+            }));
+            console.log(`✅ تم تحميل ${employeesDB.length} موظف من قاعدة البيانات`);
+        } else {
+            console.warn('⚠️ لا يوجد موظفين في قاعدة البيانات');
+        }
+    } catch (error) {
+        console.error('❌ خطأ في جلب الموظفين:', error);
+    }
+}
+
+function useMockLawyers() {
+    lawyersDB = [
+        { Id: 1, Code: '2044', FullName: 'جوليا ماجد عدلي', Grade: 'محام ممتاز', Mobile: '01223456789', IsActive: true },
+        { Id: 2, Code: '1025', FullName: 'أحمد محمود عبد الكريم', Grade: 'مدير إدارة قانونية', Mobile: '01009876543', IsActive: true },
+        { Id: 3, Code: '3012', FullName: 'مينا جرجس مرقص', Grade: 'محام أول', Mobile: '01112345678', IsActive: true },
+        { Id: 4, Code: '4567', FullName: 'رانيا محمد فوزي', Grade: 'محام', Mobile: '01234567890', IsActive: true }
+    ];
+    populateLawyerSelect();
+}
+
+// المحامين غير النشطين ميظهروش في قائمة الاختيار، لكن بيفضلوا محفوظين في lawyersDB
+// عشان لو قضية قديمة متعينلها محامي بقى غير نشط، اسمه يفضل ظاهر صح لما تفتحي القضية للتعديل
+function populateLawyerSelect() {
+    const ls = document.getElementById('assignedLawyer');
+    if (!ls) return;
+    const current = ls.value;
+    ls.innerHTML = '<option value="">-- اختر المحامي --</option>';
+    lawyersDB
+        .filter(l => l.IsActive === true || l.IsActive === 1 || l.IsActive === undefined)
+        .forEach(l => ls.appendChild(new Option(l.FullName, l.Id)));
+    if (current) ls.value = current;
+}
+
+// بيتنده لما نفتح قضية للتعديل: لو المحامي المعين للقضية بقى غير نشط دلوقتي،
+// بنضيفه كخيار إضافي (متعلّم إنه غير نشط) عشان اسمه يظهر صح بدل ما يفضل فاضي
+function ensureAssignedLawyerOptionVisible(assignedLawyerId) {
+    const ls = document.getElementById('assignedLawyer');
+    if (!ls || !assignedLawyerId) return;
+    const exists = Array.from(ls.options).some(o => String(o.value) === String(assignedLawyerId));
+    if (exists) {
+        ls.value = assignedLawyerId;
+        return;
+    }
+    const lawyer = lawyersDB.find(l => String(l.Id) === String(assignedLawyerId));
+    if (lawyer) {
+        ls.appendChild(new Option(`${lawyer.FullName} (غير نشط)`, lawyer.Id));
+        ls.value = lawyer.Id;
+    }
+}
+
+// ═══════════════════════════════════════
+// جلب المحاكم من API
+// ═══════════════════════════════════════
+async function loadCourts() {
+    try {
+        const response = await fetch(`${API_URL}/courts`);
+        const result = await response.json();
+        if (result.success) {
+            courtsDB = {};
+            result.data.forEach(c => {
+                courtsDB[c.Name] = c.Floors ? c.Floors.split(',').filter(f => f.trim()) : [];
+            });
+            populateCourtSelect();
+        } else {
+            console.error('❌ فشل جلب المحاكم:', result.message);
+            useMockCourts();
+        }
+    } catch (error) {
+        console.error('❌ خطأ في الاتصال:', error);
+        useMockCourts();
+    }
+}
+
+function useMockCourts() {
+    courtsDB = {
+        "مجمع محاكم المنشية الابتدائية": ["الدور الثاني — دائرة 3 عمالي", "الدور الرابع — دائرة 5 تجاري", "الدور الأول — مدني مستأنف"],
+        "محكمة استئناف الإسكندرية": ["الدور الثالث — دائرة 12 جنايات", "الدور الخامس — قضاء إداري شؤون عاملين"],
+        "مجلس الدولة — هيئة قضايا الدولة": ["الدور الأول — دائرة 2 إدارية", "الدور الثاني — دائرة 8 عقود دولة"]
+    };
+    populateCourtSelect();
+}
+
+function populateCourtSelect() {
+    const cs = document.getElementById('caseCourt');
+    if (!cs) return;
+    cs.innerHTML = '<option value="">-- اختر المحكمة --</option>';
+    Object.keys(courtsDB).forEach(name => cs.appendChild(new Option(name, name)));
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+    const urlParamsEarly = new URLSearchParams(window.location.search);
+    const caseIdEarly = urlParamsEarly.get('id');
+    if (typeof PermGuard !== 'undefined') {
+        if (caseIdEarly) {
+            if (!PermGuard.canEdit('cases')) { PermGuard.blockPageIfNoAccess('__no_access__'); return; }
+        } else {
+            if (!PermGuard.blockPageIfNoAccess('new-case')) return;
+        }
+    }
+    if (typeof initSidebar === 'function') initSidebar('new-case');
+    document.getElementById('caseYear').value = new Date().getFullYear();
+    
+    // تحميل البيانات الأساسية أولاً بالتوازي
+    await Promise.all([loadLawyers(), loadEmployees(), loadCourts()]);
+    setupScrollSpy();
+    
+    document.getElementById('caseNumber').addEventListener('input', updateFinalCaseNumber);
+    document.getElementById('caseYear').addEventListener('input', updateFinalCaseNumber);
+    document.getElementById('caseCourt').addEventListener('change', updateFinalCaseNumber);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const caseId = urlParams.get('id');
+    if (caseId) {
+        await loadCaseForEdit(caseId);
+    }
+    wireCustomDateField('firstSessionDate');
+});
+
+// ═══════════════════════════════════════
+// تحميل بيانات القضية للتعديل
+// ═══════════════════════════════════════
+// استبدال دالة loadCaseForEdit بالكامل
+// ═══════════════════════════════════════
+// تحميل بيانات القضية للتعديل - نسخة محسنة
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// تحميل بيانات القضية للتعديل - نسخة محسنة
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// تحميل بيانات القضية للتعديل - نسخة محسنة
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// تحميل بيانات القضية للتعديل
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// تحميل بيانات القضية للتعديل
+// ═══════════════════════════════════════
+function handlePartyConfigChange() {
+    const firstPartySelect = document.getElementById('firstPartyTypeSelect');
+    const firstParty = firstPartySelect ? firstPartySelect.value : 'الشركة';
+    const secondPartyDisplay = document.getElementById('secondPartyTypeDisplay');
+    if (secondPartyDisplay) {
+        secondPartyDisplay.value = (firstParty === 'الشركة') ? 'الخصم' : 'شركة الصرف الصحي بالإسكندرية (الشركة)';
+    }
+
+    const bannerSub = document.querySelector('.company-banner-sub');
+    if (bannerSub) {
+        bannerSub.textContent = (firstParty === 'الشركة') ? 'الطرف الأول (المدعى)' : 'الطرف الثاني (المدعى عليه)';
+    }
+
+    const companyHeader = document.querySelector('#section2 .form-card:nth-of-type(2) .form-card-header h3');
+    if (companyHeader) {
+        companyHeader.textContent = (firstParty === 'الشركة') ? 'الشركة (الطرف الأول - المدعى)' : 'الشركة (الطرف الثاني - المدعى عليه)';
+    }
+
+    const party2Header = document.querySelector('#section2 .form-card:nth-of-type(3) .form-card-header h3');
+    if (party2Header) {
+        party2Header.textContent = (firstParty === 'الشركة') ? 'الخصم (الطرف الثاني - المدعى عليه)' : 'الخصم (الطرف الأول - المدعى)';
+    }
+
+    const filedBySelect = document.getElementById('filedBySelect');
+    if (filedBySelect) {
+        filedBySelect.value = firstParty;
+    }
+}
+
+// ═══════════════════════════════════════
+// مساعد استخراج بيانات المتوفى والورثة
+// ═══════════════════════════════════════
+function parseDeceasedAndHeirs(rawName, partyObj) {
+    let isDeceased = false;
+    let cleanName = (rawName || '').trim();
+    let heirs = [];
+
+    if (partyObj && (partyObj.Deceased === true || partyObj.Deceased === 1 || partyObj.deceased === true)) {
+        isDeceased = true;
+        if (partyObj.Heirs || partyObj.heirs) {
+            const h = partyObj.Heirs || partyObj.heirs;
+            heirs = typeof h === 'string' ? h.split(/[\-\代\,]/).map(x => x.trim()).filter(Boolean) : (Array.isArray(h) ? h : []);
+        }
+    }
+
+    const match = cleanName.match(/^ورثة\s+المرحوم\s*\/\s*(.+?)(?:\s*\((.*?)\))?$/);
+    if (match) {
+        isDeceased = true;
+        cleanName = match[1].trim();
+        if (match[2] && heirs.length === 0) {
+            heirs = match[2].split(/[\-\代\,]/).map(x => x.trim()).filter(Boolean);
+        }
+    }
+    return { isDeceased, cleanName, heirs };
+}
+
+// ═══════════════════════════════════════
+// تحميل بيانات القضية للتعديل
+// ═══════════════════════════════════════
+async function loadCaseForEdit(caseId) {
+    try {
+        showToast('⏳ جاري تحميل بيانات القضية...');
+        
+        // التأكد من اكتمال تحميل الموظفين والمحامين والمحاكم أولاً
+        if (!employeesDB || employeesDB.length === 0) await loadEmployees();
+        if (!lawyersDB || lawyersDB.length === 0) await loadLawyers();
+        if (!courtsDB || Object.keys(courtsDB).length === 0) await loadCourts();
+        
+        let data = null;
+        try {
+            const response = await fetch(`${API_URL}/cases/id/${caseId}`);
+            const result = await response.json();
+            if (result.success && result.data) {
+                data = result.data;
+            }
+        } catch (e) {
+            console.warn('Direct id fetch error:', e);
+        }
+
+        if (!data) {
+            try {
+                const response = await fetch(`${API_URL}/cases/${caseId}`);
+                const result = await response.json();
+                if (result.success && result.data) {
+                    data = result.data;
+                }
+            } catch (e) {
+                console.warn('Fallback /cases/:id error:', e);
+            }
+        }
+
+        if (!data) {
+            showToast('❌ فشل تحميل بيانات القضية', true);
+            return;
+        }
+        
+        console.log('✅ بيانات القضية:', data);
+        
+        // ===== 1. تعبئة البيانات الأساسية =====
+        const caseNumberParts = data.CaseNumber?.split('/') || [];
+        document.getElementById('caseNumber').value = caseNumberParts[0] || '';
+        document.getElementById('caseYear').value = data.CaseYear || '';
+        
+        // ===== 2. تعبئة المحكمة والدائرة =====
+        if (data.CourtName) {
+            const courtSelect = document.getElementById('caseCourt');
+            let found = false;
+            for (let option of courtSelect.options) {
+                if (option.value === data.CourtName || option.text === data.CourtName) {
+                    courtSelect.value = option.value || option.text;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found && courtSelect.options.length > 0) {
+                const newOption = document.createElement('option');
+                newOption.value = data.CourtName;
+                newOption.text = data.CourtName;
+                courtSelect.appendChild(newOption);
+                courtSelect.value = data.CourtName;
+            }
+            populateDivisions();
+            document.getElementById('caseDivision').value = data.CircuitName || '';
+        }
+        
+        // ===== 3. تعبئة التاريخ (FilingDate) =====
+        if (data.FilingDate) {
+            const date = new Date(data.FilingDate);
+            if (!isNaN(date.getTime())) {
+                document.getElementById('firstSessionDate').value = date.toISOString().split('T')[0];
+            } else {
+                document.getElementById('firstSessionDate').value = data.FilingDate;
+            }
+            syncDateDisplay('firstSessionDate');
+        }
+        
+        // ===== 4. تعبئة المحامي المسؤول =====
+        ensureAssignedLawyerOptionVisible(data.AssignedLawyerId);
+        
+        // ===== 5. تعبئة نوع القضية والموضوع =====
+        const category = data.Category || 'مدني';
+        selectCaseType(category);
+        
+        if (data.Subject) {
+            const subjectEl = document.getElementById('caseSubject');
+            if (subjectEl) subjectEl.value = data.Subject;
+            
+            document.querySelectorAll('.subtype-chip').forEach(c => {
+                if (data.Subject.includes(c.textContent)) {
+                    c.classList.add('selected');
+                    selectedSubType = c.textContent;
+                }
+            });
+
+            if (category === 'عمالي' && data.Subject.includes('علاوات')) {
+                selectSubType('العلاوات', true);
+                addedAllowances = [];
+                const newFormatMatch = data.Subject.match(/^علاوات\s+(.+)$/);
+                const oldFormatMatch = data.Subject.match(/العلاوات\s*\(([^)]+)\)/);
+                if (newFormatMatch) {
+                    const items = newFormatMatch[1].split(/\s*-\s*/);
+                    items.forEach(item => {
+                        const itemMatch = item.trim().match(/^(.*?)\s+لسنة\s+(\d+)$/);
+                        if (itemMatch) {
+                            addedAllowances.push({ law: itemMatch[1].trim(), year: itemMatch[2] });
+                        }
+                    });
+                } else if (oldFormatMatch) {
+                    const items = oldFormatMatch[1].split('،');
+                    items.forEach(item => {
+                        const itemMatch = item.trim().match(/قانون\s+(.*?)\s+لسنة\s+(\d+)/);
+                        if (itemMatch) {
+                            addedAllowances.push({ law: itemMatch[1], year: itemMatch[2] });
+                        } else {
+                            addedAllowances.push({ law: item.trim(), year: '' });
+                        }
+                    });
+                }
+                if (addedAllowances.length > 0) {
+                    renderAllowances();
+                }
+            }
+        }
+        
+        // ===== 6. تعبئة الملخص (Description) والملاحظات والقيمة =====
+        const summaryField = document.getElementById('caseSummary');
+        if (summaryField) {
+            summaryField.value = (data.Description && data.Description !== 'null') ? data.Description : '';
+        }
+        
+        const notesField = document.getElementById('caseNotes');
+        if (notesField) {
+            notesField.value = (data.Notes && data.Notes !== 'null') ? data.Notes : '';
+        }
+
+        const claimValueField = document.getElementById('claimAmount');
+        if (claimValueField) {
+            claimValueField.value = (data.ClaimValue && data.ClaimValue !== 'null') ? data.ClaimValue : '';
+        }
+
+        // ===== 7. تحديد الطرف الأول والمدعى/المدعى عليه =====
+        let isOpponentFirst = false;
+        if (data.Plaintiff && !data.Plaintiff.includes('الصرف') && !data.Plaintiff.includes('الشركة')) {
+            isOpponentFirst = true;
+        } else if (data.Defendant && (data.Defendant.includes('الصرف') || data.Defendant.includes('الشركة')) && data.Plaintiff && !data.Plaintiff.includes('الصرف')) {
+            isOpponentFirst = true;
+        } else if (data.FirstPartyType === 'الخصم' || data.FiledBy === 'الخصم') {
+            isOpponentFirst = true;
+        }
+
+        const firstPartySelect = document.getElementById('firstPartyTypeSelect');
+        if (firstPartySelect) {
+            firstPartySelect.value = isOpponentFirst ? 'الخصم' : 'الشركة';
+            handlePartyConfigChange();
+        }
+
+        // ===== 8. استخراج وتعبئة الخصم والأطراف بالكامل =====
+        const seenNames = new Set();
+        const nonCompanyParties = (data.Parties || []).filter(p => {
+            if (!p.Name || p.Name.includes('الصرف') || p.Name.includes('شركة') || p.PartyCategory === 'مجموعة') return false;
+            const norm = p.Name.trim();
+            if (seenNames.has(norm)) return false;
+            seenNames.add(norm);
+            return true;
+        });
+        let rawOpponent = data.Opponent || '';
+        if (!rawOpponent && nonCompanyParties.length > 0) {
+            rawOpponent = nonCompanyParties.map(p => p.Name).join('، ');
+        }
+        if (!rawOpponent) {
+            if (isOpponentFirst && data.Plaintiff) rawOpponent = data.Plaintiff;
+            else if (!isOpponentFirst && data.Defendant) rawOpponent = data.Defendant;
+        }
+
+        if (category === 'مدني') {
+            const secondParty = nonCompanyParties[0] || {};
+            const p2Name = document.getElementById('p2Name');
+            if (p2Name) p2Name.value = rawOpponent || secondParty.Name || '';
+            const p2Mobile = document.getElementById('p2Mobile');
+            if (p2Mobile) p2Mobile.value = secondParty.Mobile || data.OpponentMobile || '';
+            const p2LawyerName = document.getElementById('p2LawyerName');
+            if (p2LawyerName) p2LawyerName.value = secondParty.LawyerName || '';
+            const p2LawyerMobile = document.getElementById('p2LawyerMobile');
+            if (p2LawyerMobile) p2LawyerMobile.value = secondParty.LawyerMobile || '';
+        } else if (category === 'عمالي') {
+            const hasGroupFlag = (data.Parties || []).some(p => p.PartyCategory === 'مجموعة' || p.PartyCategory === 'group' || p.PartyCategory === 'قائد');
+            const isGroup = hasGroupFlag || rawOpponent.includes('،') || rawOpponent.includes(',') || nonCompanyParties.length > 1;
+
+            if (isGroup) {
+                const laborTypeSelect = document.getElementById('laborTypeSelect');
+                if (laborTypeSelect) laborTypeSelect.value = 'مجموعة';
+                renderLaborSub();
+
+                let memberEntries = nonCompanyParties.length > 0 ? nonCompanyParties : rawOpponent.split(/[\،\,]/).map(s => ({ Name: s.trim() })).filter(e => e.Name);
+                if (memberEntries.length > 0) {
+                    const leaderEntry = memberEntries[0];
+                    const leaderParsed = parseDeceasedAndHeirs(leaderEntry.Name, leaderEntry);
+                    let leaderEmp = employeesDB.find(e => e.name === leaderParsed.cleanName || (leaderEntry.Position && e.code === leaderEntry.Position));
+                    if (!leaderEmp) {
+                        leaderEmp = {
+                            Id: leaderEntry.Id || ('lead_' + Date.now()),
+                            code: leaderEntry.Position || '—',
+                            name: leaderParsed.cleanName,
+                            nationalId: '—',
+                            address: '—',
+                            mobile: leaderEntry.Mobile || '—',
+                            workArea: '—'
+                        };
+                        employeesDB.push(leaderEmp);
+                    }
+                    pickLeader(leaderEmp.Id);
+
+                    if (leaderParsed.isDeceased) {
+                        const decCb = document.getElementById('leaderDeceased');
+                        if (decCb) {
+                            decCb.checked = true;
+                            toggleLeaderHeirs();
+                            const list = document.getElementById('leaderHeirsList');
+                            if (list && leaderParsed.heirs.length > 0) {
+                                list.innerHTML = '';
+                                leaderParsed.heirs.forEach(h => {
+                                    const row = document.createElement('div');
+                                    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;';
+                                    row.innerHTML = `
+                                        <input type="text" value="${h}" style="flex:1;padding:7px 10px;border:1.5px solid #FED7AA;border-radius:6px;font-family:Cairo,sans-serif;font-size:12px;outline:none;" oninput="this.style.borderColor='#EA580C'" />
+                                        <button type="button" onclick="this.parentElement.remove()" style="padding:4px 10px;background:#FEE2E2;color:#b91c1c;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:800;">✕</button>
+                                    `;
+                                    list.appendChild(row);
+                                });
+                            }
+                        }
+                    }
+
+                    groupMembers = [];
+                    for (let i = 1; i < memberEntries.length; i++) {
+                        const mEntry = memberEntries[i];
+                        const mParsed = parseDeceasedAndHeirs(mEntry.Name, mEntry);
+                        let mEmp = employeesDB.find(e => e.name === mParsed.cleanName || (mEntry.Position && e.code === mEntry.Position));
+                        if (!mEmp) {
+                            mEmp = {
+                                Id: mEntry.Id || ('mem_' + Date.now() + '_' + i),
+                                code: mEntry.Position || '—',
+                                name: mParsed.cleanName,
+                                nationalId: '—',
+                                address: '—',
+                                mobile: mEntry.Mobile || '—',
+                                workArea: '—'
+                            };
+                            employeesDB.push(mEmp);
+                        }
+                        groupMembers.push({
+                            Id: mEmp.Id,
+                            code: mEmp.code || '',
+                            name: mEmp.name,
+                            nationalId: mEmp.nationalId || '',
+                            address: mEmp.address || '',
+                            mobile: mEmp.mobile || '',
+                            workArea: mEmp.workArea || '',
+                            deceased: mParsed.isDeceased,
+                            heirs: mParsed.heirs || []
+                        });
+                    }
+                    renderFullGroupTable();
+                }
+            } else {
+                const laborTypeSelect = document.getElementById('laborTypeSelect');
+                if (laborTypeSelect) laborTypeSelect.value = 'فرد';
+                renderLaborSub();
+
+                const firstPartyObj = nonCompanyParties[0] || {};
+                const parsed = parseDeceasedAndHeirs(rawOpponent || firstPartyObj.Name || '', firstPartyObj);
+                const cleanName = parsed.cleanName;
+
+                let emp = null;
+                if (cleanName) {
+                    emp = employeesDB.find(e => e.name === cleanName);
+                    if (!emp && firstPartyObj.Position) {
+                        emp = employeesDB.find(e => String(e.code) === String(firstPartyObj.Position));
+                    }
+                    if (!emp) {
+                        emp = employeesDB.find(e => e.name && e.name.replace(/\s+/g, ' ').trim() === cleanName.replace(/\s+/g, ' ').trim());
+                    }
+                }
+
+                if (!emp && cleanName) {
+                    emp = {
+                        Id: firstPartyObj.Id || ('fard_' + Date.now()),
+                        code: firstPartyObj.Position || '—',
+                        name: cleanName,
+                        nationalId: '—',
+                        address: '—',
+                        mobile: firstPartyObj.Mobile || '—',
+                        workArea: '—'
+                    };
+                    employeesDB.push(emp);
+                }
+
+                if (emp) {
+                    pickFard(emp.Id);
+                } else if (cleanName) {
+                    const ssInput = document.getElementById('ss_fard');
+                    if (ssInput) ssInput.value = cleanName;
+                }
+
+                if (parsed.isDeceased) {
+                    const decCb = document.getElementById('fardDeceased');
+                    if (decCb) {
+                        decCb.checked = true;
+                        toggleFardHeirs();
+                        const list = document.getElementById('fardHeirsList');
+                        if (list && parsed.heirs.length > 0) {
+                            list.innerHTML = '';
+                            parsed.heirs.forEach(h => {
+                                const row = document.createElement('div');
+                                row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;';
+                                row.innerHTML = `
+                                    <input type="text" value="${h}" style="flex:1;padding:7px 10px;border:1.5px solid #FED7AA;border-radius:6px;font-family:Cairo,sans-serif;font-size:12px;outline:none;" oninput="this.style.borderColor='#EA580C'" />
+                                    <button type="button" onclick="this.parentElement.remove()" style="padding:4px 10px;background:#FEE2E2;color:#b91c1c;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:800;">✕</button>
+                                `;
+                                list.appendChild(row);
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        // ===== 9. تخزين ID القضية للتعديل =====
+        document.getElementById('editingCaseId').value = caseId;
+        
+        // ===== 10. تحديث رقم القضية النهائي =====
+        updateFinalCaseNumber();
+        
+        // ===== 11. تغيير نص الزر =====
+        const submitBtn = document.querySelector('.btn-primary[onclick="submitCase()"]');
+        if (submitBtn) {
+            submitBtn.textContent = '💾 تحديث القضية';
+        }
+        
+        showToast('✅ تم تحميل بيانات القضية للتعديل');
+        
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        showToast('❌ فشل تحميل البيانات: ' + error.message, true);
+    }
+}
+
+// ═══════════════════════════════════════
+// PROGRESS NAV — SCROLL SPY
+// ═══════════════════════════════════════
+function scrollToSection(n) {
+    const el = document.getElementById('section' + n);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function setupScrollSpy() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const num = entry.target.id.replace('section','');
+                document.querySelectorAll('.pnav-btn').forEach(b => b.classList.remove('active'));
+                const btn = document.getElementById('pnav' + num);
+                if (btn) { btn.classList.remove('visited'); btn.classList.add('active'); }
+            }
+        });
+    }, { rootMargin: '-140px 0px -55% 0px', threshold: 0 });
+
+    [1,2,3,4].forEach(n => {
+        const el = document.getElementById('section' + n);
+        if (el) observer.observe(el);
+    });
+}
+
+function markNavVisited(upTo) {
+    for (let i = 1; i <= upTo; i++) {
+        const b = document.getElementById('pnav' + i);
+        if (b) { b.classList.remove('active'); b.classList.add('visited'); }
+    }
+}
+
+// ═══════════════════════════════════════
+// السماح فقط بالأرقام ورمز "*" في حقل رقم القضية
+// ═══════════════════════════════════════
+function enforceStarOnly(input) {
+    // إزالة أي حرف مش رقم ومش "*"
+    const cleaned = input.value.replace(/[^0-9*]/g, '');
+    if (input.value !== cleaned) {
+        input.value = cleaned;
+    }
+}
+
+// ═══════════════════════════════════════
+// تحديث رقم القضية النهائي
+// ═══════════════════════════════════════
+function updateFinalCaseNumber() {
+    const number = document.getElementById('caseNumber')?.value?.trim() || '';
+    const year = document.getElementById('caseYear')?.value?.trim() || new Date().getFullYear();
+    const finalNumber = number && year ? `${number}/${year}` : '';
+    document.getElementById('finalCaseNumber').value = finalNumber;
+}
+
+// ═══════════════════════════════════════
+// COURTS → DIVISIONS
+// ═══════════════════════════════════════
+function populateDivisions() {
+    const court  = document.getElementById('caseCourt').value;
+    const divSel = document.getElementById('caseDivision');
+    if (!divSel) return;
+    divSel.innerHTML = '<option value="">-- اختر الدائرة --</option>';
+    (courtsDB[court] || []).forEach(d => divSel.appendChild(new Option(d, d)));
+}
+
+// ═══════════════════════════════════════
+// CASE TYPE SELECTION
+// ═══════════════════════════════════════
+function selectCaseType(type) {
+    selectedCaseType = type;
+    selectedSubType  = '';
+    leaderData       = null;
+    groupMembers     = [];
+    addedAllowances  = [];
+
+    document.getElementById('chip-madani').classList.toggle('selected', type === 'مدني');
+    document.getElementById('chip-omali').classList.toggle('selected', type === 'عمالي');
+
+    const subSection   = document.getElementById('subTypesSection');
+    const subjectWrap  = document.getElementById('subjectInputWrap');
+    const allowanceBox = document.getElementById('allowanceBox');
+
+    if (type === 'مدني') {
+        subSection.style.display = '';
+        buildSubTypeGrid(madaniSubTypes, false);
+        subjectWrap.innerHTML = `
+            <input type="text" id="caseSubject" placeholder="اختر تصنيفاً فرعياً أعلاه" readonly 
+                   style="height:40px;border:1.5px solid #C7D2FE;border-radius:8px;padding:0 12px;font-size:13px;font-family:Cairo,sans-serif;background:#EEF4FF;color:#1a3a5c;font-weight:700;outline:none;width:100%;box-sizing:border-box;">
+        `;
+        allowanceBox.classList.remove('show');
+        renderParty2();
+
+    } else if (type === 'عمالي') {
+        subSection.style.display = '';
+        buildSubTypeGrid(omaliSubjects, true);
+        subjectWrap.innerHTML = `
+            <input type="text" id="caseSubject" placeholder="اختر تصنيفاً فرعياً أعلاه" readonly 
+                   style="height:40px;border:1.5px solid #C7D2FE;border-radius:8px;padding:0 12px;font-size:13px;font-family:Cairo,sans-serif;background:#EEF4FF;color:#1a3a5c;font-weight:700;outline:none;width:100%;box-sizing:border-box;">
+        `;
+        renderParty2();
+    }
+    
+    updateFinalCaseNumber();
+}
+
+function buildSubTypeGrid(items, isOmali) {
+    const grid = document.getElementById('subTypeGrid');
+    if (!grid) return;
+    const selected = selectedSubType;
+    const isAdmin = isSubTypeAdmin();
+
+    grid.innerHTML = items.map(item => {
+        const escaped = item.replace(/'/g, "\\'");
+        const chipBtn = `<button type="button" class="subtype-chip${item === selected ? ' selected' : ''}"
+                onclick="selectSubType('${escaped}', ${isOmali})"
+                ${isAdmin ? `ondblclick="event.stopPropagation(); startEditSubType('${escaped}', ${isOmali})"` : ''}
+                ${isAdmin ? 'title="دبل كليك للتعديل"' : ''}>${item}</button>`;
+
+        if (!isAdmin) return chipBtn;
+
+        return `
+            <div class="subtype-chip-wrap">
+                ${chipBtn}
+                <button type="button" class="subtype-chip-del" title="حذف التصنيف" onclick="deleteSubType('${escaped}', ${isOmali}, event)">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        `;
+    }).join('') + (
+        (!subTypesLocked || isAdmin) ? `
+        <button type="button" class="subtype-chip add-new" id="addSubTypeChip" onclick="showAddSubTypeForm(${isOmali})">
+            <i class="fa-solid fa-plus"></i> تصنيف جديد
+        </button>
+        ` : ''
+    ) + (
+        isAdmin ? `
+        <button type="button" class="subtype-lock-toggle${subTypesLocked ? ' locked' : ''}" onclick="toggleSubTypeLock(${isOmali})"
+            title="${subTypesLocked ? 'إضافة تصنيف جديد ممنوعة على باقي المستخدمين — اضغط للسماح' : 'إضافة تصنيف جديد متاحة لكل المستخدمين — اضغط للمنع'}">
+            <i class="fa-solid ${subTypesLocked ? 'fa-lock' : 'fa-lock-open'}"></i> ${subTypesLocked ? 'مفعّل: منع الإضافة' : 'السماح بالإضافة'}
+        </button>
+        ` : ''
+    );
+}
+
+function showAddSubTypeForm(isOmali) {
+    const grid = document.getElementById('subTypeGrid');
+    if (!grid) return;
+    const addChip = document.getElementById('addSubTypeChip');
+    if (addChip) addChip.style.display = 'none';
+
+    const existing = document.getElementById('subTypeAddForm');
+    if (existing) existing.remove();
+
+    const form = document.createElement('div');
+    form.className = 'subtype-add-form';
+    form.id = 'subTypeAddForm';
+    form.innerHTML = `
+        <input type="text" id="newSubTypeInput" placeholder="اكتب اسم التصنيف الجديد...">
+        <button type="button" class="subtype-add-btn" onclick="saveNewSubType(${isOmali})">حفظ</button>
+        <button type="button" class="subtype-add-cancel" onclick="cancelAddSubType()" title="إلغاء"><i class="fa-solid fa-xmark"></i></button>
+    `;
+    grid.appendChild(form);
+
+    const input = document.getElementById('newSubTypeInput');
+    if (input) {
+        input.focus();
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveNewSubType(isOmali);
+            } else if (e.key === 'Escape') {
+                cancelAddSubType();
+            }
+        });
+    }
+}
+
+function cancelAddSubType() {
+    const form = document.getElementById('subTypeAddForm');
+    if (form) form.remove();
+    const addChip = document.getElementById('addSubTypeChip');
+    if (addChip) addChip.style.display = '';
+}
+
+function saveNewSubType(isOmali) {
+    const input = document.getElementById('newSubTypeInput');
+    const value = input ? input.value.trim() : '';
+    if (!value) {
+        showToast('⚠️ يرجى كتابة اسم التصنيف', true);
+        if (input) input.focus();
+        return;
+    }
+
+    const category = isOmali ? 'عمالي' : 'مدني';
+    const list = isOmali ? omaliSubjects : madaniSubTypes;
+
+    if (list.includes(value)) {
+        showToast('⚠️ هذا التصنيف موجود بالفعل');
+    } else {
+        list.push(value);
+        addCustomSubType(category, value); // حفظ دائم في قاعدة البيانات ليظهر لكل المستخدمين في كل مرة
+        showToast('✅ تم إضافة التصنيف "' + value + '"');
+    }
+
+    cancelAddSubType();
+    buildSubTypeGrid(list, isOmali);
+    selectSubType(value, isOmali);
+}
+
+function selectSubType(val, isOmali) {
+    selectedSubType = val;
+    document.querySelectorAll('.subtype-chip').forEach(c => {
+        c.classList.toggle('selected', c.textContent === val);
+    });
+
+    const subjectEl = document.getElementById('caseSubject');
+    if (subjectEl) {
+        subjectEl.value = val;
+    }
+
+    if (isOmali) {
+        const aBox = document.getElementById('allowanceBox');
+        aBox.classList.toggle('show', val === 'العلاوات');
+        if (val !== 'العلاوات') {
+            addedAllowances = [];
+            const list = document.getElementById('addedAllowancesList');
+            if (list) list.innerHTML = '';
+        } else {
+            renderAllowances();
+        }
+    }
+    
+    updateFinalCaseNumber();
+}
+
+let addedAllowances = [];
+
+function renderAllowances() {
+    const list = document.getElementById('addedAllowancesList');
+    if (!list) return;
+    
+    list.innerHTML = addedAllowances.map((a, index) => `
+        <span class="allowance-chip" style="background:#EEF4FF; border:1px solid #C7D2FE; color:#1e40af; padding:6px 12px; border-radius:100px; display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; font-family:Cairo,sans-serif;">
+            <i class="fa-solid fa-file-contract" style="opacity:0.7;"></i>
+            قانون ${a.law} لسنة ${a.year}
+            <i class="fa-solid fa-xmark" onclick="removeAllowance(${index})" style="cursor:pointer; color:#ef4444; font-size:13px; font-weight:900; transition:color 0.2s;" onmouseover="this.style.color='#b91c1c'" onmouseout="this.style.color='#ef4444'"></i>
+        </span>
+    `).join('');
+
+    const subjectEl = document.getElementById('caseSubject');
+    if (subjectEl) {
+        if (addedAllowances.length > 0) {
+            subjectEl.value = 'علاوات ' + addedAllowances.map(a => a.law + ' لسنة ' + a.year).join(' - ');
+        } else {
+            subjectEl.value = 'العلاوات';
+        }
+    }
+}
+
+function addAllowanceRow() {
+    const lawInput = document.getElementById('allowanceLawInput');
+    const yearInput = document.getElementById('allowanceYearInput');
+    
+    if (!lawInput || !yearInput) return;
+    
+    const law = lawInput.value.trim();
+    const year = yearInput.value.trim();
+    
+    if (!law || !year) {
+        showToast('⚠️ يرجى ملء رقم القانون وسنة القانون معاً', true);
+        return;
+    }
+    
+    // التوجيه لمنع التكرار
+    const exists = addedAllowances.some(a => a.law === law && a.year === year);
+    if (exists) {
+        showToast('⚠️ تم إضافة هذا القانون وهذه السنة مسبقاً', true);
+        return;
+    }
+
+    addedAllowances.push({ law, year });
+    lawInput.value = '';
+    yearInput.value = '';
+    
+    renderAllowances();
+}
+
+function removeAllowance(index) {
+    addedAllowances.splice(index, 1);
+    renderAllowances();
+}
+
+// ═══════════════════════════════════════
+// PARTY 2 RENDER
+// ═══════════════════════════════════════
+function renderParty2() {
+    const body = document.getElementById('party2Body');
+    if (!body) return;
+
+    if (selectedCaseType === 'مدني') {
+        body.innerHTML = `
+            <div class="form-grid">
+                <div class="field">
+                    <label>اسم الخصم <span class="req">*</span></label>
+                    <input type="text" id="p2Name" placeholder="الاسم الكامل للطرف المدعى عليه" />
+                </div>
+                <div class="field">
+                    <label>رقم الموبايل</label>
+                    <input type="tel" id="p2Mobile" placeholder="01xxxxxxxxx" />
+                </div>
+                <div class="field">
+                    <label>اسم محامي الخصم</label>
+                    <input type="text" id="p2LawyerName" placeholder="اسم المحامي" />
+                </div>
+                <div class="field">
+                    <label>موبايل محامي الخصم</label>
+                    <input type="tel" id="p2LawyerMobile" placeholder="01xxxxxxxxx" />
+                </div>
+            </div>`;
+
+    } else if (selectedCaseType === 'عمالي') {
+        body.innerHTML = `
+            <div class="field" style="margin-bottom:16px;">
+                <label>صفة الطرف العمالي <span class="req">*</span></label>
+                <select id="laborTypeSelect" onchange="renderLaborSub()">
+                    <option value="">-- اختر --</option>
+                    <option value="فرد">فرد</option>
+                    <option value="مجموعة">مجموعة</option>
+                </select>
+            </div>
+            <div id="laborSubWrap"></div>`;
+    } else {
+        body.innerHTML = `<p style="color:#94A3B8;font-size:13px;text-align:center;padding:20px 0;"> اختر نوع القضية في القسم الأول أولاً</p>`;
+    }
+}
+
+function renderLaborSub() {
+    const type = document.getElementById('laborTypeSelect')?.value;
+    const wrap = document.getElementById('laborSubWrap');
+    if (!wrap) return;
+    groupMembers = [];
+    leaderData   = null;
+
+    if (type === 'فرد') {
+        wrap.innerHTML = `
+            <div style="background:#F8FAFD;border:1.5px dashed #E4EAF2;border-radius:10px;padding:16px;">
+                <p style="font-size:12px;font-weight:800;color:#475569;margin-bottom:10px;"> ابحث عن الموظف المدعي</p>
+                <div class="ss-wrap" id="ssWrap_fard">
+                    <input type="text" class="ss-input" id="ss_fard"
+                           placeholder="ابحث بالاسم..."
+                           oninput="filterSS('ss_fard','ssDrop_fard')"
+                           onfocus="openDrop('ssDrop_fard')" />
+                    <span class="ss-icon">🔍</span>
+                    <div class="ss-drop" id="ssDrop_fard"></div>
+                </div>
+                <input type="hidden" id="fardCode" />
+                <div class="auto-info" id="fardInfo">
+                    <div class="ai-item"><div class="ai-label">الاسم</div><div class="ai-val" id="fi_name">—</div></div>
+                    <div class="ai-item"><div class="ai-label">الكود الوظيفي</div><div class="ai-val" id="fi_code">—</div></div>
+                    <div class="ai-item"><div class="ai-label"> الادارة التابعة</div><div class="ai-val" id="fi_area">—</div></div>
+                </div>
+                <!-- خيار المتوفى -->
+                <div style="margin-top:14px;padding:12px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:8px;">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:700;color:#9A3412;">
+                        <input type="checkbox" id="fardDeceased" onchange="toggleFardHeirs()" style="width:16px;height:16px;accent-color:#EA580C;cursor:pointer;">
+                        <span>⚰️ الموظف متوفى</span>
+                    </label>
+                    <div id="fardHeirsWrap" style="display:none;margin-top:12px;">
+                        <p style="font-size:12px;font-weight:700;color:#9A3412;margin-bottom:8px;">🧑‍🤝‍🧑 بيانات الورثة</p>
+                        <div id="fardHeirsList"></div>
+                        <button type="button" onclick="addFardHeir()" style="margin-top:8px;padding:6px 16px;background:#EA580C;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:Cairo,sans-serif;">+ إضافة وارث</button>
+                    </div>
+                </div>
+            </div>`;
+
+    } else if (type === 'مجموعة') {
+        wrap.innerHTML = `
+            <div style="background:#F8FAFD;border:1.5px dashed #E4EAF2;border-radius:10px;padding:16px;">
+
+                <p style="font-size:12px;font-weight:800;color:#475569;margin-bottom:10px;">👑 قائد المجموعة</p>
+                <div class="ss-wrap" id="ssWrap_leader">
+                    <input type="text" class="ss-input" id="ss_leader"
+                           placeholder="ابحث عن قائد المجموعة..."
+                           oninput="filterSS('ss_leader','ssDrop_leader')"
+                           onfocus="openDrop('ssDrop_leader')" />
+                    <span class="ss-icon">🔍</span>
+                    <div class="ss-drop" id="ssDrop_leader"></div>
+                </div>
+                <input type="hidden" id="leaderCode" />
+                <div class="auto-info" id="leaderInfo">
+                    <div class="ai-item"><div class="ai-label">الاسم</div><div class="ai-val" id="li_name">—</div></div>
+                    <div class="ai-item"><div class="ai-label">الكود الوظيفي</div><div class="ai-val" id="li_code">—</div></div>
+                    <div class="ai-item"><div class="ai-label">الادارة التابعة </div><div class="ai-val" id="li_area">—</div></div>
+                </div>
+                <!-- خيار المتوفى للقائد -->
+                <div style="margin-top:10px;padding:10px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:8px;">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:700;color:#9A3412;">
+                        <input type="checkbox" id="leaderDeceased" onchange="toggleLeaderHeirs()" style="width:15px;height:15px;accent-color:#EA580C;cursor:pointer;">
+                        <span>⚰️ القائد متوفى</span>
+                    </label>
+                    <div id="leaderHeirsWrap" style="display:none;margin-top:10px;">
+                        <p style="font-size:12px;font-weight:700;color:#9A3412;margin-bottom:8px;">🧑‍🤝‍🧑 ورثة القائد</p>
+                        <div id="leaderHeirsList"></div>
+                        <button type="button" onclick="addLeaderHeir()" style="margin-top:8px;padding:5px 14px;background:#EA580C;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:Cairo,sans-serif;">+ إضافة وارث</button>
+                    </div>
+                </div>
+
+                <p style="font-size:12px;font-weight:800;color:#475569;margin:18px 0 10px;">👥 باقي أعضاء المجموعة</p>
+                <div class="ss-wrap" id="ssWrap_member" style="margin-bottom:12px;">
+                    <input type="text" class="ss-input" id="ss_member"
+                           placeholder="ابحث واختر للإضافة..."
+                           oninput="filterSS('ss_member','ssDrop_member')"
+                           onfocus="openDrop('ssDrop_member')" />
+                    <span class="ss-icon">🔍</span>
+                    <div class="ss-drop" id="ssDrop_member"></div>
+                </div>
+
+                <div id="groupCounterWrap" style="display:none;margin:14px 0 10px;">
+                    <div class="group-counter">
+                        <span>👥 إجمالي أعضاء المجموعة</span>
+                        <span class="group-counter-num" id="groupCounterNum">0</span>
+                        <span>عضو</span>
+                    </div>
+                </div>
+
+                <div id="membersWrap" style="display:none;margin-top:10px;overflow-x:auto;border:1px solid #E4EAF2;border-radius:10px;">
+                    <table class="members-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>الدور</th>
+                                <th>الاسم</th>
+                                <th>الكود الوظيفي</th>
+                                <th> الادارة التابعة</th>
+                                <th>متوفى؟</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersTbody"></tbody>
+                    </table>
+                </div>
+
+            </div>`;
+    }
+}
+
+// ═══════════════════════════════════════
+// SEARCH-SELECT HELPERS
+// ═══════════════════════════════════════
+function openDrop(id) {
+    document.querySelectorAll('.ss-drop').forEach(d => { if(d.id!==id) d.classList.remove('open'); });
+    const el = document.getElementById(id);
+    if (el) {
+        el.classList.add('open');
+        // Show placeholder hint when opening empty
+        let inputId = '';
+        if (id === 'ssDrop_fard') inputId = 'ss_fard';
+        else if (id === 'ssDrop_leader') inputId = 'ss_leader';
+        else if (id === 'ssDrop_member') inputId = 'ss_member';
+        if (inputId) {
+            const q = document.getElementById(inputId)?.value || '';
+            filterSS(inputId, id);
+        }
+    }
+}
+
+document.addEventListener('click', e => {
+    if (!e.target.closest('.ss-wrap'))
+        document.querySelectorAll('.ss-drop').forEach(d => d.classList.remove('open'));
+});
+
+// Debounce timers for search
+const _ssTimers = {};
+
+function filterSS(inputId, dropId) {
+    const q    = (document.getElementById(inputId)?.value || '').trim();
+    const drop = document.getElementById(dropId);
+    if (!drop) return;
+    drop.classList.add('open');
+
+    let callbackName = '';
+    if (dropId === 'ssDrop_fard') callbackName = 'pickFard';
+    else if (dropId === 'ssDrop_leader') callbackName = 'pickLeader';
+    else if (dropId === 'ssDrop_member') callbackName = 'addMember';
+
+    if (callbackName) {
+        // If no query, show all from memory (paginated)
+        if (q === '') {
+            const all = employeesDB.slice(0, 200);
+            if (all.length > 0) {
+                drop.innerHTML = all.map(e => 
+                    `<div class="ss-item" onclick="${callbackName}('${e.Id}')">${e.code} - ${e.name}</div>`
+                ).join('') + (employeesDB.length > 200 ? `<div class="ss-item no-res" style="color:#64748b;font-size:11px;text-align:center;cursor:default;">اكتب للبحث عن موظف محدد (${employeesDB.length} موظف متاح)</div>` : '');
+            } else {
+                drop.innerHTML = `<div class="ss-item no-res">جاري تحميل الموظفين...</div>`;
+            }
+            return;
+        }
+
+        // Debounce search to avoid flooding while typing
+        clearTimeout(_ssTimers[dropId]);
+        drop.innerHTML = `<div class="ss-item no-res" style="color:#64748b;">جاري البحث...</div>`;
+
+        _ssTimers[dropId] = setTimeout(async () => {
+            try {
+                const qLower = q.toLowerCase();
+                // Search from full in-memory list (all 4309 employees)
+                const matches = employeesDB.filter(e => 
+                    e.name.toLowerCase().includes(qLower) || 
+                    String(e.code).includes(qLower)
+                );
+
+                if (matches.length > 0) {
+                    const countNote = matches.length > 300 
+                        ? `<div class="ss-item no-res" style="color:#64748b;font-size:11px;text-align:center;cursor:default;">عدد النتائج: ${matches.length} - دقق البحث لتضييق النتائج</div>`
+                        : '';
+                    drop.innerHTML = matches.slice(0, 300).map(e => 
+                        `<div class="ss-item" onclick="${callbackName}('${e.Id}')">${e.code} - ${e.name}</div>`
+                    ).join('') + countNote;
+                } else {
+                    drop.innerHTML = `<div class="ss-item no-res">لا توجد نتائج للبحث عن "${q}"</div>`;
+                }
+            } catch(err) {
+                drop.innerHTML = `<div class="ss-item no-res">خطأ في البحث</div>`;
+            }
+        }, 200);
+
+    } else {
+        const items = drop.querySelectorAll('.ss-item:not(.no-res)');
+        let any = false;
+        items.forEach(item => {
+            const show = item.textContent.toLowerCase().includes(q.toLowerCase());
+            item.style.display = show ? '' : 'none';
+            if (show) any = true;
+        });
+
+        const noRes = drop.querySelector('.no-res');
+        if (noRes) noRes.remove();
+        if (!any) {
+            const msg = document.createElement('div');
+            msg.className = 'ss-item no-res';
+            msg.textContent = 'لا توجد نتائج';
+            drop.appendChild(msg);
+        }
+    }
+}
+
+
+function getEmp(id) { 
+    return employeesDB.find(e => e.Id == id); 
+}
+
+// ═══════════════════════════════════════
+// DECEASED / HEIRS HELPERS - فرد
+// ═══════════════════════════════════════
+function toggleFardHeirs() {
+    const cb = document.getElementById('fardDeceased');
+    const wrap = document.getElementById('fardHeirsWrap');
+    if (!wrap) return;
+    wrap.style.display = cb?.checked ? 'block' : 'none';
+    if (cb?.checked && document.getElementById('fardHeirsList').children.length === 0) {
+        addFardHeir();
+    }
+}
+
+function addFardHeir() {
+    const list = document.getElementById('fardHeirsList');
+    if (!list) return;
+    const idx = list.children.length;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;';
+    row.innerHTML = `
+        <input type="text" placeholder="اسم الوارث ${idx + 1}" style="flex:1;padding:7px 10px;border:1.5px solid #FED7AA;border-radius:6px;font-family:Cairo,sans-serif;font-size:12px;outline:none;" oninput="this.style.borderColor='#EA580C'" />
+        <button type="button" onclick="this.parentElement.remove()" style="padding:4px 10px;background:#FEE2E2;color:#b91c1c;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:800;">✕</button>
+    `;
+    list.appendChild(row);
+}
+
+function getFardHeirs() {
+    const list = document.getElementById('fardHeirsList');
+    if (!list) return [];
+    return Array.from(list.querySelectorAll('input')).map(i => i.value.trim()).filter(Boolean);
+}
+
+// ═══════════════════════════════════════
+// DECEASED / HEIRS HELPERS - Leader
+// ═══════════════════════════════════════
+function toggleLeaderHeirs() {
+    const cb = document.getElementById('leaderDeceased');
+    const wrap = document.getElementById('leaderHeirsWrap');
+    if (!wrap) return;
+    wrap.style.display = cb?.checked ? 'block' : 'none';
+    if (cb?.checked && document.getElementById('leaderHeirsList').children.length === 0) {
+        addLeaderHeir();
+    }
+    renderFullGroupTable();
+}
+
+function addLeaderHeir() {
+    const list = document.getElementById('leaderHeirsList');
+    if (!list) return;
+    const idx = list.children.length;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;';
+    row.innerHTML = `
+        <input type="text" placeholder="اسم الوارث ${idx + 1}" style="flex:1;padding:7px 10px;border:1.5px solid #FED7AA;border-radius:6px;font-family:Cairo,sans-serif;font-size:12px;outline:none;" oninput="this.style.borderColor='#EA580C'" />
+        <button type="button" onclick="this.parentElement.remove()" style="padding:4px 10px;background:#FEE2E2;color:#b91c1c;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:800;">✕</button>
+    `;
+    list.appendChild(row);
+}
+
+function getLeaderHeirs() {
+    const list = document.getElementById('leaderHeirsList');
+    if (!list) return [];
+    return Array.from(list.querySelectorAll('input')).map(i => i.value.trim()).filter(Boolean);
+}
+
+// ═══════════════════════════════════════
+// MEMBER DECEASED TOGGLE
+// ═══════════════════════════════════════
+function toggleMemberDeceased(idx) {
+    if (!groupMembers[idx]) return;
+    groupMembers[idx].deceased = !groupMembers[idx].deceased;
+    if (!groupMembers[idx].deceased) groupMembers[idx].heirs = [];
+    renderFullGroupTable();
+}
+
+function addMemberHeir(idx) {
+    if (!groupMembers[idx]) return;
+    if (!groupMembers[idx].heirs) groupMembers[idx].heirs = [];
+    groupMembers[idx].heirs.push('');
+    renderFullGroupTable();
+    // focus last heir input
+    setTimeout(() => {
+        const inputs = document.querySelectorAll(`#heir-inputs-${idx} input`);
+        if (inputs.length) inputs[inputs.length - 1].focus();
+    }, 50);
+}
+
+function updateMemberHeir(idx, heirIdx, val) {
+    if (!groupMembers[idx]) return;
+    if (!groupMembers[idx].heirs) groupMembers[idx].heirs = [];
+    groupMembers[idx].heirs[heirIdx] = val;
+}
+
+function removeMemberHeir(idx, heirIdx) {
+    if (!groupMembers[idx]?.heirs) return;
+    groupMembers[idx].heirs.splice(heirIdx, 1);
+    renderFullGroupTable();
+}
+
+
+// ═══════════════════════════════════════
+// PICK INDIVIDUAL (فرد)
+// ═══════════════════════════════════════
+function pickFard(id) {
+    const emp = getEmp(id);
+    if (!emp) return;
+    document.getElementById('ss_fard').value   = emp.name;
+    document.getElementById('fardCode').value  = id;
+    document.getElementById('ssDrop_fard').classList.remove('open');
+
+    const info = document.getElementById('fardInfo');
+    if (info) {
+        info.style.display = 'grid';
+        document.getElementById('fi_name').textContent = emp.name || '—';
+        document.getElementById('fi_code').textContent = emp.code || '—';
+        document.getElementById('fi_area').textContent = emp.workArea || '—';
+    }
+}
+
+// ═══════════════════════════════════════
+// PICK LEADER
+// ═══════════════════════════════════════
+function pickLeader(id) {
+    const emp = getEmp(id);
+    if (!emp) return;
+    leaderData = emp;
+
+    document.getElementById('ss_leader').value  = emp.name;
+    document.getElementById('leaderCode').value = id;
+    document.getElementById('ssDrop_leader').classList.remove('open');
+
+    const info = document.getElementById('leaderInfo');
+    if (info) {
+        info.style.display = 'grid';
+        document.getElementById('li_name').textContent = emp.name || '—';
+        document.getElementById('li_code').textContent = emp.code || '—';
+        document.getElementById('li_area').textContent = emp.workArea || '—';
+    }
+
+    renderFullGroupTable();
+}
+
+// ═══════════════════════════════════════
+// ADD MEMBER
+// ═══════════════════════════════════════
+function addMember(id) {
+    const emp = getEmp(id);
+    if (!emp) return;
+
+    if (leaderData && leaderData.Id == id) {
+        showToast(' هذا الموظف هو القائد بالفعل', true);
+        document.getElementById('ssDrop_member').classList.remove('open');
+        document.getElementById('ss_member').value = '';
+        return;
+    }
+
+    if (groupMembers.find(m => m.Id == id)) {
+        showToast(' الموظف مضاف مسبقاً', true);
+        document.getElementById('ssDrop_member').classList.remove('open');
+        document.getElementById('ss_member').value = '';
+        return;
+    }
+
+    groupMembers.push(emp);
+    document.getElementById('ss_member').value = '';
+    document.getElementById('ssDrop_member').classList.remove('open');
+    renderFullGroupTable();
+}
+
+function removeMember(idx) {
+    groupMembers.splice(idx, 1);
+    renderFullGroupTable();
+}
+
+function renderFullGroupTable() {
+    const tbody       = document.getElementById('membersTbody');
+    const wrap        = document.getElementById('membersWrap');
+    const counterWrap = document.getElementById('groupCounterWrap');
+    const counterNum  = document.getElementById('groupCounterNum');
+    if (!tbody || !wrap) return;
+
+    let rows = '';
+    let rowIndex = 1;
+    let totalCount = 0;
+
+    if (leaderData) {
+        const leaderDeceased = document.getElementById('leaderDeceased')?.checked || false;
+        rows += `
+            <tr class="leader-row">
+                <td style="color:#1a3a5c;font-weight:900;">${rowIndex++}</td>
+                <td><span class="role-badge leader"> قائد</span></td>
+                <td style="font-weight:800;">${leaderData.name}</td>
+                <td style="color:#1a3a5c;font-weight:700;">${leaderData.code || '—'}</td>
+                <td>${leaderData.workArea || '—'}</td>
+                <td><span style="font-size:11px;color:${leaderDeceased ? '#EA580C' : '#94A3B8'};font-weight:700;">${leaderDeceased ? '⚰️ متوفى' : '—'}</span></td>
+                <td><span style="font-size:11px;color:#94A3B8;">—</span></td>
+            </tr>`;
+        totalCount++;
+    }
+
+    groupMembers.forEach((emp, i) => {
+        const deceasedCell = `
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:11px;font-weight:700;color:#9A3412;white-space:nowrap;">
+                <input type="checkbox" onchange="toggleMemberDeceased(${i})" ${emp.deceased ? 'checked' : ''} style="width:13px;height:13px;accent-color:#EA580C;">
+                <span>${emp.deceased ? '⚰️ متوفى' : 'متوفى؟'}</span>
+            </label>
+            ${emp.deceased ? `
+            <div id="heir-inputs-${i}" style="margin-top:6px;">
+                ${(emp.heirs || []).map((h, hi) => `
+                    <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+                        <input type="text" value="${h}" placeholder="وارث ${hi+1}" onchange="updateMemberHeir(${i},${hi},this.value)"
+                               style="flex:1;padding:4px 8px;border:1.5px solid #FED7AA;border-radius:5px;font-family:Cairo,sans-serif;font-size:11px;min-width:80px;" />
+                        <button type="button" onclick="removeMemberHeir(${i},${hi})" style="padding:2px 7px;background:#FEE2E2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:11px;font-weight:800;">✕</button>
+                    </div>`).join('')}
+                <button type="button" onclick="addMemberHeir(${i})" style="padding:3px 10px;background:#EA580C;color:white;border:none;border-radius:5px;cursor:pointer;font-size:11px;font-weight:700;font-family:Cairo,sans-serif;">+ وارث</button>
+            </div>` : ''}`;
+        rows += `
+            <tr>
+                <td style="color:#94A3B8;font-weight:700;">${rowIndex++}</td>
+                <td><span class="role-badge member">عضو</span></td>
+                <td style="font-weight:700;">${emp.name}</td>
+                <td style="color:#1a3a5c;font-weight:700;">${emp.code || '—'}</td>
+                <td>${emp.workArea || '—'}</td>
+                <td style="min-width:130px;">${deceasedCell}</td>
+                <td><button class="btn-rm" onclick="removeMember(${i})">حذف</button></td>
+            </tr>`;
+        totalCount++;
+    });
+
+    tbody.innerHTML = rows;
+    if (counterNum) counterNum.textContent = totalCount;
+
+    const hasData = totalCount > 0;
+    wrap.style.setProperty('display', hasData ? 'block' : 'none', 'important');
+    if (counterWrap) counterWrap.style.setProperty('display', hasData ? 'block' : 'none', 'important');
+}
+
+
+// ═══════════════════════════════════════
+// FILE UPLOAD
+// ═══════════════════════════════════════
+function onDragOver(e)  { e.preventDefault(); document.getElementById('dropZone').classList.add('dragover'); }
+function onDragLeave()  { document.getElementById('dropZone').classList.remove('dragover'); }
+function onDrop(e)      { e.preventDefault(); onDragLeave(); handleFiles(e.dataTransfer.files); }
+
+
+// Store uploaded files as {name, size, type, dataUrl}
+const uploadedFiles = [];
+
+function handleFiles(files) {
+    Array.from(files).forEach(f => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const dataUrl = e.target.result;
+            // Store in memory
+            uploadedFiles.push({
+                name: f.name,
+                size: f.size,
+                type: f.type,
+                dataUrl: dataUrl
+            });
+            // Show in UI
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            const fileIdx = uploadedFiles.length - 1;
+            const icon = f.type.startsWith('image/') ? '🖼️' : '📄';
+            item.innerHTML = `<span>${icon}</span><span class="file-item-name">${f.name}</span><span style="color:#94A3B8;font-size:11px;">${(f.size/1024).toFixed(0)} KB</span><button class="file-rm" onclick="removeUploadedFile(${fileIdx},this.parentElement)">✕</button>`;
+            document.getElementById('fileList').appendChild(item);
+        };
+        reader.readAsDataURL(f);
+    });
+}
+
+function removeUploadedFile(idx, el) {
+    uploadedFiles.splice(idx, 1);
+    if (el) el.remove();
+}
+
+
+// ═══════════════════════════════════════
+// GENERATE CASE NUMBER
+// ═══════════════════════════════════════
+function generateCaseNumber() {
+    const number = document.getElementById('caseNumber')?.value?.trim() || '0000';
+    const year = document.getElementById('caseYear')?.value?.trim() || new Date().getFullYear();
+    return `${number}/${year}`;
+}
+
+// ═══════════════════════════════════════
+// VALIDATE
+// ═══════════════════════════════════════
+function validateFullForm() {
+    let ok = true;
+    const checks = [
+        { id:'caseNumber',       err:'e-caseNumber' },
+        { id:'caseYear',         err:'e-caseYear' },
+        { id:'caseCourt',        err:'e-caseCourt' },
+        { id:'caseDivision',     err:'e-caseDivision' },
+        { id:'firstSessionDate', err:'e-firstSession' },
+        { id:'assignedLawyer',   err:'e-lawyer' },
+    ];
+
+    checks.forEach(({ id, err }) => {
+        const el = document.getElementById(id);
+        const er = document.getElementById(err);
+        if (!el || !el.value.trim()) {
+            if (el) el.classList.add('err');
+            if (er) er.classList.add('show');
+            ok = false;
+        } else {
+            if (el) el.classList.remove('err');
+            if (er) er.classList.remove('show');
+        }
+    });
+
+    if (!selectedCaseType) {
+        document.getElementById('e-caseType').classList.add('show');
+        ok = false;
+    } else {
+        document.getElementById('e-caseType').classList.remove('show');
+    }
+
+    const subjectEl = document.getElementById('caseSubject');
+    if (!subjectEl || !subjectEl.value.trim()) {
+        document.getElementById('e-caseSubject').classList.add('show');
+        ok = false;
+    } else {
+        document.getElementById('e-caseSubject').classList.remove('show');
+    }
+
+    return ok;
+}
+
+// ═══════════════════════════════════════
+// COLLECT PARTIES
+// ═══════════════════════════════════════
+function collectParties() {
+    const parties = [];
+    const firstPartyType = document.getElementById('firstPartyTypeSelect')?.value || 'الشركة';
+    const isCompanyFirst = (firstPartyType === 'الشركة');
+
+    // الطرف الخاص بالشركة
+    const lawyerSelect = document.getElementById('assignedLawyer');
+    const lawyerId = lawyerSelect ? lawyerSelect.value : '';
+    const lawyerName = lawyerSelect ? lawyerSelect.options[lawyerSelect.selectedIndex]?.text || '' : '';
+
+    const companyParty = {
+        type: isCompanyFirst ? 'first' : 'second',
+        category: 'شركة',
+        name: 'شركة الصرف الصحي بالإسكندرية',
+        lawyerName: lawyerName,
+        lawyerId: lawyerId
+    };
+
+    const opponentPartyType = isCompanyFirst ? 'second' : 'first';
+
+    // الطرف الثاني / الخصم - حسب نوع القضية
+    if (selectedCaseType === 'مدني') {
+        const p2Name = document.getElementById('p2Name');
+        if (p2Name && p2Name.value.trim()) {
+            parties.push({
+                type: opponentPartyType,
+                category: 'فرد',
+                name: p2Name.value.trim(),
+                mobile: document.getElementById('p2Mobile')?.value?.trim() || '',
+                lawyerName: document.getElementById('p2LawyerName')?.value?.trim() || '',
+                lawyerMobile: document.getElementById('p2LawyerMobile')?.value?.trim() || ''
+            });
+        }
+    } else if (selectedCaseType === 'عمالي') {
+        const laborType = document.getElementById('laborTypeSelect')?.value;
+        
+        if (laborType === 'فرد') {
+            const fardCode = document.getElementById('fardCode')?.value;
+            const emp = getEmp(fardCode);
+            const fardName = document.getElementById('ss_fard')?.value;
+            const isDeceased = document.getElementById('fardDeceased')?.checked || false;
+            const heirs = isDeceased ? getFardHeirs() : [];
+            
+            let name = '';
+            let code = '';
+            let mobile = '';
+            
+            if (emp) {
+                name = emp.name;
+                code = emp.code || '';
+                mobile = emp.mobile || '';
+            } else if (fardName && fardName.trim()) {
+                name = fardName.trim();
+            }
+            
+            if (name) {
+                const displayName = isDeceased && heirs.length > 0
+                    ? `ورثة المرحوم / ${name} (${heirs.join(' - ')})`
+                    : name;
+                parties.push({
+                    type: opponentPartyType,
+                    category: 'فرد',
+                    name: displayName,
+                    position: 'موظف',
+                    mobile: mobile,
+                    code: code,
+                    deceased: isDeceased,
+                    heirs: heirs
+                });
+            }
+        } else if (laborType === 'مجموعة') {
+            const members = [];
+            
+            if (leaderData) {
+                const leaderDeceased = document.getElementById('leaderDeceased')?.checked || false;
+                const leaderHeirs = leaderDeceased ? getLeaderHeirs() : [];
+                const leaderDisplayName = leaderDeceased && leaderHeirs.length > 0
+                    ? `ورثة المرحوم / ${leaderData.name} (${leaderHeirs.join(' - ')})`
+                    : leaderData.name;
+                members.push({
+                    name: leaderDisplayName,
+                    originalName: leaderData.name,
+                    code: leaderData.code || '',
+                    mobile: leaderData.mobile || '',
+                    role: 'قائد',
+                    deceased: leaderDeceased,
+                    heirs: leaderHeirs
+                });
+            }
+            groupMembers.forEach(m => {
+                const mDeceased = m.deceased || false;
+                const mHeirs = mDeceased ? (m.heirs || []).filter(Boolean) : [];
+                const mDisplayName = mDeceased && mHeirs.length > 0
+                    ? `ورثة المرحوم / ${m.name} (${mHeirs.join(' - ')})`
+                    : m.name;
+                members.push({
+                    name: mDisplayName,
+                    originalName: m.name,
+                    code: m.code || '',
+                    mobile: m.mobile || '',
+                    role: 'عضو',
+                    deceased: mDeceased,
+                    heirs: mHeirs
+                });
+            });
+            
+            if (members.length > 0) {
+                members.forEach((member, index) => {
+                    parties.push({
+                        type: opponentPartyType,
+                        category: index === 0 ? 'قائد' : 'عضو',
+                        name: member.name,
+                        position: member.role || (index === 0 ? 'قائد' : 'عضو'),
+                        mobile: member.mobile || '',
+                        code: member.code || '',
+                        deceased: member.deceased,
+                        heirs: member.heirs
+                    });
+                });
+            }
+        }
+    }
+
+    parties.push(companyParty);
+    return parties;
+}
+
+// ═══════════════════════════════════════
+// SUBMIT - حفظ أو تحديث القضية
+// ═══════════════════════════════════════
+async function submitCase() {
+    if (!validateFullForm()) {
+        showToast('⚠️ يرجى ملء جميع الحقول المطلوبة', true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
+
+    const editingId = document.getElementById('editingCaseId').value;
+    const isEdit = editingId && editingId !== '';
+
+    if (typeof PermGuard !== 'undefined') {
+        if (isEdit && !PermGuard.canEdit('cases')) {
+            PermGuard.denyAction('ليس لديك صلاحية تعديل بيانات القضايا.');
+            return;
+        }
+        if (!isEdit && !PermGuard.hasPage('new-case')) {
+            PermGuard.denyAction('ليس لديك صلاحية إضافة قضية جديدة.');
+            return;
+        }
+    }
+
+    console.log('📝 وضع التشغيل:', isEdit ? 'تعديل' : 'إضافة جديدة');
+    console.log('🆔 ID القضية:', editingId);
+
+    const caseNumber = generateCaseNumber();
+    const caseYear = document.getElementById('caseYear').value.trim();
+    const subjectEl = document.getElementById('caseSubject');
+    const subject = subjectEl ? subjectEl.value.trim() : '';
+    const description = document.getElementById('caseSummary')?.value || '';
+    const notes = document.getElementById('caseNotes')?.value || '';
+    const category = selectedCaseType || 'مدني';
+    const status = 'مفتوحة';
+    const filingDate = document.getElementById('firstSessionDate').value;
+    const createdBy = 1;
+
+    const lawyerSelect = document.getElementById('assignedLawyer');
+    const lawyerId = lawyerSelect ? lawyerSelect.value : '';
+    let assignedLawyerId = null;
+    if (lawyerId) assignedLawyerId = parseInt(lawyerId);
+
+    const courtSelect = document.getElementById('caseCourt');
+    const courtName = courtSelect.options[courtSelect.selectedIndex]?.text || '';
+    const circuitName = document.getElementById('caseDivision')?.value || '';
+
+    let opponentName = '';
+    if (category === 'مدني') {
+        opponentName = document.getElementById('p2Name')?.value?.trim() || '';
+    } else if (category === 'عمالي') {
+        const laborType = document.getElementById('laborTypeSelect')?.value;
+        if (laborType === 'فرد') {
+            const fardCode = document.getElementById('fardCode')?.value;
+            const emp = getEmp(fardCode);
+            if (emp) opponentName = emp.name;
+            else opponentName = document.getElementById('ss_fard')?.value?.trim() || '';
+        } else if (laborType === 'مجموعة') {
+            const members = [];
+            if (leaderData) members.push(leaderData.name);
+            groupMembers.forEach(m => members.push(m.name));
+            opponentName = members.join('، ');
+        }
+    }
+
+    const parties = collectParties();
+    const firstPartyType = document.getElementById('firstPartyTypeSelect')?.value || 'الشركة';
+    const isOpponentFirst = (firstPartyType === 'الخصم');
+    const compNameRaw = 'شركة الصرف الصحي بالإسكندرية';
+    const finalPlaintiff = isOpponentFirst ? (opponentName || 'الخصم') : compNameRaw;
+    const finalDefendant = isOpponentFirst ? compNameRaw : (opponentName || 'الخصم');
+    const filedBy = firstPartyType;
+
+    const formData = {
+        caseNumber: caseNumber,
+        caseYear: caseYear,
+        caseType: category === 'مدني' ? 'م' : category === 'عمالي' ? 'ع' : 'ت',
+        subject: subject,
+        description: description,
+        notes: notes,
+        category: category,
+        currentStage: 'ابتدائي',
+        status: status,
+        filingDate: filingDate,
+        createdBy: createdBy,
+        assignedLawyerId: assignedLawyerId,
+        courtName: courtName,
+        circuitName: circuitName,
+        opponent: opponentName,
+        parties: parties,
+        firstPartyType: firstPartyType,
+        filedBy: filedBy,
+        plaintiff: finalPlaintiff,
+        defendant: finalDefendant,
+        claimValue: document.getElementById('claimAmount')?.value || '',
+        firstSession: null,
+        attachments: uploadedFiles.map(f => ({
+            fileName: f.name,
+            fileType: f.type,
+            fileSize: f.size,
+            filePath: f.dataUrl
+        }))
+    };
+
+    console.log('📤 البيانات المرسلة:', JSON.stringify(formData, null, 2));
+
+    try {
+        showToast(isEdit ? '⏳ جاري تحديث البيانات...' : '⏳ جاري حفظ البيانات...');
+        const url = isEdit ? `${API_URL}/cases/${editingId}` : `${API_URL}/cases`;
+        const method = isEdit ? 'PUT' : 'POST';
+
+        console.log(`📡 إرسال طلب ${method} إلى ${url}`);
+
+        const response = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+        console.log('📥 نتيجة الحفظ:', result);
+
+        if (result.success) {
+            showToast(isEdit ? '✅ تم تحديث القضية بنجاح!' : `✅ تم حفظ القضية بنجاح!`);
+            setTimeout(() => {
+                window.location.href = 'Cases.html';
+            }, 1500);
+        } else {
+            showToast('❌ ' + result.message, true);
+        }
+    } catch (error) {
+        console.error('❌ خطأ:', error);
+        showToast('❌ خطأ في الاتصال بالخادم: ' + error.message, true);
+    }
+}
+
+function saveDraft() {
+    showToast('💾 تم حفظ المسودة');
+}
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+function showToast(msg, isErr = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isErr ? ' err' : '');
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function formatDisplayDate(v) {
+    if (!v) return '';
+    const s = String(v).trim();
+    const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+    const d = new Date(s);
+    if (!isNaN(d.getTime())) {
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+    }
+    return s;
+}
+function syncDateDisplay(nativeId) {
+    const native = document.getElementById(nativeId);
+    const display = document.getElementById(nativeId + '_display');
+    if (!native || !display) return;
+    display.value = native.value ? formatDisplayDate(native.value) : '';
+}
+function wireCustomDateField(nativeId) {
+    const native = document.getElementById(nativeId);
+    const display = document.getElementById(nativeId + '_display');
+    if (!native || !display) return;
+    const openPicker = () => {
+        if (typeof native.showPicker === 'function') {
+            try { native.showPicker(); } catch (e) { native.focus(); }
+        } else {
+            native.focus();
+        }
+    };
+    display.addEventListener('click', openPicker);
+    native.addEventListener('input', () => syncDateDisplay(nativeId));
+    native.addEventListener('change', () => syncDateDisplay(nativeId));
+    syncDateDisplay(nativeId);
+}
+</script>
+</body>
+</html>

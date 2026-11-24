@@ -1,0 +1,2858 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة ومتابعة الجلسات - الشؤون القانونية</title>
+    <script src="sidebar.js"></script>
+    <script src="activity-logger.js"></script>
+    <script src="permissions-guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/sessions.css">
+    <style>
+        
+        /* شارات درجات التقاضي */
+        .badge-initial { background: #dbeafe !important; color: #1d4ed8 !important; border: 1px solid #bfdbfe !important; }
+        .badge-appeal { background: #fef3c7 !important; color: #b45309 !important; border: 1px solid #fde68a !important; }
+        .badge-cassation { background: #fee2e2 !important; color: #b91c1c !important; border: 1px solid #fca5a5 !important; }
+        .badge-eshkal { background: #ede9fe !important; color: #6d28d9 !important; border: 1px solid #ddd6fe !important; }
+        .badge-eshkal-tanfeeth { background: #fce7f3 !important; color: #be185d !important; border: 1px solid #fbcfe8 !important; }
+        .badge-iltimas { background: #d1fae5 !important; color: #047857 !important; border: 1px solid #a7f3d0 !important; }
+
+        /* أنماط وتنسيقات النوافذ المنبثقة الإضافية للدمج */
+        .conditional-fields {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .conditional-fields.show {
+            max-height: 800px;
+            opacity: 1;
+            display: block !important;
+            margin-top: 8px;
+        }
+
+        .conditional-fields .inner-box {
+            background: #fef3c7;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px dashed #f59e0b;
+        }
+
+        .conditional-fields .inner-box .radio-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .conditional-fields .inner-box .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 3px 10px;
+            border-radius: 16px;
+            border: 1.5px solid #d0dfed;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .conditional-fields .inner-box .radio-group label:hover {
+            border-color: #f59e0b;
+        }
+
+        .conditional-fields .inner-box .radio-group input[type="radio"] {
+            width: 14px;
+            height: 14px;
+            accent-color: #f59e0b;
+            cursor: pointer;
+        }
+
+        .sub-conditional {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .sub-conditional.show {
+            max-height: 500px;
+            opacity: 1;
+            display: block !important;
+        }
+
+        .sub-conditional .inner-box {
+            background: #EFF6FF;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px dashed #1a5a8a;
+        }
+
+        .sub-conditional .inner-box .radio-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .sub-conditional .inner-box .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 3px 10px;
+            border-radius: 16px;
+            border: 1.5px solid #d0dfed;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .sub-conditional .inner-box .radio-group label:hover {
+            border-color: #1a5a8a;
+        }
+
+        .sub-conditional .inner-box .radio-group input[type="radio"] {
+            width: 14px;
+            height: 14px;
+            accent-color: #1a5a8a;
+            cursor: pointer;
+        }
+
+        .sub-conditional-opponent {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .sub-conditional-opponent.show {
+            max-height: 500px;
+            opacity: 1;
+            display: block !important;
+        }
+
+        .sub-conditional-opponent .inner-box {
+            background: #fecaca;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px dashed #dc2626;
+        }
+
+        .sub-conditional-opponent .inner-box .radio-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .sub-conditional-opponent .inner-box .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 3px 10px;
+            border-radius: 16px;
+            border: 1.5px solid #d0dfed;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .sub-conditional-opponent .inner-box .radio-group label:hover {
+            border-color: #dc2626;
+        }
+
+        .sub-conditional-opponent .inner-box .radio-group input[type="radio"] {
+            width: 14px;
+            height: 14px;
+            accent-color: #dc2626;
+            cursor: pointer;
+        }
+
+        /* تنسيق أزرار جدول الجلسات المدمجة */
+        .btn-action {
+            background: #1a5a8a;
+            color: white;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-action:hover {
+            background: #0f4770;
+            transform: scale(1.05);
+        }
+
+        .btn-view-details {
+            background: #dbeafe;
+            color: #2563eb;
+            border: none;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border-radius: 50%;
+            font-size: 0.95rem;
+            line-height: 1;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .btn-view-details:hover {
+            background: #2563eb;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .btn-delete-item {
+            background: #fecaca;
+            color: #dc2626;
+            border: none;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border-radius: 50%;
+            font-size: 0.95rem;
+            line-height: 1;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .btn-delete-item:hover {
+            background: #dc2626;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .btn-edit-item {
+            background: #fef3c7;
+            color: #d97706;
+            border: none;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border-radius: 50%;
+            font-size: 0.95rem;
+            line-height: 1;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .btn-edit-item:hover {
+            background: #d97706;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .action-container-td {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .action-icons-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+        /* حقل تاريخ مخصص بصيغة يوم/شهر/سنة */
+        .date-field-wrap { position: relative; display: inline-block; width: 100%; }
+        .date-field-wrap input[type="date"] {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+        .date-field-wrap input[type="text"].date-display {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            cursor: pointer;
+            pointer-events: auto;
+            direction: ltr;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+    
+    <div class="sessions-content" id="sessionsContent">
+
+        <!-- HEADER -->
+        <div class="page-header-simple">
+            <h1>📋 إدارة ومتابعة الجلسات</h1>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <button class="btn-print" onclick="openPrintOptions()">🖨️ طباعة التقرير</button>
+                <span class="date-badge" id="currentDateDisplay">اليوم</span>
+            </div>
+        </div>
+
+        <!-- KPI CARDS - GROUP 1 (صفحة الجلسات) -->
+        <div style="font-weight: 800; font-size: 1rem; color: #1a4a6e; margin-bottom: 12px;">📅 إحصائيات الجلسات المجدولة</div>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title"><span class="blue-dot dot-primary"></span> جلسات اليوم</div>
+                <div class="kpi-total" id="todayCount">0</div>
+                <div class="kpi-breakdown">
+                    <div>ابتدائي <span id="todayInit">0</span></div>
+                    <div>استئناف <span id="todayAppeal">0</span></div>
+                    <div>نقض <span id="todayCass">0</span></div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title"><span class="blue-dot dot-secondary"></span> جلسات الأسبوع</div>
+                <div class="kpi-total" id="weekCount">0</div>
+                <div class="kpi-breakdown">
+                    <div>ابتدائي <span id="weekInit">0</span></div>
+                    <div>استئناف <span id="weekAppeal">0</span></div>
+                    <div>نقض <span id="weekCass">0</span></div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title"><span class="blue-dot dot-accent"></span> جلسات الشهر</div>
+                <div class="kpi-total" id="monthCount">0</div>
+                <div class="kpi-breakdown">
+                    <div>ابتدائي <span id="monthInit">0</span></div>
+                    <div>استئناف <span id="monthAppeal">0</span></div>
+                    <div>نقض <span id="monthCass">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI CARDS - GROUP 2 (صفحة متابعة الجلسات) -->
+        <div style="font-weight: 800; font-size: 1rem; color: #1a4a6e; margin-bottom: 12px; margin-top: 10px;">📊 إحصائيات الأحكام وحالات الجلسات</div>
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card total">
+                <div class="stat-icon">Σ</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statTotal">0</div>
+                    <div class="stat-label">إجمالي الجلسات</div>
+                </div>
+            </div>
+            <div class="stat-card pending">
+                <div class="stat-icon">⏱</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statPending">0</div>
+                    <div class="stat-label">جلسات متداولة</div>
+                </div>
+            </div>
+            <div class="stat-card closed">
+                <div class="stat-icon">✓</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statClosed">0</div>
+                    <div class="stat-label">جلسات منتهية</div>
+                </div>
+            </div>
+            <div class="stat-card company">
+                <div class="stat-icon">✓</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statCompany">0</div>
+                    <div class="stat-label">لصالح الشركة</div>
+                </div>
+            </div>
+            <div class="stat-card opponent">
+                <div class="stat-icon">✕</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statOpponent">0</div>
+                    <div class="stat-label">لصالح الخصم</div>
+                </div>
+            </div>
+            <div class="stat-card appeal-action">
+                <div class="stat-icon">↑</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statActionAppeal">0</div>
+                    <div class="stat-label">استئناف</div>
+                </div>
+            </div>
+            <div class="stat-card cassation-action">
+                <div class="stat-icon">⇈</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statActionCassation">0</div>
+                    <div class="stat-label">نقض</div>
+                </div>
+            </div>
+            <div class="stat-card execution-action">
+                <div class="stat-icon">!</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statActionExecution">0</div>
+                    <div class="stat-label">اشكال في التنفيذ</div>
+                </div>
+            </div>
+            <div class="stat-card reconsider-action">
+                <div class="stat-icon">↻</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statActionReconsider">0</div>
+                    <div class="stat-label">التماس اعادة النظر</div>
+                </div>
+            </div>
+            <div class="stat-card no-action">
+                <div class="stat-icon">⊘</div>
+                <div class="stat-body">
+                    <div class="stat-number" id="statActionNone">0</div>
+                    <div class="stat-label">لا اجراء</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADD SESSION -->
+        <div class="add-case-card" id="addCaseCard">
+            <div class="add-case-title">➕ إضافة جلسة جديدة</div>
+            <div class="add-form-grid">
+                <div class="form-group">
+                    <label>رقم القضية <span style="color:#b22234;">*</span></label>
+                    <div class="searchable-select" id="addCaseSearchWrap">
+                        <input type="text" id="addCaseSearchInput" class="searchable-select-input"
+                               placeholder="اكتب رقم القضية أو أي حرف منها..." autocomplete="off">
+                        <div class="searchable-select-list" id="addCaseSearchList"></div>
+                    </div>
+                    <select id="addCaseSelect" onchange="onCaseSelect(this.value)" style="display:none;">
+                        <option value="">-- اختر قضية --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>موضوع الجلسة</label>
+                    <input type="text" id="addSubject" placeholder="موضوع الجلسة" disabled>
+                </div>
+                <div class="form-group">
+                    <label>درجة التقاضي</label>
+                    <input type="text" id="addCurrentLevel" placeholder="درجة التقاضي" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label>الخصم</label>
+                    <input type="text" id="addOpponent" placeholder="اسم الخصم" disabled>
+                </div>
+                <div class="form-group">
+                    <label>المحامي المسؤول</label>
+                    <select id="addLawyer"><option value="">-- اختر المحامي --</option></select>
+                </div>
+
+                <div class="form-group">
+                    <label>تاريخ الجلسة <span style="color:#b22234;">*</span></label>
+                    <div class="date-field-wrap">
+                        <input type="text" class="date-display" id="addSessionDate_display" placeholder="dd/mm/yyyy" readonly />
+                        <input type="date" id="addSessionDate">
+                    </div>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>قرار الجلسة</label>
+                    <textarea id="addActionTaken" rows="3" placeholder="اكتبي هنا قرار الجلسة بالتفصيل..." style="width:100%;resize:vertical;font-family:inherit;font-size:inherit;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;"></textarea>
+                </div>
+            </div>
+
+            <button class="btn-save-inline" onclick="saveNewSession()">💾 حفظ الجلسة</button>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="table-controls">
+            <div class="control-group">
+                <label>البحث العام</label>
+                <input type="text" id="searchInput" placeholder="ابحث برقم القضية أو الخصم أو الموضوع..." oninput="filterTable()">
+            </div>
+            <div class="control-group">
+                <label>تاريخ الجلسة</label>
+                <div class="date-field-wrap">
+                    <input type="text" class="date-display" id="specificDate_display" placeholder="dd/mm/yyyy" readonly />
+                    <input type="date" id="specificDate" onchange="filterTable()">
+                </div>
+            </div>
+            <div class="control-group">
+                <label>درجة التقاضي</label>
+                <select id="levelSelect" onchange="filterTable()">
+                    <option value="">الكل</option>
+                    <option value="ابتدائي">ابتدائي</option>
+                    <option value="استئناف">استئناف</option>
+                    <option value="نقض">نقض</option>
+                    <option value="إشكال">إشكال</option>
+                    <option value="إشكال في التنفيذ">إشكال في التنفيذ</option>
+                    <option value="التماس إعادة النظر">التماس إعادة النظر</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- TABLE: ALL SESSIONS -->
+        <div class="section-title" style="margin-top: 30px;">
+            <span>🗒️ جميع الجلسات</span>
+            <span class="badge-count" id="allSessionsCount">0</span>
+        </div>
+        <div class="table-responsive">
+            <table class="sessions-table">
+                <thead>
+                    <tr>
+                        <th>رقم القضية</th>
+                        <th>درجة التقاضي</th>
+                        <th>تاريخ الجلسة</th>
+                        <th>قرار الجلسة</th>
+                        <th>موضوع الجلسة</th>
+                        <th>النتيجة</th>
+                        <th>الاجراء</th>
+                        <th>ملاحظات</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="allSessionsBody">
+                    <tr><td colspan="9" style="text-align:center;padding:40px;color:#7a9ab5;">جاري تحميل الجلسات...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div id="activePaginationControls" style="display:flex; justify-content:center; align-items:center; gap:16px; margin-top:20px; padding:12px; background:white; border-radius:8px; border:1px solid #E4EAF2; box-shadow:0 1px 3px rgba(0,0,0,0.05); margin-bottom: 30px;">
+            <button class="btn-print" id="activePrevPageBtn" onclick="changePage(-1)">السابق</button>
+            <span id="activePageIndicator" style="font-weight:800; color:#1a3a5c; font-size:14px;">صفحة 1 من 1</span>
+            <button class="btn-print" id="activeNextPageBtn" onclick="changePage(1)">التالي</button>
+        </div>
+
+    </div>
+
+    <!-- MODAL 1: EDIT DETAILS MODAL -->
+    <div id="editModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="closeEditModal()">&times;</span>
+            <h2 style="color:#1a4a6e;margin-bottom:20px; font-weight: 800;">⚙️ تعديل الجلسة</h2>
+            <input type="hidden" id="editingRowId">
+            
+            <div class="modal-form-group">
+                <label>رقم القضية</label>
+                <input type="text" id="modalCaseNumber" readonly>
+            </div>
+            
+            <div class="modal-form-group">
+                <label>موضوع الجلسة</label>
+                <input type="text" id="modalSubject">
+            </div>
+            
+            <div class="modal-form-group">
+                <label>المحامي المسؤول</label>
+                <select id="modalLawyer">
+                    <option value="">-- اختر المحامي --</option>
+                </select>
+            </div>
+            <div class="modal-form-group">
+                <label>تاريخ الجلسة</label>
+                <div class="date-field-wrap">
+                    <input type="text" class="date-display" id="modalSessionDate_display" placeholder="dd/mm/yyyy" readonly />
+                    <input type="date" id="modalSessionDate">
+                </div>
+            </div>
+            <div class="modal-form-group">
+                <label>المحكمة</label>
+                <select id="modalCourt" onchange="onModalCourtChange(this.value)">
+                    <option value="">-- اختر --</option>
+                </select>
+            </div>
+            <div class="modal-form-group">
+                <label>الدائرة</label>
+                <select id="modalCircuit">
+                    <option value="">-- اختر --</option>
+                </select>
+            </div>
+            <div class="modal-form-group">
+                <label>قرار الجلسة</label>
+                <textarea id="modalActionTaken" rows="3" placeholder="اكتبي هنا قرار الجلسة بالتفصيل..." style="width:100%;resize:vertical;font-family:inherit;font-size:inherit;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;"></textarea>
+            </div>
+            <button class="btn-save" onclick="saveEdit()" style="margin-top: 14px;">حفظ التعديلات</button>
+        </div>
+    </div>
+
+    <!-- MODAL 2: ACTION MODAL (تسجيل ما تم بالجلسة) -->
+    <div class="modal-overlay" id="actionModal">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <h2 id="actionModalTitle">
+                    <i class="fa-regular fa-pen-to-square" style="color:#1a5a8a;"></i>
+                    تسجيل إجراء الجلسة وما تم بها
+                </h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="modal-details-grid" id="modalDetailsGrid">
+                <div class="item">
+                    <span class="label">رقم القضية</span>
+                    <span class="value" id="actCaseNumber">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">درجة التقاضي</span>
+                    <span class="value" id="actStage">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">تاريخ الجلسة</span>
+                    <span class="value" id="actDate">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">المحكمة</span>
+                    <span class="value" id="actCourt">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">الدائرة</span>
+                    <span class="value" id="actCircuit">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">الخصم</span>
+                    <span class="value" id="actOpponent">—</span>
+                </div>
+            </div>
+
+            <form id="actionForm" onsubmit="saveAction(event)">
+                <input type="hidden" id="actionSessionId" value="">
+                
+                <div class="modal-form-group">
+                    <label>📌 حالة الجلسة</label>
+                    <div class="status-options" id="statusOptions">
+                        <label class="selected-pending" id="lblPendingStatus">
+                            <input type="radio" name="sessionStatus" value="متداولة" checked onchange="onStatusChange(this.value)">
+                            ⏳ متداولة
+                        </label>
+                        <label id="lblClosedStatus" style="display:none;">
+                            <input type="radio" name="sessionStatus" value="منتهية" onchange="onStatusChange(this.value)">
+                            🔒 منتهية
+                        </label>
+                    </div>
+                </div>
+
+                <!-- حقل متداولة - مؤجلة أو نطق بالحكم -->
+                <div class="conditional-fields" id="pendingFields">
+                    <div class="inner-box">
+                        <label style="font-weight:700;color:#92400e;">⚙️ نوع الجلسة المتداولة</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="pendingType" value="مؤجلة" checked onchange="onPendingTypeChange(this.value)">
+                                📅 جلسة مؤجلة
+                            </label>
+                            <label>
+                                <input type="radio" name="pendingType" value="نطق_بالحكم" onchange="onPendingTypeChange(this.value)">
+                                ⚖️ جلسة النطق بالحكم
+                            </label>
+                        </div>
+
+                        <!-- حقل النطق بالحكم -->
+                        <div class="sub-conditional" id="verdictFields">
+                            <div class="inner-box" style="margin-top: 10px;">
+                                <label style="font-weight:700;color:#1a5a8a;">⚖️ النطق بالحكم — لصالح من؟</label>
+                                <div class="radio-group">
+                                    <label>
+                                        <input type="radio" name="verdictFor" value="الشركة" onchange="onVerdictForChange(this.value)">
+                                        ✅ الشركة
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="verdictFor" value="الخصم" onchange="onVerdictForChange(this.value)">
+                                        ❌ الخصم
+                                    </label>
+                                </div>
+
+                                <!-- حقل استئناف/نقض عند الخصم -->
+                                <div class="sub-conditional-opponent" id="opponentVerdictAppeal" style="margin-top: 10px;">
+                                    <div class="inner-box">
+                                        <label style="font-weight:700;color:#991b1b;">📌 الإجراء المطلوب</label>
+                                        <div class="radio-group">
+                                            <label>
+                                                <input type="radio" name="verdictAppealAction" value="استئناف" checked>
+                                                ⬆️ استئناف
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="verdictAppealAction" value="نقض">
+                                                ⬆️⬆️ نقض
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="verdictAppealAction" value="اشكال في التنفيذ">
+                                                ⚠️ اشكال في التنفيذ
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="verdictAppealAction" value="التماس اعادة النظر">
+                                                🔁 التماس اعادة النظر
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="verdictAppealAction" value="لا اجراء">
+                                                🚫 لا اجراء
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- حقل قيمة الحكم -->
+                                <div class="modal-form-group" style="margin-top: 10px;">
+                                    <label for="judgmentValue">💰 قيمة الحكم (اختياري)</label>
+                                    <input type="text" id="judgmentValue" placeholder="مثال: 50,000 ج.م">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- حقل منتهية -->
+                <div class="conditional-fields" id="closedFields">
+                    <div class="inner-box" style="border-color:#059669; background:#ECFDF5;">
+                        <label style="font-weight:700;color:#065F46;">🏆 الحكم النهائي — لصالح من؟</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="finalResult" value="لصالح الشركة">
+                                ✅ الشركة
+                            </label>
+                            <label>
+                                <input type="radio" name="finalResult" value="لصالح الخصم">
+                                ❌ الخصم
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="modalNotes">📝 ما دار بالجلسة / ملخص الحكم</label>
+                    <textarea id="modalNotes" placeholder="اكتب ملخص ما تم في الجلسة، القرارات، الملاحظات..." rows="3"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel-modal" onclick="closeModal()">إلغاء</button>
+                    <button type="submit" class="btn-save">
+                        <i class="fa-regular fa-floppy-disk"></i> حفظ وإجراء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: VIEW DETAILS MODAL (قراءة فقط) -->
+    <div class="modal-overlay" id="viewDetailsModal">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <h2>
+                    <i class="fa-regular fa-eye" style="color:#1a5a8a;"></i>
+                    بيانات الجلسة والقضية التفصيلية
+                </h2>
+                <button class="close-btn" onclick="closeViewDetailsModal()">&times;</button>
+            </div>
+
+            <div class="modal-details-grid" style="grid-template-columns: repeat(2, 1fr); gap: 12px 20px;">
+                <div class="item">
+                    <span class="label">رقم القضية</span>
+                    <span class="value" id="vdCaseNumber">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">موضوع القضية</span>
+                    <span class="value" id="vdSubject">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">درجة التقاضي</span>
+                    <span class="value" id="vdStage">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">تاريخ الجلسة</span>
+                    <span class="value" id="vdDate">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">المدعي</span>
+                    <span class="value" id="vdPlaintiff">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">المدعي عليه</span>
+                    <span class="value" id="vdDefendant">—</span>
+                </div>
+                <div class="item" id="vdStageRequestedByWrapper">
+                    <span class="label">رافع درجة التقاضي</span>
+                    <span class="value" id="vdStageRequestedBy">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">الخصم</span>
+                    <span class="value" id="vdOpponent">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">المحكمة</span>
+                    <span class="value" id="vdCourt">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">الدائرة</span>
+                    <span class="value" id="vdCircuit">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">المحامي المسؤول</span>
+                    <span class="value" id="vdLawyerName">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">المحامي الحاضر بالجلسة</span>
+                    <span class="value" id="vdAttending">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">النتيجة</span>
+                    <span class="value" id="vdResult">—</span>
+                </div>
+                <div class="item">
+                    <span class="label">الإجراء المتخذ</span>
+                    <span class="value" id="vdAppeal">—</span>
+                </div>
+                <div class="item" style="grid-column: span 2; background: #fffcf0; padding: 10px; border: 1.5px solid #fef08a; border-radius: 8px;">
+                    <span class="label" style="font-weight: 800; color: #854d0e;">📋 قرار الجلسة</span>
+                    <span class="value" id="vdAction" style="display:block; margin-top: 6px; font-weight: 600; line-height: 1.6;">—</span>
+                </div>
+                <div class="item" style="grid-column: span 2; background: #fff; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+                    <span class="label" style="font-weight: 800; color: #1a4a6e;">📝 ما دار بالجلسة / الملاحظات</span>
+                    <span class="value" id="vdNotes" style="display:block; margin-top: 6px; font-weight: 400; line-height: 1.6;">—</span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel-modal" onclick="closeViewDetailsModal()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: CUSTOM DELETE CONFIRMATION -->
+    <div class="custom-modal-overlay" id="customModal">
+        <div class="custom-modal-box">
+            <div class="custom-modal-icon" id="modalIcon">⚠️</div>
+            <div class="custom-modal-title" id="modalTitle">تأكيد</div>
+            <div class="custom-modal-message" id="modalMessage">هل أنت متأكد من حذف هذه الجلسة نهائياً؟</div>
+            <div class="custom-modal-actions">
+                <button class="btn-modal-cancel" onclick="closeCustomModal()">إلغاء</button>
+                <button class="btn-modal-confirm" id="modalConfirmBtn" onclick="executeModalAction()">تأكيد</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="customToast" class="custom-toast">تم</div>
+
+    <!-- ===== Print Options Popup ===== -->
+    <div class="modal-overlay-print" id="printModal">
+        <div class="modal-box-print" style="max-width:580px;">
+            <span class="modal-icon-print">🖨️</span>
+            <h3>خيارات طباعة تقرير الجلسات الموحد</h3>
+            <p>اختر الجلسات التي تريد تضمينها في التقرير</p>
+            <div class="print-modal-fields">
+                <div class="print-field-row">
+                    <div class="print-field">
+                        <label>نوع الجلسات</label>
+                        <select class="filter-select" id="printFilterType">
+                            <option value="all">جميع الجلسات</option>
+                            <option value="pending">جلسات متداولة فقط</option>
+                            <option value="closed">جلسات منتهية فقط</option>
+                        </select>
+                    </div>
+                    <div class="print-field">
+                        <label>درجة التقاضي</label>
+                        <select class="filter-select" id="printFilterStage">
+                            <option value="all">جميع الدرجات</option>
+                            <option value="ابتدائي">ابتدائي</option>
+                            <option value="استئناف">استئناف</option>
+                            <option value="نقض">نقض</option>
+                            <option value="إشكال">إشكال</option>
+                            <option value="إشكال في التنفيذ">إشكال في التنفيذ</option>
+                            <option value="التماس إعادة النظر">التماس إعادة النظر</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:16px;padding:6px 0;border-top:1px solid #e2e8f0;margin-top:8px;padding-top:12px;">
+                    <label class="print-field-check">
+                        <input type="checkbox" id="printIncludeStats" checked>
+                        عرض الإحصائيات
+                    </label>
+                    <label class="print-field-check">
+                        <input type="checkbox" id="printIncludeDetails" checked>
+                        عرض التفاصيل الكاملة
+                    </label>
+                    <label class="print-field-check">
+                        <input type="checkbox" id="printIncludeNotes" checked>
+                        عرض ملاحظات الجلسة
+                    </label>
+                </div>
+            </div>
+            <div class="print-modal-hint" id="printCountHint">📊 عدد الجلسات التي سيتم طباعتها: 0</div>
+            <div class="modal-actions-print">
+                <button class="btn btn-cancel-print" onclick="closePrintModal()">إلغاء</button>
+                <button class="btn btn-confirm-print" onclick="generatePrintReport()">🖨️ طباعة التقرير</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Printable Report Area -->
+    <div id="printReportArea" class="print-report-area"></div>
+
+    <script>
+        // ============================================================
+        // CONFIG & STATE
+        // ============================================================
+        const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+        let lawyersList = [];
+        let allSessions = [];
+        let allCases = [];
+        let courtsList = [];
+        let circuitsList = [];
+        let allLitigationLevels = [];
+        
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        
+        let modalAction = null;
+        let modalTargetId = null;
+        let selectedCaseData = null;
+        let selectedLitigationLevel = null;
+
+        // قراءة URL params مبكراً قبل أي async (لأن applyURLPrefillToSession تمسحها لاحقاً)
+        (function readPrefillParamsEarly() {
+            const p = new URLSearchParams(window.location.search);
+            window._prefillCaseId = p.get('prefill_caseId') || '';
+        })();
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('customToast');
+            t.textContent = msg;
+            t.style.background = isError ? '#b22234' : '#1a5a8a';
+            t.className = 'custom-toast show';
+            setTimeout(() => t.className = 'custom-toast', 3000);
+        }
+
+        // Helper check for closed status
+        function isSessionClosed(s) {
+            return s.IsClosed === true || 
+                   s.Status === 'مغلقة' || s.Status === 'closed' || 
+                   s.Status === 'منتهية' || s.Status === 'عُقدت' || s.Status === 'held' ||
+                   (s.Result && s.Result !== 'لم تحسم' && s.Result !== '' && s.Result !== 'مؤجلة');
+        }
+
+        // Format dates
+        function formatDate(dateStr) {
+            if (!dateStr) return '—';
+            try {
+                // صيغة ISO مباشرة YYYY-MM-DD
+                const isoMatch = String(dateStr).match(/^(\d{4})-(\d{2})-(\d{2})/);
+                if (isoMatch) return `${isoMatch[3]}/${isoMatch[2]}/${isoMatch[1]}`;
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return '—';
+                const dd = String(d.getDate()).padStart(2, '0');
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const yyyy = d.getFullYear();
+                return `${dd}/${mm}/${yyyy}`;
+            } catch (_) {
+                return '—';
+            }
+        }
+
+        function formatTime(timeStr) {
+            if (!timeStr) return '—';
+            if (typeof timeStr === 'string' && timeStr.includes('T')) {
+                try {
+                    const match = timeStr.match(/T(\d{2}):(\d{2})/);
+                    if (match) return `${match[1]}:${match[2]}`;
+                } catch (_) {}
+            }
+            if (typeof timeStr === 'string') {
+                const trimmed = timeStr.trim();
+                if (trimmed.includes(':')) return trimmed.slice(0, 5);
+            }
+            return '—';
+        }
+
+        // ============================================================
+        // DATA LOADERS
+        // ============================================================
+        async function loadLawyers() {
+            try {
+                const resp = await fetch(`${API_URL}/lawyers`);
+                const json = await resp.json();
+                if (json.success) {
+                    lawyersList = json.data;
+                } else {
+                    throw new Error('no data');
+                }
+            } catch (_) {
+                lawyersList = [
+                    { Id: 1, FullName: 'جوليا ماجد عدلي', IsActive: true },
+                    { Id: 2, FullName: 'أحمد محمود عبد الكريم', IsActive: true },
+                    { Id: 3, FullName: 'مينا جرجس مرقص', IsActive: true },
+                    { Id: 4, FullName: 'رانيا محمد فوزي', IsActive: true }
+                ];
+            }
+            populateLawyerSelects();
+        }
+
+        // المحامين غير النشطين ميظهروش في قائمة الاختيار، لكن بيفضلوا محفوظين في lawyersList
+        // عشان لو جلسة قديمة متعينلها محامي بقى غير نشط، اسمه يفضل ظاهر صح
+        function populateLawyerSelects() {
+            const ids = ['addLawyer', 'modalLawyer'];
+            ids.forEach(id => {
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                const cur = sel.value;
+                sel.innerHTML = `<option value="">-- اختر المحامي --</option>`;
+                lawyersList
+                    .filter(l => l.IsActive === true || l.IsActive === 1 || l.IsActive === undefined)
+                    .forEach(l => {
+                        const opt = document.createElement('option');
+                        opt.value = l.Id;
+                        opt.textContent = l.FullName;
+                        sel.appendChild(opt);
+                    });
+                if (cur) sel.value = cur;
+            });
+        }
+
+        // بتضيف المحامي المعين لقضية/جلسة كخيار إضافي (متعلّم إنه غير نشط) لو اتلغى تفعيله بعد التعيين،
+        // عشان اسمه يفضل ظاهر صح بدل ما يفضل الحقل فاضي
+        function ensureLawyerOptionVisible(selectId, lawyerId, lawyerNameFallback) {
+            const sel = document.getElementById(selectId);
+            if (!sel || !lawyerId) return;
+            const exists = Array.from(sel.options).some(o => String(o.value) === String(lawyerId));
+            if (exists) {
+                sel.value = lawyerId;
+                return;
+            }
+            const lawyer = lawyersList.find(l => String(l.Id) === String(lawyerId));
+            const name = lawyer?.FullName || lawyerNameFallback || '';
+            if (name) {
+                const opt = document.createElement('option');
+                opt.value = lawyerId;
+                opt.textContent = `${name} (غير نشط)`;
+                sel.appendChild(opt);
+                sel.value = lawyerId;
+            }
+        }
+
+        async function loadCourts() {
+            try {
+                const resp = await fetch(`${API_URL}/courts`);
+                const json = await resp.json();
+                if (json.success) {
+                    courtsList = json.data || [];
+                } else {
+                    courtsList = [];
+                }
+            } catch (_) {
+                courtsList = [];
+            }
+            populateCourtSelects();
+        }
+
+        async function loadCircuits(courtId) {
+            try {
+                const url = courtId ? `${API_URL}/circuits?courtId=${courtId}` : `${API_URL}/circuits`;
+                const resp = await fetch(url);
+                const json = await resp.json();
+                if (json.success) {
+                    circuitsList = json.data || [];
+                } else {
+                    circuitsList = [];
+                }
+            } catch (_) {
+                circuitsList = [];
+            }
+            populateCircuitSelects(courtId);
+        }
+
+        function populateCourtSelects() {
+            const ids = ['modalCourt'];
+            ids.forEach(id => {
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                const cur = sel.value;
+                sel.innerHTML = '<option value="">-- اختر محكمة --</option>';
+                courtsList.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.Id;
+                    opt.textContent = c.Name;
+                    sel.appendChild(opt);
+                });
+                if (cur) sel.value = cur;
+            });
+        }
+
+        function populateCircuitSelects(courtId) {
+            const ids = ['modalCircuit'];
+            ids.forEach(id => {
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                const cur = sel.value;
+                sel.innerHTML = '<option value="">-- اختر دائرة --</option>';
+                let filtered = circuitsList;
+                if (courtId) {
+                    filtered = circuitsList.filter(c => c.CourtId == courtId);
+                }
+                filtered.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.Id;
+                    opt.textContent = c.Name;
+                    sel.appendChild(opt);
+                });
+                if (cur) sel.value = cur;
+            });
+        }
+
+        function onModalCourtChange(courtId) {
+            loadCircuitsForModal(courtId, false);
+        }
+
+        async function loadCircuitsForModal(courtId, preserveSelection = true) {
+            try {
+                const url = courtId ? `${API_URL}/circuits?courtId=${courtId}` : `${API_URL}/circuits`;
+                const resp = await fetch(url);
+                const json = await resp.json();
+                if (json.success) {
+                    const circuits = json.data || [];
+                    const sel = document.getElementById('modalCircuit');
+                    if (!sel) return circuits;
+                    const cur = sel.value;
+                    sel.innerHTML = '<option value="">-- اختر دائرة --</option>';
+                    circuits.forEach(c => {
+                        const opt = document.createElement('option');
+                        opt.value = c.Id;
+                        opt.textContent = c.Name;
+                        sel.appendChild(opt);
+                    });
+                    if (preserveSelection && cur) sel.value = cur;
+                    return circuits;
+                }
+                return [];
+            } catch (_) {
+                return [];
+            }
+        }
+
+        async function loadCases() {
+            try {
+                const resp = await fetch(`${API_URL}/cases`);
+                const json = await resp.json();
+                if (json.success) {
+                    allCases = json.data || [];
+                } else {
+                    allCases = [];
+                }
+            } catch (e) {
+                allCases = [];
+            }
+            await loadLitigationLevels();
+            populateCaseSelect();
+        }
+
+        async function loadLitigationLevels() {
+            try {
+                const resp = await fetch(`${API_URL}/litigation-levels`);
+                const json = await resp.json();
+                if (json.success) {
+                    allLitigationLevels = json.data || [];
+                } else {
+                    allLitigationLevels = [];
+                }
+            } catch (e) {
+                allLitigationLevels = [];
+            }
+        }
+
+        function populateCaseSelect() {
+            const select = document.getElementById('addCaseSelect');
+            if (!select) return;
+            const currentValue = select.value;
+            select.innerHTML = '<option value="">-- اختر قضية --</option>';
+
+            if (!allCases || allCases.length === 0) {
+                select.innerHTML += '<option value="" disabled>⚠️ لا توجد قضايا</option>';
+                return;
+            }
+
+            // خريطة لربط درجات التقاضي بكل قضية
+            const levelsByCase = new Map();
+            allLitigationLevels.forEach(lvl => {
+                const cid = lvl.CaseId;
+                if (!levelsByCase.has(cid)) levelsByCase.set(cid, []);
+                levelsByCase.get(cid).push(lvl);
+            });
+
+            // إذا كان هناك prefill_caseId، اشمل كل القضايا حتى المغلقة
+            const filteredCases = window._prefillCaseId ? allCases : allCases.filter(c => c.Status !== 'مغلقة');
+
+            const optionsList = [];
+
+            filteredCases.forEach(c => {
+                const caseLevels = levelsByCase.get(c.Id) || (c.ChildLevels || []);
+                const primaryNumber = c.CaseNumber ? String(c.CaseNumber) : 'بدون رقم';
+
+                // جمع جميع أرقام القضية للبحث الشامل
+                const allNumbers = [primaryNumber];
+                caseLevels.forEach(lvl => {
+                    if (lvl.TrackingCode && !allNumbers.includes(String(lvl.TrackingCode))) {
+                        allNumbers.push(String(lvl.TrackingCode));
+                    }
+                    if (lvl.CaseNumber && !allNumbers.includes(String(lvl.CaseNumber))) {
+                        allNumbers.push(String(lvl.CaseNumber));
+                    }
+                });
+                const allNumbersStr = allNumbers.join(' | ');
+
+                // 1. إضافة الخيار الابتدائي
+                optionsList.push({
+                    value: `case_${c.Id}`,
+                    caseId: c.Id,
+                    displayNumber: primaryNumber,
+                    allNumbers: allNumbersStr,
+                    subject: c.Subject || 'بدون موضوع',
+                    stageType: 'initial',
+                    stageLabel: 'ابتدائي',
+                    caseData: c,
+                    levelData: null,
+                    text: `${primaryNumber} - ${c.Subject || 'بدون موضوع'} [ابتدائي]`
+                });
+
+                // 2. إضافة خيارات درجات التقاضي (استئناف / نقض)
+                caseLevels.forEach(lvl => {
+                    const rawSt = (lvl.StageType || lvl.CurrentStage || '').toLowerCase();
+                    let st = 'appeal';
+                    let label = 'استئناف';
+                    if (rawSt === 'cassation' || rawSt.includes('نقض')) {
+                        st = 'cassation';
+                        label = 'نقض';
+                    } else if (rawSt === 'eshkal_tanfeeth' || rawSt === 'execution' || (rawSt.includes('شكال') && rawSt.includes('تنفيذ'))) {
+                        st = 'eshkal_tanfeeth';
+                        label = 'إشكال في التنفيذ';
+                    } else if (rawSt === 'eshkal' || rawSt.includes('شكال')) {
+                        st = 'eshkal';
+                        label = 'إشكال';
+                    } else if (rawSt === 'iltimas' || rawSt.includes('لتماس')) {
+                        st = 'iltimas';
+                        label = 'التماس إعادة النظر';
+                    } else if (rawSt === 'initial' || rawSt.includes('ابتدائي')) {
+                        st = 'initial';
+                        label = 'ابتدائي';
+                    }
+                    const lvlNum = lvl.TrackingCode ? String(lvl.TrackingCode) : primaryNumber;
+
+                    optionsList.push({
+                        value: `level_${lvl.Id}`,
+                        caseId: c.Id,
+                        displayNumber: lvlNum,
+                        allNumbers: allNumbersStr,
+                        subject: lvl.Subject || c.Subject || 'بدون موضوع',
+                        stageType: st,
+                        stageLabel: label,
+                        caseData: c,
+                        levelData: lvl,
+                        text: `${lvlNum} - ${lvl.Subject || c.Subject || 'بدون موضوع'} [${label}]`
+                    });
+                });
+            });
+
+            optionsList.sort((a, b) => String(a.displayNumber).localeCompare(String(b.displayNumber)));
+
+            if (optionsList.length === 0) {
+                select.innerHTML += '<option value="" disabled>⚠️ لا توجد قضايا متاحة</option>';
+                return;
+            }
+
+            optionsList.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.value;
+                option.textContent = item.text;
+                option.dataset.caseId = item.caseId;
+                option.dataset.displayNumber = item.displayNumber;
+                option.dataset.allNumbers = item.allNumbers;
+                option.dataset.caseData = JSON.stringify(item.caseData);
+                option.dataset.levelData = item.levelData ? JSON.stringify(item.levelData) : '';
+                option.dataset.stageLabel = item.stageLabel;
+                option.dataset.stageType = item.stageType;
+                
+                if (item.stageType === 'initial' || item.stageLabel === 'ابتدائي') {
+                    option.style.backgroundColor = '#dbeafe';
+                    option.style.color = '#2563eb';
+                    option.style.fontWeight = '700';
+                } else if (item.stageType === 'appeal' || item.stageLabel === 'استئناف') {
+                    option.style.backgroundColor = '#fef9c3';
+                    option.style.color = '#ca8a04';
+                    option.style.fontWeight = '700';
+                } else if (item.stageType === 'cassation' || item.stageLabel === 'نقض') {
+                    option.style.backgroundColor = '#fecaca';
+                    option.style.color = '#dc2626';
+                    option.style.fontWeight = '700';
+                } else if (item.stageType === 'eshkal' || item.stageLabel === 'إشكال') {
+                    option.style.backgroundColor = '#ede9fe';
+                    option.style.color = '#6d28d9';
+                    option.style.fontWeight = '700';
+                } else if (item.stageType === 'eshkal_tanfeeth' || item.stageType === 'execution' || item.stageLabel === 'إشكال في التنفيذ') {
+                    option.style.backgroundColor = '#fce7f3';
+                    option.style.color = '#be185d';
+                    option.style.fontWeight = '700';
+                } else if (item.stageType === 'iltimas' || item.stageLabel === 'التماس إعادة النظر') {
+                    option.style.backgroundColor = '#d1fae5';
+                    option.style.color = '#047857';
+                    option.style.fontWeight = '700';
+                }
+                
+                option.style.borderRadius = '8px';
+                option.style.padding = '4px 8px';
+                
+                select.appendChild(option);
+            });
+
+            if (currentValue) {
+                select.value = currentValue;
+                const selectedOpt = select.querySelector(`option[value="${currentValue}"]`);
+                const searchInput = document.getElementById('addCaseSearchInput');
+                if (searchInput && selectedOpt) searchInput.value = selectedOpt.textContent;
+            }
+        }
+
+        // Searchable select helper
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function highlightCaseMatch(text, term) {
+            const safe = escapeHtml(text);
+            if (!term) return safe;
+            const idx = text.toLowerCase().indexOf(term.toLowerCase());
+            if (idx === -1) return safe;
+            const before = escapeHtml(text.slice(0, idx));
+            const match = escapeHtml(text.slice(idx, idx + term.length));
+            const after = escapeHtml(text.slice(idx + term.length));
+            return `${before}<mark>${match}</mark>${after}`;
+        }
+
+        function renderCaseSearchList(filterText) {
+            const list = document.getElementById('addCaseSearchList');
+            const select = document.getElementById('addCaseSelect');
+            if (!list || !select) return;
+
+            const term = (filterText || '').trim().toLowerCase();
+            list.innerHTML = '';
+
+            const options = Array.from(select.options).filter(opt => opt.value);
+            const matches = term
+                ? options.filter(opt => {
+                    const disp = (opt.dataset.displayNumber || '').toLowerCase();
+                    const allNums = (opt.dataset.allNumbers || '').toLowerCase();
+                    const txt = opt.textContent.toLowerCase();
+                    return disp.includes(term) || allNums.includes(term) || txt.includes(term);
+                })
+                : options;
+
+            if (matches.length === 0) {
+                list.innerHTML = `<div class="searchable-select-empty">لا توجد قضايا مطابقة</div>`;
+                return;
+            }
+
+            matches.forEach(opt => {
+                const item = document.createElement('div');
+                item.className = 'searchable-select-item';
+                item.innerHTML = highlightCaseMatch(opt.textContent, term);
+                if (opt.style.backgroundColor) item.style.backgroundColor = opt.style.backgroundColor;
+                if (opt.style.color) item.style.color = opt.style.color;
+                item.addEventListener('click', () => {
+                    select.value = opt.value;
+                    document.getElementById('addCaseSearchInput').value = opt.textContent;
+                    closeCaseSearchList();
+                    onCaseSelect(opt.value);
+                });
+                list.appendChild(item);
+            });
+        }
+
+        function openCaseSearchList() {
+            renderCaseSearchList(document.getElementById('addCaseSearchInput').value);
+            document.getElementById('addCaseSearchList').classList.add('open');
+        }
+
+        function closeCaseSearchList() {
+            document.getElementById('addCaseSearchList').classList.remove('open');
+        }
+
+        function onCaseSelect(val) {
+            if (!val) {
+                resetCaseFields();
+                return;
+            }
+
+            const select = document.getElementById('addCaseSelect');
+            let selectedOption = select.querySelector(`option[value="${val}"]`);
+            if (!selectedOption) {
+                selectedOption = select.querySelector(`option[value="case_${val}"]`) || 
+                                 select.querySelector(`option[data-case-id="${val}"]`);
+            }
+            if (!selectedOption) {
+                resetCaseFields();
+                return;
+            }
+
+            const caseData = JSON.parse(selectedOption.dataset.caseData || '{}');
+            if (!caseData || !caseData.Id) {
+                resetCaseFields();
+                return;
+            }
+
+            selectedCaseData = caseData;
+
+            const lvl = selectedOption.dataset.levelData ? JSON.parse(selectedOption.dataset.levelData) : null;
+            selectedLitigationLevel = lvl || null;
+
+            const stageLabel = selectedOption.dataset.stageLabel || (lvl ? (
+                lvl.StageType === 'appeal' ? 'استئناف' :
+                lvl.StageType === 'cassation' ? 'نقض' :
+                lvl.StageType === 'eshkal' ? 'إشكال' :
+                (lvl.StageType === 'eshkal_tanfeeth' || lvl.StageType === 'execution') ? 'إشكال في التنفيذ' :
+                lvl.StageType === 'iltimas' ? 'التماس إعادة النظر' : 'ابتدائي'
+            ) : (caseData.CurrentStage || 'ابتدائي'));
+            
+            document.getElementById('addSubject').value = (lvl && lvl.Subject) ? lvl.Subject : (caseData.Subject || '');
+            document.getElementById('addOpponent').value = (lvl && (lvl.Plaintiff || lvl.Defendant)) ? (lvl.Plaintiff || lvl.Defendant) : (caseData.Opponent || '');
+            document.getElementById('addCurrentLevel').value = stageLabel;
+
+            if (caseData.AssignedLawyerId) {
+                ensureLawyerOptionVisible('addLawyer', caseData.AssignedLawyerId, caseData.LawyerName);
+            }
+            showToast(`✅ تم جلب بيانات القضية (${stageLabel} - ${selectedOption.dataset.displayNumber || caseData.CaseNumber || ''})`);
+        }
+
+        function resetCaseFields() {
+            const caseSearchInput = document.getElementById('addCaseSearchInput');
+            if (caseSearchInput) caseSearchInput.value = '';
+            document.getElementById('addSubject').value = '';
+            document.getElementById('addOpponent').value = '';
+            document.getElementById('addCurrentLevel').value = '';
+            document.getElementById('addLawyer').value = '';
+            selectedCaseData = null;
+            selectedLitigationLevel = null;
+        }
+
+        async function loadSessions() {
+            try {
+                // Fetch sessions details (more descriptive)
+                const resp = await fetch(`${API_URL}/sessions/details`);
+                const json = await resp.json();
+                if (json.success) {
+                    allSessions = (json.data || []).map(s => {
+                        if (s.SessionTime && typeof s.SessionTime === 'string') {
+                            if (s.SessionTime.length > 5) {
+                                s.SessionTime = s.SessionTime.slice(0, 5);
+                            }
+                        }
+                        return s;
+                    });
+                } else {
+                    allSessions = [];
+                }
+            } catch (_) {
+                allSessions = [];
+                showToast('⚠️ فشل جلب الجلسات', true);
+            }
+            
+            filterAndRenderAll();
+            applyViewSessionFromURL();
+        }
+
+        // ============================================================
+        // فتح تفاصيل جلسة معينة تلقائياً لو جاي من رابط فيه ?viewSession=ID
+        // (مثلاً من جرس الإشعارات في القائمة الجانبية)
+        // ============================================================
+        function applyViewSessionFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const viewSessionId = params.get('viewSession');
+            if (!viewSessionId) return;
+
+            // مسح الـ param من الرابط فوراً عشان ما يتكررش عند الـ refresh
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            const targetId = parseInt(viewSessionId, 10);
+            if (!isNaN(targetId)) {
+                setTimeout(() => openViewDetailsModal(targetId), 200);
+            }
+        }
+
+        // ============================================================
+        // FILTER & RENDER
+        // ============================================================
+        function filterAndRenderAll() {
+            const filtered = getFilteredSessions();
+            
+            // جدول واحد يعرض جميع الجلسات تحت القضايا المرتبة بالأحدث
+            renderAllSessions(filtered);
+            updateKPIs(allSessions);
+        }
+
+        function getFilteredSessions() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const level = document.getElementById('levelSelect').value;
+            const date = document.getElementById('specificDate').value;
+            
+            let filtered = allSessions.filter(s => s && s.SessionDate);
+            
+            if (search) {
+                filtered = filtered.filter(s => {
+                    const caseNum = (s.CaseNumber || '').toLowerCase();
+                    const subject = (s.Subject || s.CaseSubject || '').toLowerCase();
+                    const opponent = (s.Opponent || s.CaseOpponent || '').toLowerCase();
+                    const court = (s.CourtName || '').toLowerCase();
+                    const lawyer = (s.LawyerName || s.AttendingName || '').toLowerCase();
+                    const stage = (s.Stage || '').toLowerCase();
+                    
+                    return caseNum.includes(search) || 
+                           subject.includes(search) || 
+                           opponent.includes(search) || 
+                           court.includes(search) || 
+                           lawyer.includes(search) ||
+                           stage.includes(search);
+                });
+            }
+            
+            if (level) {
+                filtered = filtered.filter(s => {
+                    const stage = s.Stage || 'ابتدائي';
+                    return stage === level;
+                });
+            }
+            
+            if (date) {
+                filtered = filtered.filter(s => s.SessionDate === date);
+            }
+            
+            return filtered;
+        }
+
+        function filterTable() {
+            currentPage = 1;
+            filterAndRenderAll();
+        }
+
+        function changePage(dir) {
+            currentPage += dir;
+            filterAndRenderAll();
+        }
+
+        // ============================================================
+        // GROUP SESSIONS BY PARENT CASE
+        // ============================================================
+        // تجميع كل جلسات نفس القضية الأصلية (بكل درجات التقاضي: ابتدائي/استئناف/نقض)
+        // مع بعضها تحت رأس واحد، مع الحفاظ على ترتيب الأحدث أولاً
+        function groupSessionsByCase(sessions) {
+            const groupsMap = new Map();
+
+            sessions.forEach(s => {
+                const key = s.CaseId != null ? `case-${s.CaseId}` : `num-${s.CaseNumber || 'unknown'}`;
+                if (!groupsMap.has(key)) {
+                    groupsMap.set(key, {
+                        key,
+                        baseCaseNumber: s.BaseCaseNumber || s.CaseNumber || '—',
+                        baseSubject: s.BaseSubject || s.Subject || s.CaseSubject || '—',
+                        maxSessionId: 0,
+                        sessions: []
+                    });
+                }
+                const grp = groupsMap.get(key);
+                grp.sessions.push(s);
+                // تتبع أكبر ID جلسة لمعرفة أي قضية تم إضافة/تحديث جلسة لها مؤخراً
+                const sid = parseInt(s.Id) || 0;
+                if (sid > grp.maxSessionId) {
+                    grp.maxSessionId = sid;
+                }
+            });
+
+            // ترتيب الجلسات داخل كل قضية: الأحدث تاريخاً أولاً
+            groupsMap.forEach(grp => {
+                grp.sessions.sort((a, b) => {
+                    const da = a.SessionDate || '';
+                    const db = b.SessionDate || '';
+                    if (da !== db) {
+                        return db.localeCompare(da); // تنازلياً حسب التاريخ
+                    }
+                    return (b.Id || 0) - (a.Id || 0); // تنازلياً حسب الـ ID إذا تساوى التاريخ
+                });
+            });
+
+            // ترتيب القضايا: القضية التي تحتوي على الجلسة المضافة/المعدلة مؤخراً تظهر أولاً
+            return Array.from(groupsMap.values()).sort((a, b) => {
+                return b.maxSessionId - a.maxSessionId;
+            });
+        }
+
+        // ============================================================
+        // ============================================================
+        // RENDER ALL SESSIONS (UNIFIED TABLE)
+        // ============================================================
+        function renderAllSessions(sessions) {
+            const tbody = document.getElementById('allSessionsBody');
+            if (!tbody) return;
+
+            const countEl = document.getElementById('allSessionsCount');
+            if (countEl) countEl.textContent = sessions.length;
+
+            if (sessions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:#7a9ab5;">لا توجد جلسات مسجلة</td></tr>`;
+                document.getElementById('activePaginationControls').style.display = 'none';
+                return;
+            }
+
+            const groups = groupSessionsByCase(sessions);
+
+            document.getElementById('activePaginationControls').style.display = 'flex';
+            const totalPages = Math.ceil(groups.length / itemsPerPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedGroups = groups.slice(start, end);
+
+            // تحديث واجهة ترقيم الصفحات
+            document.getElementById('activePageIndicator').textContent = `صفحة ${currentPage} من ${totalPages} (إجمالي ${sessions.length} جلسة في ${groups.length} قضية)`;
+            document.getElementById('activePrevPageBtn').disabled = currentPage === 1;
+            document.getElementById('activeNextPageBtn').disabled = currentPage === totalPages;
+            document.getElementById('activePrevPageBtn').style.opacity = currentPage === 1 ? '0.5' : '1';
+            document.getElementById('activeNextPageBtn').style.opacity = currentPage === totalPages ? '0.5' : '1';
+
+            let html = '';
+            paginatedGroups.forEach(group => {
+                html += `
+                    <tr class="case-group-header">
+                        <td colspan="9" style="background:#1a5a8a;color:#fff;font-weight:800;padding:8px 14px;">
+                            <i class="fa-solid fa-folder-open"></i>
+                            قضية رقم: ${group.baseCaseNumber} — ${group.baseSubject}
+                            <span style="font-weight:600;font-size:0.75rem;opacity:0.85;">(${group.sessions.length} جلسة)</span>
+                        </td>
+                    </tr>
+                `;
+
+                group.sessions.forEach(s => {
+                    const closed = isSessionClosed(s);
+                    const date = formatDate(s.SessionDate);
+                    const stage = s.Stage || 'ابتدائي';
+                    const stageClass = stage === 'استئناف' ? 'badge-appeal' :
+                                       stage === 'نقض' ? 'badge-cassation' :
+                                       (stage.includes('تنفيذ') || stage === 'eshkal_tanfeeth' || stage === 'execution') ? 'badge-eshkal-tanfeeth' :
+                                       (stage.includes('شكال') || stage === 'eshkal') ? 'badge-eshkal' :
+                                       (stage.includes('لتماس') || stage === 'iltimas') ? 'badge-iltimas' : 'badge-initial';
+                    // عرض النتيجة مع شارة المنتهية إذا كانت الجلسة مغلقة
+                    let resultDisplay;
+                    if (closed) {
+                        const r = s.Result || '';
+                        if (r === 'لصالح الشركة') resultDisplay = '<span class="badge badge-company">✅ لصالح الشركة</span>';
+                        else if (r === 'لصالح الخصم') resultDisplay = '<span class="badge badge-opponent">❌ لصالح الخصم</span>';
+                        else resultDisplay = '<span class="badge badge-closed-status">🔒 منتهية</span>';
+                    } else {
+                        const r = s.Result && s.Result !== 'لم تحسم' && s.Result !== '' ? s.Result : '—';
+                        if (r === 'مؤجلة') {
+                            resultDisplay = '<span class="badge" style="background:#fef3c7;color:#d97706;font-weight:700;">⏳ مؤجلة</span>';
+                        } else {
+                            resultDisplay = r;
+                        }
+                    }
+
+                    // ✅ نص "المحكمة: ... - الدائرة: ... | الخصم: ..." هو نص وصفي تلقائي قديم كان يُخزَّن
+                    // في عمود Notes وليس ملاحظة حقيقية، لذلك لا يجب عرضه في خانة "ملاحظات" أبداً.
+                    const isAutoMetaNotes = (txt) => typeof txt === 'string' && txt.trim().startsWith('المحكمة:');
+
+                    // قرار الجلسة: من ActionTaken، وإذا كان فاضي بنرجع لعمود Notes القديم
+                    // فقط لو مش النص الوصفي التلقائي (بيانات قديمة كانت بتُخزَّن هناك قبل وجود عمود قرار الجلسة)
+                    let actionText = '—';
+                    if (s.Action && s.Action !== '—') {
+                        actionText = s.Action;
+                    } else if (s.Notes && !isAutoMetaNotes(s.Notes)) {
+                        actionText = s.Notes;
+                    }
+
+                    // ملاحظات: فقط ما تم تسجيله فعلاً كملاحظة (ما دار بالجلسة عند عمل إعلان)
+                    const notesText = s.SessionNotes || '—';
+
+                    const appealAction = s.AppealAction || '—';
+                    const rowBg = closed ? 'background:#f8f9fa;' : '';
+                    const textColor = closed ? 'color:#64748b;' : 'color:#0b2b4a;';
+
+                    html += `
+                        <tr id="active-row-${s.Id}" style="${rowBg}">
+                            <td style="font-weight:700;${textColor}">${s.CaseNumber || '—'}</td>
+                            <td><span class="badge ${stageClass}" style="${closed ? 'opacity:0.75;' : ''}">${stage}</span></td>
+                            <td style="${closed ? 'color:#64748b;' : ''}">${date}</td>
+                            <td style="max-width:150px;word-break:break-word;${closed ? 'color:#64748b;' : ''}">${actionText}</td>
+                            <td style="max-width:160px;word-break:break-word;${closed ? 'color:#64748b;' : ''}">${s.Subject || s.CaseSubject || '—'}</td>
+                            <td>${resultDisplay}</td>
+                            <td style="${closed ? 'color:#64748b;' : ''}">${appealAction}</td>
+                            <td style="max-width:150px;word-break:break-word;${closed ? 'color:#64748b;' : ''}">${notesText}</td>
+                            <td style="white-space:nowrap;">
+                                <div class="action-container-td">
+                                    <div class="action-icons-row">
+                                        <button class="btn-view-details" onclick="openViewDetailsModal(${s.Id})" title="عرض التفاصيل">
+                                            👁️
+                                        </button>
+                                        ${(typeof PermGuard === 'undefined' || PermGuard.canEdit('sessions')) ? `<button class="btn-edit-item" onclick="openEditModal(${s.Id})" title="تعديل البيانات">
+                                            ✏️
+                                        </button>` : ''}
+                                        ${(typeof PermGuard === 'undefined' || PermGuard.canDelete('sessions')) ? `<button class="btn-delete-item" onclick="confirmDelete(${s.Id})" title="حذف الجلسة">
+                                            🗑️
+                                        </button>` : ''}
+                                    </div>
+                                    ${(typeof PermGuard === 'undefined' || PermGuard.canEdit('sessions')) ? `<button class="btn-action" onclick="openActionModal(${s.Id})" title="${closed ? 'تعديل تطورات الجلسة' : 'تطورات الجلسة'}">
+                                        <i class="fa-solid fa-gears"></i> ${closed ? 'تعديل تطورات الجلسة' : 'تطورات الجلسة'}
+                                    </button>` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }); // end group.sessions.forEach
+            }); // end paginatedGroups.forEach
+            tbody.innerHTML = html;
+        }
+
+        // ============================================================
+        // UPDATE KPIs
+        // ============================================================
+        // ✅ تنسيق التاريخ محلياً (بدون تحويل UTC) لتفادي فرق التوقيت الذي كان يسبب
+        // عدم حساب جلسات اليوم بشكل صحيح
+        function toLocalDateStr(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        function updateKPIs(sessions) {
+            const validSessions = sessions.filter(s => s && s.SessionDate);
+            
+            // GROUP 1 - Calendar Based
+            const today = toLocalDateStr(new Date());
+            const todaySessions = validSessions.filter(s => s.SessionDate === today);
+            document.getElementById('todayCount').textContent = todaySessions.length;
+
+            const weekStart = new Date();
+            weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+            const weekStartStr = toLocalDateStr(weekStart);
+            const weekSessions = validSessions.filter(s => s.SessionDate >= weekStartStr);
+            document.getElementById('weekCount').textContent = weekSessions.length;
+
+            const monthStart = new Date();
+            monthStart.setDate(1);
+            const monthStartStr = toLocalDateStr(monthStart);
+            const monthSessions = validSessions.filter(s => s.SessionDate >= monthStartStr);
+            document.getElementById('monthCount').textContent = monthSessions.length;
+
+            const stages = ['ابتدائي', 'استئناف', 'نقض'];
+            stages.forEach(stg => {
+                const filterFn = (s) => (s.Stage || 'ابتدائي') === stg;
+                
+                document.getElementById(`today${stg === 'ابتدائي' ? 'Init' : stg === 'استئناف' ? 'Appeal' : 'Cass'}`).textContent = todaySessions.filter(filterFn).length;
+                document.getElementById(`week${stg === 'ابتدائي' ? 'Init' : stg === 'استئناف' ? 'Appeal' : 'Cass'}`).textContent = weekSessions.filter(filterFn).length;
+                document.getElementById(`month${stg === 'ابتدائي' ? 'Init' : stg === 'استئناف' ? 'Appeal' : 'Cass'}`).textContent = monthSessions.filter(filterFn).length;
+            });
+
+            // GROUP 2 - Status Based
+            const total = sessions.length;
+            const pending = sessions.filter(s => !isSessionClosed(s)).length;
+            const closed = sessions.filter(s => isSessionClosed(s)).length;
+            const company = sessions.filter(s => s.Result === 'لصالح الشركة').length;
+            const opponent = sessions.filter(s => s.Result === 'لصالح الخصم').length;
+
+            const actionAppeal = sessions.filter(s => s.AppealAction === 'استئناف').length;
+            const actionCassation = sessions.filter(s => s.AppealAction === 'نقض').length;
+            const actionExecution = sessions.filter(s => s.AppealAction === 'اشكال في التنفيذ').length;
+            const actionReconsider = sessions.filter(s => s.AppealAction === 'التماس اعادة النظر').length;
+            const actionNone = sessions.filter(s => s.AppealAction === 'لا اجراء').length;
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statPending').textContent = pending;
+            document.getElementById('statClosed').textContent = closed;
+            document.getElementById('statCompany').textContent = company;
+            document.getElementById('statOpponent').textContent = opponent;
+            document.getElementById('statActionAppeal').textContent = actionAppeal;
+            document.getElementById('statActionCassation').textContent = actionCassation;
+            document.getElementById('statActionExecution').textContent = actionExecution;
+            document.getElementById('statActionReconsider').textContent = actionReconsider;
+            document.getElementById('statActionNone').textContent = actionNone;
+        }
+
+        // ============================================================
+        // OPERATIONS
+        // ============================================================
+        async function saveNewSession() {
+            if (typeof PermGuard !== 'undefined' && !PermGuard.canAdd('sessions')) {
+                PermGuard.denyAction('ليس لديك صلاحية إضافة جلسة جديدة.');
+                return;
+            }
+            const selectVal = document.getElementById('addCaseSelect').value;
+            const sessionDate = document.getElementById('addSessionDate').value;
+            
+            if (!selectVal || !sessionDate) {
+                showToast('⚠️ اختر قضية وحدد تاريخ الجلسة', true);
+                return;
+            }
+
+            const select = document.getElementById('addCaseSelect');
+            let selectedOption = select.querySelector(`option[value="${selectVal}"]`);
+            if (!selectedOption) {
+                selectedOption = select.querySelector(`option[value="case_${selectVal}"]`) || 
+                                 select.querySelector(`option[data-case-id="${selectVal}"]`);
+            }
+            if (!selectedOption) {
+                showToast('⚠️ لم يتم العثور على القضية', true);
+                return;
+            }
+
+            const caseData = JSON.parse(selectedOption.dataset.caseData || '{}');
+            const displayNumber = selectedOption.dataset.displayNumber || caseData.CaseNumber || '';
+            
+            let stage = 'ابتدائي';
+            let litigationLevelId = null;
+            const stageLabel = selectedOption.dataset.stageLabel || 'ابتدائي';
+            const stageType = selectedOption.dataset.stageType || 'initial';
+            
+            if (selectedLitigationLevel && selectedLitigationLevel.Id) {
+                litigationLevelId = selectedLitigationLevel.Id;
+                const stType = (selectedLitigationLevel.StageType || '').toLowerCase();
+                if (stType === 'appeal') stage = 'استئناف';
+                else if (stType === 'cassation') stage = 'نقض';
+                else if (stType === 'eshkal') stage = 'إشكال';
+                else if (stType === 'eshkal_tanfeeth' || stType === 'execution') stage = 'إشكال في التنفيذ';
+                else if (stType === 'iltimas') stage = 'التماس إعادة النظر';
+                else stage = selectedLitigationLevel.StageType || 'ابتدائي';
+            } else {
+                stage = stageLabel;
+            }
+
+            const payload = {
+                caseId: caseData.Id,
+                caseNumber: displayNumber,
+                subject: document.getElementById('addSubject').value.trim() || (selectedLitigationLevel && selectedLitigationLevel.Subject) || caseData.Subject || 'بدون موضوع',
+                stage: stage,
+                opponent: document.getElementById('addOpponent').value.trim() || caseData.Opponent || 'غير معروف',
+                lawyerId: document.getElementById('addLawyer').value || caseData.AssignedLawyerId || null,
+                lawyerName: document.getElementById('addLawyer').options[document.getElementById('addLawyer').selectedIndex]?.text || '',
+                sessionDate: sessionDate,
+                court: (selectedLitigationLevel && selectedLitigationLevel.CourtName) || caseData.CourtName || '',
+                circuit: (selectedLitigationLevel && (selectedLitigationLevel.CircuitName || selectedLitigationLevel['الدائرة'])) || caseData.CircuitName || '',
+                isClosed: false,
+                status: 'متداولة',
+                litigationLevelId: litigationLevelId,
+                action: document.getElementById('addActionTaken')?.value.trim() || ''
+            };
+
+            try {
+                const resp = await fetch(`${API_URL}/sessions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const json = await resp.json();
+                
+                if (json.success) {
+                    showToast(`✅ تم حفظ الجلسة (${stage})`);
+                    resetCaseFields();
+                    document.getElementById('addSessionDate').value = new Date().toISOString().split('T')[0];
+                    if (document.getElementById('addActionTaken')) document.getElementById('addActionTaken').value = '';
+                    
+                    currentPage = 1;
+                    await loadSessions();
+                    notifyCalendar('sessionAdded', { caseNumber: displayNumber, stage: stage, stageType: stageType });
+                } else {
+                    showToast('❌ ' + json.message, true);
+                }
+            } catch (error) {
+                showToast('❌ فشل الاتصال بالخادم', true);
+            }
+        }
+
+        // Delete session
+        function confirmDelete(id) {
+            if (typeof PermGuard !== 'undefined' && !PermGuard.canDelete('sessions')) {
+                PermGuard.denyAction('ليس لديك صلاحية حذف الجلسات.');
+                return;
+            }
+            modalTargetId = id;
+            modalAction = 'delete';
+            document.getElementById('modalIcon').textContent = '🗑️';
+            document.getElementById('modalTitle').textContent = 'تأكيد الحذف';
+            document.getElementById('modalConfirmBtn').textContent = 'نعم، احذف';
+            document.getElementById('customModal').classList.add('show');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.remove('show');
+            modalAction = null;
+            modalTargetId = null;
+        }
+
+        async function executeModalAction() {
+            if (modalAction === 'delete' && modalTargetId) {
+                try {
+                    const resp = await fetch(`${API_URL}/sessions/${modalTargetId}`, { method: 'DELETE' });
+                    const json = await resp.json();
+                    if (json.success) {
+                        showToast('✅ تم الحذف');
+                        closeCustomModal();
+                        await loadSessions();
+                    } else {
+                        showToast('❌ ' + json.message, true);
+                    }
+                } catch (_) {
+                    showToast('❌ فشل الحذف', true);
+                }
+                closeCustomModal();
+            }
+        }
+
+        // ============================================================
+        // EDIT MODAL ACTIONS
+        // ============================================================
+        async function openEditModal(id) {
+            if (typeof PermGuard !== 'undefined' && !PermGuard.canEdit('sessions')) {
+                PermGuard.denyAction('ليس لديك صلاحية تعديل بيانات الجلسات.');
+                return;
+            }
+            const s = allSessions.find(x => x.Id === id);
+            if (!s) {
+                showToast('⚠️ الجلسة غير موجودة', true);
+                return;
+            }
+            
+            document.getElementById('editingRowId').value = id;
+            document.getElementById('modalCaseNumber').value = s.CaseNumber || '—';
+            document.getElementById('modalSubject').value = s.Subject || '';
+            document.getElementById('modalSessionDate').value = s.SessionDate || '';
+            syncDateDisplay('modalSessionDate');
+
+            if (s.LawyerId) {
+                ensureLawyerOptionVisible('modalLawyer', s.LawyerId, s.LawyerName);
+            } else if (s.LawyerName) {
+                const lawyerSel = document.getElementById('modalLawyer');
+                const found = lawyerSel && Array.from(lawyerSel.options).find(o => o.textContent === s.LawyerName);
+                if (found) {
+                    lawyerSel.value = found.value;
+                } else if (lawyerSel) {
+                    // اسم محامي قديم مش موجود في القائمة (غير نشط أو محذوف)، نضيفه كخيار للعرض بس
+                    const opt = document.createElement('option');
+                    opt.value = '';
+                    opt.textContent = `${s.LawyerName} (غير نشط)`;
+                    opt.selected = true;
+                    lawyerSel.appendChild(opt);
+                }
+            }
+
+            const actionField = document.getElementById('modalActionTaken');
+            if (actionField) {
+                actionField.value = (s.Action && s.Action !== '—') ? s.Action : '';
+            }
+            
+            const courtSel = document.getElementById('modalCourt');
+            const courtName = (s.CourtName || s.Court || '').trim();
+            let courtId = '';
+            if (courtName) {
+                let courtFound = false;
+                for (let opt of courtSel.options) {
+                    if (opt.textContent.trim() === courtName) {
+                        courtSel.value = opt.value;
+                        courtId = opt.value;
+                        courtFound = true;
+                        break;
+                    }
+                }
+                if (!courtFound) {
+                    const opt = document.createElement('option');
+                    opt.value = 'temp';
+                    opt.textContent = courtName;
+                    courtSel.appendChild(opt);
+                    courtSel.value = 'temp';
+                    courtId = 'temp';
+                }
+            } else {
+                courtSel.value = '';
+            }
+
+            const circuitSel = document.getElementById('modalCircuit');
+            const circuitName = (s.CircuitName || s.Circuit || '').trim();
+            const fetchedCircuits = await loadCircuitsForModal(courtId && courtId !== 'temp' ? courtId : '', false);
+
+            if (circuitName) {
+                let matched = fetchedCircuits.find(c => (c.Name || '').trim() === circuitName);
+                if (matched) {
+                    circuitSel.value = matched.Id;
+                } else {
+                    const opt = document.createElement('option');
+                    opt.value = 'temp';
+                    opt.textContent = circuitName;
+                    circuitSel.appendChild(opt);
+                    circuitSel.value = 'temp';
+                }
+            } else {
+                circuitSel.value = '';
+            }
+            
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        async function saveEdit() {
+            const id = document.getElementById('editingRowId').value;
+            const courtSelect = document.getElementById('modalCourt');
+            const circuitSelect = document.getElementById('modalCircuit');
+            
+            if (!courtSelect.value || !circuitSelect.value) {
+                showToast('⚠️ اختر المحكمة والدائرة', true);
+                return;
+            }
+            
+            const courtName = courtSelect.options[courtSelect.selectedIndex]?.text || '';
+            const circuitName = circuitSelect.options[circuitSelect.selectedIndex]?.text || '';
+            const courtIdValue = courtSelect.value !== 'temp' ? courtSelect.value : null;
+            const circuitIdValue = circuitSelect.value !== 'temp' ? circuitSelect.value : null;
+            
+            const lawyerSel = document.getElementById('modalLawyer');
+            const lawyerIdVal = lawyerSel?.value || null;
+            const lawyerNameVal = lawyerSel?.options[lawyerSel.selectedIndex]?.text || '';
+            
+            const data = {
+                sessionSubject: document.getElementById('modalSubject').value,
+                sessionDate: document.getElementById('modalSessionDate').value,
+                sessionCourtName: courtName,
+                courtId: courtIdValue,
+                sessionCircuitName: circuitName,
+                circuitId: circuitIdValue,
+                lawyerId: lawyerIdVal,
+                lawyerName: lawyerNameVal,
+                actionTaken: document.getElementById('modalActionTaken')?.value.trim() || ''
+            };
+            
+            try {
+                const resp = await fetch(`${API_URL}/sessions/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const json = await resp.json();
+
+                if (json.success) {
+                    showToast('✅ تم التعديل');
+                    closeEditModal();
+                    await loadSessions();
+                } else {
+                    showToast('❌ ' + (json.message || 'فشل حفظ التعديل'), true);
+                }
+            } catch (error) {
+                showToast('❌ فشل الاتصال بالسيرفر', true);
+            }
+        }
+
+        // ============================================================
+        // ACTION MODAL (تسجيل ما تم)
+        // ============================================================
+        function toggleElement(elementId, show) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (show) {
+                el.classList.add('show');
+                el.style.display = 'block';
+            } else {
+                el.classList.remove('show');
+                el.style.display = 'none';
+            }
+        }
+
+        function resetConditionalFields() {
+            toggleElement('pendingFields', false);
+            toggleElement('closedFields', false);
+            toggleElement('verdictFields', false);
+            toggleElement('opponentVerdictAppeal', false);
+            const judgmentValueField = document.getElementById('judgmentValue');
+            if (judgmentValueField) judgmentValueField.value = '';
+        }
+
+        function onStatusChange(value) {
+            const labels = document.querySelectorAll('#statusOptions label');
+            labels.forEach(l => l.className = '');
+
+            resetConditionalFields();
+
+            if (value === 'متداولة') {
+                document.getElementById('lblPendingStatus').className = 'selected-pending';
+                toggleElement('pendingFields', true);
+                
+                const moutajalaRadio = document.querySelector('input[name="pendingType"][value="مؤجلة"]');
+                if (moutajalaRadio) moutajalaRadio.checked = true;
+                
+            } else {
+                document.getElementById('lblClosedStatus').className = 'selected-closed';
+                toggleElement('closedFields', true);
+                document.querySelectorAll('input[name="finalResult"]').forEach(r => r.checked = false);
+            }
+        }
+
+        function onPendingTypeChange(value) {
+            if (value === 'نطق_بالحكم') {
+                toggleElement('verdictFields', true);
+                document.querySelectorAll('input[name="verdictFor"]').forEach(r => r.checked = false);
+                toggleElement('opponentVerdictAppeal', false);
+            } else {
+                toggleElement('verdictFields', false);
+                toggleElement('opponentVerdictAppeal', false);
+                const judgmentValueField = document.getElementById('judgmentValue');
+                if (judgmentValueField) judgmentValueField.value = '';
+            }
+        }
+
+        function onVerdictForChange(value) {
+            if (value === 'الخصم') {
+                toggleElement('opponentVerdictAppeal', true);
+                const appealRadio = document.querySelector('input[name="verdictAppealAction"][value="استئناف"]');
+                if (appealRadio) appealRadio.checked = true;
+            } else {
+                toggleElement('opponentVerdictAppeal', false);
+            }
+        }
+
+        function openActionModal(sessionId) {
+            if (typeof PermGuard !== 'undefined' && !PermGuard.canEdit('sessions')) {
+                PermGuard.denyAction('ليس لديك صلاحية تعديل تطورات الجلسة.');
+                return;
+            }
+            const session = allSessions.find(s => s.Id === sessionId);
+            if (!session) {
+                showToast('⚠️ الجلسة غير موجودة', true);
+                return;
+            }
+
+            document.getElementById('actCaseNumber').textContent = session.CaseNumber || '—';
+            
+            const stage = session.Stage || 'ابتدائي';
+            const stageClass = stage === 'استئناف' ? 'badge-appeal' :
+                               stage === 'نقض' ? 'badge-cassation' :
+                               stage === 'إشكال' || stage === 'اشكال' ? 'badge-eshkal' :
+                               stage === 'التماس إعادة النظر' || stage === 'التماس' ? 'badge-iltimas' : 'badge-initial';
+            document.getElementById('actStage').innerHTML = `<span class="badge ${stageClass}">${stage}</span>`;
+
+            document.getElementById('actDate').textContent = formatDate(session.SessionDate);
+            document.getElementById('actCourt').textContent = session.CourtName || '—';
+            document.getElementById('actCircuit').textContent = session.CircuitName || '—';
+            document.getElementById('actOpponent').textContent = session.Opponent || '—';
+
+            document.getElementById('actionSessionId').value = sessionId;
+            document.getElementById('modalNotes').value = session.SessionNotes || '';
+
+            resetConditionalFields();
+            document.querySelectorAll('#statusOptions label').forEach(l => l.className = '');
+
+            // ✅ عنوان المودال يتغيّر حسب كون الجلسة عليها تطورات مسجلة بالفعل أم لا
+            const titleEl = document.getElementById('actionModalTitle');
+            const isEditingExisting = !!(session.IsClosed || (session.Result && session.Result !== 'لم تحسم' && session.Result !== ''));
+            if (titleEl) {
+                titleEl.innerHTML = isEditingExisting
+                    ? '<i class="fa-regular fa-pen-to-square" style="color:#1a5a8a;"></i> تعديل تطورات الجلسة'
+                    : '<i class="fa-regular fa-pen-to-square" style="color:#1a5a8a;"></i> تسجيل إجراء الجلسة وما تم بها';
+            }
+
+            // ✅ تعبئة الحقول بالقيم المُسجَّلة فعلاً بالجلسة (بدل إعادة التصفير دايماً)
+            // ده اللي بيسمح بفتح المودال على جلسة اتحفظت قبل كده وتعديل أي حاجة فيها
+            // (زي تغيير النتيجة من "لصالح الخصم" لـ"لصالح الشركة") وحفظها فعلياً.
+            if (session.IsClosed) {
+                // الجلسة منتهية بحكم نهائي — نعرض حالة "منتهية" ونملأ النتيجة النهائية
+                const closedRadio = document.querySelector('input[name="sessionStatus"][value="منتهية"]');
+                if (closedRadio) closedRadio.checked = true;
+
+                document.getElementById('lblClosedStatus').className = 'selected-closed';
+                toggleElement('pendingFields', false);
+                toggleElement('closedFields', true);
+
+                if (session.Result === 'لصالح الشركة' || session.Result === 'لصالح الخصم') {
+                    const finalResultRadio = document.querySelector(`input[name="finalResult"][value="${session.Result}"]`);
+                    if (finalResultRadio) finalResultRadio.checked = true;
+                }
+            } else {
+                // الجلسة لسه متداولة
+                const pendingRadio = document.querySelector('input[name="sessionStatus"][value="متداولة"]');
+                if (pendingRadio) pendingRadio.checked = true;
+
+                document.getElementById('lblPendingStatus').className = 'selected-pending';
+                toggleElement('pendingFields', true);
+                toggleElement('closedFields', false);
+
+                if (session.Result === 'لصالح الشركة' || session.Result === 'لصالح الخصم') {
+                    // كان فيه نطق بحكم مسجل قبل كده على الجلسة (من غير ما تتقفل نهائي)
+                    const verdictRadio = document.querySelector('input[name="pendingType"][value="نطق_بالحكم"]');
+                    if (verdictRadio) verdictRadio.checked = true;
+                    toggleElement('verdictFields', true);
+
+                    const verdictForRadio = document.querySelector(`input[name="verdictFor"][value="${session.Result === 'لصالح الشركة' ? 'الشركة' : 'الخصم'}"]`);
+                    if (verdictForRadio) verdictForRadio.checked = true;
+
+                    if (session.Result === 'لصالح الخصم') {
+                        toggleElement('opponentVerdictAppeal', true);
+                        const appealRadio = document.querySelector(`input[name="verdictAppealAction"][value="${session.AppealAction || 'استئناف'}"]`);
+                        if (appealRadio) appealRadio.checked = true;
+                    } else {
+                        toggleElement('opponentVerdictAppeal', false);
+                    }
+
+                    const judgmentValueField = document.getElementById('judgmentValue');
+                    if (judgmentValueField) judgmentValueField.value = session.JudgmentValue || '';
+                } else {
+                    // لسه معدش نطق بحكم — جلسة مؤجلة عادية
+                    const moutajalaRadio = document.querySelector('input[name="pendingType"][value="مؤجلة"]');
+                    if (moutajalaRadio) moutajalaRadio.checked = true;
+                    toggleElement('verdictFields', false);
+                    toggleElement('opponentVerdictAppeal', false);
+                }
+            }
+
+            document.getElementById('actionModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('actionModal').classList.remove('show');
+            resetConditionalFields();
+        }
+
+        async function saveAction(event) {
+            event.preventDefault();
+
+            const sessionId = document.getElementById('actionSessionId').value;
+            if (!sessionId) {
+                showToast('⚠️ خطأ في معرف الجلسة', true);
+                return;
+            }
+
+            const status = document.querySelector('input[name="sessionStatus"]:checked')?.value || 'متداولة';
+            const notes = document.getElementById('modalNotes').value;
+
+            let result = null;
+            let appealAction = null;
+            let isClosed = false;
+            let finalStatus = '';
+            let judgmentValue = null;
+
+            if (status === 'متداولة') {
+                const pendingType = document.querySelector('input[name="pendingType"]:checked')?.value || 'مؤجلة';
+                
+                if (pendingType === 'نطق_بالحكم') {
+                    const verdictFor = document.querySelector('input[name="verdictFor"]:checked')?.value || null;
+                    if (!verdictFor) {
+                        showToast('⚠️ الرجاء تحديد لصالح من صدر الحكم', true);
+                        return;
+                    }
+                    if (verdictFor === 'الخصم') {
+                        // ✅ قراءة القيمة النصية من الـ radio المختار وليس عنصر HTML
+                        const checkedAppealRadio = document.querySelector('input[name="verdictAppealAction"]:checked');
+                        appealAction = checkedAppealRadio ? checkedAppealRadio.value : null;
+                        result = 'لصالح الخصم';
+                    } else {
+                        result = 'لصالح الشركة';
+                    }
+                    // ✅ قيمة الحكم — اختيارية، ممكن تتسيب فاضية
+                    judgmentValue = document.getElementById('judgmentValue')?.value?.trim() || null;
+                } else {
+                    result = 'مؤجلة';
+                }
+                isClosed = false;
+                finalStatus = 'متداولة';
+            } else {
+                isClosed = true;
+                finalStatus = 'منتهية';
+                const finalResult = document.querySelector('input[name="finalResult"]:checked')?.value || null;
+                if (!finalResult) {
+                    showToast('⚠️ الرجاء تحديد نتيجة الحكم النهائي', true);
+                    return;
+                }
+                result = finalResult;
+                appealAction = null;
+            }
+
+            const data = {
+                sessionNotes: notes,
+                result: result,
+                isClosed: isClosed,
+                status: finalStatus,
+                appealAction: (result === 'لصالح الخصم' && appealAction) ? appealAction : null,
+                judgmentValue: judgmentValue
+            };
+
+            try {
+                const resp = await fetch(`${API_URL}/sessions/${sessionId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const json = await resp.json();
+
+                if (json.success) {
+                    showToast('✅ تم حفظ إجراء الجلسة بنجاح');
+                    closeModal();
+                    await loadSessions();
+                    
+                    notifyCalendar('sessionAdded', {
+                        caseNumber: document.getElementById('actCaseNumber')?.innerText || '',
+                        stage: document.getElementById('actStage')?.innerText || '',
+                        result: result,
+                        appealAction: data.appealAction,
+                        status: finalStatus
+                    });
+                } else {
+                    showToast('❌ ' + (json.message || 'فشل في الحفظ'), true);
+                }
+            } catch (error) {
+                showToast('❌ فشل الاتصال بالخادم', true);
+            }
+        }
+
+        // ============================================================
+        // VIEW DETAILS MODAL
+        // ============================================================
+        function openViewDetailsModal(sessionId) {
+            const session = allSessions.find(s => s.Id === sessionId);
+            if (!session) {
+                showToast('⚠️ الجلسة غير موجودة', true);
+                return;
+            }
+
+            const date = formatDate(session.SessionDate);
+            const stage = session.Stage || 'ابتدائي';
+            const opponentName = session.Opponent || session.CaseOpponent || '—';
+            const result = session.Result || 'لم تحسم';
+
+            let resultText = '—';
+            if (session.IsClosed === true) {
+                resultText = '🔒 منتهية';
+            }
+            if (result === 'لصالح الشركة') {
+                resultText = '✅ لصالح الشركة';
+            } else if (result === 'لصالح الخصم') {
+                resultText = '❌ لصالح الخصم';
+            } else if (resultText === '—') {
+                resultText = '⏳ لم تحسم';
+            }
+
+            let appealText = '—';
+            if (result === 'لصالح الخصم' && session.AppealAction) {
+                const appealIcons = {
+                    'استئناف': '⬆️ استئناف',
+                    'نقض': '⬆️⬆️ نقض',
+                    'اشكال في التنفيذ': '⚠️ اشكال في التنفيذ',
+                    'التماس اعادة النظر': '🔁 التماس اعادة النظر',
+                    'لا اجراء': '🚫 لا اجراء'
+                };
+                appealText = appealIcons[session.AppealAction] || session.AppealAction;
+            }
+
+            document.getElementById('vdCaseNumber').textContent = session.CaseNumber || '—';
+            document.getElementById('vdSubject').textContent = session.Subject || session.CaseSubject || '—';
+            document.getElementById('vdStage').textContent = stage;
+            document.getElementById('vdDate').textContent = date;
+            document.getElementById('vdPlaintiff').textContent = session.Plaintiff || '—';
+            document.getElementById('vdDefendant').textContent = session.Defendant || '—';
+
+            const stageReqBy = session.StageRequestedBy || '—';
+            const stageReqByWrapper = document.getElementById('vdStageRequestedByWrapper');
+            if (stageReqBy && stageReqBy !== '—') {
+                document.getElementById('vdStageRequestedBy').textContent = stageReqBy === 'الشركة (نحن)' ? 'الشركة' : stageReqBy;
+                if (stageReqByWrapper) stageReqByWrapper.style.display = 'block';
+            } else {
+                if (stageReqByWrapper) stageReqByWrapper.style.display = 'none';
+            }
+
+            document.getElementById('vdCourt').textContent = session.CourtName || '—';
+            document.getElementById('vdCircuit').textContent = session.CircuitName || '—';
+            document.getElementById('vdLawyerName').textContent = session.LawyerName || '—';
+            document.getElementById('vdAttending').textContent = session.AttendingName || '—';
+            document.getElementById('vdOpponent').textContent = opponentName;
+            document.getElementById('vdResult').textContent = resultText;
+            document.getElementById('vdAppeal').textContent = appealText;
+            document.getElementById('vdAction').textContent = session.Action || '—';
+            document.getElementById('vdNotes').textContent = session.SessionNotes || session.Notes || 'لا توجد ملاحظات';
+
+            document.getElementById('viewDetailsModal').classList.add('show');
+        }
+
+        function closeViewDetailsModal() {
+            document.getElementById('viewDetailsModal').classList.remove('show');
+        }
+
+        // ============================================================
+        // BROADCAST CHANNEL
+        // ============================================================
+        function notifyCalendar(type, data) {
+            const payload = { type, ...data, ts: Date.now() };
+            try {
+                const channel = new BroadcastChannel('case_channel');
+                channel.postMessage(payload);
+                channel.close();
+            } catch (e) {}
+            try {
+                localStorage.setItem('newSessionData', JSON.stringify(payload));
+            } catch (e) {}
+        }
+
+        // ============================================================
+        // PRINTING REPORT
+        // ============================================================
+        function openPrintOptions() {
+            updatePrintCount();
+            document.getElementById('printModal').classList.add('show');
+        }
+
+        function closePrintModal() {
+            document.getElementById('printModal').classList.remove('show');
+        }
+
+        function updatePrintCount() {
+            const filterType = document.getElementById('printFilterType')?.value || 'all';
+            const filterStage = document.getElementById('printFilterStage')?.value || 'all';
+            let sessions = filterSessionsForPrint(filterType, filterStage);
+            document.getElementById('printCountHint').textContent = `📊 عدد الجلسات التي سيتم طباعتها: ${sessions.length}`;
+        }
+
+        function filterSessionsForPrint(filterType, filterStage) {
+            let sessions = [...allSessions];
+            
+            if (filterType === 'pending') {
+                sessions = sessions.filter(s => !isSessionClosed(s));
+            } else if (filterType === 'closed') {
+                sessions = sessions.filter(s => isSessionClosed(s));
+            }
+            
+            if (filterStage !== 'all') {
+                sessions = sessions.filter(s => (s.Stage || 'ابتدائي') === filterStage);
+            }
+            
+            return sessions;
+        }
+
+        function generatePrintReport() {
+            const filterType = document.getElementById('printFilterType')?.value || 'all';
+            const filterStage = document.getElementById('printFilterStage')?.value || 'all';
+            const includeStats = document.getElementById('printIncludeStats')?.checked || false;
+            const includeDetails = document.getElementById('printIncludeDetails')?.checked || false;
+            const includeNotes = document.getElementById('printIncludeNotes')?.checked || false;
+            
+            let sessions = filterSessionsForPrint(filterType, filterStage);
+            sessions.sort((a, b) => new Date(a.SessionDate) - new Date(b.SessionDate));
+            
+            const pendingSessions = sessions.filter(s => !isSessionClosed(s));
+            const closedSessions = sessions.filter(s => isSessionClosed(s));
+            
+            const todayStr = (() => { const n=new Date(); return `${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`; })();
+            
+            let statsHtml = '';
+            if (includeStats) {
+                const total = sessions.length;
+                const active = pendingSessions.length;
+                const closed = closedSessions.length;
+                const initial = sessions.filter(s => (s.Stage || 'ابتدائي') === 'ابتدائي').length;
+                const appeal = sessions.filter(s => (s.Stage || 'ابتدائي') === 'استئناف').length;
+                const cassation = sessions.filter(s => (s.Stage || 'ابتدائي') === 'نقض').length;
+                const win = sessions.filter(s => s.Result === 'لصالح الشركة').length;
+                const lose = sessions.filter(s => s.Result === 'لصالح الخصم').length;
+
+                statsHtml = `
+                    <div style="margin: 10px 0 14px 0; border: 2px solid #000000; border-radius: 4px; overflow: hidden;">
+                        <table style="width:100%; border-collapse: collapse; font-size: 11px; margin:0;">
+                            <thead>
+                                <tr>
+                                    <th style="background: #e0e0e0; border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 800; font-size: 10px;">إجمالي الجلسات</th>
+                                    <th style="background: #e0e0e0; border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 800; font-size: 10px;">متداولة</th>
+                                    <th style="background: #e0e0e0; border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 800; font-size: 10px;">منتهية</th>
+                                    <th style="background: #e0e0e0; border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 800; font-size: 10px;">ابتدائي</th>
+                                    <th style="background: #e0e0e0; border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 800; font-size: 10px;">استئناف</th>
+                                    <th style="background: #e0e0e0; border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 800; font-size: 10px;">نقض</th>
+                                    <th style="background: #e0e0e0; border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 800; font-size: 10px;">لصالح الشركة</th>
+                                    <th style="background: #e0e0e0; border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 800; font-size: 10px;">لصالح الخصم</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 700; font-size: 14px;">${total}</td>
+                                    <td style="border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 700; font-size: 14px;">${active}</td>
+                                    <td style="border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 700; font-size: 14px;">${closed}</td>
+                                    <td style="border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 700; font-size: 14px;">${initial}</td>
+                                    <td style="border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 700; font-size: 14px;">${appeal}</td>
+                                    <td style="border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 700; font-size: 14px;">${cassation}</td>
+                                    <td style="border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 700; font-size: 14px;">${win}</td>
+                                    <td style="border: 1px solid #000000; padding: 6px 8px; text-align: center; font-weight: 700; font-size: 14px;">${lose}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            let pendingRows = '';
+            if (pendingSessions.length === 0) {
+                pendingRows = `<tr><td colspan="${includeDetails ? (includeNotes ? 9 : 8) : 7}" class="print-empty" style="text-align:center;padding:10px;">لا توجد جلسات متداولة</td></tr>`;
+            } else {
+                pendingSessions.forEach(s => {
+                    let details = '';
+                    if (includeDetails) {
+                        details = `
+                            <td style="border: 1px solid #000; padding:6px;">${s.CourtName || '—'}</td>
+                            <td style="border: 1px solid #000; padding:6px;">${s.CircuitName || '—'}</td>
+                            <td style="border: 1px solid #000; padding:6px;">${s.LawyerName || '—'}</td>
+                            ${includeNotes ? `<td style="border: 1px solid #000; padding:6px;">${s.SessionNotes || s.Notes || '—'}</td>` : ''}
+                        `;
+                    }
+                    pendingRows += `
+                        <tr>
+                            <td style="border: 1px solid #000; padding:6px; font-weight:700;">${s.CaseNumber || '—'}</td>
+                            <td style="border: 1px solid #000; padding:6px; text-align:center;">${s.Stage || 'ابتدائي'}</td>
+                            <td style="border: 1px solid #000; padding:6px; text-align:center;">${formatDate(s.SessionDate)}</td>
+                            <td style="border: 1px solid #000; padding:6px;">${s.Subject || s.CaseSubject || '—'}</td>
+                            <td style="border: 1px solid #000; padding:6px; text-align:center;">${s.Result || 'لم تحسم'}</td>
+                            <td style="border: 1px solid #000; padding:6px;">${s.Action || '—'}</td>
+                            ${details}
+                            <td style="border: 1px solid #000; padding:6px; text-align:center;">متداولة</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            let closedRows = '';
+            if (closedSessions.length === 0) {
+                closedRows = `<tr><td colspan="${includeDetails ? (includeNotes ? 9 : 8) : 7}" class="print-empty" style="text-align:center;padding:10px;">لا توجد جلسات منتهية</td></tr>`;
+            } else {
+                closedSessions.forEach(s => {
+                    let details = '';
+                    if (includeDetails) {
+                        details = `
+                            <td style="border: 1px solid #000; padding:6px;">${s.CourtName || '—'}</td>
+                            <td style="border: 1px solid #000; padding:6px;">${s.CircuitName || '—'}</td>
+                            <td style="border: 1px solid #000; padding:6px;">${s.LawyerName || '—'}</td>
+                            ${includeNotes ? `<td style="border: 1px solid #000; padding:6px;">${s.SessionNotes || s.Notes || '—'}</td>` : ''}
+                        `;
+                    }
+                    closedRows += `
+                        <tr style="background:#f5f5f5;">
+                            <td style="border: 1px solid #000; padding:6px; font-weight:700;">${s.CaseNumber || '—'}</td>
+                            <td style="border: 1px solid #000; padding:6px; text-align:center;">${s.Stage || 'ابتدائي'}</td>
+                            <td style="border: 1px solid #000; padding:6px; text-align:center;">${formatDate(s.SessionDate)}</td>
+                            <td style="border: 1px solid #000; padding:6px;">${s.Subject || s.CaseSubject || '—'}</td>
+                            <td style="border: 1px solid #000; padding:6px; text-align:center;">${s.Result || 'منتهية'}</td>
+                            <td style="border: 1px solid #000; padding:6px;">${s.AppealAction || '—'}</td>
+                            ${details}
+                            <td style="border: 1px solid #000; padding:6px; text-align:center;">منتهية</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            let headerCols = `
+                <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">رقم القضية</th>
+                <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">درجة التقاضي</th>
+                <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">التاريخ</th>
+                <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">موضوع الجلسة</th>
+                <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">النتيجة</th>
+                <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">قرار الجلسة</th>
+            `;
+
+            let detailsHeader = '';
+            if (includeDetails) {
+                detailsHeader = `
+                    <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">المحكمة</th>
+                    <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">الدائرة</th>
+                    <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">المحامي</th>
+                    ${includeNotes ? `<th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">الملاحظات</th>` : ''}
+                `;
+            }
+
+            const reportHtml = `
+                <div class="print-sheet" style="font-family:'Cairo', sans-serif; direction:rtl; padding:20px; background:white;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px double #000; padding-bottom:10px; margin-bottom:20px;">
+                        <div>
+                            <div style="font-weight:800; font-size:16px;">شركة الصرف الصحى بالإسكندرية</div>
+                            <div style="font-size:12px;">الإدارة العامة للشئون القانونية</div>
+                        </div>
+                        <div style="text-align:left;">
+                            <div style="font-weight:800; font-size:14px; font-family:sans-serif;">Alexandria Sanitary Drainage Company</div>
+                            <div style="font-size:11px; font-family:sans-serif;">Legal Affairs Department</div>
+                        </div>
+                    </div>
+                    
+                    <h2 style="text-align:center; margin-bottom:20px; font-weight:800;">تقرير الجلسات ومتابعة الأحكام</h2>
+                    <div style="margin-bottom:10px; font-size:12px; font-weight:700;">تاريخ الطباعة: ${todayStr}</div>
+                    
+                    ${statsHtml}
+                    
+                    <h3 style="margin-top:20px; border-bottom:1px solid #000; padding-bottom:4px;">⏳ الجلسات المتداولة (${pendingSessions.length})</h3>
+                    <table style="width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;">
+                        <thead>
+                            <tr>
+                                ${headerCols}
+                                ${detailsHeader}
+                                <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${pendingRows}
+                        </tbody>
+                    </table>
+
+                    <h3 style="margin-top:30px; border-bottom:1px solid #000; padding-bottom:4px;">🔒 سجل الجلسات المنتهية (${closedSessions.length})</h3>
+                    <table style="width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;">
+                        <thead>
+                            <tr>
+                                ${headerCols}
+                                ${detailsHeader}
+                                <th style="border: 1px solid #000; padding:6px; background:#f0f0f0;">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${closedRows}
+                        </tbody>
+                    </table>
+                    
+                    <div style="margin-top:40px; text-align:center; font-size:10px; color:#555; border-top:1px solid #ccc; padding-top:10px;">
+                        هذا التقرير صادر عن نظام إدارة القضايا والتحقيقات — شركة الصرف الصحي بالإسكندرية
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('printReportArea').innerHTML = reportHtml;
+            closePrintModal();
+            showToast('🖨️ جاري طباعة التقرير...');
+            setTimeout(() => window.print(), 500);
+        }
+
+        // ============================================================
+        // تعبئة نموذج الجلسة تلقائياً من URL params (من صفحة القضايا)
+        // ============================================================
+        function applyURLPrefillToSession() {
+            const params = new URLSearchParams(window.location.search);
+            const prefillCaseId = params.get('prefill_caseId') || window._prefillCaseId;
+            const prefillCaseNumber = params.get('prefill_caseNumber');
+            const prefillSubject = params.get('prefill_subject');
+            const prefillStage = params.get('prefill_stage');
+            const prefillOpponent = params.get('prefill_opponent');
+            const prefillLitigationLevelId = params.get('prefill_litigationLevelId');
+            
+            if (!prefillCaseId && !prefillLitigationLevelId && !prefillCaseNumber) return;
+
+            // مسح URL params فوراً لمنع إعادة التطبيق عند refresh
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            const doSelect = () => {
+                const select = document.getElementById('addCaseSelect');
+                if (!select || select.options.length <= 1) return false; // لم يتم تحميل القضايا بعد
+
+                let targetOpt = null;
+                if (prefillLitigationLevelId) {
+                    targetOpt = select.querySelector(`option[value="level_${prefillLitigationLevelId}"]`);
+                }
+                if (!targetOpt && prefillCaseId && prefillStage) {
+                    for (let opt of select.options) {
+                        if (opt.dataset.caseId === String(prefillCaseId) && opt.dataset.stageLabel === prefillStage) {
+                            targetOpt = opt;
+                            break;
+                        }
+                    }
+                }
+                if (!targetOpt && prefillCaseId) {
+                    targetOpt = select.querySelector(`option[value="case_${prefillCaseId}"]`) ||
+                                select.querySelector(`option[data-case-id="${prefillCaseId}"]`);
+                }
+                if (!targetOpt && prefillCaseNumber) {
+                    for (let opt of select.options) {
+                        if (opt.dataset.displayNumber === prefillCaseNumber || (opt.dataset.allNumbers && opt.dataset.allNumbers.includes(prefillCaseNumber))) {
+                            targetOpt = opt;
+                            break;
+                        }
+                    }
+                }
+
+                if (targetOpt) {
+                    select.value = targetOpt.value;
+                    const searchInput = document.getElementById('addCaseSearchInput');
+                    if (searchInput) searchInput.value = targetOpt.textContent;
+                    onCaseSelect(targetOpt.value);
+
+                    const addCard = document.getElementById('addCaseCard') || document.querySelector('.add-session-form') || document.querySelector('.card');
+                    if (addCard) setTimeout(() => addCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+                    showToast('✅ تم تحميل بيانات القضية ' + (prefillCaseNumber || targetOpt.dataset.displayNumber || '') + ' تلقائياً');
+                    return true;
+                }
+
+                // تعبئة احتياطية
+                const searchInput = document.getElementById('addCaseSearchInput');
+                if (searchInput && prefillCaseNumber) searchInput.value = prefillCaseNumber;
+                if (prefillSubject) {
+                    const subj = document.getElementById('addSubject');
+                    if (subj) { subj.value = prefillSubject; subj.removeAttribute('disabled'); }
+                }
+                if (prefillStage) {
+                    const lvl = document.getElementById('addCurrentLevel');
+                    if (lvl) { lvl.value = prefillStage; lvl.removeAttribute('disabled'); }
+                }
+                if (prefillOpponent) {
+                    const opp = document.getElementById('addOpponent');
+                    if (opp) { opp.value = prefillOpponent; opp.removeAttribute('disabled'); }
+                }
+                showToast('⚠️ برجاء اختيار القضية من القائمة');
+                return true;
+            };
+
+            let attempts = 0;
+            const maxAttempts = 15;
+            const interval = setInterval(() => {
+                attempts++;
+                const done = doSelect();
+                if (done || attempts >= maxAttempts) {
+                    clearInterval(interval);
+                }
+            }, 250);
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof PermGuard !== 'undefined' && !PermGuard.blockPageIfNoAccess('sessions')) return;
+
+            if (typeof PermGuard !== 'undefined' && !PermGuard.canAdd('sessions')) {
+                const addCard = document.getElementById('addCaseCard');
+                if (addCard) addCard.style.display = 'none';
+            }
+
+            document.getElementById('currentDateDisplay').textContent = (() => {
+                const n = new Date();
+                const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+                return `${days[n.getDay()]} ${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`;
+            })();
+            document.getElementById('addSessionDate').value = new Date().toISOString().split('T')[0];
+            wireCustomDateField('addSessionDate');
+            wireCustomDateField('specificDate');
+            wireCustomDateField('modalSessionDate');
+            syncDateDisplay('addSessionDate');
+
+            loadLawyers().then(() => {
+                loadCourts().then(() => {
+                    loadCases().then(() => {
+                        loadSessions();
+                        // تعبئة النموذج تلقائياً من URL params (عند القدوم من صفحة القضايا)
+                        applyURLPrefillToSession();
+                    });
+                });
+            });
+
+            if (typeof initSidebar === 'function') {
+                initSidebar('sessions');
+            }
+
+            // Searchable dropdown listeners
+            const caseSearchInput = document.getElementById('addCaseSearchInput');
+            if (caseSearchInput) {
+                caseSearchInput.addEventListener('focus', openCaseSearchList);
+                caseSearchInput.addEventListener('input', function() {
+                    renderCaseSearchList(this.value);
+                    document.getElementById('addCaseSearchList').classList.add('open');
+                });
+                caseSearchInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        closeCaseSearchList();
+                        this.blur();
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const firstItem = document.querySelector('#addCaseSearchList .searchable-select-item');
+                        if (firstItem) firstItem.click();
+                    }
+                });
+            }
+            
+            document.addEventListener('click', function(e) {
+                const wrap = document.getElementById('addCaseSearchWrap');
+                if (wrap && !wrap.contains(e.target)) closeCaseSearchList();
+            });
+
+            document.getElementById('printFilterType')?.addEventListener('change', updatePrintCount);
+            document.getElementById('printFilterStage')?.addEventListener('change', updatePrintCount);
+            
+            document.getElementById('printModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closePrintModal();
+            });
+
+            document.getElementById('actionModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            document.getElementById('viewDetailsModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closeViewDetailsModal();
+            });
+
+            window.onclick = function(e) {
+                const m = document.getElementById('editModal');
+                if (e.target === m) closeEditModal();
+                const cm = document.getElementById('customModal');
+                if (e.target === cm) closeCustomModal();
+            };
+        });
+
+        function formatDisplayDate(v) {
+            if (!v) return '';
+            const s = String(v).trim();
+            const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+            if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+            const d = new Date(s);
+            if (!isNaN(d.getTime())) {
+                const dd = String(d.getDate()).padStart(2, '0');
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const yyyy = d.getFullYear();
+                return `${dd}/${mm}/${yyyy}`;
+            }
+            return s;
+        }
+        function syncDateDisplay(nativeId) {
+            const native = document.getElementById(nativeId);
+            const display = document.getElementById(nativeId + '_display');
+            if (!native || !display) return;
+            display.value = native.value ? formatDisplayDate(native.value) : '';
+        }
+        function wireCustomDateField(nativeId) {
+            const native = document.getElementById(nativeId);
+            const display = document.getElementById(nativeId + '_display');
+            if (!native || !display) return;
+            const openPicker = () => {
+                if (typeof native.showPicker === 'function') {
+                    try { native.showPicker(); } catch (e) { native.focus(); }
+                } else {
+                    native.focus();
+                }
+            };
+            display.addEventListener('click', openPicker);
+            native.addEventListener('input', () => syncDateDisplay(nativeId));
+            native.addEventListener('change', () => syncDateDisplay(nativeId));
+            syncDateDisplay(nativeId);
+        }
+    </script>
+</body>
+</html>

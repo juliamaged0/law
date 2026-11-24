@@ -1,0 +1,137 @@
+◇ injected env (4) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+📄 DB_SERVER from .env: 172.16.13.57
+📄 DB_PASSWORD from .env: 1
+ Final Config: { server: '172.16.13.57', database: 'law_project', user: 'sa' }
+🚀 الخادم يعمل على: http://localhost:\\.\pipe\645a4a03-9414-47a2-955f-5a904f0bf3c8
+📊 قاعدة البيانات: law_project
+✅ الاتصال بقاعدة البيانات ناجح!
+✅ تم التأكد من جدول الأرشيف.
+✅ تم التأكد من جدول المحامين.
+✅ تم التأكد من جدول التصنيفات الفرعية.
+✅ تم التأكد من جدول إعدادات النظام.
+✅ تم التأكد من جدول سجل التتبعات وتحديث تصنيف Category بالكامل.
+ℹ️ تم تجاوز اليوزر IT — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر admin — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر CEO — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر sessions — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+ℹ️ تم تجاوز اليوزر reports — عنده صلاحيات محفوظة بالفعل ولن تُستبدل.
+✅ تم التأكد من نظام صلاحيات التحقيقات (Users/Roles/Modules).
+✅ تم التأكد من جدول إشعارات التحقيقات.
+✅ تم التأكد من عمود أقوال الموظفين.
+✅ تم التأكد من عمود LitigationLevelId في جدول Sessions.
+✅ تم التأكد من عمود SessionCaseNumber في جدول Sessions.
+✅ تم التأكد من عمود ClaimAmount في جدول Cases.
+✅ تم التأكد من عمود ClaimAmount في جدول LitigationLevels.
+✅ تم التأكد من عمود ClaimAmount في جدول Sessions.
+✅ تم التأكد من عمود LawsuitExpenses (قيمة الحكم) في جدول Sessions.
+✅ تم التأكد من عمود CaseExpenses (مصاريف الدعوة) في جدول Cases.
+✅ تم التأكد من عمود Subject في جدول LitigationLevels.
+✅ تم التأكد من عمود RequestedByOpponent في جدول LitigationLevels.
+✅ تم التأكد من عمود ReceiptDate في جدول Investigations.
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📊 إحصائيات درجات التقاضي: {
+  initial: { total: 2836 },
+  appeal: { total: 2537, fromCompany: 2397, fromOpponent: 140 },
+  cassation: { total: 273, fromCompany: 255, fromOpponent: 18 }
+}
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 14905 للقضية 2024/2024
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14905
+✅ تم تحديث بيانات القضية 2024/2024
+✅ تم تحديث بيانات درجة التقاضي 91340 لمطابقة تعديل الجلسة
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 14905 للقضية 2024/2024
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 14905
+✅ تم تحديث بيانات القضية 2024/2024
+✅ تم تحديث بيانات درجة التقاضي 91340 لمطابقة تعديل الجلسة
+✅ تم إنشاء القضية برقم ID: 3509
+✅ تم إضافة أطراف القضية
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3539/2026',
+  sessionDate: '2026-09-02',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3509
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📝 تحديث الجلسة 23500 للقضية 3539/2026
+⏰ وقت التعديل للتخزين (كنص): null
+✅ تم تحديث الجلسة 23500
+✅ تم تحديث بيانات القضية 3539/2026
+✅ تم إنشاء القضية برقم ID: 3510
+✅ تم إضافة أطراف القضية
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3536/2026',
+  sessionDate: '2026-09-02',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3510
+✅ تم حفظ الجلسة مع الوقت (كنص): null
+📋 جلب الدوائر من حقل Floors في جدول Courts
+📋 جلب الدوائر من حقل Floors في جدول Courts
+✅ تم إنشاء القضية برقم ID: 3511
+✅ تم إضافة أطراف القضية
+📝 إضافة جلسة جديدة: {
+  caseNumber: '3553/2026',
+  sessionDate: '2026-09-02',
+  sessionTime: undefined,
+  stage: 'ابتدائي',
+  court: 'اسكندرية الابتدائية',
+  circuit: '45',
+  claimAmount: null
+}
+⏰ الوقت للتخزين (كنص): null
+✅ تم العثور على القضية برقم ID: 3511
+✅ تم حفظ الجلسة مع الوقت (كنص): null

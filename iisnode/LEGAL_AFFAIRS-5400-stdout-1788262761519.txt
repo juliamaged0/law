@@ -1,0 +1,9 @@
+◇ injected env (4) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+📄 DB_SERVER from .env: 172.16.13.57
+📄 DB_PASSWORD from .env: 1
+ Final Config: { server: '172.16.13.57', database: 'law_project', user: 'sa' }
+🚀 الخادم يعمل على: http://localhost:\\.\pipe\64aae14e-a43e-4a23-b5bb-a2e3fa9ffad4
+📊 قاعدة البيانات: law_project
+⚠️ فشل تسجيل التتبعة في سجل التتبعات: Failed to connect to 172.16.13.57:1433 - Could not connect (sequence)
+⚠️ فشل تسجيل التتبعة في سجل التتبعات: Failed to connect to 172.16.13.57:1433 - Could not connect (sequence)

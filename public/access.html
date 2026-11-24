@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المستخدمون — إدارة الصلاحيات</title>
+  <script src="activity-logger.js"></script>
+  <script src="sidebar.js"></script>
+  <link rel="stylesheet" href="css/all.min.css">
+  <style>
+    :root {
+      --navy-900: #0a1628;
+      --navy-800: #0f2240;
+      --navy-700: #1a3a5c;
+      --navy-600: #1e4976;
+      --gold-500: #D4AF37;
+      --gold-400: #E8C84A;
+      --gold-300: #F2DC8A;
+      --gold-100: #FDF8E8;
+      --bg-page: #F4F6FA;
+      --surface: #FFFFFF;
+      --surface-2: #F8FAFD;
+      --border: #E4EAF2;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --shadow-xs: 0 1px 3px rgba(10,22,40,0.06);
+      --shadow-sm: 0 4px 12px rgba(10,22,40,0.07);
+      --shadow-md: 0 8px 24px rgba(10,22,40,0.09);
+      --shadow-lg: 0 16px 40px rgba(10,22,40,0.12);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .page-body { padding: 24px 28px; flex: 1; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-header h3 {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--navy-700);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body {
+      padding: 20px 22px;
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 13px;
+      min-width: 750px;
+    }
+
+    .data-table th {
+      background: var(--surface-2);
+      padding: 12px 16px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 13px 16px;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:hover td { background: var(--surface-2); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .badge-disabled { background: #FEF2F2; color: #DC2626; }
+    .badge-hidden { background: #EFF6FF; color: #2563EB; }
+    .badge-readonly { background: #FEF3C7; color: #D97706; }
+
+    .permission-tag {
+      display: inline-block;
+      background: #F1F5F9;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      margin: 2px 4px 2px 0;
+    }
+    .permission-tag.allow { background: #D1FAE5; color: #065F46; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 18px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      border: none;
+      line-height: 1;
+    }
+
+    .btn-primary {
+      background: var(--navy-700);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--navy-600); }
+
+    .btn-gold {
+      background: var(--gold-500);
+      color: var(--navy-900);
+    }
+    .btn-gold:hover { background: var(--gold-400); }
+
+    .btn-outline {
+      background: white;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--surface-2); color: var(--navy-700); }
+
+    .btn-danger {
+      background: #FEF2F2;
+      color: #DC2626;
+      border: 1px solid #FECACA;
+    }
+    .btn-danger:hover { background: #DC2626; color: white; }
+
+    .btn-sm { height: 32px; padding: 0 12px; font-size: 12px; border-radius: 6px; }
+
+    .delete-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,22,40,0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .delete-modal-overlay.open { display: flex; }
+
+    .delete-modal-box {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      padding: 32px 36px 28px;
+      box-shadow: var(--shadow-lg);
+      animation: modalFade 0.2s ease;
+      text-align: center;
+    }
+
+    .delete-modal-box .icon {
+      font-size: 48px;
+      color: #DC2626;
+      margin-bottom: 12px;
+    }
+
+    .delete-modal-box h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--navy-800);
+      margin-bottom: 6px;
+    }
+
+    .delete-modal-box p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .delete-modal-box .delete-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .delete-modal-box .btn {
+      min-width: 100px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,22,40,0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px 36px;
+      box-shadow: var(--shadow-lg);
+      animation: modalFade 0.2s ease;
+    }
+
+    @keyframes modalFade {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-box h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy-800);
+      margin-bottom: 4px;
+    }
+
+    .modal-box .sub {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      height: 44px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0 14px;
+      font-size: 14px;
+      font-family: 'Cairo', sans-serif;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--navy-600);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(30,73,118,0.08);
+    }
+
+    .checkbox-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: var(--surface-2);
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1e293b;
+      cursor: pointer;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--navy-600);
+      cursor: pointer;
+    }
+
+    .permission-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: white;
+      border: 1px solid var(--border);
+    }
+
+    .permission-row .checkbox-item { flex: 1; min-width: 0; }
+    .permission-row .checkbox-item span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .perm-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .perm-icon-btn {
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      opacity: 0.4;
+      filter: grayscale(1);
+      transition: var(--transition);
+    }
+
+    .perm-icon-btn:hover:not(:disabled) { border-color: var(--navy-600); }
+
+    .perm-icon-btn.active {
+      opacity: 1;
+      filter: grayscale(0);
+      background: var(--gold-100);
+      border-color: var(--gold-400);
+    }
+
+    .perm-icon-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.25;
+      filter: grayscale(1);
+    }
+
+    .permissions-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 8px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .permissions-legend span { display: inline-flex; align-items: center; gap: 4px; }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0 14px;
+      height: 42px;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-family: 'Cairo', sans-serif;
+      outline: none;
+      width: 170px;
+      color: var(--text-primary);
+    }
+
+    .search-box i { color: var(--text-muted); }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      font-size: 36px;
+      margin-bottom: 12px;
+      display: block;
+      color: #CBD5E1;
+    }
+
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .text-muted { color: var(--text-muted); font-size: 13px; }
+    .readonly-banner {
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      color: #92400E;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-body" id="pageContent">
+    <div class="card">
+      <div class="card-header">
+        <h3><i class="fa-regular fa-address-card" style="color:var(--gold-500);"></i> قائمة المستخدمين</h3>
+        <div class="flex-between" style="gap:12px;">
+          <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="searchUser" placeholder="بحث ..." oninput="renderTable()">
+          </div>
+          <button class="btn btn-primary" id="addUserBtn" onclick="openAddModal()">
+            <i class="fa-solid fa-plus"></i> مستخدم جديد
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="readonlyBanner" style="display:none;" class="readonly-banner">
+          <i class="fa-solid fa-eye"></i>
+          أنت في وضع <strong>قراءة فقط</strong> - لا يمكنك إضافة أو تعديل أو حذف المستخدمين
+        </div>
+        <div id="tableContainer"></div>
+        <div style="margin-top:12px; font-size:12px; color:var(--text-muted);">
+          <span id="userCount">0 مستخدم</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== مودال الإضافة / التعديل ===== -->
+  <div class="modal-overlay" id="userModal">
+    <div class="modal-box">
+      <h2 id="modalTitle">مستخدم جديد</h2>
+      <p class="sub" id="modalSub">حدد الاسم الكامل، اسم المستخدم، كلمة المرور، والصلاحيات المخصصة</p>
+
+      <form id="userForm" onsubmit="saveUser(event)">
+        <input type="hidden" id="editIndex" value="-1">
+
+        <div class="form-group">
+          <label>الاسم الكامل <span style="color:red;">*</span></label>
+          <input class="form-control" id="formFullName" placeholder="مثال: أحمد محمد" required>
+        </div>
+
+        <div class="form-group">
+          <label>اسم المستخدم <span style="color:red;">*</span></label>
+          <input class="form-control" id="formUsername" placeholder="مثال: ahmed" required>
+        </div>
+
+        <div class="form-group">
+          <label>كلمة المرور <span style="color:red;">*</span></label>
+          <input class="form-control" id="formPassword" placeholder="•••••••" required>
+        </div>
+
+        <div class="form-group">
+          <label>الصلاحيات (اختر الصفحات المسموح بها)</label>
+          <div class="checkbox-grid" id="permissionsGrid"></div>
+          <div class="permissions-legend">
+            <span>✅ فتح الصفحة (بدونها الأيقونات مقفولة)</span>
+            <span>🖊️ إضافة</span>
+            <span>✏️ تعديل</span>
+            <span>🗑️ مسح</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>دور المستخدم</label>
+          <select class="form-control" id="formCasesRole" style="width:100%;padding:10px;border:1.5px solid #cbd5e1;border-radius:8px;font-family:Tajawal,sans-serif;">
+            <option value="User">👤 مستخدم عادي</option>
+            <option value="Admin">👑 أدمن</option>
+            <option value="CEO">👔 مدير تنفيذي (قراءة فقط)</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">إلغاء</button>
+          <button type="submit" class="btn btn-gold" id="saveBtn">حفظ المستخدم</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== مودال حذف مخصص ===== -->
+  <div class="delete-modal-overlay" id="deleteModal">
+    <div class="delete-modal-box">
+      <div class="icon">🗑️</div>
+      <h3>تأكيد الحذف</h3>
+      <p id="deleteMessage">هل أنت متأكد من حذف المستخدم <strong id="deleteUsername"></strong>؟</p>
+      <div class="delete-actions">
+        <button class="btn btn-outline" onclick="closeDeleteModal()">إلغاء</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn">حذف</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // جميع الصفحات المتاحة
+    // ============================================================
+    const ALL_PAGES = [
+      { id: 'dashboard', label: 'لوحة التحكم' },
+      { id: 'new-case', label: 'قضية جديدة' },
+      { id: 'cases', label: 'جميع القضايا' },
+      { id: 'litigation-level', label: 'درجة التقاضى' },
+      { id: 'appeals-tracking', label: 'متابعة الدعاوى والأحكام' },
+      { id: 'sessions', label: 'الجلسات' },
+      { id: 'session-details', label: 'سجل الجلسات' },
+      { id: 'calendar', label: 'النتيجة' },
+      { id: 'lawyers', label: 'المحامون' },
+      { id: 'courts', label: 'المحاكم والدوائر' },
+      { id: 'reports-hub', label: '📊 التقارير (صفحة تقارير)' },
+      { id: 'reports', label: '◻ سجل الحركات (Logs)' },
+      { id: 'archive', label: 'الأرشيف' },
+      { id: 'users', label: 'المستخدمون' }
+    ];
+
+    // ============================================================
+    // التحقق من صلاحية "قراءة فقط"
+    // ============================================================
+    function isReadonlyUser() {
+      try {
+        const data = localStorage.getItem('userReadonly');
+        if (data) return JSON.parse(data);
+      } catch (e) {}
+      return false;
+    }
+
+    // ============================================================
+    // المتغيرات العامة
+    // ============================================================
+    let users = [];
+    let deleteTargetIndex = null;
+    const readonly = isReadonlyUser();
+
+    // ============================================================
+    // جلب المستخدمين من قاعدة البيانات
+    // ============================================================
+    async function loadUsers() {
+      try {
+        const response = await fetch('/api/users');
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            users = result.data;
+            renderTable();
+          }
+        }
+      } catch (error) {
+        console.error('❌ خطأ في جلب المستخدمين من الخادم:', error);
+      }
+    }
+
+    // ============================================================
+    // عرض الجدول
+    // ============================================================
+    function renderTable() {
+      const container = document.getElementById('tableContainer');
+      const search = document.getElementById('searchUser').value.trim().toLowerCase();
+
+      const banner = document.getElementById('readonlyBanner');
+      if (readonly) {
+        banner.style.display = 'flex';
+        document.getElementById('addUserBtn').style.display = 'none';
+      } else {
+        banner.style.display = 'none';
+        document.getElementById('addUserBtn').style.display = 'flex';
+      }
+
+      let filtered = users.filter(u => 
+        u.username.toLowerCase().includes(search) || 
+        (u.fullName && u.fullName.toLowerCase().includes(search))
+      );
+      document.getElementById('userCount').textContent = filtered.length + ' مستخدم ظاهر';
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-regular fa-user"></i>
+            <p>لا يوجد مستخدمون تطابق البحث</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم الكامل</th>
+              <th>اسم المستخدم</th>
+              <th>كلمة المرور</th>
+              <th>الدور</th>
+              <th>الصلاحيات</th>
+              <th style="text-align:center;">الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      filtered.forEach((u, idx) => {
+        const realIndex = users.indexOf(u);
+        const perms = u.permissions || [];
+        const basePerms = perms.filter(pId => !pId.includes(':'));
+        const permLabels = basePerms.map(pId => {
+          const page = ALL_PAGES.find(p => p.id === pId);
+          let label = page ? page.label : pId;
+          let icons = '';
+          if (perms.includes(pId + ':add')) icons += ' 🖊️';
+          if (perms.includes(pId + ':edit')) icons += ' ✏️';
+          if (perms.includes(pId + ':delete')) icons += ' 🗑️';
+          return label + icons;
+        });
+
+        let tagsHtml = '';
+        if (permLabels.length === 0) {
+          tagsHtml = '<span class="badge badge-disabled">لا توجد صلاحيات</span>';
+        } else {
+          const maxShow = 4;
+          const show = permLabels.slice(0, maxShow);
+          const rest = permLabels.length - maxShow;
+          tagsHtml = show.map(label => `<span class="permission-tag allow">${label}</span>`).join('');
+          if (rest > 0) tagsHtml += `<span class="permission-tag">+${rest} أخرى</span>`;
+        }
+
+        const fullNameDisplay = u.fullName || '<span style="color:#94a3b8;font-size:12px;">غير محدد</span>';
+
+        let actionsHtml = '';
+        if (readonly) {
+          actionsHtml = '<span class="badge badge-readonly"><i class="fa-regular fa-eye"></i> قراءة فقط</span>';
+        } else {
+          actionsHtml = `
+            <button class="btn btn-sm btn-outline" onclick="editUser(${realIndex})" style="margin-left:6px;">
+              <i class="fa-regular fa-pen-to-square"></i> تعديل
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="openDeleteModal(${realIndex})">
+              <i class="fa-regular fa-trash-can"></i> حذف
+            </button>
+          `;
+        }
+
+        const roleLabels = {
+          'IT': '<span class="badge" style="background:#e0e7ff;color:#3730a3;font-size:12px;">🛡️ IT</span>',
+          'Admin': '<span class="badge" style="background:#fef3c7;color:#92400e;font-size:12px;">👑 أدمن</span>',
+          'CEO': '<span class="badge" style="background:#f3e8ff;color:#6b21a8;font-size:12px;">👔 CEO</span>',
+          'User': '<span class="badge" style="background:#f1f5f9;color:#475569;font-size:12px;">👤 عادي</span>'
+        };
+        const casesRoleDisplay = roleLabels[u.casesRole] || '<span class="badge" style="background:#f1f5f9;color:#475569;font-size:12px;">👤 عادي</span>';
+
+        html += `
+          <tr>
+            <td>${idx + 1}</td>
+            <td><strong>${fullNameDisplay}</strong></td>
+            <td>${u.username}</td>
+            <td><span style="font-family: monospace; background:#f1f5f9; padding:2px 10px; border-radius:6px;">${u.password}</span></td>
+            <td>${casesRoleDisplay}</td>
+            <td style="max-width:280px;">${tagsHtml}</td>
+            <td style="text-align:center;">${actionsHtml}</td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+      container.innerHTML = html;
+    }
+
+    // ============================================================
+    // دوال المودال
+    // ============================================================
+    function openAddModal() {
+      if (readonly) {
+        alert('⚠️ أنت في وضع قراءة فقط، لا يمكنك إضافة مستخدمين جدد.');
+        return;
+      }
+      document.getElementById('editIndex').value = '-1';
+      document.getElementById('modalTitle').textContent = 'مستخدم جديد';
+      document.getElementById('modalSub').textContent = 'أدخل البيانات واختر الصلاحيات';
+      document.getElementById('formFullName').value = '';
+      document.getElementById('formUsername').value = '';
+      document.getElementById('formUsername').readOnly = false;
+      document.getElementById('formPassword').value = '';
+      document.getElementById('formCasesRole').value = 'User';
+      document.getElementById('saveBtn').textContent = 'إضافة المستخدم';
+      buildPermissionsGrid([]);
+      document.getElementById('userModal').classList.add('open');
+    }
+
+    function editUser(index) {
+      if (readonly) {
+        alert('⚠️ أنت في وضع قراءة فقط، لا يمكنك تعديل المستخدمين.');
+        return;
+      }
+      const u = users[index];
+      if (!u) return;
+      document.getElementById('editIndex').value = index;
+      document.getElementById('modalTitle').textContent = 'تعديل مستخدم';
+      document.getElementById('modalSub').textContent = 'قم بتحديث البيانات والصلاحيات';
+      document.getElementById('formFullName').value = u.fullName || '';
+      document.getElementById('formUsername').value = u.username;
+      document.getElementById('formPassword').value = u.password;
+      document.getElementById('formCasesRole').value = u.casesRole || 'User';
+      const isAdminAccount = u.username.toLowerCase() === 'admin';
+      document.getElementById('formUsername').readOnly = isAdminAccount;
+      document.getElementById('saveBtn').textContent = 'تحديث المستخدم';
+      buildPermissionsGrid(u.permissions || []);
+      document.getElementById('userModal').classList.add('open');
+    }
+
+    function buildPermissionsGrid(selected) {
+      const grid = document.getElementById('permissionsGrid');
+      let html = '';
+      ALL_PAGES.forEach(p => {
+        const checked = selected.includes(p.id);
+        const hasAdd = selected.includes(p.id + ':add');
+        const hasEdit = selected.includes(p.id + ':edit');
+        const hasDelete = selected.includes(p.id + ':delete');
+        const disabledAttr = checked ? '' : 'disabled';
+        html += `
+          <div class="permission-row" data-page="${p.id}">
+            <label class="checkbox-item">
+              <input type="checkbox" class="page-checkbox" value="${p.id}" ${checked ? 'checked' : ''} onchange="onPageCheckboxToggle(this)">
+              <span>${p.label}</span>
+            </label>
+            <div class="perm-icons">
+              <button type="button" class="perm-icon-btn ${hasAdd ? 'active' : ''}" data-perm="${p.id}:add" title="إضافة - يقدر يدخل أي حاجة في الصفحة دي" onclick="togglePermIcon(this)" ${disabledAttr}>🖊️</button>
+              <button type="button" class="perm-icon-btn ${hasEdit ? 'active' : ''}" data-perm="${p.id}:edit" title="تعديل - يقدر يعدل أي حاجة في الصفحة دي" onclick="togglePermIcon(this)" ${disabledAttr}>✏️</button>
+              <button type="button" class="perm-icon-btn ${hasDelete ? 'active' : ''}" data-perm="${p.id}:delete" title="مسح - يقدر يمسح أي حاجة في الصفحة دي" onclick="togglePermIcon(this)" ${disabledAttr}>🗑️</button>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    // تفعيل/تعطيل أيقونات الصلاحيات (إضافة/تعديل/مسح) حسب فتح الصفحة من عدمه
+    function onPageCheckboxToggle(checkbox) {
+      const row = checkbox.closest('.permission-row');
+      const icons = row.querySelectorAll('.perm-icon-btn');
+      if (checkbox.checked) {
+        icons.forEach(btn => btn.disabled = false);
+      } else {
+        icons.forEach(btn => {
+          btn.disabled = true;
+          btn.classList.remove('active');
+        });
+      }
+    }
+
+    // تفعيل/تعطيل أيقونة صلاحية واحدة (إضافة / تعديل / مسح)
+    function togglePermIcon(btn) {
+      if (btn.disabled) return;
+      btn.classList.toggle('active');
+    }
+
+    function closeModal() {
+      document.getElementById('userModal').classList.remove('open');
+    }
+
+    document.getElementById('userModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // ============================================================
+    // دوال مودال الحذف
+    // ============================================================
+    function openDeleteModal(index) {
+      if (readonly) {
+        alert('⚠️ أنت في وضع قراءة فقط، لا يمكنك حذف المستخدمين.');
+        return;
+      }
+      const u = users[index];
+      if (!u) return;
+      if (u.username.toLowerCase() === 'admin') {
+        alert('⚠️ لا يمكن حذف حساب المدير (admin).');
+        return;
+      }
+      deleteTargetIndex = index;
+      document.getElementById('deleteUsername').textContent = u.fullName || u.username;
+      document.getElementById('deleteMessage').innerHTML = 
+        `هل أنت متأكد من حذف المستخدم <strong>${u.fullName || u.username}</strong>؟`;
+      document.getElementById('deleteModal').classList.add('open');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.remove('open');
+      deleteTargetIndex = null;
+    }
+
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+      if (e.target === this) closeDeleteModal();
+    });
+
+    // ============================================================
+    // تأكيد الحذف
+    // ============================================================
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async function() {
+      if (deleteTargetIndex !== null) {
+        const userToDelete = users[deleteTargetIndex];
+        if (userToDelete) {
+          try {
+            const response = await fetch(`/api/users/${userToDelete.Id}`, {
+              method: 'DELETE'
+            });
+            const result = await response.json();
+            if (response.ok && result.success) {
+              await loadUsers();
+            } else {
+              alert('❌ ' + result.message);
+            }
+          } catch (err) {
+            console.error('❌ خطأ في حذف المستخدم:', err);
+            alert('❌ حدث خطأ في الاتصال بالخادم');
+          }
+        }
+        closeDeleteModal();
+      }
+    });
+
+    // ============================================================
+    // حفظ المستخدم (إضافة / تعديل)
+    // ============================================================
+    async function saveUser(e) {
+    e.preventDefault();
+
+    if (readonly) {
+        alert('⚠️ أنت في وضع قراءة فقط، لا يمكنك حفظ التغييرات.');
+        return;
+    }
+
+    const fullName = document.getElementById('formFullName').value.trim();
+    const username = document.getElementById('formUsername').value.trim();
+    const password = document.getElementById('formPassword').value.trim();
+    const editIndex = parseInt(document.getElementById('editIndex').value);
+
+    if (!fullName || !username || !password) {
+        alert('❌ يرجى إدخال جميع البيانات المطلوبة');
+        return;
+    }
+
+    const permissions = [];
+    document.querySelectorAll('#permissionsGrid .page-checkbox').forEach(cb => {
+        if (cb.checked) permissions.push(cb.value);
+    });
+    document.querySelectorAll('#permissionsGrid .perm-icon-btn.active').forEach(btn => {
+        permissions.push(btn.dataset.perm);
+    });
+
+    const casesRole = document.getElementById('formCasesRole').value;
+
+    try {
+        let response;
+        let result;
+
+        if (editIndex === -1) {
+            // إضافة مستخدم جديد
+            response = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'X-Username': localStorage.getItem('username') || '' 
+                },
+                body: JSON.stringify({ 
+                    username, 
+                    fullName, 
+                    password, 
+                    permissions, 
+                    casesRole 
+                })
+            });
+            result = await response.json();
+            
+            if (response.ok && result.success) {
+                closeModal();
+                await loadUsers(); // إعادة تحميل القائمة
+                
+                // ✅ إذا كان المستخدم المضاف هو نفس المستخدم الحالي (نادراً)
+                const currentUser = localStorage.getItem('username');
+                if (username === currentUser) {
+                    localStorage.setItem('userPermissions', JSON.stringify(permissions));
+                    localStorage.setItem('casesRole', casesRole);
+                }
+            } else {
+                alert('❌ ' + result.message);
+            }
+        } else {
+            // تعديل مستخدم موجود
+            const userToEdit = users[editIndex];
+            response = await fetch(`/api/users/${userToEdit.Id}`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'X-Username': localStorage.getItem('username') || '' 
+                },
+                body: JSON.stringify({ 
+                    username, 
+                    fullName, 
+                    password, 
+                    permissions, 
+                    casesRole 
+                })
+            });
+            result = await response.json();
+            
+            if (response.ok && result.success) {
+                closeModal();
+                await loadUsers(); // إعادة تحميل القائمة
+                
+                // ✅ تحديث صلاحيات المستخدم الحالي إذا كان هو المُعدَّل
+                const currentUser = localStorage.getItem('username');
+                if (username === currentUser) {
+                    localStorage.setItem('userPermissions', JSON.stringify(permissions));
+                    localStorage.setItem('casesRole', casesRole);
+                    
+                    // تحديث حالة readonly
+                    const isReadonly = (casesRole === 'CEO');
+                    localStorage.setItem('userReadonly', JSON.stringify(isReadonly));
+                    
+                    // إعادة تحميل الصفحة لتطبيق الصلاحيات الجديدة
+                    alert('✅ تم تحديث صلاحياتك. سيتم إعادة تحميل الصفحة لتطبيق التغييرات.');
+                    location.reload();
+                } else {
+                    // إذا تم تعديل مستخدم آخر، نعرض رسالة نجاح فقط
+                    alert('✅ تم تحديث المستخدم بنجاح');
+                }
+            } else {
+                alert('❌ ' + result.message);
+            }
+        }
+    } catch (err) {
+        console.error('❌ خطأ في حفظ المستخدم:', err);
+        alert('❌ حدث خطأ في الاتصال بالخادم');
+    }
+}
+
+    // ============================================================
+    // تهيئة الصفحة
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof initSidebar === 'function') {
+        initSidebar('users');
+      }
+      loadUsers();
+
+      window.openAddModal = openAddModal;
+      window.editUser = editUser;
+      window.saveUser = saveUser;
+      window.closeModal = closeModal;
+      window.renderTable = renderTable;
+      window.openDeleteModal = openDeleteModal;
+      window.closeDeleteModal = closeDeleteModal;
+    });
+  </script>
+</body>
+</html>

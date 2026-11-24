@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جميع القضايا — الشؤون القانونية</title>
+  <script src="sidebar.js"></script>
+  <script src="activity-logger.js"></script>
+  <script src="permissions-guard.js"></script>
+  <link rel="stylesheet" href="css/Cases.css">
+
+  <style>
+    /* ===== تحسينات الطباعة - أبيض وأسود فقط ===== */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printReportArea, #printReportArea * {
+        visibility: visible;
+      }
+      #printReportArea {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        background: white;
+        padding: 15px 20px;
+        font-family: 'Cairo', 'Segoe UI', sans-serif;
+        direction: rtl;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .print-sheet {
+        padding: 5px 8px;
+        color: #000000;
+      }
+      .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 3px solid #000000;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+      .print-title-ar {
+        font-weight: 800;
+        font-size: 17px;
+        text-align: right;
+        color: #000000;
+      }
+      .print-sub-ar {
+        font-weight: 700;
+        font-size: 11px;
+        margin-top: 2px;
+        text-align: right;
+        color: #000000;
+      }
+      .print-title-en {
+        font-weight: 700;
+        font-size: 12px;
+        text-align: left;
+        color: #000000;
+      }
+      .print-sub-en {
+        font-weight: 600;
+        font-size: 10px;
+        margin-top: 2px;
+        text-align: left;
+        color: #000000;
+      }
+      .print-report-title {
+        text-align: center;
+        font-weight: 800;
+        font-size: 18px;
+        color: #000000;
+        margin-bottom: 6px;
+        letter-spacing: 1px;
+      }
+      .print-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 10px;
+        border-bottom: 2px dashed #000000;
+        padding-bottom: 6px;
+        flex-wrap: wrap;
+        gap: 3px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9px;
+        margin-bottom: 8px;
+        border: 2px solid #000000;
+      }
+      .print-table th {
+        background: #e0e0e0 !important;
+        color: #000000 !important;
+        border: 1px solid #000000;
+        padding: 5px 4px;
+        font-weight: 800;
+        text-align: center;
+        font-size: 8.5px;
+        white-space: nowrap;
+      }
+      .print-table td {
+        border: 1px solid #000000;
+        padding: 4px 5px;
+        text-align: center;
+        font-size: 8.5px;
+        vertical-align: middle;
+        color: #000000;
+      }
+      
+      /* ===== الصف الرئيسي (القضية الأم) - خط غامق ===== */
+      .print-table .parent-row td {
+        background: #f5f5f5 !important;
+        font-weight: 800 !important;
+        border-top: 3px solid #000000;
+        border-bottom: 2px solid #000000;
+        padding: 7px 5px;
+        font-size: 9px;
+        color: #000000;
+      }
+      .print-table .parent-row td:first-child {
+        font-weight: 900;
+        color: #000000;
+        font-size: 9.5px;
+      }
+      
+      /* ===== صفوف درجات التقاضي - خط أصغر ===== */
+      .print-table .sub-row td {
+        background: #ffffff !important;
+        border-color: #000000;
+        padding: 4px 5px;
+        font-size: 7.5px !important;
+        color: #000000;
+        border-bottom: 1px dashed #999999;
+      }
+      .print-table .sub-row td:first-child {
+        padding-right: 18px;
+        text-align: right;
+        font-weight: 600;
+        color: #000000;
+      }
+      .print-table .sub-row.sub-appeal td:first-child {
+        border-right: 2px solid #000000;
+      }
+      .print-table .sub-row.sub-cassation td:first-child {
+        border-right: 2px solid #000000;
+      }
+      
+      /* ===== عنوان درجات التقاضي ===== */
+      .print-level-header td {
+        background: #e8e8e8 !important;
+        border: 1px solid #000000;
+        font-weight: 700;
+        color: #000000;
+        font-size: 8px;
+        text-align: right;
+        padding: 3px 12px;
+        border-top: 2px solid #000000;
+      }
+      
+      /* ===== فاصل بين القضايا ===== */
+      .print-table .case-divider td {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        height: 6px;
+        border-bottom: 2px solid #cccccc;
+      }
+      
+      /* ===== إزالة البادجات والدوائر ===== */
+      .print-badge {
+        display: inline;
+        padding: 0;
+        border: none;
+        background: transparent !important;
+        color: #000000 !important;
+        font-weight: 400;
+        font-size: inherit;
+      }
+      
+      .print-stage-tag {
+        display: inline;
+        padding: 0;
+        border: none;
+        background: transparent !important;
+        color: #000000 !important;
+        font-weight: 400;
+        font-size: inherit;
+      }
+      
+      .print-footer {
+        text-align: center;
+        font-size: 8.5px;
+        color: #000000;
+        margin-top: 10px;
+        border-top: 2px solid #000000;
+        padding-top: 8px;
+      }
+      
+      .print-table .text-wrap {
+        word-wrap: break-word;
+        white-space: normal;
+        max-width: 80px;
+      }
+      .print-table .text-nowrap {
+        white-space: nowrap;
+      }
+      
+      /* ===== إزالة جميع الأيقونات ===== */
+      .no-icon {
+        display: none;
+      }
+    }
+
+    /* ===== عرض التقرير قبل الطباعة ===== */
+    .print-report-area {
+      display: none;
+    }
+
+    /* ===== تحسينات نافذة الطباعة ===== */
+    .print-modal-fields .filter-select {
+      min-width: unset;
+      width: 100%;
+    }
+    .print-field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 500px) {
+      .print-field-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .print-field-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      padding: 6px 0;
+    }
+    .print-field-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #1a3a5c;
+      cursor: pointer;
+    }
+    .print-modal-hint {
+      background: #F8FAFD;
+      border: 1px solid #E4EAF2;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a3a5c;
+      text-align: center;
+      margin: 10px 0 14px;
+    }
+
+    /* ===== تحسين خانة الإجراءات ===== */
+    .actions-cell {
+      vertical-align: middle;
+      text-align: center;
+      padding: 6px 2px;
+      min-height: 60px;
+    }
+
+    .actions-cell-inner {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* ===== جعل النص باللون الأبيض في تفاصيل القضية ===== */
+    .details-header .title {
+      color: #ffffff !important;
+    }
+
+    /* ===== تحسين hover على الصف كاملاً ===== */
+    .cases-table .main-row:hover td {
+      background: #f8fafc !important;
+    }
+
+    /* ===== عند hover على خانة الإجراءات فقط ===== */
+    .cases-table .main-row td:last-child:hover {
+      background: #f1f5f9 !important;
+    }
+
+    /* ===== تعديلات إضافية للتوازن ===== */
+    .cases-table td:last-child {
+      vertical-align: middle !important;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="page-body">
+
+  <!-- ===== Stats Cards ===== -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon-wrap navy">📁</div>
+      <div>
+        <div class="stat-num" id="totalCases">0</div>
+        <div class="stat-label">إجمالي القضايا</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-wrap green">📂</div>
+      <div>
+        <div class="stat-num" id="openCases">0</div>
+        <div class="stat-label">قضايا متداولة</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-wrap red">✅</div>
+      <div>
+        <div class="stat-num" id="closedCases">0</div>
+        <div class="stat-label">قضايا منتهية</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-wrap amber">⏳</div>
+      <div>
+        <div class="stat-num" id="pendingCases">0</div>
+        <div class="stat-label">قضايا معلقة</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-wrap gold">⚖️</div>
+      <div>
+        <div class="stat-num" id="civilCases">0</div>
+        <div class="stat-label">قضايا مدني</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-wrap amber">👷</div>
+      <div>
+        <div class="stat-num" id="laborCases">0</div>
+        <div class="stat-label">قضايا عمالي</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Filter Bar ===== -->
+  <div class="filter-bar">
+    <a href="new_case.html" class="btn btn-primary" id="addNewCaseBtn">＋ قضية جديدة</a>
+    <button class="btn btn-print" onclick="openPrintOptions()">🖨️ طباعة تقرير</button>
+    <select class="filter-select" id="filterDegree" onchange="filterCases()">
+      <option value="">كل الدرجات</option>
+      <option value="ابتدائي">ابتدائي</option>
+      <option value="استئناف">استئناف</option>
+      <option value="نقض">نقض</option>
+      <option value="إشكال">إشكال</option>
+      <option value="إشكال في التنفيذ">إشكال في التنفيذ</option>
+      <option value="التماس إعادة النظر">التماس إعادة النظر</option>
+    </select>
+    <select class="filter-select" id="filterType" onchange="filterCases()">
+      <option value="">كل الأنواع</option>
+      <option value="مدني">مدني</option>
+      <option value="عمالي">عمالي</option>
+    </select>
+    <select class="filter-select" id="filterStatus" onchange="filterCases()">
+      <option value="">كل الحالات</option>
+      <option value="متداولة">متداولة</option>
+      <option value="معلقة">معلقة</option>
+      <option value="منتهية">منتهية</option>
+    </select>
+    <select class="filter-select" id="filterLawyer" onchange="filterCases()">
+      <option value="">كل المحامين</option>
+    </select>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="بحث برقم القضية، الموضوع، درجة التقاضي (ابتدائي/استئناف/نقض...)، المحامي، الخصم أو الملاحظات..." oninput="filterCases()" />
+    </div>
+  </div>
+
+  <!-- ===== Table ===== -->
+  <div class="table-wrap">
+    <table class="cases-table" style="table-layout: fixed; width: 100%;">
+      <thead>
+        <tr>
+          <th style="width: 10%;">رقم القضية</th>
+          <th style="width: 11%;">موضوع القضية</th>
+          <th style="width: 7%;">درجة التقاضي</th>
+          <th style="width: 8%;">المحامي</th>
+          <th style="width: 9%;">المحكمة</th>
+          <th style="width: 7%;">الدائرة</th>
+          <th style="width: 8%;">المدعى</th>
+          <th style="width: 8%;">المدعى عليه</th>
+          <th style="width: 7%;">الحالة</th>
+          <th style="width: 7%;">النتيجة لصالح</th>
+          <th style="width: 18%; text-align:center;">إجراءات</th>
+        </tr>
+      </thead>
+      <tbody id="casesBody">
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== Pagination ===== -->
+  <div id="paginationControls" style="display:flex; justify-content:center; align-items:center; gap:16px; margin-top:20px; padding:12px; background:white; border-radius:8px; border:1px solid #E4EAF2; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+    <button class="btn" id="prevPageBtn" onclick="changePage(-1)" style="padding:6px 16px; background:#1a3a5c; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:700;">السابق</button>
+    <span id="pageIndicator" style="font-weight:800; color:#1a3a5c; font-size:14px; font-family:'Cairo',sans-serif;">صفحة 1 من 1</span>
+    <button class="btn" id="nextPageBtn" onclick="changePage(1)" style="padding:6px 16px; background:#1a3a5c; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:700;">التالي</button>
+  </div>
+
+</div>
+
+<!-- ===== Modal ===== -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <span class="modal-icon" id="modalIcon">🗑️</span>
+    <h3 id="modalTitle">تأكيد الحذف</h3>
+    <p id="modalMessage">هل أنت متأكد من أنك تريد حذف هذه القضية نهائياً؟</p>
+    <div class="form-group" id="lawsuitExpensesGroup" style="display:none; text-align:right; margin-bottom:20px;">
+      <label for="lawsuitExpensesInput" style="display:block; font-size:13px; font-weight:700; color:#475569; margin-bottom:6px;">مصاريف الدعوة</label>
+      <input type="number" id="lawsuitExpensesInput" min="0" step="0.01" placeholder="أدخل قيمة مصاريف الدعوة" style="width:100%; height:40px; box-sizing:border-box; background:white; border:1.5px solid #E4EAF2; border-radius:8px; padding:0 14px; font-size:13px; font-family:'Cairo',sans-serif; outline:none; transition:all 0.2s;" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal()">إلغاء</button>
+      <button class="btn btn-confirm" id="modalConfirmBtn">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Party Names Modal (المدعى / المدعى عليه) ===== -->
+<div class="modal-overlay" id="partyNamesModal">
+  <div class="modal-box party-names-modal-box">
+    <span class="modal-icon">👥</span>
+    <h3 id="partyNamesModalTitle">الأسماء</h3>
+    <ul class="party-names-list" id="partyNamesModalList"></ul>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closePartyNamesModal()" style="width:100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Attachments Modal ===== -->
+<div class="modal-overlay" id="attachmentsModal">
+  <div class="modal-box" style="max-width:700px;max-height:90vh;overflow-y:auto;">
+    <span class="modal-icon">📎</span>
+    <h3 id="attachmentsModalTitle">مرفقات القضية</h3>
+    <div id="attachmentsModalBody" style="margin-top:12px;min-height:80px;">
+      <div style="text-align:center;padding:30px;color:#94A3B8;">جارِ التحميل...</div>
+    </div>
+    <div class="modal-actions" style="margin-top:14px;">
+      <button class="btn btn-cancel" onclick="closeAttachmentsModal()" style="width:100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== Print Options Modal ===== -->
+<div class="modal-overlay" id="printModal">
+  <div class="modal-box print-modal-box" style="max-width:560px;">
+    <span class="modal-icon">🖨️</span>
+    <h3>خيارات طباعة التقرير</h3>
+    <p>سيتم طباعة القضايا الظاهرة حالياً في الجدول بعد التصفية والبحث</p>
+    <div class="print-modal-fields">
+      <div class="print-field-row">
+        <div class="print-field">
+          <label>درجة التقاضي</label>
+          <select class="filter-select" id="printFilterDegree">
+            <option value="">كل الدرجات</option>
+            <option value="ابتدائي">ابتدائي فقط</option>
+            <option value="استئناف">استئناف فقط</option>
+            <option value="نقض">نقض فقط</option>
+            <option value="إشكال">إشكال فقط</option>
+            <option value="إشكال في التنفيذ">إشكال في التنفيذ فقط</option>
+            <option value="التماس إعادة النظر">التماس إعادة النظر فقط</option>
+          </select>
+        </div>
+        <div class="print-field">
+          <label>نوع القضية</label>
+          <select class="filter-select" id="printFilterType">
+            <option value="">كل الأنواع</option>
+            <option value="مدني">مدني فقط</option>
+            <option value="عمالي">عمالي فقط</option>
+          </select>
+        </div>
+      </div>
+      <div class="print-field-row">
+        <div class="print-field">
+          <label>الحالة</label>
+          <select class="filter-select" id="printFilterStatus">
+            <option value="">كل الحالات</option>
+            <option value="مفتوحة">مفتوحة فقط</option>
+            <option value="مغلقة">مغلقة فقط</option>
+            <option value="معلقة">معلقة فقط</option>
+          </select>
+        </div>
+        <div class="print-field">
+          <label>المحامي</label>
+          <select class="filter-select" id="printFilterLawyer">
+            <option value="">كل المحامين</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;padding:6px 0;border-top:1px solid #e2e8f0;margin-top:8px;padding-top:12px;">
+        <label class="print-field-check">
+          <input type="checkbox" id="printIncludeChildLevels" checked>
+          عرض درجات التقاضي
+        </label>
+        <label class="print-field-check">
+          <input type="checkbox" id="printUseCurrentFilter" checked>
+          استخدام الفلتر الحالي
+        </label>
+      </div>
+    </div>
+    <div class="print-modal-hint" id="printCountHint"></div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closePrintModal()">إلغاء</button>
+      <button class="btn btn-confirm print-confirm" onclick="generatePrintReport()">🖨️ طباعة التقرير</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Case Sessions History Modal ===== -->
+<div class="modal-overlay" id="caseSessionsModal">
+  <div class="modal-box print-modal-box" style="max-width:720px;">
+    <span class="modal-icon">📅</span>
+    <h3>جلسات القضية <span id="sessionsModalCaseNumber" style="color:#1a5a8a;"></span></h3>
+    <div id="sessionsModalBody" style="max-height:60vh;overflow-y:auto;text-align:right;margin-top:10px;">
+      <div style="text-align:center;padding:30px;color:#94A3B8;">جارِ التحميل...</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeCaseSessionsModal()" style="width:100%;">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Printable Report ===== -->
+<div id="printReportArea" class="print-report-area"></div>
+
+<!-- ===== Toast ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // ============================================================
+  // API URL
+  // ============================================================
+  
+  const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+
+  // ============================================================
+  let allCases = [];
+  let lawyersList = [];
+  let currentFilteredCases = [];
+  let currentPage = 1;
+  const rowsPerPage = 50;
+
+  // ============================================================
+  // Toast System
+  // ============================================================
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const icons = { success: '✅', error: '❌', warning: '⚠️' };
+    const toast = document.createElement('div');
+    toast.className = `toast-item ${type}`;
+    toast.innerHTML = `
+      <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+      <span>${message}</span>
+      <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(80px)';
+        setTimeout(() => toast.remove(), 300);
+      }
+    }, 4000);
+  }
+
+  // ============================================================
+  // Modal System
+  // ============================================================
+  function openDeleteModal(caseId, caseNumber) {
+    document.getElementById('modalIcon').textContent = '🗑️';
+    document.getElementById('modalTitle').textContent = 'تأكيد الحذف';
+    document.getElementById('modalMessage').textContent = 
+      `هل أنت متأكد من أنك تريد حذف القضية رقم "${caseNumber}" نهائياً؟`;
+    document.getElementById('lawsuitExpensesGroup').style.display = 'none';
+    document.getElementById('confirmModal').classList.add('show');
+    
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    const newBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+    newBtn.addEventListener('click', function() {
+      closeModal();
+      deleteCase(caseId);
+    });
+  }
+
+  function closeModal() {
+    document.getElementById('confirmModal').classList.remove('show');
+    document.getElementById('lawsuitExpensesGroup').style.display = 'none';
+    document.getElementById('lawsuitExpensesInput').value = '';
+  }
+
+  document.getElementById('confirmModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // ============================================================
+  // تحويل القضية إلى "منتهية" يدوياً
+  // ============================================================
+  function openCloseCaseModal(caseId, caseNumber) {
+    document.getElementById('modalIcon').textContent = '✅';
+    document.getElementById('modalTitle').textContent = 'تأكيد إنهاء القضية';
+    document.getElementById('modalMessage').textContent =
+      `هل أنت متأكد من تحويل القضية رقم "${caseNumber}" إلى "منتهية"؟ سيتم إغلاق كل جلساتها المفتوحة تلقائياً.`;
+    document.getElementById('lawsuitExpensesGroup').style.display = 'block';
+    document.getElementById('lawsuitExpensesInput').value = '';
+    document.getElementById('confirmModal').classList.add('show');
+
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    const newBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+    newBtn.addEventListener('click', function() {
+      const expensesValue = document.getElementById('lawsuitExpensesInput').value;
+      closeModal();
+      markCaseAsFinished(caseId, expensesValue);
+    });
+  }
+
+  async function markCaseAsFinished(caseId, lawsuitExpenses) {
+    try {
+      const response = await fetch(`${API_URL}/cases/${caseId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: 'منتهية',
+          lawsuitExpenses: lawsuitExpenses !== '' && lawsuitExpenses !== undefined ? Number(lawsuitExpenses) : null
+        })
+      });
+      const result = await response.json();
+      if (result.success) {
+        showToast('✅ تم تحويل القضية إلى منتهية بنجاح', 'success');
+        loadCases();
+      } else {
+        showToast('❌ ' + result.message, 'error');
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم', 'error');
+    }
+  }
+
+  // ============================================================
+  // بادچ ملون لعرض "النتيجة لصالح" (الشركة بالأخضر ✓ / الخصم بالأحمر ✗)
+  // ============================================================
+  function renderResultBadge(resultValue) {
+    const val = (resultValue || '').toString().trim();
+    if (!val) return '';
+    if (val.includes('شرك')) {
+      return `<span style="background:#DCFCE7;color:#047857;border:1px solid #6EE7B7;font-weight:700;font-size:11px;padding:3px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;"><span style="background:#047857;color:white;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;">✓</span>${val}</span>`;
+    } else if (val.includes('خصم')) {
+      return `<span style="background:#FEE2E2;color:#b91c1c;border:1px solid #FCA5A5;font-weight:700;font-size:11px;padding:3px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;"><span style="background:#b91c1c;color:white;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;">✗</span>${val}</span>`;
+    }
+    return `<span style="font-size:12px;color:#475569;">${val}</span>`;
+  }
+
+  // ============================================================
+  // عرض كل جلسات القضية وتواريخها ومعلوماتها
+  // ============================================================
+  function formatCaseDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const dd2 = String(d.getDate()).padStart(2,'0');
+    const mm2 = String(d.getMonth()+1).padStart(2,'0');
+    return `${dd2}/${mm2}/${d.getFullYear()}`;
+  }
+
+  async function openCaseSessionsModal(caseId, caseNumber) {
+    document.getElementById('sessionsModalCaseNumber').textContent = caseNumber ? `(${caseNumber})` : '';
+    const body = document.getElementById('sessionsModalBody');
+    body.innerHTML = `<div style="text-align:center;padding:30px;color:#94A3B8;">جارِ التحميل...</div>`;
+    document.getElementById('caseSessionsModal').classList.add('show');
+
+    try {
+      const resp = await fetch(`${API_URL}/sessions/details?caseId=${caseId}`);
+      const json = await resp.json();
+
+      if (!json.success || !json.data || json.data.length === 0) {
+        body.innerHTML = `<div style="text-align:center;padding:30px;color:#94A3B8;">لا توجد جلسات مسجلة لهذه القضية</div>`;
+        return;
+      }
+
+      const sessions = json.data;
+      body.innerHTML = sessions.map(s => {
+        const isClosed = s.IsClosed === true || s.IsClosed === 1 || s.Status === 'مغلقة' || s.Status === 'منتهية';
+        const statusColor = isClosed ? '#059669' : '#D97706';
+        const statusBg = isClosed ? '#ECFDF5' : '#FEF3C7';
+        const statusText = isClosed ? 'منتهية' : (s.Status || 'متداولة');
+        const dateText = formatCaseDate(s.SessionDate);
+        const timeText = s.SessionTime || '';
+        const notesOrSummary = s.SessionNotes || s.Notes || s.Action || '—';
+
+        return `
+          <div style="border:1px solid #E2E8F0;border-radius:10px;padding:14px 16px;margin-bottom:10px;background:#FAFBFD;border-right:4px solid ${statusColor};">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <div style="font-weight:800;color:#1a3a5c;font-size:14px;">
+                📅 ${dateText} ${timeText ? `— ${timeText}` : ''}
+              </div>
+              <span style="background:${statusBg};color:${statusColor};font-weight:700;font-size:12px;padding:3px 12px;border-radius:12px;border:1px solid ${statusColor}55;">${statusText}</span>
+            </div>
+            <div style="font-size:12px;color:#64748B;margin-top:6px;">
+              <strong style="color:#475569;">درجة التقاضي:</strong> ${s.Stage || 'ابتدائي'}
+              ${s.CourtName ? ` &nbsp;|&nbsp; <strong style="color:#475569;">المحكمة:</strong> ${s.CourtName}` : ''}
+              ${s.CircuitName ? ` &nbsp;|&nbsp; <strong style="color:#475569;">الدائرة:</strong> ${s.CircuitName}` : ''}
+            </div>
+            ${s.Result ? `<div style="font-size:12px;color:#475569;margin-top:6px;display:flex;align-items:center;gap:6px;"><strong>النتيجة لصالح:</strong> ${renderResultBadge(s.Result)}</div>` : ''}
+            ${s.AppealAction ? `<div style="font-size:12px;color:#991B1B;margin-top:4px;"><strong>الإجراء المتخذ:</strong> ${s.AppealAction}</div>` : ''}
+            <div style="font-size:12px;color:white;margin-top:6px;background:#1a3a5c;border:1px solid #1a3a5c;border-radius:6px;padding:8px 10px;">
+              <strong style="color:#93C5FD;">موضوع الجلسة:</strong> ${notesOrSummary}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch (error) {
+      body.innerHTML = `<div style="text-align:center;padding:30px;color:#EF4444;">❌ حدث خطأ أثناء تحميل الجلسات</div>`;
+    }
+  }
+
+  function closeCaseSessionsModal() {
+    document.getElementById('caseSessionsModal').classList.remove('show');
+  }
+
+  document.getElementById('caseSessionsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeCaseSessionsModal();
+  });
+
+  // ============================================================
+  // Party Names Popup (المدعى / المدعى عليه)
+  // ============================================================
+  function splitPartyNames(namesStr) {
+    if (!namesStr) return [];
+    return String(namesStr)
+      .split(/،\s*|,\s*|\n+/)
+      .map(n => n.trim())
+      .filter(Boolean);
+  }
+
+  function renderPartyCell(namesStr, label) {
+    const names = splitPartyNames(namesStr);
+    if (names.length === 0) return '—';
+    if (names.length === 1) {
+      return `<span class="party-cell-name" title="${names[0]}" style="max-width:none;white-space:normal;">${names[0]}</span>`;
+    }
+    const encoded = encodeURIComponent(JSON.stringify(names));
+    return `
+      <div class="party-cell-wrap">
+        <span class="party-cell-name" title="${names[0]}">${names[0]}</span>
+        <button type="button" class="party-more-badge" data-names="${encoded}" data-label="${label}" onclick="openPartyNamesModal(this)">+${names.length - 1}</button>
+      </div>
+    `;
+  }
+
+  function openPartyNamesModal(btn) {
+    const names = JSON.parse(decodeURIComponent(btn.dataset.names));
+    const label = btn.dataset.label || 'الأسماء';
+    document.getElementById('partyNamesModalTitle').textContent = `${label} (${names.length})`;
+    document.getElementById('partyNamesModalList').innerHTML =
+      names.map(n => `<li>${n}</li>`).join('');
+    document.getElementById('partyNamesModal').classList.add('show');
+  }
+
+  function closePartyNamesModal() {
+    document.getElementById('partyNamesModal').classList.remove('show');
+  }
+
+  document.getElementById('partyNamesModal').addEventListener('click', function(e) {
+    if (e.target === this) closePartyNamesModal();
+  });
+
+  // ============================================================
+  // Load Lawyers
+  // ============================================================
+  async function loadLawyers() {
+    try {
+      const response = await fetch(`${API_URL}/lawyers`);
+      const result = await response.json();
+      if (result.success && result.data) {
+        lawyersList = result.data;
+        populateLawyerFilter('filterLawyer');
+        populateLawyerFilter('printFilterLawyer');
+      }
+    } catch (error) {
+      console.error('❌ خطأ في جلب المحامين:', error);
+      lawyersList = [
+        { FullName: 'أحمد محمود', Id: 1 },
+        { FullName: 'خالد عبد الله', Id: 2 },
+        { FullName: 'سامي حسن', Id: 3 }
+      ];
+      populateLawyerFilter('filterLawyer');
+      populateLawyerFilter('printFilterLawyer');
+    }
+  }
+
+  function populateLawyerFilter(selectId) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    const currentValue = select.value;
+    select.innerHTML = '<option value="">كل المحامين</option>';
+    lawyersList.forEach(l => {
+      const option = document.createElement('option');
+      option.value = l.Id;
+      option.textContent = l.FullName || l.Name || `محامي ${l.Id}`;
+      select.appendChild(option);
+    });
+    if (currentValue) select.value = currentValue;
+  }
+
+  // ============================================================
+  // Load Cases
+  // ============================================================
+  async function loadCases() {
+    try {
+      const search = document.getElementById('searchInput')?.value || '';
+      const stage = document.getElementById('filterDegree')?.value || '';
+      const status = document.getElementById('filterStatus')?.value || '';
+      const lawyerId = document.getElementById('filterLawyer')?.value || '';
+
+      let url = `${API_URL}/cases`;
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (stage) params.append('stage', stage);
+      if (status) params.append('status', status);
+      if (params.toString()) url += '?' + params.toString();
+
+      const response = await fetch(url);
+      const result = await response.json();
+
+      if (result.success) {
+        allCases = result.data;
+        if (lawyerId) {
+          allCases = allCases.filter(c => c.AssignedLawyerId == lawyerId || c.LawyerId == lawyerId);
+        }
+        currentFilteredCases = allCases;
+        renderCases(allCases);
+        updateStats(allCases);
+      } else {
+        useMockData();
+      }
+    } catch (error) {
+      console.error('❌ خطأ في جلب القضايا:', error);
+      useMockData();
+    }
+  }
+
+  // ============================================================
+  // Mock Data
+  // ============================================================
+  function useMockData() {
+    allCases = [
+      {
+        Id: 1,
+        CaseNumber: 'م-5250-2026',
+        Subject: 'نزاع تسوية مستحقات بلائحة الأجور الموحدة',
+        LawyerName: 'أحمد محمود',
+        AssignedLawyerId: 1,
+        CurrentStage: 'ابتدائي',
+        FilingDate: '2026-07-15',
+        Status: 'متداولة',
+        Category: 'مدني',
+        Opponent: 'شركة الصرف الصحي',
+        Plaintiff: 'شركة الصرف الصحي بالإسكندرية',
+        Defendant: 'شركة المقاولات',
+        CourtName: 'مجمع محاكم المنشية الابتدائية',
+        CircuitName: 'الدور الثاني — دائرة 3 عمالي',
+        Description: 'إعلان الخصم بالصحيفة وتحديد موعد لتقديم الطلبات العارضة.',
+        LatestSessionAction: 'تم التأجيل لجلسة 2026-09-01 لإعادة الإعلان',
+        ChildLevels: [
+          { StageType: 'appeal', TrackingCode: 'است-123-2026', LaunchDate: '2026-08-20', RequestedBy: 'الشركة (نحن)', CourtName: 'محكمة استئناف الإسكندرية', Status: 'open', LatestSessionAction: 'مقدم للمرافعة' }
+        ]
+      }
+    ];
+    currentFilteredCases = allCases;
+    renderCases(allCases);
+    updateStats(allCases);
+  }
+
+  // ============================================================
+  // Render Cases (عرض على الشاشة)
+  // ============================================================
+  function formatClaimValue(value) {
+    if (value === null || value === undefined || value === '' || value === 'null') return '—';
+    const num = Number(String(value).replace(/,/g, ''));
+    if (!isNaN(num) && String(value).trim() !== '') {
+      return num.toLocaleString('ar-EG') + ' ج.م';
+    }
+    return value;
+  }
+
+  function renderCases(cases) {
+    const tbody = document.getElementById('casesBody');
+    if (!tbody) return;
+
+    const totalPages = Math.ceil(cases.length / rowsPerPage) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const pageCases = cases.slice(startIndex, endIndex);
+
+    // Update Pagination UI
+    const prevBtn = document.getElementById('prevPageBtn');
+    const nextBtn = document.getElementById('nextPageBtn');
+    const indicator = document.getElementById('pageIndicator');
+    
+    if (indicator) indicator.textContent = `صفحة ${currentPage} من ${totalPages} (إجمالي ${cases.length})`;
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages;
+    
+    // Style disabled buttons
+    if (prevBtn) prevBtn.style.opacity = currentPage === 1 ? '0.5' : '1';
+    if (nextBtn) nextBtn.style.opacity = currentPage === totalPages ? '0.5' : '1';
+
+    if (pageCases.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:#94A3B8;">لا توجد قضايا</td></tr>`;
+      return;
+    }
+
+    let html = '';
+    
+    pageCases.forEach((c, index) => {
+      const parentId = c.Id;
+      const detailsId = `details-${parentId}`;
+      
+      const isClosed = c.Status === 'مغلقة' || c.Status === 'منتهية';
+      const isPending = c.Status === 'معلقة';
+      const statusClass = isClosed ? 'badge-closed' : (isPending ? 'badge-pending' : 'badge-open');
+      const displayStatus = isClosed ? 'منتهية' : (isPending ? 'معلقة' : 'متداولة');
+      const statusBadgeStyle = isPending ? 'style="background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;"' : '';
+      const filingDate = c.FilingDate ? (() => { const m=String(c.FilingDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m?`${m[3]}/${m[2]}/${m[1]}`:'—'; })() : '—';
+      
+      const compName = 'شركة الصرف الصحي بالإسكندرية';
+      let plaintiff = c.Plaintiff;
+      let defendant = c.Defendant;
+      if (!plaintiff && !defendant) {
+        plaintiff = (c.FiledBy === 'الخصم' || c.FirstPartyType === 'الخصم') ? (c.Opponent || 'الخصم') : compName;
+        defendant = (c.FiledBy === 'الخصم' || c.FirstPartyType === 'الخصم') ? compName : (c.Opponent || 'الخصم');
+      } else if (!plaintiff) {
+        plaintiff = compName;
+      } else if (!defendant) {
+        defendant = c.Opponent || 'الخصم';
+      }
+
+      let resultDisplay = '—';
+      const agginstVal = (c.Agginst || '').toString().trim();
+      if (agginstVal.includes('شرك')) {
+        resultDisplay = `<span style="background:#DCFCE7;color:#047857;border:1px solid #6EE7B7;font-weight:700;font-size:10px;padding:3px 7px;border-radius:6px;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;"><span style="background:#047857;color:white;border-radius:50%;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;">✓</span>${agginstVal}</span>`;
+      } else if (agginstVal.includes('خصم')) {
+        resultDisplay = `<span style="background:#FEE2E2;color:#b91c1c;border:1px solid #FCA5A5;font-weight:700;font-size:10px;padding:3px 7px;border-radius:6px;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;"><span style="background:#b91c1c;color:white;border-radius:50%;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;">✗</span>${agginstVal}</span>`;
+      } else if (agginstVal) {
+        resultDisplay = `<span style="font-size:10px;color:#64748B;">${agginstVal}</span>`;
+      }
+
+      const parentStage = normalizeStageLabel(c.CurrentStage);
+      const childLevels = (c.ChildLevels || []).filter(l => {
+        const t = (l.StageType || '').toLowerCase();
+        return t === 'appeal' || t === 'cassation' || t === 'eshkal' || t === 'eshkal_tanfeeth' || t === 'execution' || t === 'iltimas';
+      });
+      const hasChildren = childLevels.length > 0;
+      
+      const arrowIcon = hasChildren ? 
+        `<span class="toggle-arrow" onclick="toggleChildRows('${detailsId}')" style="cursor:pointer;font-size:13px;margin-right:6px;display:inline-block;transition:transform 0.2s;color:#1a3a5c;background:#EEF2FF;padding:2px 10px;border-radius:4px;border:1px solid #D6E0F0;">▶</span>` : '';
+      
+      html += `
+        <tr class="main-row parent-row" style="border-right: 3px solid #1a3a5c; background: #FFFFFF;" data-parent="${detailsId}">
+          <td style="word-break:break-word;">
+            <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+              <span class="case-num">📂 ${c.CaseNumber || '—'}</span>
+              ${arrowIcon}
+            </div>
+            ${hasChildren ? `<div style="font-size:10px;color:#D4AF37;font-weight:700;margin-top:2px;">${childLevels.length} درجة تقاضي</div>` : ''}
+          </td>
+          <td style="word-break:break-word;">
+            <div style="font-weight:700;color:#1A2332;">${c.Subject || '—'}</div>
+            <div style="font-size:11px;color:#94A3B8;">${c.Category || '—'}</div>
+          </td>
+          <td style="word-break:break-word;">
+            <div><strong style="color:#1a3a5c;">${parentStage}</strong></div>
+          </td>
+          <td style="word-break:break-word;font-size:12px;">${c.LawyerName || '—'}</td>
+          <td style="word-break:break-word;font-size:12px;">${c.CourtName || '—'}</td>
+          <td style="word-break:break-word;font-size:11px;">${c.CircuitName || '—'}</td>
+          <td style="word-break:break-word;font-weight:600;color:#047857;">
+            ${renderPartyCell(plaintiff, 'المدعى')}
+          </td>
+          <td style="word-break:break-word;font-weight:600;color:#b91c1c;">
+            ${renderPartyCell(defendant, 'المدعى عليه')}
+          </td>
+          <td><span class="badge ${statusClass}" ${statusBadgeStyle}>${displayStatus}</span></td>
+          <td style="word-break:break-word;text-align:center;">
+            ${resultDisplay}
+          </td>
+          <td class="actions-cell">
+            <div class="actions-cell-inner">
+              <div style="display:flex;gap:3px;align-items:center;justify-content:center;flex-wrap:wrap;">
+                <button class="btn-icon view" style="width:26px;height:26px;font-size:13px;" onclick="toggleDetails('${detailsId}')" title="عرض التفاصيل">👁️</button>
+                ${(typeof PermGuard === 'undefined' || PermGuard.canEdit('cases')) ? `<a href="new_case.html?id=${c.Id}" class="btn-icon edit" style="width:26px;height:26px;font-size:13px;" title="تعديل">✏️</a>` : ''}
+                ${(typeof PermGuard === 'undefined' || PermGuard.canDelete('cases')) ? `<button class="btn-icon delete" style="width:26px;height:26px;font-size:13px;" onclick="openDeleteModal(${c.Id}, '${c.CaseNumber}')" title="حذف">🗑️</button>` : ''}
+                <button class="btn-icon sessions" style="width:26px;height:26px;font-size:13px;color:#1a5a8a;" onclick="openCaseSessionsModal(${c.Id}, '${c.CaseNumber}')" title="عرض الجلسات">📅</button>
+                <button class="btn-icon" style="width:26px;height:26px;font-size:13px;color:#7C3AED;background:#EDE9FE;border:1px solid #DDD6FE;border-radius:6px;" onclick="openAttachmentsModal(${c.Id}, '${c.CaseNumber}')" title="عرض المرفقات">📎</button>
+                ${!isClosed ? `<button class="btn-icon close-case" style="width:26px;height:26px;font-size:13px;color:#047857;" onclick="openCloseCaseModal(${c.Id}, '${c.CaseNumber}')" title="إنهاء القضية">✅</button>` : ''}
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;justify-content:center;">
+                <button style="padding:3px 8px;font-size:10px;font-weight:700;background:#E8F4FD;color:#1a5a8a;border:1px solid #93C5FD;border-radius:5px;cursor:pointer;white-space:nowrap;" onclick="goCreateLitigationLevel(${c.Id}, '${c.CaseNumber}', '${(c.Subject||'').replace(/'/g,"'")}', '${(c.Plaintiff||'').replace(/'/g,"'")}', '${(c.Defendant||'').replace(/'/g,"'")}')" title="إنشاء درجة تقاضي">⚖️ إنشاء درجة</button>
+                <button style="padding:3px 8px;font-size:10px;font-weight:700;background:#ECFDF5;color:#047857;border:1px solid #86EFAC;border-radius:5px;cursor:pointer;white-space:nowrap;" onclick="goCreateSession(${c.Id}, '${c.CaseNumber}', '${(c.Subject||'').replace(/'/g,"'")}', '${(c.CurrentStage||'ابتدائي').replace(/'/g,"'")}', '${(c.Opponent||'').replace(/'/g,"'")}')" title="إنشاء جلسة">📋 إنشاء جلسة</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+      
+      if (hasChildren) {
+        html += `
+          <tr class="child-rows-container" id="child-container-${detailsId}" style="display:none;">
+            <td colspan="11" style="padding: 0; background: transparent;">
+              <div style="background: #FFFFFF; border-radius: 8px; margin: 4px 8px 8px 8px; border: 1px solid #D4AF37; overflow: hidden; box-shadow: 0 2px 8px rgba(212,175,55,0.1);">
+                <div style="background: #FDF5E8; padding: 8px 18px; border-bottom: 2px solid #D4AF37; display: flex; align-items: center; gap: 12px;">
+                  <span style="font-size:14px;font-weight:800;color:#1a3a5c;">📋 درجات التقاضي</span>
+                  <span style="font-size:12px;color:#94A3B8;font-weight:600;">للقضية رقم ${c.CaseNumber}</span>
+                  <span style="font-size:12px;color:#D4AF37;font-weight:700;background:#FFFFFF;padding:0 14px;border-radius:12px;border:1px solid #D4AF37;">${childLevels.length} درجة</span>
+                </div>
+                <div style="padding: 0;">
+        `;
+        
+        childLevels.forEach((child, childIndex) => {
+          let childStageText = 'استئناف';
+          let borderColor = '#D4AF37';
+          let labelPrefix = '📄 رقم الاستئناف';
+          const st = (child.StageType || '').toLowerCase();
+          if (st === 'appeal') {
+            childStageText = 'استئناف';
+            borderColor = '#D4AF37';
+            labelPrefix = '📄 رقم الاستئناف';
+          } else if (st === 'cassation') {
+            childStageText = 'نقض';
+            borderColor = '#B45309';
+            labelPrefix = '📄 رقم النقض';
+          } else if (st === 'eshkal') {
+            childStageText = 'إشكال';
+            borderColor = '#8B5CF6';
+            labelPrefix = '📄 رقم الإشكال';
+          } else if (st === 'eshkal_tanfeeth' || st === 'execution') {
+            childStageText = 'إشكال في التنفيذ';
+            borderColor = '#EC4899';
+            labelPrefix = '📄 رقم إشكال التنفيذ';
+          } else if (st === 'iltimas') {
+            childStageText = 'التماس إعادة النظر';
+            borderColor = '#10B981';
+            labelPrefix = '📄 رقم الالتماس';
+          }
+          const requestedBy = child.RequestedBy || '—';
+          const requestedByDisplay = requestedBy === 'الشركة (نحن)' ? '🏢 الشركة' : 
+                                    requestedBy === 'الخصم' ? '👤 الخصم' : requestedBy;
+          const bgColor = childIndex % 2 === 0 ? '#FFFFFF' : '#FAFBFD';
+          const childPlaintiff = child.Plaintiff || child.CasePlaintiff || '—';
+          const childDefendant = child.Defendant || child.CaseDefendant || '—';
+          const childSubject = child.Subject || child.LitigationSubject || child.CaseName || '—';
+          const childSubjectSafe = childSubject.replace(/'/g, '\u2019').replace(/"/g, ' ');
+          const childCourt = child.CourtName || '—';
+          const childCircuit = child.CircuitName || '—';
+          const childId = child.Id || '';
+          const childCaseIdForSession = child.CaseId || child.ParentId || 0;
+          const childTrackingCode = child.TrackingCode || child.CaseNumber || '—';
+          
+          html += `
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:8px;padding:10px 18px;background:${bgColor};border-bottom:1px solid #F1F4F9;border-right:4px solid ${borderColor};">
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <span style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;">
+                  ${labelPrefix}
+                </span>
+                <span style="font-weight:700;color:#1a3a5c;font-size:13px;direction:ltr;background:#EEF2FF;padding:2px 8px;border-radius:4px;display:inline-block;width:fit-content;">
+                  ${childTrackingCode}
+                </span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <span style="font-size:10px;font-weight:700;color:#94A3B8;">📝 موضوع درجة التقاضي</span>
+                <span style="font-size:12px;color:#334155;font-weight:600;">${childSubject}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <span style="font-size:10px;font-weight:700;color:#94A3B8;">🏛️ المحكمة / الدائرة</span>
+                <span style="font-size:12px;color:#475569;font-weight:600;">${childCourt}</span>
+                <span style="font-size:11px;color:#64748B;">${childCircuit}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <span style="font-size:10px;font-weight:700;color:#047857;">👤 المدعى</span>
+                <span style="font-size:12px;color:#047857;font-weight:600;">${childPlaintiff}</span>
+                <span style="font-size:10px;font-weight:700;color:#b91c1c;margin-top:4px;">👤 المدعى عليه</span>
+                <span style="font-size:12px;color:#b91c1c;font-weight:600;">${childDefendant}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
+                <span style="font-size:10px;font-weight:700;color:#94A3B8;">الإجراءات</span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                  ${(childId && (typeof PermGuard === 'undefined' || PermGuard.canEdit('litigation-level'))) ? `<a href="litigation-level.html?editId=${childId}" title="تعديل" style="width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:#E8F0FE;color:#1a3a5c;border:1px solid #93C5FD;border-radius:6px;text-decoration:none;font-size:13px;">✏️</a>` : ''}
+                  ${(childId && (typeof PermGuard === 'undefined' || PermGuard.canDelete('litigation-level'))) ? `<button onclick="deleteLitigationLevel(${childId})" title="حذف" style="width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:#FEE2E2;color:#b91c1c;border:1px solid #FCA5A5;border-radius:6px;cursor:pointer;font-size:13px;">🗑️</button>` : ''}
+                  <button onclick="openChildSessionsModal(${child.LitigationLevelId || childId || 0}, '${childTrackingCode}')" title="عرض الجلسات" style="width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:#F0FDF4;color:#047857;border:1px solid #86EFAC;border-radius:6px;cursor:pointer;font-size:13px;">📅</button>
+                  <button onclick="goCreateSession(${childCaseIdForSession}, '${childTrackingCode}', '${childSubjectSafe}', '${childStageText}', '', ${child.LitigationLevelId || childId || 0})" title="إنشاء جلسة" style="width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:#ECFDF5;color:#065f46;border:1px solid #6EE7B7;border-radius:6px;cursor:pointer;font-size:13px;">➕</button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `
+                </div>
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+      
+      html += `
+        <tr class="details-row" id="${detailsId}">
+          <td colspan="11">
+            <div class="details-container" style="background:#F8FAFD;border:1px solid #CBD5E1;border-radius:10px;padding:16px;">
+              <div class="details-header" style="border-bottom:1px solid #E2E8F0;padding-bottom:10px;margin-bottom:14px;background:linear-gradient(135deg, #1a3a5c 0%, #1e4976 100%);border-radius:12px 12px 0 0;padding:14px 20px;">
+                <div class="title" style="font-size:16px;font-weight:800;color:#ffffff;">
+                  📋 تفاصيل القضية الشاملة
+                  <span class="case-badge" style="background:rgba(255,255,255,0.15);color:#F2DC8A;padding:3px 16px;border-radius:20px;font-size:13px;border:1px solid rgba(212,175,55,0.3);margin-right:8px;">${c.CaseNumber || '—'}</span>
+                </div>
+              </div>
+              <div class="case-detail-grid" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:14px;background:white;border:1px solid #D6E0F0;border-radius:0 0 12px 12px;padding:16px 20px;">
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">رقم القضية:</span>
+                  <div class="case-detail-value" style="color:#1a3a5c;font-weight:800;font-size:14px;">${c.CaseNumber || '—'}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">درجة التقاضي:</span>
+                  <div class="case-detail-value"><strong style="color:#1a3a5c;">${parentStage}</strong></div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">الحالة:</span>
+                  <div class="case-detail-value"><span class="badge ${statusClass}" ${statusBadgeStyle}>${displayStatus}</span></div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">المحامي المسؤول:</span>
+                  <div class="case-detail-value" style="font-weight:700;color:#0F172A;">${c.LawyerName || 'غير مسند'}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#047857;font-size:12px;">المدعى:</span>
+                  <div class="case-detail-value" style="font-weight:700;color:#047857;">${plaintiff}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#b91c1c;font-size:12px;">المدعى عليه:</span>
+                  <div class="case-detail-value" style="font-weight:700;color:#b91c1c;">${defendant}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">النتيجة لصالح:</span>
+                  <div class="case-detail-value" style="font-weight:700;">${resultDisplay}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">المحكمة:</span>
+                  <div class="case-detail-value">${c.CourtName || '—'}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">الدائرة:</span>
+                  <div class="case-detail-value">${c.CircuitName || '—'}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">تاريخ ادخال القضية:</span>
+                  <div class="case-detail-value">${filingDate}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">القيمة المادية للدعوى:</span>
+                  <div class="case-detail-value" style="color:#1a3a5c;font-weight:800;">${formatClaimValue(c.ClaimValue)}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">قيمة الحكم:</span>
+                  <div class="case-detail-value" style="color:#1a3a5c;font-weight:800;">${formatClaimValue(c.LawsuitExpenses)}</div>
+                </div>
+                <div class="case-detail-item">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">مصاريف الدعوة:</span>
+                  <div class="case-detail-value" style="color:#1a3a5c;font-weight:800;">${formatClaimValue(c.CaseExpenses)}</div>
+                </div>
+                <div class="case-detail-item" style="grid-column: span 3;">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">موضوع القضية:</span>
+                  <div class="case-detail-value" style="color:white;background:#1a3a5c;padding:8px 12px;border-radius:6px;border:1px solid #1a3a5c;font-weight:600;">${c.Subject || '—'}</div>
+                </div>
+                <div class="case-detail-item" style="grid-column: span 3;">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">ملخص القضية:</span>
+                  <div class="case-detail-value" style="color:#334155;background:white;padding:8px 12px;border-radius:6px;border:1px solid #E2E8F0;white-space:pre-wrap;">${c.Description || '—'}</div>
+                </div>
+                <div class="case-detail-item" style="grid-column: span 3;">
+                  <span class="case-detail-label" style="font-weight:700;color:#64748B;font-size:12px;">الملاحظات:</span>
+                  <div class="case-detail-value" style="color:#334155;background:white;padding:8px 12px;border-radius:6px;border:1px solid #E2E8F0;white-space:pre-wrap;">${c.Notes || '—'}</div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  // ============================================================
+  // Toggle Functions
+  // ============================================================
+  function toggleOpponentGroup(event, popupId) {
+    event.stopPropagation();
+    const popup = document.getElementById(popupId);
+    if (!popup) return;
+    const isOpen = popup.classList.contains('show');
+    document.querySelectorAll('.opponent-group-popup.show').forEach(p => {
+      if (p !== popup) p.classList.remove('show');
+    });
+    popup.classList.toggle('show', !isOpen);
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.opponent-group-wrap')) {
+      document.querySelectorAll('.opponent-group-popup.show').forEach(p => p.classList.remove('show'));
+    }
+  });
+
+  function toggleChildRows(parentId) {
+    const container = document.getElementById(`child-container-${parentId}`);
+    const arrow = document.querySelector(`[data-parent="${parentId}"] .toggle-arrow`);
+    if (!container || !arrow) return;
+    if (container.style.display === 'none' || container.style.display === '') {
+      container.style.display = 'table-row';
+      arrow.textContent = '▼';
+      arrow.style.color = '#D4AF37';
+      arrow.style.background = '#FDF5E8';
+      arrow.style.borderColor = '#D4AF37';
+    } else {
+      container.style.display = 'none';
+      arrow.textContent = '▶';
+      arrow.style.color = '#1a3a5c';
+      arrow.style.background = '#EEF2FF';
+      arrow.style.borderColor = '#D6E0F0';
+    }
+  }
+
+  function toggleDetails(id) {
+    const dr = document.getElementById(id);
+    if (dr) {
+      if (dr.style.display === 'table-row') {
+        dr.style.display = 'none';
+      } else {
+        document.querySelectorAll('.details-row').forEach(r => r.style.display = 'none');
+        dr.style.display = 'table-row';
+        setTimeout(() => dr.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+      }
+    }
+  }
+
+  // ============================================================
+  // Update Stats
+  // ============================================================
+  function updateStats(cases) {
+    const total = cases.length;
+    const open = cases.filter(c => c.Status === 'متداولة' || c.Status === 'مفتوحة').length;
+    const closed = cases.filter(c => c.Status === 'منتهية' || c.Status === 'مغلقة').length;
+    const pending = cases.filter(c => c.Status === 'معلقة').length;
+    const civil = cases.filter(c => c.Category === 'مدني').length;
+    const labor = cases.filter(c => c.Category === 'عمالي').length;
+
+    document.getElementById('totalCases').textContent = total;
+    document.getElementById('openCases').textContent = open;
+    document.getElementById('closedCases').textContent = closed;
+    document.getElementById('pendingCases').textContent = pending;
+    document.getElementById('civilCases').textContent = civil;
+    document.getElementById('laborCases').textContent = labor;
+  }
+
+  // ============================================================
+  // Delete Case
+  // ============================================================
+  async function deleteCase(caseId) {
+    if (typeof PermGuard !== 'undefined' && !PermGuard.canDelete('cases')) {
+      PermGuard.denyAction('ليس لديك صلاحية حذف القضايا.');
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/cases/${caseId}`, { method: 'DELETE' });
+      const result = await response.json();
+      if (result.success) {
+        showToast('✅ تم حذف القضية بنجاح', 'success');
+        loadCases();
+      } else {
+        showToast('❌ ' + result.message, 'error');
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم', 'error');
+    }
+  }
+
+  // ============================================================
+  // Filter Cases
+  // ============================================================
+  // ===== مساعدات البحث (تطبيع الحروف العربية + أسماء درجات التقاضي) =====
+  const STAGE_LABELS = {
+    appeal: 'استئناف',
+    cassation: 'نقض',
+    eshkal: 'إشكال',
+    eshkal_tanfeeth: 'إشكال في التنفيذ',
+    execution: 'إشكال في التنفيذ',
+    iltimas: 'التماس إعادة النظر'
+  };
+  function normAr(str) {
+    return (str || '').toString().toLowerCase()
+      .replace(/[\u064B-\u0652\u0640]/g, '')   // حذف التشكيل والتطويل
+      .replace(/[إأآ]/g, 'ا')                    // إشكال = اشكال
+      .replace(/ى/g, 'ي')
+      .replace(/ة/g, 'ه');
+  }
+  function childStageLabel(l) {
+    return STAGE_LABELS[(l.StageType || '').toLowerCase()] || '';
+  }
+  function childMatchesSearch(l, s) {
+    return normAr(l.TrackingCode).includes(s) ||
+           normAr(l.StageNumber).includes(s) ||
+           normAr(childStageLabel(l)).includes(s);
+  }
+
+  function normalizeStageLabel(st) {
+    const s = String(st || '').toLowerCase().trim().replace(/-/g, '_');
+    if (!s || s === 'first_instance' || s === 'firstinstance' || s === 'initial' || s === 'primary' || s === 'ابتدائية') return 'ابتدائي';
+    return st;
+  }
+
+  function getFilteredCases({ search = '', stage = '', status = '', type = '', lawyerId = '' } = {}) {
+    let filtered = allCases;
+    if (search) {
+      const s = normAr(search.trim());
+      filtered = filtered.filter(c => {
+        // البحث في بيانات القضية الأساسية (بما فيها درجة التقاضي الحالية)
+        const mainMatch =
+          normAr(c.CaseNumber).includes(s) ||
+          normAr(c.Subject).includes(s) ||
+          normAr(c.LawyerName).includes(s) ||
+          normAr(c.Opponent).includes(s) ||
+          normAr(c.Description).includes(s) ||
+          normAr(c.Notes).includes(s) ||
+          normAr(normalizeStageLabel(c.CurrentStage)).includes(s);
+        if (mainMatch) return true;
+        // البحث في درجات التقاضي التابعة (رقمها + اسم الدرجة)
+        return (c.ChildLevels || []).some(l => childMatchesSearch(l, s));
+      });
+    }
+    if (stage) {
+      filtered = filtered.filter(c => {
+        if (normalizeStageLabel(c.CurrentStage) === stage) return true;
+        const childLevels = c.ChildLevels || [];
+        const stageMap = {
+          'استئناف': ['appeal'],
+          'نقض': ['cassation'],
+          'إشكال': ['eshkal'],
+          'اشكال': ['eshkal'],
+          'إشكال في التنفيذ': ['eshkal_tanfeeth', 'execution'],
+          'اشكال في التنفيذ': ['eshkal_tanfeeth', 'execution'],
+          'إشكال تنفيذي': ['eshkal_tanfeeth', 'execution'],
+          'التماس إعادة النظر': ['iltimas'],
+          'التماس': ['iltimas']
+        };
+        const targetTypes = stageMap[stage] || [stage.toLowerCase()];
+        return childLevels.some(l => targetTypes.includes((l.StageType || '').toLowerCase()));
+      });
+    }
+    if (status) filtered = filtered.filter(c => c.Status === status);
+    if (type) filtered = filtered.filter(c => c.Category === type);
+    if (lawyerId) {
+      filtered = filtered.filter(c =>
+        c.AssignedLawyerId == lawyerId || c.LawyerId == lawyerId
+      );
+    }
+    return filtered;
+  }
+
+  function changePage(direction) {
+    const totalPages = Math.ceil(currentFilteredCases.length / rowsPerPage) || 1;
+    let newPage = currentPage + direction;
+    if (newPage < 1) newPage = 1;
+    if (newPage > totalPages) newPage = totalPages;
+    currentPage = newPage;
+    renderCases(currentFilteredCases);
+  }
+
+  function filterCases() {
+    const search = document.getElementById('searchInput')?.value || '';
+    const stage = document.getElementById('filterDegree')?.value || '';
+    const status = document.getElementById('filterStatus')?.value || '';
+    const type = document.getElementById('filterType')?.value || '';
+    const lawyerId = document.getElementById('filterLawyer')?.value || '';
+
+    const filtered = getFilteredCases({ search, stage, status, type, lawyerId });
+    currentFilteredCases = filtered;
+    currentPage = 1; // Reset to page 1 on filter
+    renderCases(filtered);
+    updateStats(filtered);
+
+    // إذا كان البحث برقم درجة تقاضي، افتح الـ child rows تلقائياً
+    if (search) {
+      const s = normAr(search.trim());
+      setTimeout(() => {
+        filtered.forEach(c => {
+          const childLevels = (c.ChildLevels || []).filter(l => childMatchesSearch(l, s));
+          if (childLevels.length > 0) {
+            const detailsId = `details-${c.Id}`;
+            const container = document.getElementById(`child-container-${detailsId}`);
+            const arrow = document.querySelector(`[data-parent="${detailsId}"] .toggle-arrow`);
+            if (container && container.style.display !== 'table-row') {
+              container.style.display = 'table-row';
+              if (arrow) {
+                arrow.textContent = '▼';
+                arrow.style.color = '#D4AF37';
+                arrow.style.background = '#FDF5E8';
+                arrow.style.borderColor = '#D4AF37';
+              }
+            }
+          }
+        });
+      }, 50);
+    }
+  }
+
+  // ============================================================
+  // Print Report
+  // ============================================================
+  function openPrintOptions() {
+    document.getElementById('printFilterDegree').value = document.getElementById('filterDegree')?.value || '';
+    document.getElementById('printFilterType').value = document.getElementById('filterType')?.value || '';
+    document.getElementById('printFilterStatus').value = document.getElementById('filterStatus')?.value || '';
+    document.getElementById('printFilterLawyer').value = document.getElementById('filterLawyer')?.value || '';
+    document.getElementById('printIncludeChildLevels').checked = true;
+    document.getElementById('printUseCurrentFilter').checked = true;
+    updatePrintCount();
+    document.getElementById('printModal').classList.add('show');
+  }
+
+  function closePrintModal() {
+    document.getElementById('printModal').classList.remove('show');
+  }
+
+  function updatePrintCount() {
+    const useCurrent = document.getElementById('printUseCurrentFilter')?.checked || false;
+    let count = 0;
+    
+    if (useCurrent) {
+      count = currentFilteredCases.length;
+    } else {
+      const stage = document.getElementById('printFilterDegree')?.value || '';
+      const type = document.getElementById('printFilterType')?.value || '';
+      const status = document.getElementById('printFilterStatus')?.value || '';
+      const lawyerId = document.getElementById('printFilterLawyer')?.value || '';
+      const search = document.getElementById('searchInput')?.value || '';
+      count = getFilteredCases({ search, stage, status, type, lawyerId }).length;
+    }
+    document.getElementById('printCountHint').textContent = `📊 عدد القضايا التي سيتم طباعتها: ${count}`;
+  }
+
+  document.addEventListener('change', function(e) {
+    if (['printFilterDegree', 'printFilterType', 'printFilterStatus', 'printFilterLawyer'].includes(e.target.id)) {
+      const useCurrentCb = document.getElementById('printUseCurrentFilter');
+      if (useCurrentCb) useCurrentCb.checked = false;
+      updatePrintCount();
+    } else if (e.target.id === 'printUseCurrentFilter') {
+      updatePrintCount();
+    }
+  });
+
+  function buildFilterSummary(stage, type, status, lawyerId) {
+    const parts = [];
+    parts.push(`الدرجة: ${stage || 'كل الدرجات'}`);
+    parts.push(`النوع: ${type || 'كل الأنواع'}`);
+    parts.push(`الحالة: ${status || 'كل الحالات'}`);
+    if (lawyerId) {
+      const lawyer = lawyersList.find(l => l.Id == lawyerId);
+      parts.push(`المحامي: ${lawyer ? lawyer.FullName : lawyerId}`);
+    } else {
+      parts.push(`المحامي: كل المحامين`);
+    }
+    return parts.join('   |   ');
+  }
+
+  // ============================================================
+  // Generate Print Report - أبيض وأسود بدون مسند
+  // ============================================================
+  function generatePrintReport() {
+    const useCurrent = document.getElementById('printUseCurrentFilter')?.checked || false;
+    const includeChildLevels = document.getElementById('printIncludeChildLevels')?.checked || false;
+    
+    let casesToPrint = [];
+    let filterSummary = '';
+    
+    if (useCurrent) {
+      casesToPrint = currentFilteredCases;
+      const stage = document.getElementById('filterDegree')?.value || '';
+      const type = document.getElementById('filterType')?.value || '';
+      const status = document.getElementById('filterStatus')?.value || '';
+      const lawyerId = document.getElementById('filterLawyer')?.value || '';
+      filterSummary = buildFilterSummary(stage, type, status, lawyerId);
+    } else {
+      const stage = document.getElementById('printFilterDegree')?.value || '';
+      const type = document.getElementById('printFilterType')?.value || '';
+      const status = document.getElementById('printFilterStatus')?.value || '';
+      const lawyerId = document.getElementById('printFilterLawyer')?.value || '';
+      const search = document.getElementById('searchInput')?.value || '';
+      casesToPrint = getFilteredCases({ search, stage, status, type, lawyerId });
+      filterSummary = buildFilterSummary(stage, type, status, lawyerId);
+    }
+    
+    const todayStr = (() => { const n=new Date(); return `${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`; })();
+    const filterLabel = useCurrent ? '(تطبيق الفلتر الحالي)' : '(تطبيق الفلاتر المحددة)';
+    
+    let rowsHtml = '';
+    if (casesToPrint.length === 0) {
+      rowsHtml = `<tr><td colspan="10" style="text-align:center;padding:20px;color:#000000;">لا توجد قضايا مطابقة</td></tr>`;
+    } else {
+      casesToPrint.forEach((c, i) => {
+        const filingDate = c.FilingDate ? (() => { const m=String(c.FilingDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m?`${m[3]}/${m[2]}/${m[1]}`:'—'; })() : '—';
+        const statusText = c.Status || '—';
+        const childLevels = (c.ChildLevels || []).filter(l => {
+          const t = (l.StageType || '').toLowerCase();
+          return t === 'appeal' || t === 'cassation' || t === 'eshkal' || t === 'eshkal_tanfeeth' || t === 'execution' || t === 'iltimas';
+        });
+        const hasChildren = childLevels.length > 0;
+        const parentStage = normalizeStageLabel(c.CurrentStage);
+        
+        // ===== الصف الرئيسي (القضية الأم) - خط غامق =====
+        rowsHtml += `
+          <tr class="parent-row">
+            <td style="font-weight:900;text-align:right;font-size:9.5px;">${c.CaseNumber || '—'}</td>
+            <td style="text-align:right;font-size:9px;font-weight:700;">${c.Subject || '—'}</td>
+            <td style="font-size:9px;font-weight:700;">${parentStage}</td>
+            <td style="font-size:9px;font-weight:600;">${c.LawyerName || 'غير مسند'}</td>
+            <td style="font-size:9px;text-align:right;">${c.Opponent || '—'}</td>
+            <td style="font-size:8.5px;">${c.CourtName || '—'}</td>
+            <td style="font-size:8.5px;">${c.CircuitName || '—'}</td>
+            <td style="font-size:9px;">${filingDate}</td>
+            <td style="font-size:9px;">${statusText}</td>
+            <td style="font-size:8px;text-align:right;max-width:60px;word-wrap:break-word;">${c.Description || c.Notes || '—'}</td>
+          </tr>
+        `;
+
+        // ===== درجات التقاضي تحت القضية الأم =====
+        if (hasChildren && includeChildLevels) {
+          childLevels.forEach((child) => {
+            const childDate = child.LaunchDate ? (() => { const m=String(child.LaunchDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m?`${m[3]}/${m[2]}/${m[1]}`:'—'; })() : '—';
+            let childStageText = 'استئناف';
+            const st = (child.StageType || '').toLowerCase();
+            if (st === 'appeal') childStageText = 'استئناف';
+            else if (st === 'cassation') childStageText = 'نقض';
+            else if (st === 'eshkal') childStageText = 'إشكال';
+            else if (st === 'eshkal_tanfeeth' || st === 'execution') childStageText = 'إشكال في التنفيذ';
+            else if (st === 'iltimas') childStageText = 'التماس إعادة النظر';
+            const requestedBy = child.RequestedBy || '—';
+            const childStatusText = child.Status === 'closed' ? 'مغلقة' : 'مفتوحة';
+            const subClass = 'sub-' + (st || 'appeal');
+            
+            rowsHtml += `
+              <tr class="sub-row ${subClass}">
+                <td style="padding-right:18px;text-align:right;font-weight:600;font-size:8px;">└─ ${child.TrackingCode || child.CaseNumber || '—'}</td>
+                <td style="text-align:right;font-size:7.5px;">${childStageText}</td>
+                <td style="font-size:7.5px;">${childStageText}</td>
+                <td style="font-size:7.5px;">${child.LawyerName || '—'}</td>
+                <td style="font-size:7.5px;text-align:right;">${requestedBy}</td>
+                <td style="font-size:7.5px;">${child.CourtName || '—'}</td>
+                <td style="font-size:7.5px;">${child.CircuitName || '—'}</td>
+                <td style="font-size:7.5px;">${childDate}</td>
+                <td style="font-size:7.5px;">${childStatusText}</td>
+                <td style="font-size:7px;text-align:right;max-width:50px;word-wrap:break-word;">${child.Notes || '—'}</td>
+              </tr>
+            `;
+          });
+        }
+
+        // ===== فاصل بين القضايا =====
+        if (i < casesToPrint.length - 1) {
+          rowsHtml += `
+            <tr class="case-divider">
+              <td colspan="10"></td>
+            </tr>
+          `;
+        }
+      });
+    }
+
+    const reportHtml = `
+      <div class="print-sheet">
+        <div class="print-header">
+          <div>
+            <div class="print-title-ar">شركة الصرف الصحى بالإسكندرية</div>
+            <div class="print-sub-ar">الإدارة العامة للشئون القانونية</div>
+          </div>
+          <div style="text-align:left;">
+            <div class="print-title-en">Alexandria Sanitary Drainage Company</div>
+            <div class="print-sub-en">Legal Affairs Department</div>
+          </div>
+        </div>
+        
+        <div class="print-report-title">تقرير القضايا المفصل</div>
+        
+        <div class="print-meta">
+          <span>تاريخ الطباعة: ${todayStr}</span>
+          <span>${filterSummary} ${filterLabel}</span>
+          <span>عدد القضايا: ${casesToPrint.length}</span>
+        </div>
+        
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th style="width:10%;">رقم القضية</th>
+              <th style="width:12%;">موضوع القضية</th>
+              <th style="width:8%;">درجة التقاضي</th>
+              <th style="width:10%;">المحامي</th>
+              <th style="width:10%;">الخصم</th>
+              <th style="width:12%;">المحكمة</th>
+              <th style="width:10%;">الدائرة</th>
+              <th style="width:9%;">تاريخ الجلسة</th>
+              <th style="width:8%;">الحالة</th>
+              <th style="width:11%;">الملاحظات</th>
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+        
+        <div class="print-footer">
+          هذا التقرير صادر عن نظام إدارة الشؤون القانونية — شركة الصرف الصحي بالإسكندرية
+        </div>
+      </div>
+    `;
+
+    document.getElementById('printReportArea').innerHTML = reportHtml;
+    closePrintModal();
+    setTimeout(() => window.print(), 300);
+  }
+
+  // ============================================================
+  // Navigation helpers: إنشاء درجة تقاضي / إنشاء جلسة
+  // ============================================================
+  function goCreateLitigationLevel(caseId, caseNumber, subject, plaintiff, defendant) {
+    const params = new URLSearchParams();
+    params.set('prefill_caseId', caseId);
+    params.set('prefill_caseNumber', caseNumber);
+    params.set('prefill_subject', subject);
+    params.set('prefill_plaintiff', plaintiff);
+    params.set('prefill_defendant', defendant);
+    window.location.href = 'litigation-level.html?' + params.toString();
+  }
+
+  function goCreateSession(caseId, caseNumber, subject, stage, opponent, litigationLevelId) {
+    const params = new URLSearchParams();
+    if (caseId) params.set('prefill_caseId', caseId);
+    if (caseNumber) params.set('prefill_caseNumber', caseNumber);
+    if (subject) params.set('prefill_subject', subject);
+    if (stage) params.set('prefill_stage', stage);
+    if (opponent) params.set('prefill_opponent', opponent);
+    if (litigationLevelId) params.set('prefill_litigationLevelId', litigationLevelId);
+    window.location.href = 'sessions.html?' + params.toString();
+  }
+
+  // ============================================================
+  // Delete litigation level from Cases page
+  // ============================================================
+  async function deleteLitigationLevel(levelId) {
+    if (typeof PermGuard !== 'undefined' && !PermGuard.canDelete('litigation-level')) {
+      PermGuard.denyAction('ليس لديك صلاحية حذف درجات التقاضي.');
+      return;
+    }
+    if (!confirm('هل أنت متأكد من حذف درجة التقاضي هذه؟')) return;
+    try {
+      const res = await fetch(`${API_URL}/litigation-levels/${levelId}`, { method: 'DELETE' });
+      const result = await res.json();
+      if (result.success) {
+        showToast('✅ تم حذف درجة التقاضي بنجاح', 'success');
+        loadCases();
+      } else {
+        showToast('❌ ' + (result.message || 'فشل الحذف'), 'error');
+      }
+    } catch (e) {
+      showToast('❌ خطأ في الاتصال بالخادم', 'error');
+    }
+  }
+
+  // ============================================================
+  // جلسات درجة التقاضي (Child Sessions Modal)
+  // ============================================================
+  let childSessionsModal = null;
+
+  function openChildSessionsModal(litigationLevelId, trackingCode) {
+    // Reuse the existing caseSessionsModal with litigation level sessions
+    document.getElementById('sessionsModalCaseNumber').textContent = trackingCode ? `(${trackingCode})` : '';
+    const body = document.getElementById('sessionsModalBody');
+    body.innerHTML = `<div style="text-align:center;padding:30px;color:#94A3B8;">جارِ التحميل...</div>`;
+    document.getElementById('caseSessionsModal').classList.add('show');
+
+    if (!litigationLevelId) {
+      body.innerHTML = `<div style="text-align:center;padding:30px;color:#94A3B8;">لا يوجد معرف لدرجة التقاضي</div>`;
+      return;
+    }
+
+    fetch(`${API_URL}/sessions/details?litigationLevelId=${litigationLevelId}`)
+      .then(r => r.json())
+      .then(json => {
+        if (!json.success || !json.data || json.data.length === 0) {
+          body.innerHTML = `<div style="text-align:center;padding:30px;color:#94A3B8;">لا توجد جلسات مسجلة لهذه الدرجة</div>`;
+          return;
+        }
+        const sessions = json.data;
+        body.innerHTML = sessions.map(s => {
+          const isClosed = s.IsClosed === true || s.IsClosed === 1 || s.Status === 'مغلقة' || s.Status === 'منتهية';
+          const statusColor = isClosed ? '#059669' : '#D97706';
+          const statusBg = isClosed ? '#ECFDF5' : '#FEF3C7';
+          const statusText = isClosed ? 'منتهية' : (s.Status || 'متداولة');
+          const dateText = formatCaseDate(s.SessionDate);
+          const timeText = s.SessionTime || '';
+          const notesOrSummary = s.SessionNotes || s.Notes || s.Action || '—';
+
+          return `
+            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:14px 16px;margin-bottom:10px;background:#FAFBFD;border-right:4px solid ${statusColor};">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                <div style="font-weight:800;color:#1a3a5c;font-size:14px;">
+                  📅 ${dateText} ${timeText ? `— ${timeText}` : ''}
+                </div>
+                <span style="background:${statusBg};color:${statusColor};font-weight:700;font-size:12px;padding:3px 12px;border-radius:12px;border:1px solid ${statusColor}55;">${statusText}</span>
+              </div>
+              <div style="font-size:12px;color:#64748B;margin-top:6px;">
+                <strong style="color:#475569;">درجة التقاضي:</strong> ${s.Stage || 'ابتدائي'}
+                ${s.CourtName ? ` &nbsp;|&nbsp; <strong style="color:#475569;">المحكمة:</strong> ${s.CourtName}` : ''}
+                ${s.CircuitName ? ` &nbsp;|&nbsp; <strong style="color:#475569;">الدائرة:</strong> ${s.CircuitName}` : ''}
+              </div>
+              ${s.Result ? `<div style="font-size:12px;color:#475569;margin-top:6px;display:flex;align-items:center;gap:6px;"><strong>النتيجة لصالح:</strong> ${renderResultBadge(s.Result)}</div>` : ''}
+              ${s.AppealAction ? `<div style="font-size:12px;color:#991B1B;margin-top:4px;"><strong>الإجراء المتخذ:</strong> ${s.AppealAction}</div>` : ''}
+              <div style="font-size:12px;color:#1E293B;margin-top:6px;background:#FFFFFF;border:1px solid #EEF2F7;border-radius:6px;padding:8px 10px;">
+                <strong style="color:#475569;">موضوع الجلسة:</strong> ${notesOrSummary}
+              </div>
+            </div>
+          `;
+        }).join('');
+      })
+      .catch(() => {
+        body.innerHTML = `<div style="text-align:center;padding:30px;color:#EF4444;">❌ حدث خطأ أثناء تحميل الجلسات</div>`;
+      });
+  }
+
+  // ============================================================
+  // Init
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof PermGuard !== 'undefined' && !PermGuard.blockPageIfNoAccess('cases')) return;
+    if (typeof initSidebar === 'function') initSidebar('cases');
+
+    if (typeof PermGuard !== 'undefined' && !PermGuard.canAdd('cases')) {
+      const addBtn = document.getElementById('addNewCaseBtn');
+      if (addBtn) addBtn.style.display = 'none';
+    }
+
+    loadLawyers().then(() => {
+      loadCases();
+    });
+    
+    document.getElementById('searchInput')?.addEventListener('input', filterCases);
+    document.getElementById('filterDegree')?.addEventListener('change', filterCases);
+    document.getElementById('filterStatus')?.addEventListener('change', filterCases);
+    document.getElementById('filterType')?.addEventListener('change', filterCases);
+    document.getElementById('filterLawyer')?.addEventListener('change', filterCases);
+
+    // Close attachments modal on overlay click
+    document.getElementById('attachmentsModal')?.addEventListener('click', function(e) {
+      if (e.target === this) closeAttachmentsModal();
+    });
+  });
+
+  // ============================================================
+  // Attachments Modal
+  // ============================================================
+  async function openAttachmentsModal(caseId, caseNumber) {
+    document.getElementById('attachmentsModalTitle').textContent = `مرفقات القضية رقم ${caseNumber}`;
+    const body = document.getElementById('attachmentsModalBody');
+    body.innerHTML = `<div style="text-align:center;padding:30px;color:#94A3B8;">⏳ جارِ التحميل...</div>`;
+    document.getElementById('attachmentsModal').classList.add('show');
+
+    try {
+      const res = await fetch(`${API_URL}/attachments?caseId=${caseId}`);
+      const result = await res.json();
+      const attachments = result.data || result.attachments || [];
+
+      if (!attachments.length) {
+        body.innerHTML = `<div style="text-align:center;padding:40px;color:#94A3B8;font-size:14px;">📭 لا توجد مرفقات لهذه القضية</div>`;
+        return;
+      }
+
+      body.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;padding:4px;">
+          ${attachments.map((att, i) => {
+            const isImage = (att.FileType || '').startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(att.FileName || '');
+            const src = att.FilePath || '';
+            const name = att.FileName || `مرفق ${i+1}`;
+            const imgHtml = isImage && src
+              ? `<img src="${src}" alt="${name}" style="width:100%;height:130px;object-fit:cover;border-radius:6px;border:1px solid #E4EAF2;cursor:pointer;" onclick="window.open(this.src,'_blank')" />`
+              : `<div style="width:100%;height:130px;display:flex;align-items:center;justify-content:center;background:#F8FAFD;border-radius:6px;border:1px solid #E4EAF2;font-size:40px;">📄</div>`;
+            return `
+              <div style="background:white;border:1.5px solid #E4EAF2;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                ${imgHtml}
+                <div style="padding:8px 10px;">
+                  <div style="font-size:11px;font-weight:700;color:#334155;word-break:break-word;margin-bottom:6px;">${name}</div>
+                  <div style="display:flex;gap:6px;">
+                    <button onclick="printAttachment('${src}','${name}')" style="flex:1;padding:4px;background:#EEF2FF;color:#3730A3;border:none;border-radius:5px;cursor:pointer;font-size:10px;font-weight:700;font-family:Cairo,sans-serif;">🖨️ طباعة</button>
+                    <a href="${src}" download="${name}" style="flex:1;padding:4px;background:#ECFDF5;color:#047857;border:none;border-radius:5px;cursor:pointer;font-size:10px;font-weight:700;font-family:Cairo,sans-serif;text-decoration:none;text-align:center;display:inline-block;">📥 تحميل</a>
+                  </div>
+                </div>
+              </div>`;
+          }).join('')}
+        </div>`;
+    } catch (err) {
+      body.innerHTML = `<div style="text-align:center;padding:30px;color:#EF4444;">❌ خطأ في تحميل المرفقات</div>`;
+    }
+  }
+
+  function closeAttachmentsModal() {
+    document.getElementById('attachmentsModal').classList.remove('show');
+  }
+
+  function printAttachment(src, name) {
+    if (!src) return;
+    const win = window.open('', '_blank');
+    if (!win) { showToast('يرجى السماح بالنوافذ المنبثقة للطباعة', 'warning'); return; }
+    const isImage = /^data:image|\.(?:jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(src);
+    if (isImage) {
+      win.document.write(`<!DOCTYPE html><html><head><title>${name}</title><style>body{margin:0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;background:#fff;}img{max-width:100%;height:auto;display:block;margin:auto;}</style></head><body><img src="${src}" onload="window.print();window.close();" /></body></html>`);
+    } else {
+      win.document.write(`<!DOCTYPE html><html><head><title>${name}</title></head><body><iframe src="${src}" style="width:100%;height:100vh;border:none;"></iframe><script>setTimeout(()=>{window.print();window.close();},1000);<\/script></body></html>`);
+    }
+    win.document.close();
+  }
+
+</script>
+</body>
+</html>

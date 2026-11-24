@@ -1,0 +1,3441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التقارير - الشركة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="sidebar.js"></script>
+<script src="activity-logger.js"></script>
+<link rel="stylesheet" href="css/sessions.css">
+<style>
+    :root {
+        --navy-900: #0a2740;
+        --navy-800: #0f3a5c;
+        --navy-700: #14497a;
+        --blue-600: #1a5a8a;
+        --blue-500: #2a7ca8;
+        --blue-100: #eaf3fb;
+        --blue-50: #f5f9fd;
+        --gold-600: #b8912e;
+        --gold-100: #faf3e2;
+        --ink: #16232f;
+        --muted: #5b7d9c;
+        --muted-light: #8aa3ba;
+        --border: #e2eaf2;
+        --border-soft: #edf3f9;
+        --success: #059669;
+        --success-dark: #047857;
+        --danger: #b91c1c;
+        --danger-bg: #fef2f2;
+        --radius-xl: 20px;
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --radius-sm: 8px;
+        --shadow-xs: 0 1px 3px rgba(15,58,92,.06);
+        --shadow-sm: 0 4px 14px rgba(15,58,92,.07);
+        --shadow-md: 0 10px 28px rgba(15,58,92,.11);
+        --shadow-lg: 0 20px 48px rgba(10,39,64,.16);
+        --ease: cubic-bezier(.22,1,.36,1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        background: linear-gradient(180deg, #f4f8fc 0%, #eef4fa 100%);
+    }
+
+    /* ===== أدوات عامة (لا تُطبع) ===== */
+    .no-print { }
+
+    .toolbar-note {
+        font-size: 0.82rem;
+        color: var(--muted);
+        font-weight: 600;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .control-btn {
+        background: linear-gradient(135deg, var(--blue-600), var(--navy-800));
+        color: #fff;
+        border: none;
+        border-radius: 40px;
+        padding: 11px 24px;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+        white-space: nowrap;
+        box-shadow: 0 6px 16px rgba(15,58,92,.22);
+    }
+    .control-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(15,58,92,.28); }
+    .control-btn:active { transform: translateY(0); }
+    .control-btn.secondary { background: linear-gradient(135deg, var(--blue-500), var(--blue-600)); box-shadow: 0 6px 16px rgba(42,124,168,.22); }
+    .control-btn.success { background: linear-gradient(135deg, #10b981, var(--success-dark)); box-shadow: 0 6px 16px rgba(5,150,105,.22); }
+    .control-btn.ghost { background: #fff; color: var(--blue-600); box-shadow: none; border: 1.5px solid var(--border); }
+    .control-btn.ghost:hover { background: var(--blue-50); border-color: #a9c8e0; box-shadow: 0 4px 12px rgba(15,58,92,.08); }
+    .control-btn.danger-outline { background: #fff; color: var(--danger); border: 1.5px solid #f3c6c6; box-shadow: none; }
+    .control-btn.danger-outline:hover { background: var(--danger-bg); }
+    .control-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ===== رأس الصفحة ===== */
+    .page-header-simple {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        padding-bottom: 18px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid var(--border-soft);
+    }
+    .page-header-simple h1 {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: var(--navy-900);
+        margin: 0;
+        letter-spacing: -.2px;
+    }
+    .date-badge {
+        background: var(--blue-100);
+        color: var(--blue-600);
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        border-radius: 40px;
+        border: 1px solid #d7e8f6;
+    }
+
+    /* ===== شريط التبويب الرئيسي ===== */
+    .main-tabs {
+        display: flex;
+        gap: 8px;
+        margin-top: 20px;
+        margin-bottom: 6px;
+        background: #fff;
+        padding: 6px;
+        border-radius: 40px;
+        border: 1px solid var(--border);
+        width: fit-content;
+        box-shadow: var(--shadow-xs);
+    }
+    .main-tab-btn {
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 10px 22px;
+        border-radius: 40px;
+        cursor: pointer;
+        transition: all .2s var(--ease);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+    .main-tab-btn:hover { color: var(--blue-600); background: var(--blue-50); }
+    .main-tab-btn.active {
+        background: linear-gradient(135deg, var(--blue-600), var(--navy-800));
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(15,58,92,.22);
+    }
+    .main-tab-btn .tab-count {
+        background: rgba(255,255,255,.25);
+        border-radius: 20px;
+        font-size: .72rem;
+        padding: 1px 8px;
+        font-weight: 800;
+    }
+    .main-tab-btn:not(.active) .tab-count { background: var(--blue-100); color: var(--blue-600); }
+
+    .view-fade { animation: viewFadeIn .32s var(--ease); }
+    @keyframes viewFadeIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== شبكة كروت التقارير ===== */
+    .reports-hub-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 26px;
+    }
+    @media (max-width: 900px) {
+        .reports-hub-grid {
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        }
+    }
+
+    .report-card {
+        position: relative;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px 22px 22px;
+        cursor: pointer;
+        transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
+        box-shadow: var(--shadow-sm);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        overflow: hidden;
+    }
+    .report-card .rc-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+    }
+    .report-card::before {
+        content: '';
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--gold-600), var(--blue-600), var(--navy-900));
+        opacity: 0;
+        transition: opacity .22s var(--ease);
+    }
+    .report-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+        border-color: #b9d3e8;
+    }
+    .report-card:hover::before { opacity: 1; }
+    .report-card .rc-icon {
+        width: 54px;
+        height: 54px;
+        flex-shrink: 0;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--blue-500), var(--navy-800));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(15,58,92,.22);
+    }
+    .report-card .rc-title {
+        font-weight: 800;
+        font-size: 1.02rem;
+        color: var(--navy-900);
+        line-height: 1.5;
+        text-align: right;
+    }
+    .report-card .rc-desc {
+        font-size: 0.83rem;
+        color: var(--muted);
+        font-weight: 600;
+        line-height: 1.7;
+        text-align: center;
+    }
+    .report-card .rc-arrow {
+        margin-top: auto;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--blue-600);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        opacity: 0;
+        transform: translateX(6px);
+        transition: all .22s var(--ease);
+    }
+    .report-card:hover .rc-arrow { opacity: 1; transform: translateX(0); }
+    .report-card.rc-external {
+        background: var(--blue-50);
+        border: 1.5px dashed #a9c8e0;
+    }
+    .report-card.rc-external::before { display: none; }
+
+    /* ===== لوحة الفلاتر ===== */
+    .report-filter-panel {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 26px 28px;
+        margin-top: 24px;
+        box-shadow: var(--shadow-sm);
+    }
+    .rfp-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border-soft);
+        flex-wrap: wrap;
+    }
+    .rfp-header h2 {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--navy-900);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .rfp-header h2::before {
+        content: '';
+        width: 6px;
+        height: 22px;
+        border-radius: 4px;
+        background: linear-gradient(180deg, var(--gold-600), var(--blue-600));
+        display: inline-block;
+    }
+    .rfp-row {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        margin-bottom: 16px;
+    }
+    .rfp-field { display: flex; flex-direction: column; gap: 7px; min-width: 180px; }
+    .rfp-field label { font-size: 0.8rem; font-weight: 700; color: var(--navy-800); }
+    .rfp-field input[type="date"],
+    .rfp-field input[type="text"],
+    .rfp-field select {
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+        font-family: 'Cairo', sans-serif;
+        font-size: 0.88rem;
+        color: var(--ink);
+        transition: border-color .18s, box-shadow .18s;
+        background: var(--blue-50);
+    }
+    .rfp-field input[type="date"]:focus,
+    .rfp-field input[type="text"]:focus,
+    .rfp-field select:focus {
+        outline: none;
+        border-color: var(--blue-500);
+        box-shadow: 0 0 0 3px rgba(42,124,168,.15);
+        background: #fff;
+    }
+    .rfp-field input[type="text"]::placeholder { color: var(--muted-light); }
+
+    /* حقل تاريخ مخصص بصيغة يوم/شهر/سنة (بدل صيغة المتصفح mm/dd/yyyy) */
+    .date-field-wrap { position: relative; }
+    .date-field-wrap input[type="date"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    .rfp-field .date-field-wrap input[type="text"].date-display {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        cursor: pointer;
+        pointer-events: auto;
+        padding: 10px 12px;
+        direction: ltr;
+        text-align: center;
+    }
+    .date-field-wrap .date-display::placeholder { color: var(--muted-light); }
+    .date-field-wrap .date-icon {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--muted-light);
+        font-size: 1rem;
+        z-index: 4;
+    }
+
+    .columns-panel-label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--navy-800);
+        margin-bottom: 10px;
+        display: block;
+    }
+    .columns-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 12px;
+        background: var(--blue-50);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-md);
+        padding: 16px 18px;
+        margin-bottom: 18px;
+    }
+    .col-check {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--navy-800);
+        cursor: pointer;
+        user-select: none;
+        background: #fff;
+        border: 1px solid var(--border);
+        padding: 7px 12px;
+        border-radius: 30px;
+        transition: all .16s var(--ease);
+    }
+    .col-check:hover { border-color: var(--blue-500); }
+    .col-check:has(input:checked) { background: var(--blue-600); color: #fff; border-color: var(--blue-600); }
+    .col-check input { width: 15px; height: 15px; cursor: pointer; accent-color: var(--blue-600); }
+
+    /* ✅ سحب وإفلات لترتيب الأعمدة: امسكي أي عمود واسحبيه لمكانه الجديد */
+    .col-check[draggable="true"] { cursor: grab; }
+    .col-check.dragging { opacity: 0.35; }
+    .col-check.drag-over { box-shadow: 0 0 0 2px var(--blue-600) inset; }
+
+    .rfp-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+    .live-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--success-dark);
+        background: #ecfdf5;
+        border: 1px solid #bbf0d8;
+        padding: 6px 14px;
+        border-radius: 30px;
+    }
+    .live-indicator .dot {
+        width: 7px; height: 7px; border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0 rgba(5,150,105,.6);
+        animation: pulseDot 1.8s infinite;
+    }
+    @keyframes pulseDot {
+        0% { box-shadow: 0 0 0 0 rgba(5,150,105,.5); }
+        70% { box-shadow: 0 0 0 7px rgba(5,150,105,0); }
+        100% { box-shadow: 0 0 0 0 rgba(5,150,105,0); }
+    }
+
+    /* ===== ورقة التقرير القابلة للطباعة ===== */
+    .report-wrap {
+        display: flex;
+        justify-content: center;
+        margin-top: 24px;
+    }
+
+    .report-sheet {
+        background: #ffffff;
+        width: 100%;
+        max-width: 1100px;
+        padding: 44px 48px 40px;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border);
+        font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+        color: var(--ink);
+        line-height: 1.9;
+        position: relative;
+    }
+    .report-sheet::before {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; left: 0;
+        height: 6px;
+        border-radius: var(--radius-md) var(--radius-md) 0 0;
+        background: linear-gradient(90deg, var(--gold-600), var(--blue-600), var(--navy-900));
+    }
+
+    .letterhead {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+    }
+    .letterhead-en { text-align: left; flex: 1; }
+    .letterhead-ar { text-align: right; flex: 1; }
+    .en-title { font-weight: 700; font-size: 0.92rem; color: var(--ink); }
+    .en-sub { font-weight: 700; font-size: 0.92rem; margin-top: 2px; color: var(--blue-600); }
+    .en-sub2 { font-weight: 600; font-size: 0.8rem; margin-top: 5px; line-height: 1.6; color: var(--muted); }
+    .ar-title { font-weight: 800; font-size: 1.08rem; color: var(--ink); }
+    .ar-sub { font-weight: 700; font-size: 0.9rem; margin-top: 2px; color: var(--blue-600); }
+    .ar-sub2 { font-weight: 600; font-size: 0.85rem; margin-top: 5px; line-height: 1.7; color: var(--muted); }
+    .report-signature {
+        margin-top: 48px;
+        text-align: left;
+        padding-left: 18px;
+    }
+    .report-signature .sig-role {
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: var(--ink);
+    }
+    .report-signature .sig-name {
+        font-weight: 700;
+        font-size: 0.92rem;
+        color: var(--blue-600);
+        margin-top: 34px;
+    }
+    .letter-divider {
+        border: none;
+        border-top: 2px solid var(--navy-900);
+        margin: 18px 0 22px;
+        opacity: .9;
+    }
+    .letter-to {
+        font-weight: 800;
+        font-size: 1.02rem;
+        text-align: center;
+        margin-bottom: 18px;
+        outline: none;
+        border-radius: 6px;
+        padding: 2px 4px;
+    }
+    .letter-greeting {
+        font-weight: 800;
+        font-size: 1rem;
+        margin-bottom: 14px;
+        outline: none;
+        border-radius: 6px;
+        padding: 2px 4px;
+    }
+    .letter-body {
+        font-weight: 600;
+        font-size: 0.98rem;
+        margin-bottom: 26px;
+        outline: none;
+        border-radius: 6px;
+        padding: 2px 4px;
+        line-height: 1.9;
+    }
+    .editable-day {
+        display: inline-block;
+        min-width: 90px;
+        font-weight: 800;
+        color: var(--navy-900);
+        border-bottom: 2px dotted var(--muted-light);
+        padding: 0 4px;
+        outline: none;
+    }
+    .letter-closing {
+        font-weight: 800;
+        font-size: 0.98rem;
+        margin: 24px 0 4px;
+        outline: none;
+        border-radius: 6px;
+        padding: 2px 4px;
+    }
+
+    .report-title-block { text-align: center; margin-bottom: 24px; }
+    .report-title-block .rt-title {
+        font-weight: 800;
+        font-size: 1.2rem;
+        color: var(--navy-900);
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+    .report-title-block .rt-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 56px; height: 3px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, var(--gold-600), var(--blue-600));
+    }
+    .report-title-block .rt-period { font-weight: 700; font-size: 0.9rem; color: var(--muted); margin-top: 10px; }
+    .report-title-block .rt-generated { font-weight: 600; font-size: 0.78rem; color: var(--muted-light); margin-top: 4px; }
+
+    /* ===== شريط إحصائيات (كسب/خسارة) لتقرير القضايا المنتهية ===== */
+    .report-stats-bar {
+        display: flex;
+        gap: 14px;
+        margin: 16px 0 20px;
+        flex-wrap: wrap;
+    }
+    .stat-pill {
+        flex: 1 1 160px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        background: var(--blue-50);
+    }
+    .stat-pill .stat-icon { font-size: 1.4rem; }
+    .stat-pill .stat-num { font-weight: 900; font-size: 1.35rem; color: var(--navy-900); line-height: 1; }
+    .stat-pill .stat-lbl { font-weight: 700; font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .stat-pill.win { background: #ecfdf5; border-color: #bbf0da; }
+    .stat-pill.win .stat-num { color: var(--success-dark); }
+    .stat-pill.lose { background: var(--danger-bg); border-color: #f3c6c6; }
+    .stat-pill.lose .stat-num { color: var(--danger); }
+    .stat-pill.total { background: #fff; }
+
+    /* ===== جدول إجمالي المبالغ (تقرير بيان مصاريف القضايا) ===== */
+    .report-totals-bar { margin: 4px 0 22px; }
+    .report-totals-bar .rtb-caption {
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: var(--navy-900);
+        margin: 0 0 8px;
+    }
+    table.report-totals-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 0.85rem;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        border: 1px solid var(--navy-900);
+    }
+    table.report-totals-table th {
+        background: linear-gradient(135deg, var(--gold-600), var(--navy-900));
+        border: 1px solid var(--navy-900);
+        padding: 10px 6px;
+        font-weight: 800;
+        text-align: center;
+        color: #fff;
+        font-size: 0.85rem;
+    }
+    table.report-totals-table td {
+        border: 1px solid #cdd9e5;
+        padding: 10px 6px;
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 800;
+        color: var(--navy-900);
+        background: var(--blue-50);
+        font-size: 0.95rem;
+    }
+
+    table.report-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 8px 0 20px;
+        font-size: 0.85rem;
+        border-radius: var(--radius-sm);
+        overflow: visible;
+        border: 1px solid var(--navy-900);
+    }
+    table.report-table th {
+        background: linear-gradient(135deg, var(--navy-800), var(--navy-900));
+        border: 1px solid var(--navy-900);
+        padding: 10px 6px;
+        font-weight: 800;
+        text-align: center;
+        color: #fff;
+        font-size: 0.85rem;
+        position: relative;
+        overflow: visible;
+        z-index: 25;
+    }
+
+    /* ===== فلترة الأعمدة (سهم فلتر أسفل كل عمود) ===== */
+    .col-filter-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        position: relative;
+    }
+    .col-filter-btn {
+        background: rgba(255,255,255,.16);
+        border: none;
+        color: #fff;
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.62rem;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .col-filter-btn:hover { background: rgba(255,255,255,.32); }
+    .col-filter-btn.active-filter { background: var(--gold-600); }
+    .col-filter-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 9999;
+        background: #fff;
+        color: var(--ink);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+        min-width: 190px;
+        max-width: 260px;
+        max-height: 260px;
+        overflow-y: auto;
+        padding: 8px;
+        text-align: right;
+        font-weight: 600;
+        font-size: 0.78rem;
+    }
+    .col-filter-dropdown .cf-actions {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--border-soft);
+    }
+    .col-filter-dropdown .cf-actions button {
+        flex: 1;
+        border: 1px solid var(--border);
+        background: var(--blue-50);
+        color: var(--blue-600);
+        border-radius: 6px;
+        padding: 4px 6px;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 0.72rem;
+        cursor: pointer;
+    }
+    .col-filter-dropdown label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 2px;
+        cursor: pointer;
+    }
+    .col-filter-dropdown label:hover { background: var(--blue-50); }
+    .col-filter-dropdown input[type="checkbox"] { margin: 0; }
+    table.report-table td {
+        border: 1px solid #cdd9e5;
+        padding: 8px 6px;
+        text-align: center;
+        vertical-align: middle;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+    }
+    table.report-table tbody tr:not(.group-row):nth-child(even) { background: var(--blue-50); }
+    table.report-table td[contenteditable="true"] { outline: none; }
+    .row-index { font-weight: 700; background: #fafdff !important; color: var(--muted); }
+
+    /* ===== جدول ثابت العرض (بيان بالقضايا) — بدون سكرول يمين/شمال ===== */
+    table.report-table.fixed-width-table {
+        table-layout: fixed;
+        width: 100%;
+        font-size: 0.72rem;
+    }
+    table.report-table.fixed-width-table th,
+    table.report-table.fixed-width-table td {
+        padding: 6px 3px;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+    }
+
+    th.sortable-th {
+        position: relative;
+        user-select: none;
+        transition: background 0.15s;
+    }
+    th.sortable-th:hover {
+        background: linear-gradient(135deg, var(--navy-700), var(--navy-800)) !important;
+    }
+
+    /* ===== خط وفأرة سحب وتعديل حجم الأعمدة (مثل الإكسل تماماً) ===== */
+    .col-resizer {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -6px;
+        width: 12px;
+        cursor: col-resize !important;
+        user-select: none;
+        z-index: 100;
+        display: block !important;
+    }
+    .col-resizer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 4px;
+        width: 3px;
+        background: transparent;
+        transition: background 0.1s, box-shadow 0.1s;
+    }
+    .col-resizer:hover::after,
+    .col-resizer.is-resizing::after {
+        background: #f59e0b !important;
+        box-shadow: 0 0 8px rgba(245, 158, 11, 0.9);
+    }
+    body.is-table-resizing {
+        cursor: col-resize !important;
+        user-select: none !important;
+    }
+
+
+    tr.group-row td.group-header {
+        background: linear-gradient(90deg, var(--blue-600), var(--navy-800));
+        color: #fff;
+        font-weight: 800;
+        text-align: right;
+        padding: 10px 16px;
+        border: 1px solid var(--navy-900);
+    }
+    .group-count { font-weight: 600; opacity: 0.85; font-size: 0.85em; }
+    .party-more { color: var(--gold-600); font-weight: 700; font-size: 0.85em; }
+
+    .del-cell button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.05rem;
+        line-height: 1;
+        padding: 5px 7px;
+        border-radius: var(--radius-sm);
+        transition: 0.15s;
+    }
+    .del-cell button:hover { background: #fecaca; transform: scale(1.15); }
+
+    .add-row-bar { text-align: center; margin: -8px 0 22px; }
+    .add-row-bar button {
+        background: var(--blue-50);
+        border: 1.5px dashed #9db8cf;
+        color: var(--blue-600);
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 0.82rem;
+        padding: 8px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all .18s var(--ease);
+    }
+    .add-row-bar button:hover { background: #e1ecf6; transform: translateY(-1px); }
+
+    .empty-hint {
+        text-align: center;
+        color: var(--muted-light);
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 14px 0 22px;
+        padding: 18px;
+        background: var(--blue-50);
+        border-radius: var(--radius-md);
+        border: 1px dashed var(--border);
+    }
+
+    .report-footer-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-soft);
+    }
+
+    /* ===== ترقيم الصفحات (Pagination) للجداول الطويلة ===== */
+    /* أي صف عليه هذا الكلاس يتخفي تمامًا حتى لو الفلاتر بتحاول تظهره */
+    tr.pg-hidden { display: none !important; }
+
+    .table-pagination-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin: 14px 0;
+        padding: 10px 16px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 40px;
+        box-shadow: var(--shadow-xs);
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .table-pagination-bar .pg-info {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--muted);
+        white-space: nowrap;
+    }
+    .table-pagination-bar .pg-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .table-pagination-bar button.pg-btn {
+        background: linear-gradient(135deg, var(--blue-600), var(--navy-800));
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        padding: 7px 16px;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: transform .15s var(--ease), box-shadow .15s var(--ease), opacity .15s var(--ease);
+        white-space: nowrap;
+    }
+    .table-pagination-bar button.pg-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(15,58,92,.22); }
+    .table-pagination-bar button.pg-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .table-pagination-bar .pg-page-indicator {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--navy-900);
+        background: var(--blue-100);
+        border-radius: 30px;
+        padding: 6px 14px;
+        white-space: nowrap;
+    }
+
+    [contenteditable="true"]:hover { background: #eef6ff; }
+    [contenteditable="true"]:focus { background: #e2f0ff; box-shadow: inset 0 0 0 2px #a9c8e0; }
+    .hidden { display: none !important; }
+
+    /* ===== سجل التقارير المحفوظة ===== */
+    .history-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+    }
+    .history-card {
+        position: relative;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 20px 20px 18px;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: all .2s var(--ease);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .history-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: #b9d3e8;
+    }
+    .history-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .history-card .hc-icon {
+        width: 42px; height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--gold-100), #fff);
+        border: 1px solid #ecdca8;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.15rem;
+    }
+    .history-card .hc-del {
+        background: none; border: none; cursor: pointer;
+        color: var(--muted-light);
+        font-size: 0.95rem;
+        padding: 5px 7px;
+        border-radius: var(--radius-sm);
+        transition: all .15s;
+    }
+    .history-card .hc-del:hover { background: var(--danger-bg); color: var(--danger); }
+    .history-card .hc-title {
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: var(--navy-900);
+        line-height: 1.5;
+    }
+    .history-card .hc-meta {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .history-card .hc-badge {
+        margin-top: 6px;
+        align-self: flex-start;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: var(--blue-600);
+        background: var(--blue-100);
+        padding: 4px 12px;
+        border-radius: 30px;
+    }
+    .history-empty {
+        text-align: center;
+        color: var(--muted-light);
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 40px 0;
+        padding: 40px 20px;
+        background: #fff;
+        border-radius: var(--radius-lg);
+        border: 1.5px dashed var(--border);
+    }
+    .history-empty .he-icon { font-size: 2.2rem; margin-bottom: 10px; display: block; }
+
+    /* ===== النافذة المنبثقة (Modal) ===== */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(10,39,64,.55);
+        backdrop-filter: blur(3px);
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 40px 16px;
+        z-index: 1000;
+        overflow-y: auto;
+        animation: overlayFadeIn .2s var(--ease);
+    }
+    @keyframes overlayFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-box {
+        background: #fff;
+        border-radius: var(--radius-xl);
+        width: 100%;
+        max-width: 1040px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        animation: modalPopIn .28s var(--ease);
+    }
+    @keyframes modalPopIn {
+        from { opacity: 0; transform: translateY(16px) scale(.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 18px 26px;
+        background: linear-gradient(135deg, var(--blue-600), var(--navy-900));
+        color: #fff;
+    }
+    .modal-header h3 { margin: 0; font-size: 1.05rem; font-weight: 800; }
+    .modal-close-btn {
+        background: rgba(255,255,255,.15);
+        border: none;
+        color: #fff;
+        width: 34px; height: 34px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: background .15s;
+    }
+    .modal-close-btn:hover { background: rgba(255,255,255,.3); }
+    .modal-body { padding: 28px; background: #eef4fa; }
+    .modal-footer {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        padding: 16px 26px 22px;
+        background: #eef4fa;
+        flex-wrap: wrap;
+    }
+
+    /* ===== إعدادات الطباعة ===== */
+    @media print {
+        @page { size: A4 landscape; margin: 8mm; }
+        body * { visibility: hidden; }
+        .report-sheet, .report-sheet * { visibility: visible; }
+        .report-sheet {
+            position: absolute;
+            top: 0; right: 0;
+            margin: 0 auto;
+            box-shadow: none;
+            border: none;
+            width: 100%;
+            max-width: 100%;
+            padding: 10px 14px;
+        }
+        .no-print { display: none !important; }
+        .del-cell { display: none !important; }
+        table.report-table th:last-child,
+        table.report-table td.del-cell { display: none !important; }
+
+        /* ✅ عند الطباعة تظهر كل الصفوف حتى لو كانت مخفية بسبب ترقيم الصفحات (الطباعة بتاخد التقرير كامل مش صفحة واحدة بس) */
+        tr.pg-hidden { display: table-row !important; }
+
+        /* ✅ الجدول بيحترم عرض الأعمدة اللي المستخدم ظبطها — لو فيه colgroup بعرض مخصص،
+           الجدول بيستخدمه كما هو؛ ولو مفيش تخصيص، الأعمدة بتتوزع تلقائيًا */
+        table.report-table {
+            table-layout: fixed !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            font-size: 0.68rem !important;
+        }
+        /* ✅ أعمدة المستخدم المخصصة: لو المستخدم ظبط عرض كل عمود، الـ colgroup
+           بيحتوي على العرض بالنسبة المئوية وبيتطبق تلقائيًا وقت الطباعة */
+        table.report-table colgroup col {
+            width: auto;
+        }
+        table.report-table colgroup col[style*="width"] {
+            /* نحافظ على العرض اللي المستخدم حدده */
+        }
+        table.report-table th,
+        table.report-table td {
+            padding: 4px 3px !important;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal !important;
+        }
+        .col-filter-btn { display: none !important; }
+        .col-resizer-left, .col-resizer-right { display: none !important; }
+    }
+
+    @media (max-width: 640px) {
+        .report-sheet { padding: 28px 20px 24px; }
+        .letterhead { flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+        .letterhead-en, .letterhead-ar { text-align: center; }
+    }
+</style>
+</head>
+<body>
+<div id="sidebar-container"></div>
+<div class="sessions-content" id="reportsContent">
+
+    <!-- HEADER -->
+    <div class="page-header-simple no-print">
+        <h1>📊 التقارير</h1>
+        <span class="date-badge" id="currentDateDisplay"></span>
+    </div>
+
+    <!-- MAIN TABS -->
+    <div class="main-tabs no-print">
+        <button class="main-tab-btn active" id="tabBtnCreate" onclick="showMainView('create')">
+            📊 إنشاء تقرير
+        </button>
+        <button class="main-tab-btn" id="tabBtnHistory" onclick="showMainView('history')">
+            📚 السجل المحفوظ <span class="tab-count" id="historyCount">0</span>
+        </button>
+    </div>
+
+    <!-- ===================== CREATE VIEW ===================== -->
+    <div id="createView" class="view-fade">
+
+        <!-- HUB -->
+        <div id="reportsHub" class="no-print">
+            <div class="reports-hub-grid" id="reportsHubGrid"></div>
+        </div>
+
+        <!-- FILTER PANEL -->
+        <div id="reportFilterPanel" class="report-filter-panel no-print hidden">
+            <div class="rfp-header">
+                <h2 id="rfpTitle"></h2>
+                <button class="control-btn ghost" onclick="backToHub()">↩ رجوع لكل التقارير</button>
+            </div>
+
+            <div class="rfp-row" id="rfpDateRow">
+                <div class="rfp-field">
+                    <label id="rfpFromLabel">من تاريخ</label>
+                    <div class="date-field-wrap">
+                        <input type="text" class="date-display" id="reportDateFrom_display" placeholder="dd/mm/yyyy" readonly>
+                        <span class="date-icon">📅</span>
+                        <input type="date" id="reportDateFrom" lang="en-GB">
+                    </div>
+                </div>
+                <div class="rfp-field">
+                    <label id="rfpToLabel">إلى تاريخ</label>
+                    <div class="date-field-wrap">
+                        <input type="text" class="date-display" id="reportDateTo_display" placeholder="dd/mm/yyyy" readonly>
+                        <span class="date-icon">📅</span>
+                        <input type="date" id="reportDateTo" lang="en-GB">
+                    </div>
+                </div>
+            </div>
+
+            <div class="rfp-row" id="rfpSearchRow">
+                <div class="rfp-field" id="rfpLawyerField" style="display:none;">
+                    <label>👤 المحامي</label>
+                    <select id="reportLawyerFilter">
+                        <option value="">كل المحامين</option>
+                    </select>
+                </div>
+                <div class="rfp-field" id="rfpGroupByField" style="min-width:180px;">
+                    <label>📊 تقسيم / تجميع حسب عمود</label>
+                    <select id="reportGroupBySelect" onchange="onGroupByChange(this.value)">
+                        <option value="">بدون تجميع</option>
+                    </select>
+                </div>
+                <div class="rfp-field" style="flex:1; min-width:240px;">
+                    <label>🔍 بحث سريع (اسم المحامي / رقم القضية / أي كلمة)</label>
+                    <input type="text" id="reportQuickSearch" placeholder="دور بأي كلمة أو رقم أو اسم... وهيتطبع اللي دورتي عليه بس">
+                </div>
+            </div>
+
+            <label class="columns-panel-label">الأعمدة الظاهرة في التقرير (اختر ما تريد إضافته أو حذفه)</label>
+            <div class="columns-panel" id="columnsPanel"></div>
+
+            <div id="reportStatusMessage" class="report-status-msg no-print" style="display:none; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 10px 16px; font-size: 13.5px; font-weight: 700; margin-top: 12px;"></div>
+
+        </div>
+
+        <!-- REPORT SHEET -->
+        <div id="reportSheetWrap" class="report-wrap hidden">
+            <div class="report-sheet" id="reportSheet">
+
+                <div class="letterhead">
+                    <div class="letterhead-en">
+                        <div class="en-title">Alexandria Sanitary Drainage Company</div>
+                        <div class="en-sub">A.E.S.C.</div>
+                    </div>
+                    <div class="letterhead-ar">
+                        <div class="ar-title">شركة الصرف الصحى بالإسكندرية</div>
+                        <div class="ar-sub2">الإدارة العامة للشئون القانونية</div>
+                    </div>
+                </div>
+
+                <hr class="letter-divider">
+
+                <div class="report-title-block">
+                    <div class="rt-title" id="reportTitleText"></div>
+                    <div class="rt-period" id="reportPeriodText"></div>
+                    <div class="rt-generated" id="reportGeneratedText"></div>
+                </div>
+
+                <div class="report-stats-bar" id="reportStatsBar" style="display:none;"></div>
+
+                <table class="report-table" id="reportTable">
+                    <thead><tr id="reportTheadRow"></tr></thead>
+                    <tbody id="reportTbody"></tbody>
+                </table>
+                <div class="empty-hint" id="reportEmptyHint" style="display:none;">لا توجد بيانات مطابقة للفترة أو الفلاتر المحددة.</div>
+
+                <div class="table-pagination-bar no-print" id="reportTable-pagination"></div>
+
+                <div class="report-totals-bar" id="reportTotalsBar" style="display:none;">
+                    <div class="rtb-caption">إجمالي القيم</div>
+                    <table class="report-totals-table" id="reportTotalsTable">
+                        <thead><tr id="reportTotalsTheadRow"></tr></thead>
+                        <tbody><tr id="reportTotalsTbodyRow"></tr></tbody>
+                    </table>
+                </div>
+
+                <div class="report-signature">
+                    <div class="sig-role">مدير عام الشئون القانونية</div>
+                    <div class="sig-name">أ / اشرف عبد العظيم</div>
+                </div>
+
+                <div class="report-footer-actions no-print">
+                    <button class="control-btn ghost" onclick="clearAllColumnFilters('reportTable')">↺ إلغاء كل فلاتر الأعمدة</button>
+                    <button class="control-btn success" onclick="printAndSaveReport()">🖨️ طباعة / حفظ PDF</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MAMORIYAT FILTER PANEL (مدمج في نفس الصفحة) -->
+        <div id="mamoriyatFilterPanel" class="report-filter-panel no-print hidden">
+            <div class="rfp-header">
+                <h2>📄 تقرير المأموريات</h2>
+                <button class="control-btn ghost" onclick="backToHub()">↩ رجوع لكل التقارير</button>
+            </div>
+
+            <div class="rfp-row">
+                <div class="rfp-field">
+                    <label>من تاريخ</label>
+                    <div class="date-field-wrap">
+                        <input type="text" class="date-display" id="mamoriyaDateFrom_display" placeholder="dd/mm/yyyy" readonly>
+                        <span class="date-icon">📅</span>
+                        <input type="date" id="mamoriyaDateFrom" lang="en-GB" onchange="loadMamoriyatForRange()">
+                    </div>
+                </div>
+                <div class="rfp-field">
+                    <label>إلى تاريخ</label>
+                    <div class="date-field-wrap">
+                        <input type="text" class="date-display" id="mamoriyaDateTo_display" placeholder="dd/mm/yyyy" readonly>
+                        <span class="date-icon">📅</span>
+                        <input type="date" id="mamoriyaDateTo" lang="en-GB" onchange="loadMamoriyatForRange()">
+                    </div>
+                </div>
+            </div>
+
+            <label class="columns-panel-label">الأعمدة الظاهرة في تقرير المأمورية (اختر ما تريد إضافته أو حذفه، وتحكم في ترتيبها)</label>
+            <div class="columns-panel" id="mamoriyaColumnsPanel"></div>
+
+        </div>
+
+        <!-- MAMORIYAT SHEET -->
+        <div id="mamoriyaSheetWrap" class="report-wrap hidden">
+            <div class="report-sheet" id="mamoriyaSheet">
+
+                <div class="letterhead">
+                    <div class="letterhead-en">
+                        <div class="en-title">Alexandria Sanitary Drainage Company</div>
+                        <div class="en-sub">A.E.S.C.</div>
+                    </div>
+                    <div class="letterhead-ar">
+                        <div class="ar-title">شركة الصرف الصحى بالإسكندرية</div>
+                        <div class="ar-sub2">الإدارة العامة للشئون القانونية</div>
+                    </div>
+                </div>
+
+                <hr class="letter-divider">
+
+                <div class="letter-to" contenteditable="true">السيد المهندس / رئيس مجلس الإدارة والعضو المنتدب</div>
+                <div class="letter-greeting" contenteditable="true">تحية طيبة وبعد،</div>
+                <div class="letter-body" contenteditable="true">
+                    يرجى التكرم بالموافقة على منح السادة المحامين التالي أسماءهم مأمورية صباحية خلال الفترة من
+                    <span id="mamoriyaDayFromSpan" class="editable-day" contenteditable="true">.........</span>
+                    إلى
+                    <span id="mamoriyaDayToSpan" class="editable-day" contenteditable="true">.........</span>
+                    وذلك لحضور جلسات عن القضايا.
+                </div>
+
+                <table class="report-table" id="mamoriyaTable">
+                    <thead><tr id="mamoriyaTheadRow"></tr></thead>
+                    <tbody id="mamoriyaTbody"></tbody>
+                </table>
+                <div class="add-row-bar no-print">
+                    <button onclick="addManualMamoriyaRow()">➕ إضافة صف</button>
+                </div>
+                <div class="empty-hint" id="mamoriyaEmptyHint" style="display:none;">لا توجد جلسات مسجلة في هذا التاريخ — يمكنك إضافة الصفوف يدويًا.</div>
+
+                <div class="table-pagination-bar no-print" id="mamoriyaTable-pagination"></div>
+
+                <div class="letter-closing" contenteditable="true">وتفضلوا بقبول وافر الاحترام والتقدير،</div>
+
+                <div class="report-signature">
+                    <div class="sig-role">مدير عام الشئون القانونية</div>
+                    <div class="sig-name">أ / اشرف عبد العظيم</div>
+                </div>
+
+                <div class="report-footer-actions no-print">
+                    <button class="control-btn ghost" onclick="clearAllColumnFilters('mamoriyaTable')">↺ إلغاء كل فلاتر الأعمدة</button>
+                    <button class="control-btn success" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===================== HISTORY VIEW ===================== -->
+    <div id="historyView" class="no-print hidden">
+        <div class="rfp-header" style="margin-top:24px; background:#fff; border:1px solid var(--border); border-radius:var(--radius-lg); padding:18px 24px; box-shadow: var(--shadow-xs);">
+            <h2>📚 التقارير المحفوظة</h2>
+            <span class="toolbar-note" style="margin-top:0;">💡 كل تقرير بتعمله بيتحفظ هنا تلقائيًا مع تاريخ آخر تحديث له. دوس على أي كارت لعرض التقرير كامل.</span>
+        </div>
+        <div class="history-grid" id="historyGrid"></div>
+        <div class="history-empty hidden" id="historyEmpty">
+            <span class="he-icon">🗂️</span>
+            لسه معملتش أي تقرير. روح لتبويب "إنشاء تقرير" وابدأ أول تقرير.
+        </div>
+    </div>
+
+</div>
+
+<!-- ===================== HISTORY MODAL ===================== -->
+<div id="historyModalOverlay" class="modal-overlay hidden" onclick="if(event.target===this) closeHistoryModal()">
+    <div class="modal-box">
+        <div class="modal-header no-print">
+            <h3 id="modalTitle"></h3>
+            <button class="modal-close-btn" onclick="closeHistoryModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="report-sheet" id="modalReportSheet" style="max-width:100%;">
+                <div class="letterhead">
+                    <div class="letterhead-en">
+                        <div class="en-title">Alexandria Sanitary Drainage Company</div>
+                        <div class="en-sub">A.E.S.C.</div>
+                    </div>
+                    <div class="letterhead-ar">
+                        <div class="ar-title">شركة الصرف الصحى بالإسكندرية</div>
+                        <div class="ar-sub2">الإدارة العامة للشئون القانونية</div>
+                    </div>
+                </div>
+                <hr class="letter-divider">
+                <div class="report-title-block">
+                    <div class="rt-title" id="modalTitleText"></div>
+                    <div class="rt-period" id="modalPeriodText"></div>
+                    <div class="rt-generated" id="modalGeneratedText"></div>
+                </div>
+                <table class="report-table" id="modalReportTable">
+                    <thead><tr id="modalTheadRow"></tr></thead>
+                    <tbody id="modalTbody"></tbody>
+                </table>
+                <div class="table-pagination-bar no-print" id="modalReportTable-pagination"></div>
+                <div class="report-totals-bar" id="modalTotalsBar" style="display:none;">
+                    <div class="rtb-caption">إجمالي القيم</div>
+                    <table class="report-totals-table" id="modalTotalsTable">
+                        <thead><tr id="modalTotalsTheadRow"></tr></thead>
+                        <tbody><tr id="modalTotalsTbodyRow"></tr></tbody>
+                    </table>
+                </div>
+                <div class="report-signature">
+                    <div class="sig-role">مدير عام الشئون القانونية</div>
+                    <div class="sig-name">أ / اشرف عبد العظيم</div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer no-print">
+            <button class="control-btn success" onclick="printModalReport()">🖨️ طباعة / حفظ PDF</button>
+            <button class="control-btn danger-outline" id="modalDeleteBtn">🗑️ حذف من السجل</button>
+            <button class="control-btn ghost" onclick="closeHistoryModal()">إغلاق</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+    const COMPANY_MARK = 'الصرف الصحي';
+
+    // ============================================================
+    // تعريف التقارير السبعة
+    // ============================================================
+    const REPORTS = [
+        {
+            id: 'cases-by-lawyer',
+            icon: '👨🏻‍💼',
+            title: 'بيان بالقضايا المحالة لكل محامي',
+            desc: 'قضايا كل محامٍ خلال فترة زمنية محددة',
+            dataType: 'cases',
+            dateField: 'FilingDate',
+            dateLabelFrom: 'من تاريخ القيد',
+            dateLabelTo: 'إلى تاريخ القيد',
+            groupBy: 'Lawyer',
+            lawyerFilterKey: 'Lawyer',
+            groupLabel: (key, items) => `👤 المحامي: ${key}${items[0] && items[0].LawyerCode ? ' (كود: ' + items[0].LawyerCode + ')' : ''}`,
+            columns: [
+                { key: 'CaseNumber', label: 'رقم القضية', default: true },
+                { key: 'Subject', label: 'الموضوع', default: true },
+                { key: 'Description', label: 'ملخص القضية', default: true },
+                { key: 'Category', label: 'النوع', default: true },
+                { key: 'Stage', label: 'الدرجة', default: true },
+                { key: 'Status', label: 'الحالة', default: true },
+                { key: 'Court', label: 'المحكمة', default: false },
+                { key: 'Circuit', label: 'الدائرة', default: true },
+                { key: 'Opponent', label: 'الخصم', default: true },
+                { key: 'Notes', label: 'ملاحظات', default: false }
+            ]
+        },
+        {
+            id: 'sessions-by-lawyer',
+            icon: '🗓️',
+            title: 'بيان الجلسات لكل محامي',
+            desc: 'جلسات كل محامٍ خلال فترة زمنية محددة',
+            dataType: 'sessions',
+            dateField: 'SessionDate',
+            dateLabelFrom: 'من تاريخ الجلسة',
+            dateLabelTo: 'إلى تاريخ الجلسة',
+            groupBy: 'Attending',
+            lawyerFilterKey: 'Attending',
+            groupLabel: (key) => `👤 المحامي: ${key}`,
+            columns: [
+                { key: 'CaseNumber', label: 'رقم القضية', default: true },
+                { key: 'Subject', label: 'الموضوع', default: true },
+                { key: 'Description', label: 'ملخص القضية', default: true },
+                { key: 'Category', label: 'النوع', default: true },
+                { key: 'SessionDate', label: 'تاريخ الجلسة', default: true },
+                { key: 'Stage', label: 'الدرجة', default: true },
+                { key: 'Status', label: 'الحالة', default: true },
+                { key: 'Court', label: 'المحكمة', default: false },
+                { key: 'Circuit', label: 'الدائرة', default: true },
+                { key: 'Action', label: 'قرار الجلسة', default: true },
+                { key: 'Opponent', label: 'الخصم', default: false },
+                { key: 'Notes', label: 'ملاحظات', default: false }
+            ]
+        },
+        {
+            id: 'all-cases',
+            icon: '📁',
+            title: 'بيان بالقضايا',
+            desc: 'كل القضايا وبياناتها الكاملة',
+            dataType: 'cases',
+            dateField: 'FilingDate',
+            dateLabelFrom: 'من تاريخ القيد',
+            dateLabelTo: 'إلى تاريخ القيد',
+            groupBy: null,
+            columns: [
+                { key: 'CaseNumber', label: 'رقم القضية', default: true },
+                { key: 'CaseYear', label: 'السنة', default: false },
+                { key: 'Subject', label: 'الموضوع', default: true },
+                { key: 'Description', label: 'ملخص القضية', default: true },
+                { key: 'Category', label: 'النوع', default: true },
+                { key: 'Stage', label: 'الدرجة', default: true },
+                { key: 'Status', label: 'الحالة', default: true },
+                { key: 'Court', label: 'المحكمة', default: true },
+                { key: 'Circuit', label: 'الدائرة', default: false },
+                { key: 'Lawyer', label: 'المحامي', default: true },
+                { key: 'Opponent', label: 'الخصم', default: true },
+                { key: 'Plaintiff', label: 'المدعي', default: true },
+                { key: 'Defendant', label: 'المدعى عليه', default: true },
+                { key: 'FilingDate', label: 'تاريخ القيد', default: true },
+                { key: 'ClaimValue', label: 'قيمة المطالبة', default: false },
+                { key: 'JudgmentValue', label: 'قيمة الحكم', default: false },
+                { key: 'CaseExpenses', label: 'مصاريف الدعوة', default: true },
+                { key: 'LatestSessionAction', label: 'قرار القضايا', default: true },
+                { key: 'Notes', label: 'ملاحظات', default: false }
+            ]
+        },
+        {
+            id: 'case-expenses-statement',
+            icon: '💰',
+            title: 'بيان مصاريف القضايا',
+            desc: 'رقم القضية والموضوع وقيمة المطالبة وقيمة الحكم ومصاريف الدعوى، مع إجمالي كل قيمة',
+            dataType: 'cases',
+            dateField: 'FilingDate',
+            dateLabelFrom: 'من تاريخ القيد',
+            dateLabelTo: 'إلى تاريخ القيد',
+            groupBy: null,
+            showTotals: true,
+            totalsColumns: ['ClaimValue', 'JudgmentValue', 'CaseExpenses'],
+            columns: [
+                { key: 'CaseNumber', label: 'رقم القضية', default: true },
+                { key: 'Subject', label: 'الموضوع', default: true },
+                { key: 'Description', label: 'ملخص القضية', default: true },
+                { key: 'Category', label: 'النوع', default: true },
+                { key: 'ClaimValue', label: 'قيمة المطالبة', default: true },
+                { key: 'JudgmentValue', label: 'قيمة الحكم', default: true },
+                { key: 'CaseExpenses', label: 'مصاريف الدعوة', default: true }
+            ]
+        },
+        {
+            id: 'closed-cases-result',
+            icon: '📜',
+            title: 'بيان القضايا المنتهية لصالح الشركة أو ضد الشركة',
+            desc: 'نتائج القضايا المنتهية فقط حسب من صدر الحكم لصالحه (بدون القضايا المتداولة)',
+            dataType: 'closed',
+            dateField: 'FilingDate',
+            dateLabelFrom: 'من تاريخ القيد',
+            dateLabelTo: 'إلى تاريخ القيد',
+            groupBy: 'Result',
+            groupOrder: ['لصالح الخصم', 'لصالح الشركة'],
+            groupLabel: (key) => key === 'لصالح الشركة' ? '✅ قضايا منتهية لصالح الشركة' : (key === 'لصالح الخصم' ? '❌ قضايا منتهية لصالح الخصم' : `⚖️ ${key}`),
+            columns: [
+                { key: 'CaseNumber', label: 'رقم القضية', default: true },
+                { key: 'Subject', label: 'الموضوع', default: true },
+                { key: 'Description', label: 'ملخص القضية', default: true },
+                { key: 'Category', label: 'النوع', default: true },
+                { key: 'Lawyer', label: 'المحامي', default: true },
+                { key: 'Opponent', label: 'الخصم', default: true },
+                { key: 'Plaintiff', label: 'المدعي', default: true },
+                { key: 'Defendant', label: 'المدعى عليه', default: true },
+                { key: 'Stage', label: 'الدرجة', default: false },
+                { key: 'Court', label: 'المحكمة', default: false },
+                { key: 'Circuit', label: 'الدائرة', default: true },
+                { key: 'Result', label: 'الحكم', default: true },
+                { key: 'JudgmentText', label: 'منطوق الحكم', default: true },
+                { key: 'FilingDate', label: 'تاريخ القيد', default: false },
+                { key: 'Notes', label: 'ملاحظات', default: false }
+            ]
+        },
+        {
+            id: 'all-sessions',
+            icon: '📝',
+            title: 'بيان بالجلسات',
+            desc: 'كل الجلسات وبياناتها الكاملة',
+            dataType: 'sessions',
+            dateField: 'SessionDate',
+            dateLabelFrom: 'من تاريخ الجلسة',
+            dateLabelTo: 'إلى تاريخ الجلسة',
+            groupBy: null,
+            columns: [
+                { key: 'CaseNumber', label: 'رقم القضية', default: true },
+                { key: 'Subject', label: 'الموضوع', default: true },
+                { key: 'Description', label: 'ملخص القضية', default: true },
+                { key: 'Category', label: 'النوع', default: true },
+                { key: 'SessionDate', label: 'تاريخ الجلسة', default: true },
+                { key: 'Stage', label: 'الدرجة', default: true },
+                { key: 'Status', label: 'الحالة', default: true },
+                { key: 'Attending', label: 'المحامي', default: true },
+                { key: 'Action', label: 'قرار الجلسة', default: true },
+                { key: 'Court', label: 'المحكمة', default: false },
+                { key: 'Circuit', label: 'الدائرة', default: true },
+                { key: 'Opponent', label: 'الخصم', default: false },
+                { key: 'JudgmentValue', label: 'قيمة الحكم', default: false },
+                { key: 'Notes', label: 'ملاحظات', default: false }
+            ]
+        },
+        {
+            id: 'plaintiffs-statement',
+            icon: '🧾',
+            title: 'كشف عن المدعيين',
+            desc: 'من رفع على الشركة ومن رفعت عليه الشركة',
+            dataType: 'cases',
+            dateField: 'FilingDate',
+            dateLabelFrom: 'من تاريخ القيد',
+            dateLabelTo: 'إلى تاريخ القيد',
+            groupBy: 'FiledBy',
+            groupLabel: (key) => key === 'الشركة' ? '🏢 دعاوى مقامة من الشركة' : '⚖️ دعاوى مقامة على الشركة (من الخصم)',
+            columns: [
+                { key: 'CaseNumber', label: 'رقم القضية', default: true },
+                { key: 'Subject', label: 'الموضوع', default: true },
+                { key: 'Description', label: 'ملخص القضية', default: true },
+                { key: 'Plaintiff', label: 'المدعي', default: true },
+                { key: 'Defendant', label: 'المدعى عليه', default: true },
+                { key: 'Category', label: 'النوع', default: true },
+                { key: 'Court', label: 'المحكمة', default: false },
+                { key: 'Status', label: 'الحالة', default: true },
+                { key: 'FilingDate', label: 'تاريخ القيد', default: false },
+                { key: 'Lawyer', label: 'المحامي', default: false },
+                { key: 'ClaimValue', label: 'القيمة المادية للدعوة', default: true }
+            ]
+        },
+        {
+            id: 'transferred-lawyers',
+            icon: '🔁',
+            title: 'بيان المحامين المحولين',
+            desc: 'القضايا التي تم تغيير المحامي الحاضر فيها عن المحامي الأصلي المسند إليه',
+            dataType: 'transferred',
+            dateField: 'SessionDate',
+            dateLabelFrom: 'من تاريخ الجلسة',
+            dateLabelTo: 'إلى تاريخ الجلسة',
+            groupBy: null,
+            columns: [
+                { key: 'CaseNumber', label: 'رقم القضية', default: true },
+                { key: 'Subject', label: 'الموضوع', default: true },
+                { key: 'Category', label: 'النوع', default: true },
+                { key: 'OriginalLawyer', label: 'المحامي الأصلي', default: true },
+                { key: 'CurrentLawyer', label: 'المحامي الحالي', default: true },
+                { key: 'Court', label: 'المحكمة', default: false },
+                { key: 'Circuit', label: 'الدائرة', default: false },
+                { key: 'SessionDate', label: 'تاريخ آخر جلسة', default: false }
+            ]
+        },
+        {
+            id: 'mamoriyat',
+            icon: '📄',
+            title: 'تقرير المأموريات',
+            desc: 'إعداد وطباعة مأمورية حضور الجلسات اليومية',
+            custom: 'mamoriyat'
+        }
+    ];
+
+    let currentConfig = null;
+    let lastReportRows = [];
+    let lastReportFrom = '';
+    let lastReportTo = '';
+    let currentSortCol = null;
+    let currentSortDir = 'asc';
+
+    // ============================================================
+    // بناء شبكة الكروت
+    // ============================================================
+    function buildHub() {
+        const grid = document.getElementById('reportsHubGrid');
+        grid.innerHTML = REPORTS.map(r => `
+            <div class="report-card" onclick="${r.custom === 'mamoriyat' ? 'openMamoriyatView()' : `openReportFilter('${r.id}')`}">
+                <div class="rc-header">
+                    <div class="rc-icon">${r.icon}</div>
+                    <div class="rc-title">${r.title}</div>
+                </div>
+                <div class="rc-desc">${r.desc}</div>
+            </div>
+        `).join('');
+    }
+
+    function openReportFilter(id) {
+        const cfg = REPORTS.find(r => r.id === id);
+        if (!cfg || cfg.custom) return;
+        currentConfig = cfg;
+
+        document.getElementById('reportsHub').classList.add('hidden');
+        document.getElementById('reportFilterPanel').classList.remove('hidden');
+        document.getElementById('reportSheetWrap').classList.add('hidden');
+        document.getElementById('mamoriyatFilterPanel').classList.add('hidden');
+        document.getElementById('mamoriyaSheetWrap').classList.add('hidden');
+
+        document.getElementById('rfpTitle').textContent = cfg.title;
+        document.getElementById('rfpFromLabel').textContent = cfg.dateLabelFrom || 'من تاريخ';
+        document.getElementById('rfpToLabel').textContent = cfg.dateLabelTo || 'إلى تاريخ';
+
+        // إخفاء صف الفترة الزمنية للتقارير اللي مالهاش تاريخ فلترة
+        document.getElementById('rfpDateRow').style.display = cfg.dateField ? '' : 'none';
+
+        // ✅ تم إلغاء التعبئة التلقائية لتاريخ (من أول السنة لحد النهاردة)
+        // لأنها كانت بتخفي كل القضايا المنتهية قبل السنة الحالية بدون أي تنبيه للمستخدم.
+        // التقرير الآن يعرض كل الفترات المسجلة افتراضيًا، والمستخدم يقدر يحدد فترة يدويًا لو احتاج.
+        document.getElementById('reportDateFrom').value = '';
+        document.getElementById('reportDateTo').value = '';
+        syncDateDisplay('reportDateFrom');
+        syncDateDisplay('reportDateTo');
+
+        // ✅ خيارات الأعمدة (Checkbox) بتظهر دلوقتي لكل التقارير بدون استثناء،
+        // بما فيها "بيان القضايا المحالة لكل محامي"، بالضبط زي باقي التقارير
+        const colsPickerLabel = document.querySelector('.columns-panel-label');
+        const colsPanel = document.getElementById('columnsPanel');
+        if (colsPickerLabel) colsPickerLabel.style.display = '';
+        colsPanel.style.display = '';
+        renderColumnsPanel(cfg);
+
+        // ✅ فلترة باسم محامٍ معين (تظهر فقط في تقريري "القضايا/الجلسات المحالة لكل محامي")
+        const lawyerField = document.getElementById('rfpLawyerField');
+        const lawyerSelect = document.getElementById('reportLawyerFilter');
+        lawyerSelect.value = '';
+        if (cfg.lawyerFilterKey) {
+            lawyerField.style.display = '';
+            populateLawyerFilterOptions();
+        } else {
+            lawyerField.style.display = 'none';
+        }
+
+        // ✅ تعبئة القائمة المنسدلة للتقسيم / التجميع ديناميكيًا من أعمدة التقرير
+        const groupBySelect = document.getElementById('reportGroupBySelect');
+        if (groupBySelect) {
+            groupBySelect.innerHTML = '<option value="">بدون تجميع</option>' +
+                cfg.columns.map(c => `<option value="${c.key}">${escapeHtml(c.label)}</option>`).join('');
+            groupBySelect.value = cfg.groupBy || '';
+        }
+
+        // ✅ إعادة ضبط خانة البحث السريع عند فتح تقرير جديد
+        const quickSearchInput = document.getElementById('reportQuickSearch');
+        if (quickSearchInput) quickSearchInput.value = '';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        generateReport();
+    }
+
+    function onGroupByChange(val) {
+        if (!currentConfig) return;
+        currentConfig.groupBy = val || null;
+        renderReportSheet(currentConfig, lastReportRows, lastReportFrom, lastReportTo);
+    }
+
+    // ============================================================
+    // ✅ التحكم في ترتيب الأعمدة: تقف على أي عمود وتنقله لأول التقرير
+    // أو لآخره. الترتيب نفسه هو اللي بيتحكم في ترتيب ظهور الأعمدة
+    // في رأس الجدول (thead) وفي كل صف بيانات، لأن العرض بيعتمد على
+    // ترتيب مصفوفة cfg.columns مباشرة.
+    // ============================================================
+    function renderColumnsPanel(cfg) {
+        const colsPanel = document.getElementById('columnsPanel');
+
+        // نحافظ على اختيارات المستخدم الحالية (الأعمدة الظاهرة/المخفية)
+        // قبل ما نعيد بناء اللوحة، عشان السحب والإفلات ميلغيش اختياراتها
+        const prevChecked = {};
+        cfg.columns.forEach(c => {
+            const el = document.getElementById('col_' + c.key);
+            if (el) prevChecked[c.key] = el.checked;
+        });
+
+        colsPanel.innerHTML = cfg.columns.map(c => {
+            const isChecked = Object.prototype.hasOwnProperty.call(prevChecked, c.key) ? prevChecked[c.key] : c.default;
+            return `
+            <label class="col-check" draggable="true" data-colkey="${c.key}">
+                <input type="checkbox" id="col_${c.key}" data-colkey="${c.key}" ${isChecked ? 'checked' : ''}>
+                ${c.label}
+            </label>`;
+        }).join('');
+
+        attachColumnDragHandlers(colsPanel, cfg.columns, () => {
+            renderColumnsPanel(cfg);
+            renderReportSheet(cfg, lastReportRows, lastReportFrom, lastReportTo);
+        });
+    }
+
+    // ============================================================
+    // ✅ سحب وإفلات لترتيب الأعمدة: امسكي أي عمود بالماوس واسحبيه يمين
+    // أو شمال لمكانه الجديد (خانة أو خانتين أو لأي مكان)، وهيتحرك في
+    // ترتيب التقرير فورًا. نفس الدالة بتتستخدم للتقارير العادية ولتقرير
+    // المأموريات.
+    // ============================================================
+    function attachColumnDragHandlers(container, columnsArray, onReorder) {
+        let draggedKey = null;
+
+        container.querySelectorAll('.col-check[draggable="true"]').forEach(pill => {
+            pill.addEventListener('dragstart', (e) => {
+                draggedKey = pill.dataset.colkey;
+                pill.classList.add('dragging');
+                if (e.dataTransfer) {
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', draggedKey);
+                }
+            });
+            pill.addEventListener('dragend', () => {
+                pill.classList.remove('dragging');
+                container.querySelectorAll('.col-check.drag-over').forEach(el => el.classList.remove('drag-over'));
+                draggedKey = null;
+            });
+            pill.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                if (pill.dataset.colkey !== draggedKey) pill.classList.add('drag-over');
+            });
+            pill.addEventListener('dragleave', () => {
+                pill.classList.remove('drag-over');
+            });
+            pill.addEventListener('drop', (e) => {
+                e.preventDefault();
+                pill.classList.remove('drag-over');
+                const targetKey = pill.dataset.colkey;
+                if (!draggedKey || draggedKey === targetKey) return;
+
+                const fromIdx = columnsArray.findIndex(c => c.key === draggedKey);
+                const toIdx = columnsArray.findIndex(c => c.key === targetKey);
+                if (fromIdx === -1 || toIdx === -1) return;
+
+                const [moved] = columnsArray.splice(fromIdx, 1);
+                columnsArray.splice(toIdx, 0, moved);
+
+                onReorder();
+            });
+        });
+    }
+
+    // ✅ تعبئة قائمة المحامين في فلتر "اختيار محامٍ معين"
+    async function populateLawyerFilterOptions() {
+        const sel = document.getElementById('reportLawyerFilter');
+        if (!sel) return;
+        const currentVal = sel.value;
+        try {
+            const resp = await fetch(`${API_URL}/lawyers`);
+            const json = await resp.json();
+            const lawyers = (json.data || []).slice().sort((a, b) => String(a.FullName || '').localeCompare(String(b.FullName || ''), 'ar'));
+            sel.innerHTML = '<option value="">كل المحامين</option>' +
+                lawyers.map(l => `<option value="${escapeHtml(l.FullName)}">${escapeHtml(l.FullName)}${l.Code ? ' (' + escapeHtml(l.Code) + ')' : ''}</option>`).join('');
+            if (currentVal) sel.value = currentVal;
+        } catch (e) {
+            console.error('❌ فشل جلب قائمة المحامين للفلتر', e);
+        }
+    }
+
+    function backToHub() {
+        currentConfig = null;
+        document.getElementById('reportsHub').classList.remove('hidden');
+        document.getElementById('reportFilterPanel').classList.add('hidden');
+        document.getElementById('reportSheetWrap').classList.add('hidden');
+        document.getElementById('mamoriyatFilterPanel').classList.add('hidden');
+        document.getElementById('mamoriyaSheetWrap').classList.add('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToFilters() {
+        document.getElementById('reportFilterPanel').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ============================================================
+    // تقرير المأموريات (مدمج في صفحة التقارير مع أعمدة إضافية)
+    // ============================================================
+    let mamRowCounter = 0;
+    let lastMamoriyaItems = [];
+
+    // ✅ تعريف أعمدة تقرير المأمورية (نفس فكرة أعمدة التقارير التانية):
+    // ترتيب المصفوفة هو نفسه ترتيب ظهور الأعمدة، فالنقل لأول/لآخر بيغيّر
+    // ترتيبها هنا مباشرة.
+    const MAMORIYAT_COLUMNS = [
+        { key: 'code', label: 'كود المحامي', default: true },
+        { key: 'name', label: 'اسم المحامي', default: true },
+        { key: 'caseNumber', label: 'رقم القضية', default: true },
+        { key: 'caseSubject', label: 'موضوع القضية', default: true },
+        { key: 'caseStage', label: 'درجة القضية', default: false },
+        { key: 'court', label: 'جهة المأمورية (المحكمة)', default: true },
+        { key: 'circuit', label: 'الدائرة', default: true },
+        { key: 'sessionDate', label: 'تاريخ الجلسة', default: true },
+        { key: 'opponent', label: 'الخصم', default: false },
+        { key: 'action', label: 'قرار الجلسة', default: true }
+    ];
+
+    function getVisibleMamoriyaColumns() {
+        return MAMORIYAT_COLUMNS.filter(c => {
+            const cb = document.getElementById('mam_col_' + c.key);
+            return cb ? cb.checked : c.default;
+        });
+    }
+
+    function renderMamoriyaColumnsPanel() {
+        const panel = document.getElementById('mamoriyaColumnsPanel');
+        if (!panel) return;
+
+        const prevChecked = {};
+        MAMORIYAT_COLUMNS.forEach(c => {
+            const el = document.getElementById('mam_col_' + c.key);
+            if (el) prevChecked[c.key] = el.checked;
+        });
+
+        panel.innerHTML = MAMORIYAT_COLUMNS.map(c => {
+            const isChecked = Object.prototype.hasOwnProperty.call(prevChecked, c.key) ? prevChecked[c.key] : c.default;
+            return `
+            <label class="col-check" draggable="true" data-colkey="${c.key}">
+                <input type="checkbox" id="mam_col_${c.key}" data-colkey="${c.key}" ${isChecked ? 'checked' : ''}>
+                ${c.label}
+            </label>`;
+        }).join('');
+
+        attachColumnDragHandlers(panel, MAMORIYAT_COLUMNS, () => {
+            renderMamoriyaColumnsPanel();
+            renderMamoriyaThead();
+            renderMamoriyaBody();
+            attachColumnFilters('mamoriyaTable');
+        });
+    }
+
+    function renderMamoriyaThead() {
+        const visible = getVisibleMamoriyaColumns();
+        let thead = `<th style="width:40px;position:relative;">م</th>`;
+        visible.forEach(c => {
+            thead += `<th data-col="${c.key}" style="position:relative;">
+                <span class="col-filter-wrap th-label-wrap">
+                    <span class="cf-label">${escapeHtml(c.label)}</span>
+                    <button type="button" class="col-filter-btn no-print" data-colkey="${c.key}" title="فلترة">▾</button>
+                </span>
+                <span class="col-resizer" title="اسحب لتوسيع أو تضييق العمود" onmousedown="initColResize(event, this)"></span>
+            </th>`;
+        });
+        thead += `<th class="no-print" style="width:40px;position:relative;">حذف</th>`;
+        document.getElementById('mamoriyaTheadRow').innerHTML = thead;
+
+        applyTableColWidths('mamoriyaTable', visible, 'mamoriyat');
+    }
+
+    document.getElementById('mamoriyaColumnsPanel').addEventListener('change', (e) => {
+        if (e.target.matches('input[type="checkbox"]')) {
+            renderMamoriyaThead();
+            renderMamoriyaBody();
+            attachColumnFilters('mamoriyaTable');
+        }
+    });
+
+    function renderMamoriyaBody() {
+        const tbody = document.getElementById('mamoriyaTbody');
+        tbody.innerHTML = '';
+        mamRowCounter = 0;
+
+        if (lastMamoriyaItems.length === 0) {
+            document.getElementById('mamoriyaEmptyHint').style.display = 'block';
+            resetTablePagination('mamoriyaTable');
+            applyTablePagination('mamoriyaTable');
+            return;
+        }
+        document.getElementById('mamoriyaEmptyHint').style.display = 'none';
+
+        const visibleCols = getVisibleMamoriyaColumns();
+        lastMamoriyaItems.forEach(data => {
+            mamRowCounter++;
+            const tr = document.createElement('tr');
+            let html = `<td class="row-index">${mamRowCounter}</td>`;
+            visibleCols.forEach(c => {
+                const raw = data[c.key];
+                const val = c.key === 'sessionDate' ? formatDisplayDate(raw) : (raw || '');
+                html += `<td data-col="${c.key}" contenteditable="true">${escapeHtml(val)}</td>`;
+            });
+            html += `<td class="no-print del-cell"><button onclick="deleteMamoriyaRow(this)" title="حذف الصف">🗑️</button></td>`;
+            tr.innerHTML = html;
+            tbody.appendChild(tr);
+        });
+
+        // ✅ نبدأ دايمًا من أول صفحة (40 سطر) عند توليد بيان مأموريات جديد
+        resetTablePagination('mamoriyaTable');
+        applyTablePagination('mamoriyaTable');
+    }
+
+    // ===== إضافة صف يدوي في تقرير المأمورية =====
+    function addManualMamoriyaRow() {
+        const tbody = document.getElementById('mamoriyaTbody');
+        const visibleCols = getVisibleMamoriyaColumns();
+
+        mamRowCounter++;
+        const tr = document.createElement('tr');
+        let html = `<td class="row-index">${mamRowCounter}</td>`;
+        visibleCols.forEach(c => {
+            html += `<td data-col="${c.key}" contenteditable="true"></td>`;
+        });
+        html += `<td class="no-print del-cell"><button onclick="deleteMamoriyaRow(this)" title="حذف الصف">🗑️</button></td>`;
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+        document.getElementById('mamoriyaEmptyHint').style.display = 'none';
+
+        // ✅ نروح لآخر صفحة عشان تبان الصف الجديد اللي اتضاف على طول
+        const state = tablePaginationState['mamoriyaTable'] || (tablePaginationState['mamoriyaTable'] = { page: 1 });
+        state.page = Number.MAX_SAFE_INTEGER;
+        applyTablePagination('mamoriyaTable');
+    }
+
+    // ===== حذف صف من تقرير المأمورية =====
+    function deleteMamoriyaRow(btn) {
+        const tr = btn.closest('tr');
+        if (tr) tr.remove();
+        renumberMamoriyaRows();
+        const remaining = document.querySelectorAll('#mamoriyaTbody tr').length;
+        document.getElementById('mamoriyaEmptyHint').style.display = remaining === 0 ? 'block' : 'none';
+        applyTablePagination('mamoriyaTable');
+    }
+
+    // ===== إعادة ترقيم صفوف تقرير المأمورية بعد الحذف =====
+    function renumberMamoriyaRows() {
+        mamRowCounter = 0;
+        document.querySelectorAll('#mamoriyaTbody tr').forEach(tr => {
+            mamRowCounter++;
+            const idxCell = tr.querySelector('.row-index');
+            if (idxCell) idxCell.textContent = mamRowCounter;
+        });
+    }
+
+    function openMamoriyatView() {
+        currentConfig = null;
+        document.getElementById('reportsHub').classList.add('hidden');
+        document.getElementById('reportFilterPanel').classList.add('hidden');
+        document.getElementById('reportSheetWrap').classList.add('hidden');
+        document.getElementById('mamoriyatFilterPanel').classList.remove('hidden');
+        document.getElementById('mamoriyaSheetWrap').classList.remove('hidden');
+
+        const fromInput = document.getElementById('mamoriyaDateFrom');
+        const toInput = document.getElementById('mamoriyaDateTo');
+        const today = new Date().toISOString().split('T')[0];
+        if (!fromInput.value) fromInput.value = today;
+        if (!toInput.value) toInput.value = today;
+        syncDateDisplay('mamoriyaDateFrom');
+        syncDateDisplay('mamoriyaDateTo');
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        loadMamoriyatForRange();
+    }
+
+    async function fetchLawyersMap() {
+        try {
+            const resp = await fetch(`${API_URL}/lawyers`);
+            const json = await resp.json();
+            const map = {};
+            (json.data || []).forEach(l => { map[l.FullName] = l.Code; });
+            return map;
+        } catch (e) {
+            console.error('❌ فشل جلب المحامين', e);
+            return {};
+        }
+    }
+
+    function renderMamoriyaRows(sessions, lawyersMap) {
+        const items = [];
+        sessions.forEach(s => {
+            const lawyerName = (s.AttendingName && s.AttendingName !== '—') ? s.AttendingName : (s.LawyerName || '—');
+            if (!lawyerName || lawyerName === '—') return;
+            const court = (s.CourtName && s.CourtName.trim() !== '') ? s.CourtName.trim() : '—';
+            const circuit = (s.CircuitName && s.CircuitName.trim() !== '') ? s.CircuitName.trim() : '—';
+            items.push({
+                code: lawyersMap[lawyerName] || '',
+                name: lawyerName,
+                caseNumber: s.CaseNumber || '—',
+                caseSubject: s.Subject || '—',
+                caseStage: s.Stage || 'ابتدائي',
+                court: court,
+                circuit: circuit,
+                sessionDate: s.SessionDate || '',
+                opponent: s.Opponent || '—',
+                action: resolveSessionAction(s)
+            });
+        });
+
+        // الترتيب حسب تاريخ الجلسة (مش حسب المحامي)
+        items.sort((a, b) => String(a.sessionDate).localeCompare(String(b.sessionDate)));
+
+        lastMamoriyaItems = items;
+        renderMamoriyaColumnsPanel();
+        renderMamoriyaThead();
+        renderMamoriyaBody();
+        attachColumnFilters('mamoriyaTable');
+    }
+
+    async function loadMamoriyatForRange() {
+        const fromDate = document.getElementById('mamoriyaDateFrom').value;
+        const toDate = document.getElementById('mamoriyaDateTo').value;
+        if (!fromDate || !toDate) return;
+
+        document.getElementById('mamoriyaDayFromSpan').textContent = formatArabicDate(fromDate);
+        document.getElementById('mamoriyaDayToSpan').textContent = formatArabicDate(toDate);
+
+        try {
+            const [sessResp, lawyersMap] = await Promise.all([
+                fetch(`${API_URL}/sessions`).then(r => r.json()),
+                fetchLawyersMap()
+            ]);
+            const sessions = (sessResp.data || []).filter(s => s.SessionDate && s.SessionDate >= fromDate && s.SessionDate <= toDate);
+            renderMamoriyaRows(sessions, lawyersMap);
+        } catch (e) {
+            console.error('❌ فشل تحميل بيانات المأمورية', e);
+            renderMamoriyaRows([], {});
+        }
+    }
+
+    // ============================================================
+    // دوال مساعدة
+    // ============================================================
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, ch => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[ch]));
+    }
+
+    function formatArabicDate(isoDate) {
+        if (!isoDate) return '';
+        const d = new Date(isoDate + 'T00:00:00');
+        if (isNaN(d.getTime())) return isoDate;
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        return `${dd}/${mm}/${d.getFullYear()}`;
+    }
+
+    function formatArabicDateTime(isoDateTime) {
+        if (!isoDateTime) return '';
+        const d = new Date(isoDateTime);
+        if (isNaN(d.getTime())) return isoDateTime;
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        const hh = String(d.getHours()).padStart(2, '0');
+        const min = String(d.getMinutes()).padStart(2, '0');
+        return `${dd}/${mm}/${yyyy} — ${hh}:${min}`;
+    }
+
+    function formatIsoDate(v) {
+        if (v === null || v === undefined || v === '') return '';
+        const s = String(v);
+        const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (m) return m[0];
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) return d.toISOString().split('T')[0];
+        // تنسيق غير معروف: اعرض القيمة الخام بدل ما تختفي خالص
+        return s;
+    }
+
+    // ✅ تنسيق عرض التاريخ في كل التقارير: يوم/شهر/سنة (وليس شهر/يوم/سنة)
+    // القيمة الأصلية (ISO: سنة-شهر-يوم) بتفضل زي ما هي جوه بيانات الصف عشان الفلترة بالتاريخ
+    // تفضل شغالة صح؛ التنسيق ده بس بيتطبق وقت العرض في الجدول
+    function formatDisplayDate(v) {
+        if (v === null || v === undefined || v === '') return '';
+        const s = String(v);
+        const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        }
+        return s;
+    }
+
+    // ✅ تحويل أي قيمة تاريخ إلى صيغة YYYY-MM-DD للمقارنة في الفلترة
+    // يقبل: ISO string, أو dd/mm/yyyy, أو YYYY-MM-DD
+    function toComparableDate(v) {
+        if (!v) return '';
+        const s = String(v).trim();
+        // صيغة ISO مباشرة YYYY-MM-DD
+        const isoMatch = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (isoMatch) return isoMatch[0];
+        // صيغة dd/mm/yyyy
+        const dmyMatch = s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+        if (dmyMatch) return `${dmyMatch[3]}-${dmyMatch[2]}-${dmyMatch[1]}`;
+        // محاولة من Date object
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) return d.toISOString().split('T')[0];
+        return '';
+    }
+
+    // ============================================================
+    // حقول التاريخ المخصصة (تعرض يوم/شهر/سنة دايمًا بدل صيغة المتصفح mm/dd/yyyy)
+    // ============================================================
+    function syncDateDisplay(nativeId) {
+        const native = document.getElementById(nativeId);
+        const display = document.getElementById(nativeId + '_display');
+        if (!native || !display) return;
+        display.value = native.value ? formatDisplayDate(native.value) : '';
+    }
+
+    function wireCustomDateField(nativeId) {
+        const native = document.getElementById(nativeId);
+        const display = document.getElementById(nativeId + '_display');
+        if (!native || !display) return;
+        const openPicker = () => {
+            if (typeof native.showPicker === 'function') {
+                try { native.showPicker(); } catch (e) { native.focus(); }
+            } else {
+                native.focus();
+            }
+        };
+        display.addEventListener('click', openPicker);
+        display.parentElement.querySelector('.date-icon')?.addEventListener('click', openPicker);
+        native.addEventListener('input', () => syncDateDisplay(nativeId));
+        native.addEventListener('change', () => syncDateDisplay(nativeId));
+        syncDateDisplay(nativeId);
+    }
+
+    // مفاتيح الأعمدة اللي بتمثل تاريخ في كل التقارير، عشان نعرضها بصيغة يوم/شهر/سنة
+    const DATE_COLUMN_KEYS = ['SessionDate', 'FilingDate', 'NextDate', 'sessionDate'];
+
+    // ✅ قرار الجلسة: نفس منطق صفحة الجلسات بالظبط —
+    // القيمة الأساسية من عمود ActionTaken (اللي بييجي هنا في s.Action)،
+    // ولو فاضي بنرجع لعمود Notes القديم (إلا لو كان نص وصفي تلقائي قديم بيبدأ بـ "المحكمة:")
+    function isAutoMetaNotes(txt) {
+        return typeof txt === 'string' && txt.trim().startsWith('المحكمة:');
+    }
+    function resolveSessionAction(s) {
+        if (s.Action && s.Action !== '—') return s.Action;
+        if (s.Notes && !isAutoMetaNotes(s.Notes)) return s.Notes;
+        return '—';
+    }
+
+    // ============================================================
+    // جلب البيانات للتقارير الأخرى
+    // ============================================================
+async function fetchCasesRows() {
+    const resp = await fetch(`${API_URL}/cases`);
+    const json = await resp.json();
+    return (json.data || []).map(c => ({
+        Id: c.Id,
+        CaseNumber: c.CaseNumber || '—',
+        CaseYear: c.CaseYear || '',
+        Subject: c.Subject || '—',
+        Description: c.Description || '',
+        Category: c.Category || '—',
+        Stage: c.CurrentStage || '—',
+        Status: c.Status || '—',
+        Court: c.CourtName || '—',
+        Circuit: c.CircuitName || '—',
+        Lawyer: c.LawyerName || 'غير مسند',
+        LawyerCode: c.LawyerCode || '',
+        Opponent: c.Opponent || '—',
+        Plaintiff: c.Plaintiff || '—',
+        Defendant: c.Defendant || '—',
+        FiledBy: (c.Plaintiff && c.Plaintiff.includes(COMPANY_MARK)) ? 'الشركة' : 'الخصم',
+        FilingDate: formatIsoDate(c.FilingDate),
+        ClaimValue: (c.ClaimValue !== null && c.ClaimValue !== undefined) ? c.ClaimValue : '',
+        JudgmentValue: (c.LawsuitExpenses !== null && c.LawsuitExpenses !== undefined) ? c.LawsuitExpenses : '',
+        CaseExpenses: (c.CaseExpenses !== null && c.CaseExpenses !== undefined) ? c.CaseExpenses : '',
+        Notes: c.Notes || '',
+        Result: c.Result || '',
+        Agginst: c.Agginst || '',   // ✅ هذا السطر الجديد مهم جداً لجلب البيانات
+        LatestSessionAction: c.LatestSessionAction || ''
+    }));
+}
+
+    // ✅ "النوع" (مدني / عمال) بييجي دايمًا صح من جدول القضايا نفسه (Cases.Category)،
+    // زي ما بيان بالقضايا بيجيبه. أما اللي راجع مع الجلسة مباشرة (s.Category) فبيبقى
+    // فاضي أحيانًا لو ربط الجلسة بالقضية مش مباشر (جلسات استئناف/نقض مثلًا).
+    // عشان كده بنبني خريطة (Id / رقم القضية → النوع) من بيانات القضايا الفعلية،
+    // ونستخدمها كأول مصدر موثوق، وبعدين نرجع لنوع الجلسة نفسه كحل احتياطي فقط.
+    async function buildCaseCategoryMaps() {
+        const casesRows = await fetchCasesRows();
+        const byId = {};
+        const byNumber = {};
+        casesRows.forEach(c => {
+            if (c.Id !== undefined && c.Id !== null) byId[c.Id] = c.Category;
+            if (c.CaseNumber) byNumber[c.CaseNumber] = c.Category;
+        });
+        return { byId, byNumber };
+    }
+
+    function resolveSessionCategory(s, caseCategoryMaps) {
+        const { byId, byNumber } = caseCategoryMaps;
+        if (s.CaseId !== undefined && s.CaseId !== null && byId[s.CaseId] && byId[s.CaseId] !== '—') {
+            return byId[s.CaseId];
+        }
+        if (s.CaseNumber && byNumber[s.CaseNumber] && byNumber[s.CaseNumber] !== '—') {
+            return byNumber[s.CaseNumber];
+        }
+        return s.Category || '—';
+    }
+
+    async function fetchSessionsRows() {
+    const [resp, caseCategoryMaps, casesRows] = await Promise.all([
+        fetch(`${API_URL}/sessions`),
+        buildCaseCategoryMaps(),
+        fetchCasesRows()
+    ]);
+    const caseDescMap = {};
+    casesRows.forEach(c => {
+        if (c.Id) caseDescMap[c.Id] = c.Description;
+        if (c.CaseNumber) caseDescMap[c.CaseNumber] = c.Description;
+    });
+    const json = await resp.json();
+    return (json.data || []).map(s => ({
+        CaseNumber: s.CaseNumber || '—',
+        Subject: s.Subject || '—',
+        Description: s.Description || caseDescMap[s.CaseId] || caseDescMap[s.CaseNumber] || '',
+        Category: resolveSessionCategory(s, caseCategoryMaps),
+        SessionDate: s.SessionDate || '',
+        SessionTime: s.SessionTime || '',
+        Stage: s.Stage || '—',
+        Status: s.Status || '—',
+        Court: s.CourtName || '—',
+        Circuit: s.CircuitName || '—',
+        Lawyer: s.LawyerName || '—',
+        Attending: (s.AttendingName && s.AttendingName !== '—') ? s.AttendingName : (s.LawyerName || '—'),
+        Action: resolveSessionAction(s),
+        NextDate: s.NextDate || '',
+        Opponent: s.Opponent || '—',
+        Result: s.Result || '',
+        JudgmentValue: (s.JudgmentValue !== null && s.JudgmentValue !== undefined) ? s.JudgmentValue : '',
+        Notes: s.Notes || s.SessionNotes || '',
+        _createdAt: s.CreatedAt || '',
+        CaseId: (s.CaseId !== undefined && s.CaseId !== null) ? s.CaseId : ''
+    }));
+}
+
+    // ✅ يحوّل قيمة عمود "ضد من صدر الحكم" (Agginst) في جدول Cases إلى نتيجة نهائية:
+    //    Agginst = "الخصم"  → الحكم صدر ضد الخصم  → النتيجة: لصالح الشركة
+    //    Agginst = "الشركة" → الحكم صدر ضد الشركة → النتيجة: لصالح الخصم
+    //    غير محدد/غير مقرر/فارغ → القضية لسه معلقة (يتم تصنيفها لاحقًا بالاعتماد على عمود الحالة Status)
+    function resolveResultFromAgginst(rawAgginst) {
+        const agg = (rawAgginst || '').trim();
+        if (!agg) return '';
+        // توحيد الهمزات/التاء المربوطة والهاء لتفادي فروقات الإملاء
+        // (مثال حقيقي من قاعدة البيانات: "الشركة" و"الشركه" بنفس المعنى لكن بإملاء مختلف)
+        const aggNorm = agg.replace(/[إأآا]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, '');
+
+        // قيم تعني إن القضية لسه معلقة / لم يصدر فيها حكم بعد
+        const undecidedValues = ['غيرمقرر', 'غيرمحدد', 'لميصدربعد', 'معلق', 'قيدالنظر'];
+        if (undecidedValues.some(v => aggNorm.includes(v))) return '';
+
+        if (aggNorm.includes('الخصم')) return 'لصالح الشركة';
+        if (aggNorm.includes('شركه')) return 'لصالح الخصم';
+        return '';
+    }
+
+    // ✅ التقرير يعتمد على عمود Agginst لتحديد لصالح مين انتهت القضية،
+    // وأي قضية لسه معلقة (Agginst فاضي/غير محدد) بتتحط تحت مجموعة "متداولة"
+    // بناءً على عمود الحالة Status بدل ما تختفي أو تتحط تحت "أخرى"
+    async function fetchClosedCasesRows() {
+    try {
+        const casesData = await fetchCasesRows();
+
+        // ✅ منطوق الحكم: نفس النص اللي بيتكتب في صفحة الجلسات في خانة
+        // "📝 ما دار بالجلسة / ملخص الحكم" (SessionNotes) وقت عمل إعلان بنتيجة الحكم.
+        // بنجيب لكل قضية آخر جلسة صدر فيها حكم (فيها Result) ونجيب نص إعلانها،
+        // والمطابقة بتتم عن طريق CaseId عشان تكون دقيقة حتى لو رقم القضية اتغيّر شكله للعرض.
+        const judgmentTextByCaseId = {};
+        try {
+            const sessResp = await fetch(`${API_URL}/sessions`);
+            const sessJson = await sessResp.json();
+            (sessJson.data || []).forEach(s => {
+                if (!s.CaseId || !s.Result) return;
+                const existing = judgmentTextByCaseId[s.CaseId];
+                if (!existing || String(s.SessionDate || '') > String(existing.SessionDate || '')) {
+                    judgmentTextByCaseId[s.CaseId] = { SessionDate: s.SessionDate || '', text: s.SessionNotes || s.Notes || '' };
+                }
+            });
+        } catch (e) {
+            console.error('❌ فشل جلب الجلسات لاستخراج منطوق الحكم', e);
+        }
+
+        const closedCases = [];
+
+        casesData.forEach(caseItem => {
+            const result = resolveResultFromAgginst(caseItem.Agginst);
+            // ✅ التقرير ده خاص بالقضايا "المنتهية" بس (لصالح الشركة أو لصالح الخصم)
+            // القضايا اللي لسه متداولة/معلقة (لم يصدر فيها حكم بعد) ما تدخلش في هذا التقرير خالص
+            if (!result) return;
+
+            const judgmentEntry = judgmentTextByCaseId[caseItem.Id];
+
+            closedCases.push({
+                CaseNumber: caseItem.CaseNumber,
+                Subject: caseItem.Subject || '—',
+                Description: caseItem.Description || '',
+                Category: caseItem.Category || '—',
+                Lawyer: caseItem.Lawyer || '—',
+                Opponent: caseItem.Opponent || '—',
+                Plaintiff: caseItem.Plaintiff || '—',
+                Defendant: caseItem.Defendant || '—',
+                Stage: caseItem.Stage || '—',
+                Court: caseItem.Court || '—',
+                Circuit: caseItem.Circuit || '—',
+                Result: result,
+                JudgmentText: judgmentEntry ? (judgmentEntry.text || '') : '',
+                FilingDate: caseItem.FilingDate || '',
+                Notes: caseItem.Notes || ''
+            });
+        });
+
+        const wonCount = closedCases.filter(c => c.Result === 'لصالح الشركة').length;
+        const lostCount = closedCases.filter(c => c.Result === 'لصالح الخصم').length;
+        console.log(`✅ إجمالي القضايا المنتهية: ${closedCases.length} (لصالح الشركة: ${wonCount}, لصالح الخصم: ${lostCount})`);
+        return closedCases;
+
+    } catch (error) {
+        console.error('❌ خطأ في جلب القضايا المنتهية:', error);
+        return [];
+    }
+}
+
+    // ✅ بيان المحامين المحولين: القضايا اللي المحامي الأصلي (المسند للقضية) اتغير
+    // وحضر بدالة محامي تاني في الجلسات (بيعتمد على آخر جلسة لكل قضية)
+    async function fetchTransferredLawyersRows() {
+        try {
+            const [resp, caseCategoryMaps] = await Promise.all([
+                fetch(`${API_URL}/sessions`),
+                buildCaseCategoryMaps()
+            ]);
+            const json = await resp.json();
+            const sessions = json.data || [];
+            // الجلسات بترجع من السيرفر مرتبة الأحدث أولاً (CreatedAt DESC)
+            const seenCases = new Set();
+            const rows = [];
+            sessions.forEach(s => {
+                const caseKey = s.CaseNumber || s.CaseId;
+                if (!caseKey || seenCases.has(caseKey)) return;
+                seenCases.add(caseKey);
+
+                const original = (s.LawyerName || '').trim();
+                const current = (s.AttendingName || '').trim();
+                if (!original || !current || original === '—' || current === '—') return;
+                if (original === current) return;
+
+                rows.push({
+                    CaseNumber: s.CaseNumber || '—',
+                    Subject: s.CaseSubject || s.Subject || '—',
+                    Category: resolveSessionCategory(s, caseCategoryMaps),
+                    OriginalLawyer: original,
+                    CurrentLawyer: current,
+                    Court: s.CourtName || '—',
+                    Circuit: s.CircuitName || '—',
+                    SessionDate: s.SessionDate || ''
+                });
+            });
+            return rows;
+        } catch (e) {
+            console.error('❌ فشل جلب بيان المحامين المحولين', e);
+            return [];
+        }
+    }
+
+    // ============================================================
+    // ✅ ترقيم الصفحات للجداول الطويلة (كل 40 سطر تلقائيًا + السابق/التالي)
+    // بيشتغل فوق أي جدول له tbody فيه صفوف بيانات (reportTable / mamoriyaTable)
+    // ويحترم فلاتر الأعمدة والبحث السريع الموجودين أصلاً (بيقرأ tr.style.display)
+    // وعند الطباعة بتظهر كل الصفوف تلقائيًا (شوفي قاعدة tr.pg-hidden جوه @media print)
+    // ============================================================
+    const TABLE_PAGE_SIZE = 20;
+    const tablePaginationState = {}; // { tableId: { page: N } }
+
+    function getPaginationDataRows(tableId) {
+        return Array.from(document.querySelectorAll(`#${tableId} tbody tr:not(.group-row)`));
+    }
+
+    function isFilterVisibleRow(tr) {
+        return tr.style.display !== 'none';
+    }
+
+    function updatePaginationGroupVisibility(tableId) {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        if (!tbody) return;
+        let currentGroup = null;
+        let hasVisible = false;
+        Array.from(tbody.children).forEach(tr => {
+            if (tr.classList.contains('group-row')) {
+                if (currentGroup) currentGroup.style.display = hasVisible ? '' : 'none';
+                currentGroup = tr;
+                hasVisible = false;
+            } else if (isFilterVisibleRow(tr) && !tr.classList.contains('pg-hidden')) {
+                hasVisible = true;
+            }
+        });
+        if (currentGroup) currentGroup.style.display = hasVisible ? '' : 'none';
+    }
+
+    function renderPaginationBar(tableId, page, totalPages, total) {
+        const bar = document.getElementById(`${tableId}-pagination`);
+        if (!bar) return;
+
+        if (total <= TABLE_PAGE_SIZE) {
+            bar.innerHTML = '';
+            bar.style.display = 'none';
+            return;
+        }
+        bar.style.display = 'flex';
+
+        const start = total === 0 ? 0 : (page - 1) * TABLE_PAGE_SIZE + 1;
+        const end = Math.min(page * TABLE_PAGE_SIZE, total);
+
+        bar.innerHTML = `
+            <span class="pg-info">عرض ${start}–${end} من إجمالي ${total} سطر</span>
+            <div class="pg-nav">
+                <button type="button" class="pg-btn" onclick="changeTablePage('${tableId}', -1)" ${page <= 1 ? 'disabled' : ''}>السابق</button>
+                <span class="pg-page-indicator">صفحة ${page} من ${totalPages}</span>
+                <button type="button" class="pg-btn" onclick="changeTablePage('${tableId}', 1)" ${page >= totalPages ? 'disabled' : ''}>التالي</button>
+            </div>
+        `;
+    }
+
+    function applyTablePagination(tableId) {
+        const state = tablePaginationState[tableId] || (tablePaginationState[tableId] = { page: 1 });
+        const dataRows = getPaginationDataRows(tableId);
+        const filteredRows = dataRows.filter(isFilterVisibleRow);
+        const total = filteredRows.length;
+        const totalPages = Math.max(1, Math.ceil(total / TABLE_PAGE_SIZE));
+
+        if (state.page > totalPages) state.page = totalPages;
+        if (state.page < 1) state.page = 1;
+
+        const start = (state.page - 1) * TABLE_PAGE_SIZE;
+        const end = start + TABLE_PAGE_SIZE;
+
+        dataRows.forEach(tr => tr.classList.remove('pg-hidden'));
+        filteredRows.forEach((tr, i) => {
+            if (i < start || i >= end) {
+                tr.classList.add('pg-hidden');
+            } else {
+                const cell = tr.querySelector('.row-index');
+                if (cell) cell.textContent = i + 1;
+            }
+        });
+
+        if (document.querySelector(`#${tableId} tbody .group-row`)) {
+            updatePaginationGroupVisibility(tableId);
+        }
+
+        renderPaginationBar(tableId, state.page, totalPages, total);
+    }
+
+    function resetTablePagination(tableId) {
+        tablePaginationState[tableId] = { page: 1 };
+    }
+
+    function changeTablePage(tableId, delta) {
+        const state = tablePaginationState[tableId] || (tablePaginationState[tableId] = { page: 1 });
+        state.page += delta;
+        applyTablePagination(tableId);
+        const sheet = document.getElementById(tableId.replace(/Table$/, 'Sheet'));
+        if (sheet) sheet.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ============================================================
+    // فلترة الأعمدة (سهم فلتر أسفل كل عمود، زي إكسل)
+    // ============================================================
+    // filterState: { tableId: { colKey: Set(القيم المسموح بيها) | null } }
+    const columnFilterState = {};
+
+    function closeAllColumnFilterDropdowns(exceptEl) {
+        document.querySelectorAll('.col-filter-dropdown').forEach(dd => {
+            if (dd !== exceptEl) dd.remove();
+        });
+    }
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.col-filter-wrap')) closeAllColumnFilterDropdowns(null);
+    });
+
+    function getColumnValues(tableId, colKey) {
+        const values = new Set();
+        document.querySelectorAll(`#${tableId} tbody tr:not(.group-row) td[data-col="${colKey}"]`).forEach(td => {
+            values.add(td.textContent.trim());
+        });
+        return Array.from(values).sort((a, b) => String(a).localeCompare(String(b), 'ar'));
+    }
+
+    function applyColumnFilters(tableId) {
+        const state = columnFilterState[tableId] || {};
+        const activeCols = Object.keys(state).filter(k => state[k] !== null);
+        const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+        let lastGroupRow = null;
+        let groupHasVisible = false;
+
+        rows.forEach(tr => {
+            if (tr.classList.contains('group-row')) {
+                if (lastGroupRow) lastGroupRow.style.display = groupHasVisible ? '' : 'none';
+                lastGroupRow = tr;
+                groupHasVisible = false;
+                return;
+            }
+            let visible = true;
+            for (const colKey of activeCols) {
+                const td = tr.querySelector(`td[data-col="${colKey}"]`);
+                const val = td ? td.textContent.trim() : '';
+                if (!state[colKey].has(val)) { visible = false; break; }
+            }
+            tr.style.display = visible ? '' : 'none';
+            if (visible) groupHasVisible = true;
+        });
+        if (lastGroupRow) lastGroupRow.style.display = groupHasVisible ? '' : 'none';
+
+        // تحديث شكل زرار الفلتر (لو فيه فلتر مفعّل عليه)
+        document.querySelectorAll(`#${tableId} thead .col-filter-btn`).forEach(btn => {
+            const colKey = btn.dataset.colkey;
+            btn.classList.toggle('active-filter', !!state[colKey]);
+        });
+
+        // ✅ أي تغيير في الفلاتر يرجّعنا لأول صفحة، ثم نعيد حساب الصفحات على البيانات المفلترة
+        resetTablePagination(tableId);
+        applyTablePagination(tableId);
+
+        if (tableId === 'reportTable') {
+            recomputeVisibleTotals('reportTable', 'reportTotalsBar', 'reportTotalsTheadRow', 'reportTotalsTbodyRow');
+        }
+    }
+
+    // ✅ إلغاء كل فلاتر الأعمدة دفعة واحدة وإرجاع كل الصفوف والاختيارات زي ما كانت
+    function clearAllColumnFilters(tableId) {
+        columnFilterState[tableId] = {};
+        closeAllColumnFilterDropdowns(null);
+        applyColumnFilters(tableId);
+    }
+
+    function toggleColumnFilterDropdown(tableId, colKey, btnEl) {
+        const existing = btnEl.parentElement.querySelector('.col-filter-dropdown');
+        if (existing) { existing.remove(); return; }
+        closeAllColumnFilterDropdowns(null);
+
+        const allValues = getColumnValues(tableId, colKey);
+        columnFilterState[tableId] = columnFilterState[tableId] || {};
+        const currentSet = columnFilterState[tableId][colKey];
+        const selected = currentSet ? currentSet : new Set(allValues);
+
+        const dd = document.createElement('div');
+        dd.className = 'col-filter-dropdown';
+        dd.innerHTML = `
+            <div class="cf-actions">
+                <button type="button" data-act="all">تحديد الكل</button>
+                <button type="button" data-act="none">إلغاء الكل</button>
+            </div>
+            ${allValues.map(v => `
+                <label>
+                    <input type="checkbox" value="${escapeHtml(v)}" ${selected.has(v) ? 'checked' : ''}>
+                    <span>${escapeHtml(v) || '(فارغ)'}</span>
+                </label>
+            `).join('')}
+        `;
+        dd.addEventListener('click', (e) => e.stopPropagation());
+
+        dd.querySelector('[data-act="all"]').addEventListener('click', () => {
+            dd.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+            commitFilter();
+        });
+        dd.querySelector('[data-act="none"]').addEventListener('click', () => {
+            dd.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            commitFilter();
+        });
+        dd.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', commitFilter);
+        });
+
+        function commitFilter() {
+            const checked = Array.from(dd.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+            // ✅ لو المستخدم فضّى الاختيارات كلها (بيحاول "يرجع تاني" يشوف كل القيم)
+            // أو حدد كل القيم، في الحالتين ده معناه: مفيش فلتر فعلاً على العمود ده
+            // (قبل كان التفضية الكاملة بتخفي كل الصفوف بدل ما ترجّع العرض الكامل)
+            columnFilterState[tableId][colKey] = (checked.length === 0 || checked.length === allValues.length) ? null : new Set(checked);
+            applyColumnFilters(tableId);
+        }
+
+        btnEl.parentElement.appendChild(dd);
+    }
+
+    function attachColumnFilters(tableId) {
+        columnFilterState[tableId] = {}; // إعادة ضبط الفلاتر عند إعادة توليد التقرير
+        document.querySelectorAll(`#${tableId} thead th[data-col]`).forEach(th => {
+            const colKey = th.dataset.col;
+            const btn = th.querySelector('.col-filter-btn');
+            if (btn) {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    toggleColumnFilterDropdown(tableId, colKey, btn);
+                };
+            }
+        });
+    }
+
+    // ============================================================
+    // توليد التقارير العادية
+    // ============================================================
+    function debounce(fn, wait) {
+        let t;
+        return (...args) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn(...args), wait);
+        };
+    }
+
+    const debouncedGenerateReport = debounce(() => { if (currentConfig) generateReport(); }, 350);
+
+    document.getElementById('reportDateFrom').addEventListener('input', debouncedGenerateReport);
+    document.getElementById('reportDateTo').addEventListener('input', debouncedGenerateReport);
+    document.getElementById('reportLawyerFilter').addEventListener('change', debouncedGenerateReport);
+    document.getElementById('reportQuickSearch').addEventListener('input', debounce(applyQuickSearch, 150));
+
+    document.getElementById('columnsPanel').addEventListener('change', (e) => {
+        if (e.target.matches('input[type="checkbox"]') && currentConfig) {
+            // ✅ نعيد بناء الجدول بالأعمدة الظاهرة الجديدة فقط (بدون إعادة جلب البيانات)
+            // عشان الأعمدة المخفية متاخدش مساحتها فاضية، والباقي يتصاغر ويملأ الصفحة بالكامل
+            renderReportSheet(currentConfig, lastReportRows, lastReportFrom, lastReportTo);
+        }
+    });
+
+
+    async function generateReport() {
+        const cfg = currentConfig;
+        if (!cfg) return;
+
+        try {
+            let rows = [];
+            if (cfg.dataType === 'cases') rows = await fetchCasesRows();
+            else if (cfg.dataType === 'sessions') rows = await fetchSessionsRows();
+            else if (cfg.dataType === 'closed') rows = await fetchClosedCasesRows();
+            else if (cfg.dataType === 'transferred') rows = await fetchTransferredLawyersRows();
+
+            const from = document.getElementById('reportDateFrom').value;
+            const to = document.getElementById('reportDateTo').value;
+
+            if (cfg.dateField && (from || to)) {
+                rows = rows.filter(r => {
+                    const d = toComparableDate(r[cfg.dateField]);
+                    if (!d) return true; // سجل من غير تاريخ صالح — يفضل يظهر بدل ما يختفي بصمت
+                    if (from && d < from) return false;
+                    if (to && d > to) return false;
+                    return true;
+                });
+            }
+
+            // ✅ فلترة محامٍ معين (تقارير "المحالة لكل محامي" فقط)
+            if (cfg.lawyerFilterKey) {
+                const lawyerVal = document.getElementById('reportLawyerFilter').value;
+                if (lawyerVal) {
+                    rows = rows.filter(r => r[cfg.lawyerFilterKey] === lawyerVal);
+                }
+            }
+
+            lastReportRows = rows;
+            lastReportFrom = from;
+            lastReportTo = to;
+
+            // ✅ عرض الرسالة الخضراء لتأكيد البيانات المجلوبة
+            let periodText = 'لجميع الفترات';
+            if (from && to) periodText = `للفترة من ${formatDisplayDate(from)} إلى ${formatDisplayDate(to)}`;
+            else if (from) periodText = `للفترة من ${formatDisplayDate(from)}`;
+            else if (to) periodText = `للفترة حتى ${formatDisplayDate(to)}`;
+
+            let lawyerText = '';
+            if (cfg.lawyerFilterKey) {
+                const lawyerVal = document.getElementById('reportLawyerFilter').value;
+                if (lawyerVal) {
+                    lawyerText = ` | للمحامي: ${lawyerVal}`;
+                }
+            }
+
+            const statusMsgEl = document.getElementById('reportStatusMessage');
+            if (statusMsgEl) {
+                statusMsgEl.innerHTML = `✅ تم جلب البيانات (${rows.length} نتيجة) ${periodText}${lawyerText}`;
+                statusMsgEl.style.display = 'block';
+            }
+
+            renderReportSheet(cfg, rows, from, to);
+        } catch (e) {
+            console.error('❌ فشل توليد التقرير', e);
+            alert('حدث خطأ أثناء توليد التقرير، برجاء المحاولة مرة أخرى.');
+        }
+    }
+
+    // ✅ الأعمدة الظاهرة فعليًا دلوقتي حسب حالة الـ checkbox — بنبني الجدول بيها بس،
+    // بدل ما نخفي الأعمدة الغير مطلوبة بـ display:none ونسيبها تاخد مساحتها فاضية جنب الجدول.
+    // كده الجدول دايمًا بياخد عرض الصفحة كامل، ولو فعّلتي أعمدة أكتر بتتصاغر الأعمدة تلقائيًا لتظبط.
+    function getVisibleColumns(cfg) {
+        return cfg.columns.filter(c => {
+            const cb = document.getElementById('col_' + c.key);
+            return cb ? cb.checked : c.default;
+        });
+    }
+
+    // ✅ لأعمدة الأطراف (المدعي / المدعى عليه / الخصم) اللي ممكن تحتوي على أكتر من اسم مع بعض:
+    // بنعرض أول اسم بس + عدد الباقيين، والقائمة كاملة بتفضل موجودة كـ tooltip عند تمرير الماوس فوق الاسم
+    const PARTY_LIST_COLUMN_KEYS = ['Plaintiff', 'Defendant', 'Opponent'];
+
+    function formatPartyList(rawValue) {
+        const raw = (rawValue === undefined || rawValue === null) ? '' : String(rawValue).trim();
+        if (!raw) return '';
+
+        let parts = null;
+        if (raw.includes('\n')) parts = raw.split('\n');
+        else if (raw.includes('،')) parts = raw.split('،');
+        else if (raw.includes(',')) parts = raw.split(',');
+        else if (raw.includes('؛')) parts = raw.split('؛');
+        else if (raw.includes(';')) parts = raw.split(';');
+        else if (/\sو\s/.test(raw)) parts = raw.split(/\sو\s/);
+
+        if (!parts) return escapeHtml(raw);
+
+        parts = parts.map(p => p.trim()).filter(Boolean);
+        if (parts.length <= 1) return escapeHtml(raw);
+
+        const first = parts[0];
+        const restCount = parts.length - 1;
+        return `<span title="${escapeHtml(raw)}">${escapeHtml(first)} <span class="party-more">+${restCount} آخرين</span></span>`;
+    }
+
+    function buildRowHtml(cfg, r, idx, visibleCols) {
+        let h = `<tr><td class="row-index">${idx}</td>`;
+        visibleCols.forEach(c => {
+            const val = r[c.key];
+            const display = (val === undefined || val === null) ? '' : val;
+            const cellContent = DATE_COLUMN_KEYS.includes(c.key)
+                ? escapeHtml(formatDisplayDate(display))
+                : (PARTY_LIST_COLUMN_KEYS.includes(c.key) ? formatPartyList(display) : escapeHtml(display));
+            h += `<td data-col="${c.key}">${cellContent}</td>`;
+        });
+        h += `</tr>`;
+        return h;
+    }
+
+    // ✅ تحويل قيمة نصية لرقم صالح للجمع، بنفس منطق SQL's TRY_CAST(...AS DECIMAL):
+    // القيمة لازم تبقى رقم صافي (مسموح بفواصل الآلاف وعلامة عشرية واحدة وإشارة سالب)
+    // من غير أي نص أو رموز تانية جواها — أي حاجة غير كده بترجع 0 (بدل ما نستخرج
+    // أرقام من جوه نص أو ندمج أكتر من رقم في خلية واحدة وهو غلط كان بيضخم الإجمالي بشكل كبير)
+    function parseNumericValue(val) {
+        if (val === undefined || val === null || val === '') return 0;
+        let s = String(val).trim();
+        if (s === '' || s === '-' || s === '—') return 0;
+        s = s.replace(/,/g, ''); // فواصل الآلاف بس هي المسموح نشيلها
+        // لازم الشكل النهائي يبقى رقم صافي فقط: إشارة سالب اختيارية + أرقام + نقطة عشرية اختيارية
+        // أي نص أو رمز تاني (زي "جنيه" أو مسافة أو رقمين مدموجين) بيخلي القيمة = 0،
+        // بالظبط زي TRY_CAST في الـ SQL اللي بيستبعد أي قيمة مش رقم صافي
+        if (!/^-?\d+(\.\d+)?$/.test(s)) return 0;
+        const num = parseFloat(s);
+        return isNaN(num) ? 0 : num;
+    }
+
+    function formatTotalValue(num) {
+        return num.toLocaleString('ar-EG', { maximumFractionDigits: 2 });
+    }
+
+    // ✅ صف إجمالي أسفل الجدول: بيظهر بس للتقارير اللي معلّم عليها showTotals،
+    // وبيحسب المجموع لكل عمود من totalsColumns الظاهر فعليًا حاليًا ضمن أعمدة التقرير
+    function renderTotalsBar(cfg, rows, visibleCols, barId, theadId, tbodyId) {
+        const bar = document.getElementById(barId);
+        if (!bar) return;
+
+        if (!cfg.showTotals || !cfg.totalsColumns || !cfg.totalsColumns.length) {
+            bar.style.display = 'none';
+            document.getElementById(theadId).innerHTML = '';
+            document.getElementById(tbodyId).innerHTML = '';
+            return;
+        }
+
+        const visibleKeys = visibleCols.map(c => c.key);
+        const totalCols = cfg.totalsColumns
+            .map(key => cfg.columns.find(c => c.key === key))
+            .filter(c => c && visibleKeys.includes(c.key));
+
+        if (!totalCols.length) {
+            bar.style.display = 'none';
+            document.getElementById(theadId).innerHTML = '';
+            document.getElementById(tbodyId).innerHTML = '';
+            return;
+        }
+
+        let thead = '';
+        let tbody = '';
+        totalCols.forEach(c => {
+            const sum = rows.reduce((acc, r) => acc + parseNumericValue(r[c.key]), 0);
+            thead += `<th>إجمالي ${c.label}</th>`;
+            tbody += `<td>${formatTotalValue(sum)}</td>`;
+        });
+
+        document.getElementById(theadId).innerHTML = thead;
+        document.getElementById(tbodyId).innerHTML = tbody;
+        bar.style.display = 'block';
+
+        // ✅ تشخيص سريع: عدد صفوف القضايا اللي دخلت في الحساب + عدد أرقام القضايا
+        // المكررة (لو موجودة). يساعد في اكتشاف لو في تكرار جاي من الـ API قبل ما يوصل للإجمالي
+        const noteId = barId + 'Note';
+        let noteEl = document.getElementById(noteId);
+        if (!noteEl) {
+            noteEl = document.createElement('div');
+            noteEl.id = noteId;
+            noteEl.className = 'rtb-diag-note no-print';
+            noteEl.style.cssText = 'margin-top:8px;font-size:0.75rem;font-weight:700;color:var(--muted);';
+            bar.appendChild(noteEl);
+        }
+        const numberCounts = new Map();
+        rows.forEach(r => {
+            const num = r.CaseNumber || '—';
+            numberCounts.set(num, (numberCounts.get(num) || 0) + 1);
+        });
+        const duplicated = Array.from(numberCounts.entries()).filter(([, count]) => count > 1);
+        const dupCount = duplicated.reduce((acc, [, count]) => acc + count, 0);
+        noteEl.textContent = duplicated.length}
+
+    // ✅ إعادة حساب الإجمالي من الصفوف "الظاهرة فعليًا" في الجدول بس (بعد البحث السريع أو فلاتر الأعمدة)،
+    // بدل ما يفضل بيحسب على كل الصفوف حتى لو مخفية — عشان الإجمالي يطابق اللي هيتطبع فعلاً
+    function recomputeVisibleTotals(tableId, barId, theadId, tbodyId) {
+        const cfg = currentConfig;
+        if (!cfg || !cfg.showTotals || !cfg.totalsColumns || !cfg.totalsColumns.length) return;
+        const bar = document.getElementById(barId);
+        if (!bar || bar.style.display === 'none') return;
+
+        const visibleKeys = Array.from(document.querySelectorAll(`#${tableId} thead th[data-col]`)).map(th => th.dataset.col);
+        const totalCols = cfg.totalsColumns
+            .map(key => cfg.columns.find(c => c.key === key))
+            .filter(c => c && visibleKeys.includes(c.key));
+        if (!totalCols.length) return;
+
+        const visibleRows = Array.from(document.querySelectorAll(`#${tableId} tbody tr`))
+            .filter(tr => !tr.classList.contains('group-row') && tr.style.display !== 'none');
+
+        let thead = '';
+        let tbody = '';
+        totalCols.forEach(c => {
+            let sum = 0;
+            visibleRows.forEach(tr => {
+                const td = tr.querySelector(`td[data-col="${c.key}"]`);
+                sum += parseNumericValue(td ? td.textContent : '');
+            });
+            thead += `<th>إجمالي ${c.label}</th>`;
+            tbody += `<td>${formatTotalValue(sum)}</td>`;
+        });
+        document.getElementById(theadId).innerHTML = thead;
+        document.getElementById(tbodyId).innerHTML = tbody;
+    }
+
+    function renderReportSheet(cfg, rows, from, to) {
+        lastReportRows = rows;
+        lastReportFrom = from;
+        lastReportTo = to;
+
+        // ✅ جدول ثابت العرض (بدون سكرول يمين/شمال) لكل التقارير — الحجم الكلي للجدول
+        // يفضل ثابت (100% من عرض الصفحة) والأعمدة هي اللي بتتصاغر/تتلاءم مع المساحة،
+        // ده يخلي شكل الطباعة موحّد وصغير الحجم مهما زاد عدد الأعمدة الظاهرة
+        document.getElementById('reportTable').classList.add('fixed-width-table');
+
+        const visibleCols = getVisibleColumns(cfg);
+
+        let thead = `<th style="width:40px;position:relative;">م</th>`;
+        visibleCols.forEach(c => {
+            const isSorted = currentSortCol === c.key;
+            const sortIcon = isSorted ? (currentSortDir === 'asc' ? ' ▲' : ' ▼') : '';
+            thead += `<th data-col="${c.key}" class="sortable-th" style="position:relative;">
+                <span class="col-filter-wrap th-label-wrap">
+                    <span class="cf-label" onclick="handleReportColumnSort('${c.key}')" title="انقر للترتيب" style="cursor:pointer;">
+                        ${escapeHtml(c.label)}
+                        ${sortIcon ? '<span style="font-size:10px;color:var(--gold-600);">' + sortIcon + '</span>' : ''}
+                    </span>
+                    <button type="button" class="col-filter-btn no-print" data-colkey="${c.key}" title="فلترة">▾</button>
+                </span>
+                <span class="col-resizer" title="اسحب لتوسيع أو تضييق العمود" onmousedown="initColResize(event, this)"></span>
+            </th>`;
+        });
+        document.getElementById('reportTheadRow').innerHTML = thead;
+
+        // ✅ تطبيق مساحات الأعمدة المخصصة وحفظ تناسق العرض للطباعة والشاشة
+        applyTableColWidths('reportTable', visibleCols, cfg.id);
+
+        let idx = 0;
+        let body = '';
+
+        if (cfg.groupBy) {
+            const groups = new Map();
+            rows.forEach(r => {
+                const key = r[cfg.groupBy] || 'غير محدد';
+                if (!groups.has(key)) groups.set(key, []);
+                groups.get(key).push(r);
+            });
+            let sortedKeys;
+            if (cfg.groupOrder && cfg.groupOrder.length) {
+                const known = cfg.groupOrder.filter(k => groups.has(k));
+                const rest = Array.from(groups.keys()).filter(k => !cfg.groupOrder.includes(k)).sort((a, b) => String(a).localeCompare(String(b), 'ar'));
+                sortedKeys = [...known, ...rest];
+            } else {
+                sortedKeys = Array.from(groups.keys()).sort((a, b) => String(a).localeCompare(String(b), 'ar'));
+            }
+            sortedKeys.forEach(key => {
+                const items = groups.get(key);
+                const label = cfg.groupLabel ? cfg.groupLabel(key, items) : key;
+                body += `<tr class="group-row"><td colspan="${visibleCols.length + 1}" class="group-header">${label} <span class="group-count">(${items.length})</span></td></tr>`;
+                items.forEach(r => { idx++; body += buildRowHtml(cfg, r, idx, visibleCols); });
+            });
+        } else {
+            rows.forEach(r => { idx++; body += buildRowHtml(cfg, r, idx, visibleCols); });
+        }
+
+        document.getElementById('reportTbody').innerHTML = body;
+        document.getElementById('reportEmptyHint').style.display = rows.length ? 'none' : 'block';
+
+        // ===== شريط إحصائيات كسب/خسارة القضايا (تقرير closed-cases-result فقط) =====
+        const statsBar = document.getElementById('reportStatsBar');
+        if (cfg.id === 'closed-cases-result') {
+            const wonCount = rows.filter(r => r.Result === 'لصالح الشركة').length;
+            const lostCount = rows.filter(r => r.Result === 'لصالح الخصم').length;
+            statsBar.innerHTML = `
+                <div class="stat-pill win">
+                    <span class="stat-icon">✅</span>
+                    <div><div class="stat-num">${wonCount}</div><div class="stat-lbl">قضايا كسبتها الشركة (ضد الخصم)</div></div>
+                </div>
+                <div class="stat-pill lose">
+                    <span class="stat-icon">❌</span>
+                    <div><div class="stat-num">${lostCount}</div><div class="stat-lbl">قضايا خسرتها الشركة (لصالح الخصم)</div></div>
+                </div>
+                <div class="stat-pill total">
+                    <span class="stat-icon">⚖️</span>
+                    <div><div class="stat-num">${wonCount + lostCount}</div><div class="stat-lbl">إجمالي القضايا المنتهية</div></div>
+                </div>
+            `;
+            statsBar.style.display = 'flex';
+        } else {
+            statsBar.style.display = 'none';
+            statsBar.innerHTML = '';
+        }
+
+        renderTotalsBar(cfg, rows, visibleCols, 'reportTotalsBar', 'reportTotalsTheadRow', 'reportTotalsTbodyRow');
+
+        attachColumnFilters('reportTable');
+
+        document.getElementById('reportTitleText').textContent = cfg.title;
+        const periodText = (from || to)
+            ? `عن الفترة من ${from || '...'} إلى ${to || '...'}`
+            : 'عن كل الفترات المسجلة';
+        document.getElementById('reportPeriodText').textContent = periodText;
+        document.getElementById('reportGeneratedText').textContent = `تاريخ إعداد التقرير: ${formatArabicDate(new Date().toISOString().split('T')[0])}`;
+
+        document.getElementById('reportSheetWrap').classList.remove('hidden');
+
+        // ✅ لو فيه كلمة بحث سريع متكتوبة، بنطبقها تاني بعد أي إعادة توليد للتقرير (تغيير تاريخ/محامي)
+        applyQuickSearch();
+    }
+
+    // ============================================================
+    // ترتيب الأعمدة بالنقر
+    // ============================================================
+    function handleReportColumnSort(colKey) {
+        if (!lastReportRows || !lastReportRows.length) return;
+        if (currentSortCol === colKey) {
+            currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSortCol = colKey;
+            currentSortDir = 'asc';
+        }
+
+        lastReportRows.sort((a, b) => {
+            let va = a[colKey] !== undefined && a[colKey] !== null ? a[colKey] : '';
+            let vb = b[colKey] !== undefined && b[colKey] !== null ? b[colKey] : '';
+
+            // Number comparison
+            const numA = parseNumericValue(va);
+            const numB = parseNumericValue(vb);
+            if (numA !== 0 || numB !== 0) {
+                return currentSortDir === 'asc' ? numA - numB : numB - numA;
+            }
+
+            // String / Arabic comparison
+            const strA = String(va).trim();
+            const strB = String(vb).trim();
+            const res = strA.localeCompare(strB, 'ar');
+            return currentSortDir === 'asc' ? res : -res;
+        });
+
+        renderReportSheet(currentConfig, lastReportRows, lastReportFrom, lastReportTo);
+    }
+
+    // ============================================================
+    // ✅ نظام التحكم في عرض ومساحات الأعمدة للطباعة (مثل الإكسل)
+    // ============================================================
+    const COL_WIDTHS_STORAGE_KEY = 'aesc_report_col_widths_v1';
+
+    function loadSavedColWidths() {
+        try {
+            const raw = localStorage.getItem(COL_WIDTHS_STORAGE_KEY);
+            return raw ? JSON.parse(raw) : {};
+        } catch(e) {
+            return {};
+        }
+    }
+
+    function saveColWidthsState(reportId, colKey, widthPercent) {
+        const allWidths = loadSavedColWidths();
+        if (!allWidths[reportId]) allWidths[reportId] = {};
+        allWidths[reportId][colKey] = widthPercent;
+        try {
+            localStorage.setItem(COL_WIDTHS_STORAGE_KEY, JSON.stringify(allWidths));
+        } catch(e){}
+    }
+
+    function getColWidth(reportId, colKey, defaultPercent) {
+        const allWidths = loadSavedColWidths();
+        if (allWidths[reportId] && allWidths[reportId][colKey] !== undefined) {
+            return allWidths[reportId][colKey];
+        }
+        return defaultPercent;
+    }
+
+    function applyTableColWidths(tableId, visibleCols, reportId) {
+        const table = document.getElementById(tableId);
+        if (!table) return;
+
+        let colgroup = table.querySelector('colgroup');
+        if (!colgroup) {
+            colgroup = document.createElement('colgroup');
+            table.insertBefore(colgroup, table.firstChild);
+        }
+
+        let colgroupHtml = `<col style="width:40px;">`;
+
+        visibleCols.forEach(c => {
+            const w = getColWidth(reportId, c.key, null);
+            if (w !== null && w !== undefined) {
+                colgroupHtml += `<col data-col="${c.key}" style="width:${w}%;">`;
+            } else {
+                colgroupHtml += `<col data-col="${c.key}">`;
+            }
+        });
+
+        if (tableId === 'mamoriyaTable') {
+            colgroupHtml += `<col class="no-print" style="width:40px;">`;
+        }
+
+        colgroup.innerHTML = colgroupHtml;
+
+        // تطبيق العرض على خانات رأس الجدول
+        visibleCols.forEach(c => {
+            const th = table.querySelector(`thead th[data-col="${c.key}"]`);
+            const w = getColWidth(reportId, c.key, null);
+            if (th) {
+                if (w !== null && w !== undefined) {
+                    th.style.width = `${w}%`;
+                } else {
+                    th.style.width = '';
+                }
+            }
+        });
+    }
+
+    function resetCurrentReportColWidths() {
+        if (!currentConfig) return;
+        const allWidths = loadSavedColWidths();
+        delete allWidths[currentConfig.id];
+        try {
+            localStorage.setItem(COL_WIDTHS_STORAGE_KEY, JSON.stringify(allWidths));
+        } catch(e){}
+        const visibleCols = getVisibleColumns(currentConfig);
+        applyTableColWidths('reportTable', visibleCols, currentConfig.id);
+    }
+
+    function resetMamoriyaColWidths() {
+        const allWidths = loadSavedColWidths();
+        delete allWidths['mamoriyat'];
+        try {
+            localStorage.setItem(COL_WIDTHS_STORAGE_KEY, JSON.stringify(allWidths));
+        } catch(e){}
+        const visibleCols = getVisibleMamoriyaColumns();
+        applyTableColWidths('mamoriyaTable', visibleCols, 'mamoriyat');
+    }
+
+    // ============================================================
+    // ✅ تعديل عرض الأعمدة بالسحب المباشر بالفأرة (Excel-Style Resizing)
+    // ============================================================
+    function initColResize(e, resizer) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const th = resizer.parentElement;
+        const colKey = th.dataset.col;
+        const table = th.closest('table');
+        const tableId = table ? table.id : 'reportTable';
+        const reportId = (tableId === 'mamoriyaTable') ? 'mamoriyat' : (currentConfig ? currentConfig.id : 'all-cases');
+
+        const startX = e.pageX;
+        const startWidth = th.offsetWidth;
+        const colEl = table ? table.querySelector(`colgroup col[data-col="${colKey}"]`) : null;
+
+        resizer.classList.add('is-resizing');
+        document.body.classList.add('is-table-resizing');
+
+        function onMouseMove(moveEvent) {
+            // في الواجهة العربية (RTL): التحرك لليسار (pageX أصغر) يوسع العمود
+            const diff = startX - moveEvent.pageX;
+            const newWidthPx = Math.max(35, startWidth + diff);
+
+            th.style.width = newWidthPx + 'px';
+            th.style.minWidth = newWidthPx + 'px';
+            if (colEl) {
+                colEl.style.width = newWidthPx + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+
+            resizer.classList.remove('is-resizing');
+            document.body.classList.remove('is-table-resizing');
+
+            if (table && colKey) {
+                const finalWidthPx = th.offsetWidth;
+                const totalWidth = table.offsetWidth || 1;
+                const newPercent = Math.max(4, Math.min(85, Math.round((finalWidthPx / totalWidth) * 100)));
+
+                saveColWidthsState(reportId, colKey, newPercent);
+
+                th.style.width = newPercent + '%';
+                th.style.minWidth = '';
+                if (colEl) {
+                    colEl.style.width = newPercent + '%';
+                }
+            }
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    }
+
+
+    function renumberReportRows() {
+        let n = 0;
+        document.querySelectorAll('#reportTbody tr').forEach(tr => {
+            if (tr.classList.contains('group-row')) return;
+            if (tr.style.display === 'none') return;
+            n++;
+            const cell = tr.querySelector('.row-index');
+            if (cell) cell.textContent = n;
+        });
+    }
+
+    // ============================================================
+    // ✅ البحث السريع فوق التقرير: بيدور في كل الأعمدة الظاهرة
+    // ويخفي أي صف مش مطابق، وبالتالي الطباعة بتاخد بس اللي اتفلتر
+    // ============================================================
+    function applyQuickSearch() {
+        const input = document.getElementById('reportQuickSearch');
+        const q = input ? input.value.trim().toLowerCase() : '';
+        const tbody = document.getElementById('reportTbody');
+        if (!tbody) return;
+
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        // 1) إظهار/إخفاء صفوف البيانات حسب تطابق النص
+        rows.forEach(tr => {
+            if (tr.classList.contains('group-row')) return;
+            if (!q) { tr.style.display = ''; return; }
+            tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+
+        // 2) إظهار/إخفاء صف عنوان المجموعة (اسم المحامي مثلاً) حسب وجود صفوف ظاهرة تحته
+        let currentGroup = null;
+        let groupHasVisible = false;
+        rows.forEach(tr => {
+            if (tr.classList.contains('group-row')) {
+                if (currentGroup) currentGroup.style.display = groupHasVisible ? '' : 'none';
+                currentGroup = tr;
+                groupHasVisible = false;
+            } else if (tr.style.display !== 'none') {
+                groupHasVisible = true;
+            }
+        });
+        if (currentGroup) currentGroup.style.display = groupHasVisible ? '' : 'none';
+
+        // ✅ أي بحث جديد يرجّعنا لأول صفحة، ثم نعيد حساب الصفحات على النتائج المطابقة
+        resetTablePagination('reportTable');
+        applyTablePagination('reportTable');
+
+        const anyVisible = rows.some(tr => !tr.classList.contains('group-row') && tr.style.display !== 'none');
+        document.getElementById('reportEmptyHint').style.display = anyVisible ? 'none' : 'block';
+
+        recomputeVisibleTotals('reportTable', 'reportTotalsBar', 'reportTotalsTheadRow', 'reportTotalsTbodyRow');
+    }
+
+    // ============================================================
+    // التبديل بين تبويب "إنشاء تقرير" و"السجل المحفوظ"
+    // ============================================================
+    function showMainView(view) {
+        const createView = document.getElementById('createView');
+        const historyView = document.getElementById('historyView');
+        const tabCreate = document.getElementById('tabBtnCreate');
+        const tabHistory = document.getElementById('tabBtnHistory');
+
+        if (view === 'history') {
+            createView.classList.add('hidden');
+            historyView.classList.remove('hidden');
+            historyView.classList.add('view-fade');
+            tabCreate.classList.remove('active');
+            tabHistory.classList.add('active');
+            renderHistoryGrid();
+        } else {
+            historyView.classList.add('hidden');
+            createView.classList.remove('hidden');
+            createView.classList.add('view-fade');
+            tabHistory.classList.remove('active');
+            tabCreate.classList.add('active');
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ============================================================
+    // سجل التقارير المحفوظة (يُحفظ محليًا في المتصفح لكل مستخدم)
+    // ============================================================
+    const HISTORY_KEY = 'aesc_reports_history_v1';
+
+    function loadHistory() {
+        try {
+            const raw = localStorage.getItem(HISTORY_KEY);
+            return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+            console.error('تعذّر قراءة السجل المحفوظ', e);
+            return {};
+        }
+    }
+
+    function persistHistory(historyObj) {
+        try {
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(historyObj));
+        } catch (e) {
+            console.error('تعذّر حفظ السجل', e);
+        }
+        updateHistoryCount();
+    }
+
+    function updateHistoryCount() {
+        const historyObj = loadHistory();
+        const count = Object.keys(historyObj).length;
+        const badge = document.getElementById('historyCount');
+        if (badge) badge.textContent = count;
+    }
+
+    function saveCurrentReportToHistory() {
+        const cfg = currentConfig;
+        if (!cfg) return;
+        const wrap = document.getElementById('reportSheetWrap');
+        if (!wrap || wrap.classList.contains('hidden')) return;
+
+        const historyObj = loadHistory();
+        const existing = historyObj[cfg.id];
+
+        historyObj[cfg.id] = {
+            id: cfg.id,
+            icon: cfg.icon,
+            title: document.getElementById('reportTitleText').textContent,
+            period: document.getElementById('reportPeriodText').textContent,
+            theadHtml: document.getElementById('reportTheadRow').innerHTML,
+            tbodyHtml: document.getElementById('reportTbody').innerHTML,
+            totalsVisible: document.getElementById('reportTotalsBar').style.display !== 'none',
+            totalsTheadHtml: document.getElementById('reportTotalsTheadRow').innerHTML,
+            totalsTbodyHtml: document.getElementById('reportTotalsTbodyRow').innerHTML,
+            createdAt: existing ? existing.createdAt : new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        persistHistory(historyObj);
+
+        if (!document.getElementById('historyView').classList.contains('hidden')) {
+            renderHistoryGrid();
+        }
+    }
+
+    // يُستدعى فقط عند الضغط على زر الطباعة: يحفظ التقرير في السجل المحفوظ ثم يفتح الطباعة
+    function printAndSaveReport() {
+        saveCurrentReportToHistory();
+        window.print();
+    }
+
+    function renderHistoryGrid() {
+        const historyObj = loadHistory();
+        const entries = Object.values(historyObj).sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+        const grid = document.getElementById('historyGrid');
+        const emptyEl = document.getElementById('historyEmpty');
+
+        updateHistoryCount();
+
+        if (!entries.length) {
+            grid.innerHTML = '';
+            emptyEl.classList.remove('hidden');
+            return;
+        }
+        emptyEl.classList.add('hidden');
+
+        grid.innerHTML = entries.map(en => `
+            <div class="history-card" onclick="openHistoryModal('${en.id}')">
+                <div class="history-card-top">
+                    <div class="hc-icon">${en.icon || '📄'}</div>
+                    <button class="hc-del" title="حذف من السجل" onclick="event.stopPropagation(); deleteHistoryEntry('${en.id}')">🗑️</button>
+                </div>
+                <div class="hc-title">${en.title}</div>
+                <div class="hc-meta">🕒 آخر تحديث: ${formatArabicDateTime(en.updatedAt)}</div>
+                <span class="hc-badge">عرض التقرير</span>
+            </div>
+        `).join('');
+    }
+
+    let activeModalEntryId = null;
+
+    function openHistoryModal(id) {
+        const historyObj = loadHistory();
+        const en = historyObj[id];
+        if (!en) return;
+        activeModalEntryId = id;
+
+        document.getElementById('modalTitle').textContent = `${en.icon || '📄'} ${en.title}`;
+        document.getElementById('modalTitleText').textContent = en.title;
+        document.getElementById('modalPeriodText').textContent = en.period;
+        document.getElementById('modalGeneratedText').textContent = `آخر تحديث: ${formatArabicDateTime(en.updatedAt)}`;
+        document.getElementById('modalTheadRow').innerHTML = en.theadHtml;
+
+        const tempDiv = document.createElement('tbody');
+        tempDiv.innerHTML = en.tbodyHtml;
+        tempDiv.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+        tempDiv.querySelectorAll('.del-cell').forEach(el => el.remove());
+        // ✅ نشيل أي أثر لترقيم صفحات قديم كان محفوظ وقت الحفظ، عشان الترقيم يتحسب من جديد هنا
+        tempDiv.querySelectorAll('tr').forEach(tr => { tr.classList.remove('pg-hidden'); tr.style.display = ''; });
+        document.getElementById('modalTbody').innerHTML = tempDiv.innerHTML;
+
+        resetTablePagination('modalReportTable');
+        applyTablePagination('modalReportTable');
+
+        const modalTotalsBar = document.getElementById('modalTotalsBar');
+        if (en.totalsVisible && en.totalsTheadHtml) {
+            document.getElementById('modalTotalsTheadRow').innerHTML = en.totalsTheadHtml;
+            document.getElementById('modalTotalsTbodyRow').innerHTML = en.totalsTbodyHtml || '';
+            modalTotalsBar.style.display = 'block';
+        } else {
+            document.getElementById('modalTotalsTheadRow').innerHTML = '';
+            document.getElementById('modalTotalsTbodyRow').innerHTML = '';
+            modalTotalsBar.style.display = 'none';
+        }
+
+        const delBtn = document.getElementById('modalDeleteBtn');
+        delBtn.onclick = () => { deleteHistoryEntry(id); closeHistoryModal(); };
+
+        document.getElementById('historyModalOverlay').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeHistoryModal() {
+        document.getElementById('historyModalOverlay').classList.add('hidden');
+        document.body.style.overflow = '';
+        activeModalEntryId = null;
+    }
+
+    function deleteHistoryEntry(id) {
+        if (!confirm('هل تريد حذف هذا التقرير من السجل المحفوظ؟ لا يمكن التراجع عن هذا الإجراء.')) return;
+        const historyObj = loadHistory();
+        delete historyObj[id];
+        persistHistory(historyObj);
+        renderHistoryGrid();
+    }
+
+    function printModalReport() {
+        const mainSheet = document.getElementById('reportSheetWrap');
+        const wasHiddenMain = mainSheet.classList.contains('hidden');
+        if (!wasHiddenMain) mainSheet.classList.add('hidden');
+        window.print();
+        if (!wasHiddenMain) mainSheet.classList.remove('hidden');
+    }
+
+    // ============================================================
+    // التهيئة
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('currentDateDisplay').textContent = formatArabicDate(new Date().toISOString().split('T')[0]);
+        buildHub();
+        updateHistoryCount();
+
+        ['reportDateFrom', 'reportDateTo', 'mamoriyaDateFrom', 'mamoriyaDateTo'].forEach(wireCustomDateField);
+
+        if (typeof initSidebar === 'function') {
+            initSidebar('reports-hub');
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeHistoryModal();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,2610 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم — الشؤون القانونية</title>
+  <script src="sidebar.js"></script>
+  <script src="activity-logger.js"></script>
+  <script src="chart.js"></script>
+  <script src="chartjs-plugin-datalabels.js"></script>
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — FORMAL & PROFESSIONAL
+       ============================================================ */
+    :root {
+      --navy-900: #0a1628;
+      --navy-800: #0f2240;
+      --navy-700: #1a3a5c;
+      --navy-600: #1e4976;
+      --navy-500: #2563a8;
+      --gold-500: #D4AF37;
+      --gold-400: #C49B2A;
+      --gold-300: #E8C84A;
+      --bg-page: #e3eaf4;
+      --surface: #FFFFFF;
+      --surface-2: #F7F8FA;
+      --border: #E2E6ED;
+      --border-strong: #C8D0DA;
+      --green-600: #0B7A4A;
+      --green-50: #E8F3EE;
+      --red-600: #B91C1C;
+      --red-50: #FDE8E8;
+      --amber-600: #B45309;
+      --amber-50: #FEF3E8;
+      --blue-600: #1D4ED8;
+      --blue-50: #E8EDFB;
+      --purple-600: #5B21B6;
+      --purple-50: #EDE8FB;
+      --text-primary: #1A2332;
+      --text-secondary: #4A5568;
+      --text-muted: #8895AA;
+      --shadow-xs: 0 1px 2px rgba(10,22,40,0.05);
+      --shadow-sm: 0 2px 8px rgba(10,22,40,0.06);
+      --shadow-md: 0 6px 20px rgba(10,22,40,0.08);
+      --shadow-lg: 0 12px 32px rgba(10,22,40,0.10);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 18px;
+      --transition: all 0.2s ease;
+      --section-bg: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Cairo', 'Tajawal', system-ui, sans-serif;
+      direction: rtl;
+      background: var(--bg-page);
+      color: var(--text-primary);
+    }
+
+    .page-body { padding: 20px 24px; flex: 1; }
+
+    /* ===== Welcome Banner ===== */
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--navy-800) 0%, var(--navy-600) 100%);
+      border-radius: var(--radius-lg);
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-banner::after {
+      content: '⚖';
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 72px;
+      opacity: 0.05;
+    }
+
+    .welcome-banner h2 { font-size: 17px; font-weight: 800; margin-bottom: 3px; }
+    .welcome-banner p  { font-size: 12.5px; opacity: 0.7; font-weight: 500; }
+
+    .welcome-badge {
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.2);
+      color: var(--gold-300);
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ===== Filter Bar ===== */
+    .filter-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 22px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .filter-bar .filter-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-bar select {
+      height: 34px;
+      padding: 0 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-2);
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .filter-bar select:focus {
+      border-color: var(--navy-600);
+      box-shadow: 0 0 0 3px rgba(30, 73, 118, 0.08);
+    }
+
+    .filter-bar .btn-filter {
+      height: 34px;
+      padding: 0 22px;
+      background: var(--navy-700);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-bar .btn-filter:hover { background: var(--navy-600); }
+
+    .filter-bar .btn-reset {
+      height: 34px;
+      padding: 0 14px;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-bar .btn-reset:hover { background: var(--surface-2); color: var(--text-secondary); }
+
+    .filter-bar .filter-stats {
+      margin-right: auto;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--surface-2);
+      padding: 3px 16px;
+      border-radius: 20px;
+    }
+
+    .filter-bar .filter-stats strong { color: var(--navy-700); font-size: 15px; }
+
+    /* ===== Section Container ===== */
+    .section-container {
+      background: var(--section-bg);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px 20px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .section-container:last-child { margin-bottom: 0; }
+
+    /* ===== Stats Cards ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-xs);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 3px;
+      height: 100%;
+      border-radius: 0 3px 3px 0;
+    }
+
+    .stat-card:nth-child(1)::after { background: var(--navy-600); }
+    .stat-card:nth-child(2)::after { background: var(--green-600); }
+    .stat-card:nth-child(3)::after { background: var(--red-600); }
+    .stat-card:nth-child(4)::after { background: var(--gold-500); }
+    .stat-card:nth-child(5)::after { background: var(--amber-600); }
+    .stat-card:nth-child(6)::after { background: var(--purple-600); }
+
+    .stat-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    .stat-icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon-wrap.navy   { background: #E8EDFB; color: var(--navy-600); }
+    .stat-icon-wrap.green  { background: var(--green-50); color: var(--green-600); }
+    .stat-icon-wrap.red    { background: var(--red-50); color: var(--red-600); }
+    .stat-icon-wrap.gold   { background: #FDF5E8; color: var(--gold-500); }
+    .stat-icon-wrap.amber  { background: var(--amber-50); color: var(--amber-600); }
+    .stat-icon-wrap.purple { background: var(--purple-50); color: var(--purple-600); }
+    .stat-icon-wrap.blue   { background: var(--blue-50); color: var(--blue-600); }
+
+    .stat-num {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-label {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 1px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===== Charts ===== */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .charts-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xs);
+      overflow: hidden;
+    }
+
+    .chart-card .card-header {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chart-card .card-header h3 {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      letter-spacing: 0.2px;
+    }
+
+    .chart-card .card-body {
+      padding: 10px 12px 12px;
+      height: 220px;
+      position: relative;
+    }
+
+    .chart-card .card-body canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* ===== Sessions KPI Cards ===== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 900px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 550px) { .kpi-grid { grid-template-columns: 1fr; } }
+
+    .kpi-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px 12px;
+      box-shadow: var(--shadow-xs);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--navy-600);
+    }
+    .kpi-card:nth-child(2) { border-top-color: var(--gold-500); }
+    .kpi-card:nth-child(3) { border-top-color: var(--blue-600); }
+
+    .kpi-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .kpi-total {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--navy-800);
+      background: var(--surface-2);
+      display: inline-block;
+      padding: 0 14px;
+      border-radius: 40px;
+      margin-bottom: 10px;
+    }
+    .kpi-breakdown {
+      display: flex;
+      justify-content: space-around;
+      background: var(--surface-2);
+      border-radius: 40px;
+      padding: 8px 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .kpi-breakdown div { display: flex; align-items: center; gap: 4px; }
+    .kpi-breakdown span {
+      background: var(--surface);
+      padding: 1px 10px;
+      border-radius: 30px;
+      font-weight: 700;
+      color: var(--navy-800);
+      border: 1px solid var(--border-strong);
+    }
+    .blue-dot { display: inline-block; width: 9px; height: 9px; border-radius: 9px; }
+    .dot-primary { background: var(--navy-600); }
+    .dot-secondary { background: var(--gold-500); }
+    .dot-accent { background: var(--blue-600); }
+
+    /* ===== Print Button ===== */
+    .btn-print {
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.35);
+      color: var(--gold-300);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Cairo', sans-serif;
+    }
+    .btn-print:hover { background: rgba(212,175,55,0.25); }
+
+    /* ===== Print Options Modal ===== */
+    .modal-overlay-print {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,22,40,0.55);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-overlay-print.show { display: flex; }
+    .modal-box-print {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 26px 30px;
+      max-width: 460px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-icon-print { font-size: 30px; display: block; text-align: center; margin-bottom: 6px; }
+    .modal-box-print h3 { font-size: 18px; font-weight: 800; color: var(--navy-800); text-align: center; margin-bottom: 4px; }
+    .modal-box-print p { color: var(--text-muted); text-align: center; font-size: 13px; margin-bottom: 14px; }
+    .print-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 2px;
+      margin-bottom: 16px;
+    }
+    .print-field-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 7px 4px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .print-field-check:hover { background: var(--surface-2); }
+    .print-field-check input[type="checkbox"] {
+      width: 17px; height: 17px; accent-color: var(--navy-700); cursor: pointer;
+    }
+    .print-field-check.all-option { font-weight: 800; color: var(--navy-800); }
+    .modal-actions-print { display: flex; gap: 10px; justify-content: center; }
+    .modal-actions-print .btn {
+      padding: 9px 26px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13.5px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Cairo', sans-serif;
+    }
+    .btn-cancel-print { background: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border) !important; }
+    .btn-cancel-print:hover { background: var(--border); }
+    .btn-confirm-print { background: var(--navy-700); color: white; }
+    .btn-confirm-print:hover { background: var(--navy-600); }
+
+    /* ===== Print (dedicated report area, exact site look) ===== */
+    #printReportArea { display: none; }
+
+    .print-page-letterhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--navy-800);
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+    }
+    .print-page-letterhead .ar b { display:block; font-size: 14px; font-weight: 800; color: var(--navy-800); }
+    .print-page-letterhead .ar span { display:block; font-size: 10px; font-weight: 600; color: var(--text-secondary); margin-top: 2px; }
+    .print-page-letterhead .en { text-align: left; }
+    .print-page-letterhead .en b { display:block; font-size: 11px; font-weight: 700; color: var(--navy-800); }
+    .print-page-letterhead .en span { display:block; font-size: 9px; font-weight: 600; color: var(--text-secondary); margin-top: 2px; }
+    .print-page-date { text-align: center; font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; }
+
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+      @page { margin: 12mm; }
+      body * { visibility: hidden; }
+      #printReportArea, #printReportArea * { visibility: visible; }
+      #printReportArea {
+        display: block !important;
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        margin: 0 auto;
+        background: white;
+        width: 100%;
+      }
+      .print-page {
+        page-break-after: always;
+        break-after: page;
+      }
+      .print-page:last-child { page-break-after: auto; break-after: auto; }
+      .print-page .section-container {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-bottom: 0 !important;
+      }
+      /* اعرض القوائم كاملة في الطباعة بدون قص */
+      .print-page .resource-card .card-body {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      .print-page .chart-card .card-body img {
+        width: 100%;
+        max-height: 220px;
+        object-fit: contain;
+      }
+      /* الصفحة المطبوعة ضيقة زي الموبايل، فبنفرض عمودين للرسومات دايماً بدل ما تتراص تحت بعض */
+      .print-page .charts-grid,
+      .print-page .charts-grid-2 {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+      }
+      .print-page .charts-grid .chart-card:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* ===== Section Divider ===== */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .section-divider h2 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0;
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+    }
+
+    .section-divider .line {
+      flex: 1;
+      height: 1.5px;
+      background: linear-gradient(to left, var(--border), transparent);
+    }
+
+    .section-divider .line-left {
+      flex: 1;
+      height: 1.5px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ===== Stage Cards ===== */
+    .stages-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .stage-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xs);
+      overflow: hidden;
+      border-right: 4px solid var(--navy-600);
+    }
+
+    .stage-card .stage-header {
+      padding: 10px 16px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stage-card .stage-header .stage-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .stage-card .stage-header .stage-count {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      background: var(--surface);
+      padding: 0 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .stage-card .stage-body {
+      padding: 10px 16px;
+    }
+
+    .stage-card .stage-detail {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #F0F2F5;
+      font-size: 12.5px;
+    }
+
+    .stage-card .stage-detail:last-child { border-bottom: none; }
+
+    .stage-card .stage-detail .label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stage-card .stage-detail .value {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stage-card .stage-detail .value.company { color: var(--navy-600); }
+    .stage-card .stage-detail .value.opponent { color: var(--red-600); }
+    .stage-card .stage-detail .value.active { color: var(--green-600); }
+    .stage-card .stage-detail .value.won { color: var(--gold-500); }
+
+    .stage-card.primary { border-right-color: var(--navy-600); }
+    .stage-card.appeal { border-right-color: var(--gold-500); }
+    .stage-card.cassation { border-right-color: var(--purple-600); }
+    .stage-card.execution { border-right-color: var(--amber-600); }
+    .stage-card.reconsider { border-right-color: var(--blue-600); }
+
+    /* ===== Sessions Judgment/Action Stat Cards (mirrors sessions.html) ===== */
+    .sess-subtitle {
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--navy-700);
+      margin: 4px 0 12px;
+    }
+
+    .sess-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .sess-stat-card {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-right: 3px solid var(--sess-accent, var(--navy-600));
+      box-shadow: var(--shadow-xs);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .sess-stat-card:hover { box-shadow: var(--shadow-md); }
+
+    .sess-stat-card .sess-stat-icon {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--sess-accent, var(--navy-600)) 12%, white);
+      color: var(--sess-accent, var(--navy-600));
+    }
+
+    .sess-stat-card .sess-stat-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .sess-stat-card .sess-stat-number {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.15;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sess-stat-card .sess-stat-label {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .sess-stat-card.total       { --sess-accent: #1a5a8a; }
+    .sess-stat-card.pending     { --sess-accent: #f59e0b; }
+    .sess-stat-card.closed      { --sess-accent: #6b7280; }
+    .sess-stat-card.company     { --sess-accent: #059669; }
+    .sess-stat-card.opponent    { --sess-accent: #dc2626; }
+    .sess-stat-card.appeal-action     { --sess-accent: #2563eb; }
+    .sess-stat-card.cassation-action  { --sess-accent: #7c3aed; }
+    .sess-stat-card.execution-action  { --sess-accent: #d97706; }
+    .sess-stat-card.reconsider-action { --sess-accent: #0891b2; }
+    .sess-stat-card.no-action         { --sess-accent: #94a3b8; }
+
+    @media (max-width: 1200px) { .sess-stats-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px)  { .sess-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 450px)  { .sess-stats-grid { grid-template-columns: 1fr; } }
+
+    /* ===== Pending Container ===== */
+    .pending-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .pending-container .chart-card { grid-column: 1; }
+
+    .pending-container .warning-card {
+      grid-column: 2;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xs);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pending-container .warning-card .card-header {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: #FDF5E8;
+    }
+
+    .pending-container .warning-card .card-header h3 {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #78350F;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+    }
+
+    .pending-container .warning-card .card-body {
+      padding: 12px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .warning-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #F0F2F5;
+    }
+
+    .warning-item:last-child { border-bottom: none; }
+
+    .warning-item .warn-icon { font-size: 24px; flex-shrink: 0; }
+
+    .warning-item .warn-info { flex: 1; }
+
+    .warning-item .warn-info .warn-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .warning-item .warn-info .warn-detail {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .warning-item .warn-days {
+      font-size: 13px;
+      font-weight: 800;
+      padding: 3px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+      color: white;
+    }
+
+    .warning-item .warn-days.urgent { background: var(--red-600); }
+    .warning-item .warn-days.warning { background: var(--amber-600); }
+    .warning-item .warn-days.safe { background: var(--green-600); }
+
+    .no-warning {
+      text-align: center;
+      color: var(--green-600);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 16px 0;
+    }
+
+    .no-warning .big-icon { font-size: 36px; display: block; margin-bottom: 6px; }
+
+    /* ===== Resources ===== */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .resource-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xs);
+      overflow: hidden;
+    }
+
+    .resource-card .card-header {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .resource-card .card-header h3 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .resource-card .card-header a {
+      font-size: 11px;
+      color: var(--blue-600);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .resource-card .card-body {
+      padding: 8px 14px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .resource-card .card-body::-webkit-scrollbar { width: 3px; }
+    .resource-card .card-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .resource-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #F0F2F5;
+    }
+
+    .resource-item:last-child { border-bottom: none; }
+    .resource-item .name { font-weight: 600; font-size: 12px; color: var(--text-primary); }
+    .resource-item .count { font-size: 11px; color: var(--text-muted); }
+
+    /* ===== Lawyer Row ===== */
+    .lawyer-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid #F0F2F5;
+    }
+
+    .lawyer-row:last-child { border-bottom: none; }
+
+    .lawyer-av {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .lawyer-name { font-size: 11.5px; font-weight: 600; color: var(--text-primary); }
+    .lawyer-court { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+    .lawyer-count {
+      margin-right: auto;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy-600);
+      background: #E8EDFB;
+      padding: 1px 8px;
+      border-radius: 20px;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-left: 4px;
+    }
+    .dot-green { background: var(--green-600); }
+    .dot-gray { background: var(--border-strong); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .badge-open   { background: var(--green-50); color: var(--green-600); }
+    .badge-closed { background: var(--red-50); color: var(--red-600); }
+    .badge-pending{ background: var(--amber-50); color: var(--amber-600); }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy-700);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast.error { background: var(--red-600); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1200px) {
+      .charts-grid { grid-template-columns: 1fr 1fr; }
+      .stages-container { grid-template-columns: 1fr 1fr; }
+      .resources-grid { grid-template-columns: 1fr 1fr; }
+      .pending-container { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .charts-grid { grid-template-columns: 1fr; }
+      .charts-grid-2 { grid-template-columns: 1fr; }
+      .stages-container { grid-template-columns: 1fr; }
+      .resources-grid { grid-template-columns: 1fr; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-bar .filter-stats { margin-right: 0; text-align: center; }
+      .page-body { padding: 14px 16px; }
+      .section-container { padding: 14px 14px 16px; }
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat-card { padding: 10px 12px; }
+      .stat-num { font-size: 18px; }
+      .stat-icon-wrap { width: 32px; height: 32px; font-size: 14px; }
+      .section-divider h2 { font-size: 14px; }
+      .welcome-banner { flex-direction: column; text-align: center; gap: 8px; }
+      .welcome-banner::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-body">
+
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div>
+      <h2>مرحباً، مدير النظام 👋</h2>
+      <p>نظرة عامة على الوضع القانوني — <span id="todayDate"></span></p>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <button class="btn-print" onclick="openPrintOptions()">🖨️ طباعة التقرير</button>
+      <div class="welcome-badge" id="activeCasesBadge">📋 0 قضية نشطة</div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <span class="filter-label">📅 الفترة:</span>
+    <select id="filterMonth">
+      <option value="">الشهر</option>
+      <option value="1">يناير</option><option value="2">فبراير</option>
+      <option value="3">مارس</option><option value="4">أبريل</option>
+      <option value="5">مايو</option><option value="6">يونيو</option>
+      <option value="7">يوليو</option><option value="8">أغسطس</option>
+      <option value="9">سبتمبر</option><option value="10">أكتوبر</option>
+      <option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+    </select>
+    <select id="filterYear">
+      <option value="">السنة</option>
+      <option value="2024">2024</option>
+      <option value="2025">2025</option>
+      <option value="2026">2026</option>
+      <option value="2027">2027</option>
+    </select>
+    <button class="btn-filter" onclick="applyDateFilter()">🔍 تطبيق</button>
+    <button class="btn-reset" onclick="resetDateFilter()">✕ إلغاء</button>
+    <span class="filter-stats">📊 <strong id="filteredCount">0</strong> قضية</span>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 1: Cases -->
+  <!-- ============================================ -->
+  <div class="section-container" data-section="cases">
+    <div class="section-divider">
+      <div class="line-left"></div>
+      <h2>📋 القضايا</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrap navy">📁</div>
+        <div><div class="stat-num" id="totalCases">0</div><div class="stat-label">إجمالي القضايا</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap green">📂</div>
+        <div><div class="stat-num" id="openCases">0</div><div class="stat-label">قضايا متداولة</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap red">✅</div>
+        <div><div class="stat-num" id="closedCases">0</div><div class="stat-label">قضايا منتهية</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap purple">⏳</div>
+        <div><div class="stat-num" id="pendingCases">0</div><div class="stat-label">القضايا المعلقة</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap gold">👨🏻‍💼</div>
+        <div><div class="stat-num" id="civilCases">0</div><div class="stat-label">قضايا مدني</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap amber">👷</div>
+        <div><div class="stat-num" id="laborCases">0</div><div class="stat-label">قضايا عمالي</div></div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="card-header"><h3>🍩 حالة القضايا</h3></div>
+        <div class="card-body"><canvas id="chartStatus"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="card-header"><h3>📊 القضايا حسب النوع</h3></div>
+        <div class="card-body"><canvas id="chartCategory"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="card-header"><h3>📈 القضايا حسب الشهر</h3></div>
+        <div class="card-body"><canvas id="chartMonthly"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 2: Litigation Stages -->
+  <!-- ============================================ -->
+  <div class="section-container" data-section="stages">
+    <div class="section-divider">
+      <div class="line-left"></div>
+      <h2>⬆️ درجات التقاضي</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="stages-container">
+      <div class="stage-card primary">
+        <div class="stage-header">
+          <span class="stage-title">🏛️ المرحلة الابتدائية</span>
+          <span class="stage-count" id="stagePrimaryCount">0</span>
+        </div>
+        <div class="stage-body">
+          <div class="stage-detail">
+            <span class="label">من الشركة:</span>
+            <span class="value company" id="primaryCompany">0</span>
+          </div>
+          <div class="stage-detail">
+            <span class="label">من الخصم:</span>
+            <span class="value opponent" id="primaryOpponent">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-card appeal">
+        <div class="stage-header">
+          <span class="stage-title">📜 الاستئناف العالي</span>
+          <span class="stage-count" id="appealCount">0</span>
+        </div>
+        <div class="stage-body">
+          <div class="stage-detail">
+            <span class="label">من الشركة:</span>
+            <span class="value company" id="appealCompany">0</span>
+          </div>
+          <div class="stage-detail">
+            <span class="label">من الخصم:</span>
+            <span class="value opponent" id="appealOpponent">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-card cassation">
+        <div class="stage-header">
+          <span class="stage-title">❌ الطعن بالنقض</span>
+          <span class="stage-count" id="cassationCount">0</span>
+        </div>
+        <div class="stage-body">
+          <div class="stage-detail">
+            <span class="label">من الشركة:</span>
+            <span class="value company" id="cassationCompany">0</span>
+          </div>
+          <div class="stage-detail">
+            <span class="label">من الخصم:</span>
+            <span class="value opponent" id="cassationOpponent">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-card execution">
+        <div class="stage-header">
+          <span class="stage-title">🚧 إشكال في التنفيذ</span>
+          <span class="stage-count" id="executionCount">0</span>
+        </div>
+        <div class="stage-body">
+          <div class="stage-detail">
+            <span class="label">من الشركة:</span>
+            <span class="value company" id="executionCompany">0</span>
+          </div>
+          <div class="stage-detail">
+            <span class="label">من الخصم:</span>
+            <span class="value opponent" id="executionOpponent">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage-card reconsider">
+        <div class="stage-header">
+          <span class="stage-title">📝 التماس إعادة النظر</span>
+          <span class="stage-count" id="reconsiderCount">0</span>
+        </div>
+        <div class="stage-body">
+          <div class="stage-detail">
+            <span class="label">من الشركة:</span>
+            <span class="value company" id="reconsiderCompany">0</span>
+          </div>
+          <div class="stage-detail">
+            <span class="label">من الخصم:</span>
+            <span class="value opponent" id="reconsiderOpponent">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts-grid-2">
+      <div class="chart-card">
+        <div class="card-header"><h3>🍩 توزيع درجات التقاضي</h3></div>
+        <div class="card-body"><canvas id="chartStagesPie"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="card-header"><h3>📊 استئناف، نقض، إشكال والتماس (شركة vs خصم)</h3></div>
+        <div class="card-body"><canvas id="chartAppealCassationBar"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION: Sessions -->
+  <!-- ============================================ -->
+  <div class="section-container" data-section="sessions">
+    <div class="section-divider">
+      <div class="line-left"></div>
+      <h2>🗓️ الجلسات</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title"><span class="blue-dot dot-primary"></span> جلسات اليوم</div>
+        <div class="kpi-total" id="sessTodayCount">0</div>
+        <div class="kpi-breakdown">
+          <div>ابتدائي <span id="sessTodayInit">0</span></div>
+          <div>استئناف <span id="sessTodayAppeal">0</span></div>
+          <div>نقض <span id="sessTodayCass">0</span></div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title"><span class="blue-dot dot-secondary"></span> جلسات الأسبوع</div>
+        <div class="kpi-total" id="sessWeekCount">0</div>
+        <div class="kpi-breakdown">
+          <div>ابتدائي <span id="sessWeekInit">0</span></div>
+          <div>استئناف <span id="sessWeekAppeal">0</span></div>
+          <div>نقض <span id="sessWeekCass">0</span></div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title"><span class="blue-dot dot-accent"></span> جلسات الشهر</div>
+        <div class="kpi-total" id="sessMonthCount">0</div>
+        <div class="kpi-breakdown">
+          <div>ابتدائي <span id="sessMonthInit">0</span></div>
+          <div>استئناف <span id="sessMonthAppeal">0</span></div>
+          <div>نقض <span id="sessMonthCass">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts-grid-2">
+      <div class="chart-card">
+        <div class="card-header"><h3>📊 الجلسات حسب الفترة والدرجة</h3></div>
+        <div class="card-body"><canvas id="sessBarChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="card-header"><h3>🍩 توزيع الجلسات حسب الدرجة</h3></div>
+        <div class="card-body"><canvas id="sessPieChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sess-subtitle">📊 إحصائيات الأحكام وحالات الجلسات</div>
+    <div class="sess-stats-grid">
+      <div class="sess-stat-card total">
+        <div class="sess-stat-icon">Σ</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatTotal">0</div>
+          <div class="sess-stat-label">إجمالي الجلسات</div>
+        </div>
+      </div>
+      <div class="sess-stat-card pending">
+        <div class="sess-stat-icon">⏱</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatPending">0</div>
+          <div class="sess-stat-label">جلسات متداولة</div>
+        </div>
+      </div>
+      <div class="sess-stat-card closed">
+        <div class="sess-stat-icon">✓</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatClosed">0</div>
+          <div class="sess-stat-label">جلسات منتهية</div>
+        </div>
+      </div>
+      <div class="sess-stat-card company">
+        <div class="sess-stat-icon">✓</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatCompany">0</div>
+          <div class="sess-stat-label">لصالح الشركة</div>
+        </div>
+      </div>
+      <div class="sess-stat-card opponent">
+        <div class="sess-stat-icon">✕</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatOpponent">0</div>
+          <div class="sess-stat-label">لصالح الخصم</div>
+        </div>
+      </div>
+      <div class="sess-stat-card appeal-action">
+        <div class="sess-stat-icon">↑</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatActionAppeal">0</div>
+          <div class="sess-stat-label">استئناف</div>
+        </div>
+      </div>
+      <div class="sess-stat-card cassation-action">
+        <div class="sess-stat-icon">⇈</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatActionCassation">0</div>
+          <div class="sess-stat-label">نقض</div>
+        </div>
+      </div>
+      <div class="sess-stat-card execution-action">
+        <div class="sess-stat-icon">!</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatActionExecution">0</div>
+          <div class="sess-stat-label">اشكال في التنفيذ</div>
+        </div>
+      </div>
+      <div class="sess-stat-card reconsider-action">
+        <div class="sess-stat-icon">↻</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatActionReconsider">0</div>
+          <div class="sess-stat-label">التماس اعادة النظر</div>
+        </div>
+      </div>
+      <div class="sess-stat-card no-action">
+        <div class="sess-stat-icon">⊘</div>
+        <div class="sess-stat-body">
+          <div class="sess-stat-number" id="sessStatActionNone">0</div>
+          <div class="sess-stat-label">لا اجراء</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts-grid-2">
+      <div class="chart-card">
+        <div class="card-header"><h3>🍩 نتيجة الأحكام (شركة vs خصم)</h3></div>
+        <div class="card-body"><canvas id="sessResultPieChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="card-header"><h3>📊 الإجراءات المتخذة بعد الجلسات</h3></div>
+        <div class="card-body"><canvas id="sessActionsBarChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 3: Pending Appeal & Cassation -->
+  <!-- ============================================ -->
+  <div class="section-container" data-section="pending">
+    <div class="section-divider">
+      <div class="line-left"></div>
+      <h2>⏳ الاستئناف والنقض المعلق</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="pending-container">
+      <div class="chart-card">
+        <div class="card-header"><h3>📊 الاستئناف والنقض المعلق</h3></div>
+        <div class="card-body"><canvas id="chartPendingAppealCassation"></canvas></div>
+      </div>
+
+      <div class="warning-card">
+        <div class="card-header">
+          <h3>🚨 أقرب المواعيد النهائية</h3>
+        </div>
+        <div class="card-body" id="warningBody">
+          <div style="text-align:center;color:var(--text-muted);padding:16px;">جاري تحميل البيانات...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 4: Resources -->
+  <!-- ============================================ -->
+  <div class="section-container" data-section="resources">
+    <div class="section-divider">
+      <div class="line-left"></div>
+      <h2>👨‍💼 الموارد</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrap purple">👨‍💼</div>
+        <div><div class="stat-num" id="totalLawyers">0</div><div class="stat-label">المحامون</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap navy">🏛️</div>
+        <div><div class="stat-num" id="totalCourts">0</div><div class="stat-label">المحاكم</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap gold">🔄</div>
+        <div><div class="stat-num" id="totalCircuits">0</div><div class="stat-label">الدوائر</div></div>
+      </div>
+    </div>
+
+    <div class="resources-grid">
+      <div class="resource-card">
+        <div class="card-header"><h3>👨‍💼 المحامون</h3><a href="lawyers.html">عرض الكل</a></div>
+        <div class="card-body" id="lawyersList"><div style="text-align:center;color:var(--text-muted);padding:16px;">جاري التحميل...</div></div>
+      </div>
+      <div class="resource-card">
+        <div class="card-header"><h3>🏛️ المحاكم</h3><a href="courts.html">عرض الكل</a></div>
+        <div class="card-body" id="courtsList"><div style="text-align:center;color:var(--text-muted);padding:16px;">جاري التحميل...</div></div>
+      </div>
+      <div class="resource-card">
+        <div class="card-header"><h3>🔄 الدوائر</h3><a href="courts.html">عرض الكل</a></div>
+        <div class="card-body" id="circuitsList"><div style="text-align:center;color:var(--text-muted);padding:16px;">جاري التحميل...</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== Print Options Modal ===== -->
+<div class="modal-overlay-print" id="printModal">
+  <div class="modal-box-print">
+    <span class="modal-icon-print">🖨️</span>
+    <h3>خيارات طباعة التقرير</h3>
+    <p>اختر الأقسام التي تريد تضمينها في التقرير</p>
+    <div class="print-options-list">
+      <label class="print-field-check all-option">
+        <input type="checkbox" id="printAll" checked onchange="toggleAllPrintOptions(this.checked)">
+        الكل
+      </label>
+      <label class="print-field-check">
+        <input type="checkbox" class="print-section-check" value="sessions" checked>
+        🗓️ الجلسات
+      </label>
+      <label class="print-field-check">
+        <input type="checkbox" class="print-section-check" value="cases" checked>
+        📋 القضايا
+      </label>
+      <label class="print-field-check">
+        <input type="checkbox" class="print-section-check" value="stages" checked>
+        ⬆️ درجات التقاضي
+      </label>
+      <label class="print-field-check">
+        <input type="checkbox" class="print-section-check" value="pending" checked>
+        ⏳ الاستئناف والنقض المعلق
+      </label>
+      <label class="print-field-check">
+        <input type="checkbox" class="print-section-check" value="resources" checked>
+        👨‍💼 الموارد
+      </label>
+    </div>
+    <div class="modal-actions-print">
+      <button class="btn btn-cancel-print" onclick="closePrintModal()">إلغاء</button>
+      <button class="btn btn-confirm-print" onclick="runDashboardPrint()">🖨️ طباعة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Printable Report Area ===== -->
+<div id="printReportArea"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ============================================================
+  if (typeof Chart !== 'undefined' && typeof ChartDataLabels !== 'undefined') {
+    Chart.register(ChartDataLabels);
+  } else {
+    console.warn('⚠️ لم يتم تحميل مكتبة Chart.js — الرسوم البيانية لن تعمل لكن باقي الصفحة (السايدبار والبيانات) ستعمل بشكل طبيعي.');
+  }
+
+  const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+
+  let chartStatus, chartCategory, chartMonthly;
+  let chartStagesPie, chartAppealCassationBar;
+  let chartPendingAppealCassation;
+
+  let allCases = [];
+  let allLawyers = [];
+  let allCourts = [];
+  let allCircuits = [];
+
+  const sampleCases = [
+    { CaseNumber: '2026-1', CurrentStage: 'استئناف', Status: 'مفتوحة', FilingDate: '2026-05-15', Subject: 'قضية تعويض' },
+    { CaseNumber: '2026-2', CurrentStage: 'استئناف', Status: 'مفتوحة', FilingDate: '2026-05-20', Subject: 'قضية مخالفة' },
+    { CaseNumber: '2026-3', CurrentStage: 'نقض', Status: 'مفتوحة', FilingDate: '2026-04-10', Subject: 'قضية إيجار' },
+    { CaseNumber: '2026-4', CurrentStage: 'ابتدائي', Status: 'مفتوحة', FilingDate: '2026-06-01', Subject: 'قضية عمالية' },
+    { CaseNumber: '2026-5', CurrentStage: 'استئناف', Status: 'مغلقة', FilingDate: '2026-03-01', Subject: 'قضية مقاولات' },
+    { CaseNumber: '2026-6', CurrentStage: 'نقض', Status: 'مفتوحة', FilingDate: '2026-05-25', Subject: 'قضية ضرر' },
+    { CaseNumber: '2026-7', CurrentStage: 'استئناف', Status: 'مفتوحة', FilingDate: '2026-06-10', Subject: 'قضية بيع' },
+  ];
+
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  function getNowAr() {
+    const n = new Date();
+    const days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+    return `${days[n.getDay()]} ${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`;
+  }
+
+  // ============================================================
+  // ✅ FIX: حساب حقيقي للأيام المتبقية بناءً على تاريخ الحكم الفعلي
+  // (كانت الدالة القديمة بترجع رقم عشوائي مبني على رقم القضية، مش تاريخ حقيقي)
+  // ============================================================
+  function computeRealDaysRemaining(judgmentDateStr, deadlineDays) {
+    const start = new Date(judgmentDateStr);
+    if (isNaN(start.getTime())) return null;
+    const deadline = new Date(start);
+    deadline.setDate(deadline.getDate() + deadlineDays);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    deadline.setHours(0, 0, 0, 0);
+    return Math.round((deadline - today) / (1000 * 60 * 60 * 24));
+  }
+
+  // ============================================================
+  // ✅ FIX: مقارنة مرنة لحقل الحالة (Status) بدل المطابقة الحرفية
+  // اللي كانت بتفشل لو القيمة القادمة من الـ API فيها مسافات زيادة
+  // أو صيغة مختلفة شوية عن 'مفتوحة'/'مغلقة' بالظبط
+  // ============================================================
+  const PENDING_STATUS_VALUES = ['معلقة', 'معلق', 'pending'];
+  const OPEN_STATUS_VALUES = ['مفتوحة', 'مفتوح', 'open', 'active', 'نشطة', 'نشط', 'متداولة'];
+  const CLOSED_STATUS_VALUES = ['مغلقة', 'مغلق', 'closed', 'منتهية', 'منتهي', 'مقفولة'];
+  function isPendingStatus(status) {
+    const v = (status ?? '').toString().trim().toLowerCase();
+    return PENDING_STATUS_VALUES.some(s => s.toLowerCase() === v);
+  }
+  function isOpenStatus(status) {
+    const v = (status ?? '').toString().trim().toLowerCase();
+    return OPEN_STATUS_VALUES.some(s => s.toLowerCase() === v) || isPendingStatus(status);
+  }
+  function isClosedStatus(status) {
+    const v = (status ?? '').toString().trim().toLowerCase();
+    return CLOSED_STATUS_VALUES.some(s => s.toLowerCase() === v);
+  }
+
+  // ============================================================
+  // مقارنة مرنة لحقل درجة التقاضي (CurrentStage) لتجنب الفشل بسبب اختلاف المسميات
+  // ============================================================
+  function isExecutionStage(stage) {
+    const s = (stage ?? '').toString().trim().toLowerCase();
+    return s.includes('اشكال') || s.includes('إشكال');
+  }
+
+  function isReconsiderStage(stage) {
+    const s = (stage ?? '').toString().trim().toLowerCase();
+    return s.includes('التماس');
+  }
+
+  function isAppealStage(stage) {
+    const s = (stage ?? '').toString().trim().toLowerCase();
+    if (isExecutionStage(s) || isReconsiderStage(s)) return false;
+    return s.includes('استئناف') || s.includes('علية') || s.includes('عليا') || s.includes('طعن') || s.includes('تظلم');
+  }
+
+  function isCassationStage(stage) {
+    const s = (stage ?? '').toString().trim().toLowerCase();
+    return s.includes('نقض') || s.includes('بالنقض');
+  }
+
+  function isPrimaryStage(stage) {
+    const s = (stage ?? '').toString().trim().toLowerCase();
+    if (!s || s === '-' || s === '') return true;
+    return !isAppealStage(s) && !isCassationStage(s) && !isExecutionStage(s) && !isReconsiderStage(s);
+  }
+
+  // ============================================================
+  // ✅ FIX: جلب قضايا الاستئناف والنقض "المعلقة" الحقيقية من نفس
+  // مصدر صفحة متابعة الاستئناف (sessions/details + AppealAction)
+  // بدل الاعتماد فقط على CurrentStage في جدول القضايا، اللي ممكن
+  // يفضل من غير تحديث لما يتسجل استئناف/نقض من صفحة الجلسات
+  // ============================================================
+  async function loadPendingAppealCassationFromSessions() {
+    try {
+      const sessResp = await fetch(`${API_URL}/sessions/details`).then(r => r.json()).catch(() => ({ data: [] }));
+      const sessionRows = (sessResp && sessResp.success && Array.isArray(sessResp.data)) ? sessResp.data : [];
+
+      const appealItems = [];
+      const cassationItems = [];
+
+      sessionRows.forEach(s => {
+        if (!s.AppealAction || s.AppealAction === 'لا شيء' || s.AppealAction === '') return;
+
+        let stage = null;
+        let deadlineDays = 60;
+        if (s.AppealAction === 'استئناف') {
+          stage = 'appeal';
+          deadlineDays = 60;
+          if (Number(s.HasAppealLevel) > 0) return;
+        } else if (s.AppealAction === 'نقض') {
+          stage = 'cassation';
+          deadlineDays = 80;
+          if (Number(s.HasCassationLevel) > 0) return;
+        } else {
+          return;
+        }
+
+        const judgmentDate = s.SessionDate || new Date().toISOString().split('T')[0];
+        const daysRemaining = computeRealDaysRemaining(judgmentDate, deadlineDays);
+        if (daysRemaining === null || daysRemaining <= 0) return;
+
+        const caseNum = s.CaseNumber || `قضية-${s.CaseId}`;
+        const record = {
+          CaseNumber: caseNum,
+          Subject: s.Subject || s.CaseSubject || (stage === 'appeal' ? 'قضية استئناف' : 'قضية نقض'),
+          daysRemaining
+        };
+        if (stage === 'appeal') appealItems.push(record);
+        else cassationItems.push(record);
+      });
+
+      appealItems.sort((a, b) => a.daysRemaining - b.daysRemaining);
+      cassationItems.sort((a, b) => a.daysRemaining - b.daysRemaining);
+
+      return { appealItems, cassationItems };
+    } catch (error) {
+      console.warn('⚠️ لا يمكن جلب قضايا الاستئناف/النقض المعلقة:', error.message);
+      return { appealItems: [], cassationItems: [] };
+    }
+  }
+
+  // ============================================================
+  // دالة لتقسيم الدوائر من النص
+  // ============================================================
+  function extractCircuits(floorsStr) {
+    if (!floorsStr) return [];
+    let text = floorsStr.replace(/،/g, ',').replace(/;/g, ',').replace(/\n/g, ',');
+    let parts = text.split(',').filter(f => f && f.trim());
+    if (parts.length === 0) {
+      parts = floorsStr.split('-').filter(f => f && f.trim());
+    }
+    return parts.map(f => f.trim());
+  }
+
+  // ============================================================
+  // تحديث قائمة الدوائر - تستخرج الدوائر من المحاكم مباشرة
+  // ============================================================
+  function updateCircuitsList(courts) {
+    const container = document.getElementById('circuitsList');
+    if (!container) return;
+    
+    // استخراج الدوائر من المحاكم
+    let allCircuitsList = [];
+    courts.forEach(court => {
+      const circuits = extractCircuits(court.Floors);
+      circuits.forEach(circuitName => {
+        if (circuitName) {
+          allCircuitsList.push({
+            Name: circuitName,
+            CourtName: court.Name || 'محكمة غير مسماة',
+            CourtId: court.Id
+          });
+        }
+      });
+    });
+    
+    // إذا لم توجد دوائر
+    if (allCircuitsList.length === 0) {
+      container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:16px;">لا توجد دوائر مسجلة</div>';
+      document.getElementById('totalCircuits').textContent = '0';
+      return;
+    }
+    
+    // عرض الدوائر (حد أقصى 8)
+    container.innerHTML = allCircuitsList.slice(0, 8).map(c => {
+      return `
+        <div class="resource-item">
+          <span class="name">🔄 ${c.Name}</span>
+          <span class="count">🏛️ ${c.CourtName}</span>
+        </div>
+      `;
+    }).join('');
+    
+    // تحديث عدد الدوائر الكلي
+    document.getElementById('totalCircuits').textContent = allCircuitsList.length;
+  }
+
+  // ============================================================
+  // تحديث قائمة المحاكم
+  // ============================================================
+  function updateCourtsList(courts) {
+    const container = document.getElementById('courtsList');
+    if (!container) return;
+    if (!courts || courts.length === 0) {
+      container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:16px;">لا توجد محاكم</div>';
+      return;
+    }
+    
+    container.innerHTML = courts.slice(0, 8).map(c => {
+      const circuits = extractCircuits(c.Floors);
+      const count = circuits.length;
+      const names = circuits.slice(0, 3);
+      let countText = count > 0 ? `${count} دوائر` : 'لا توجد دوائر';
+      if (names.length > 0) {
+        countText += ` (${names.join('، ')}${count > 3 ? ` ... +${count - 3}` : ''})`;
+      }
+      return `
+        <div class="resource-item">
+          <span class="name">🏛️ ${c.Name || '—'}</span>
+          <span class="count">${countText}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ============================================================
+  // تحديث قائمة المحامين
+  // ============================================================
+  function updateLawyersList(lawyers) {
+    const container = document.getElementById('lawyersList');
+    if (!container) return;
+    if (!lawyers || lawyers.length === 0) {
+      container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:16px;">لا يوجد محامون</div>';
+      return;
+    }
+    const colors = ['#1a3a5c', '#5B21B6', '#0B7A4A', '#B45309', '#B91C1C'];
+    container.innerHTML = lawyers.slice(0, 8).map((l, i) => {
+      const initials = l.FullName ? l.FullName.trim().split(' ').slice(0,2).map(w=>w[0]).join('') : 'م';
+      const color = colors[i % colors.length];
+      return `
+        <div class="lawyer-row">
+          <div class="lawyer-av" style="background:${color};">${initials}</div>
+          <div><div class="lawyer-name"><span class="status-dot ${l.IsActive ? 'dot-green' : 'dot-gray'}"></span>${l.FullName || '—'}</div>
+          <div class="lawyer-court">${l.Grade || 'محامي'}</div></div>
+          <div class="lawyer-count">${l.CasesCount || 0}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ============================================================
+  // Load All Data
+  // ============================================================
+  async function loadAllData() {
+    try {
+        // جلب القضايا
+        const casesRes = await fetch(`${API_URL}/cases`);
+        const casesResult = await casesRes.json();
+        if (casesResult.success && casesResult.data.length > 0) {
+            allCases = casesResult.data;
+        } else {
+            allCases = sampleCases;
+            console.log('📋 استخدام بيانات افتراضية للقضايا');
+        }
+
+        // جلب المحامين
+        try {
+            const lawyersRes = await fetch(`${API_URL}/lawyers`);
+            const lawyersResult = await lawyersRes.json();
+            if (lawyersResult.success) allLawyers = lawyersResult.data || [];
+        } catch (e) {
+            console.warn('⚠️ لا يمكن جلب المحامين:', e.message);
+            allLawyers = [];
+        }
+
+        // جلب المحاكم (المصدر الرئيسي للدوائر)
+        try {
+            const courtsRes = await fetch(`${API_URL}/courts`);
+            const courtsResult = await courtsRes.json();
+            if (courtsResult.success) {
+                allCourts = courtsResult.data || [];
+                console.log('📋 تم جلب المحاكم:', allCourts.length);
+                allCourts.forEach(c => {
+                    const circuits = extractCircuits(c.Floors);
+                    console.log(`🏛️ ${c.Name}: ${circuits.length} دوائر`);
+                });
+            }
+        } catch (e) {
+            console.warn('⚠️ لا يمكن جلب المحاكم:', e.message);
+            allCourts = [];
+        }
+
+        // تحديث العدادات
+        document.getElementById('totalLawyers').textContent = allLawyers.length || 0;
+        document.getElementById('totalCourts').textContent = allCourts.length || 0;
+        
+        // تحديث القوائم
+        updateLawyersList(allLawyers);
+        updateCourtsList(allCourts);
+        updateCircuitsList(allCourts);
+
+    } catch (error) {
+        // ✅ هذا الـ catch يغطي فقط فشل جلب البيانات من الـ API (فتش القضايا/المحامين/المحاكم)
+        console.error('❌ خطأ في تحميل البيانات:', error);
+        allCases = sampleCases;
+        showToast('⚠️ تم تحميل بيانات تجريبية للقضايا', true);
+    }
+
+    // ✅ الرسم/التحديث منفصل تمامًا عن جلب البيانات: أي خطأ هنا (مثلاً فشل مكتبة خارجية زي Chart.js)
+    // لن يتسبب في استبدال البيانات الحقيقية التي وصلت من الداتابيز ببيانات تجريبية
+    try {
+        await updateAll(allCases);
+        const openCount = allCases.filter(c => isOpenStatus(c.Status)).length;
+        document.getElementById('activeCasesBadge').textContent = `📋 ${openCount} قضية نشطة`;
+        document.getElementById('filteredCount').textContent = allCases.length;
+    } catch (renderError) {
+        console.error('❌ خطأ في عرض/رسم البيانات (البيانات نفسها سليمة):', renderError);
+    }
+  }
+
+  // ============================================================
+  // Update All
+  // ============================================================
+  async function updateAll(cases) {
+    const total = cases.length;
+    // ✅ FIX: استخدام isOpenStatus/isClosedStatus بدل المطابقة الحرفية لـ Status
+    // ملحوظة: "متداولة" هنا مستبعد منها القضايا "المعلقة" عشان تتحسب لوحدها في كارت القضايا المعلقة
+    const open = cases.filter(c => isOpenStatus(c.Status) && !isPendingStatus(c.Status)).length;
+    const closed = cases.filter(c => isClosedStatus(c.Status)).length;
+    const civil = cases.filter(c => c.Category === 'مدني').length;
+    const labor = cases.filter(c => c.Category === 'عمالي').length;
+
+    // 🔍 تشخيص مؤقت: لو لسه فيه قضايا الحالة بتاعتها مش "مفتوحة" ولا "مغلقة"
+    // (ولا أي مرادف معروف)، هيظهر تنبيه في الـ Console يوضح القيمة الفعلية
+    const unknownStatuses = [...new Set(
+      cases.filter(c => !isOpenStatus(c.Status) && !isClosedStatus(c.Status)).map(c => JSON.stringify(c.Status))
+    )];
+    if (unknownStatuses.length > 0) {
+      console.warn('⚠️ فيه قضايا بحقل Status غير معروف (مش مفتوحة ولا مغلقة):', unknownStatuses);
+    }
+
+    const pendingCases = cases.filter(c => isPendingStatus(c.Status)).length;
+
+    const primary = cases.filter(c => isPrimaryStage(c.CurrentStage)).length;
+    const appeal = cases.filter(c => isAppealStage(c.CurrentStage)).length;
+    const cassation = cases.filter(c => isCassationStage(c.CurrentStage)).length;
+    const execution = cases.filter(c => isExecutionStage(c.CurrentStage)).length;
+    const reconsider = cases.filter(c => isReconsiderStage(c.CurrentStage)).length;
+
+    const primaryCompany = Math.round(primary * 0.6);
+    const primaryOpponent = primary - primaryCompany;
+
+    const appealCompany = Math.round(appeal * 0.6);
+    const appealOpponent = appeal - appealCompany;
+
+    const cassationCompany = Math.round(cassation * 0.5);
+    const cassationOpponent = cassation - cassationCompany;
+
+    const executionCompany = Math.round(execution * 0.5);
+    const executionOpponent = execution - executionCompany;
+
+    const reconsiderCompany = Math.round(reconsider * 0.5);
+    const reconsiderOpponent = reconsider - reconsiderCompany;
+
+    document.getElementById('totalCases').textContent = total;
+    document.getElementById('openCases').textContent = open;
+    document.getElementById('closedCases').textContent = closed;
+    document.getElementById('civilCases').textContent = civil;
+    document.getElementById('laborCases').textContent = labor;
+    document.getElementById('pendingCases').textContent = pendingCases;
+
+    document.getElementById('stagePrimaryCount').textContent = primary;
+    document.getElementById('primaryCompany').textContent = primaryCompany;
+    document.getElementById('primaryOpponent').textContent = primaryOpponent;
+
+    document.getElementById('appealCount').textContent = appeal;
+    document.getElementById('appealCompany').textContent = appealCompany;
+    document.getElementById('appealOpponent').textContent = appealOpponent;
+
+    document.getElementById('cassationCount').textContent = cassation;
+    document.getElementById('cassationCompany').textContent = cassationCompany;
+    document.getElementById('cassationOpponent').textContent = cassationOpponent;
+
+    document.getElementById('executionCount').textContent = execution;
+    document.getElementById('executionCompany').textContent = executionCompany;
+    document.getElementById('executionOpponent').textContent = executionOpponent;
+
+    document.getElementById('reconsiderCount').textContent = reconsider;
+    document.getElementById('reconsiderCompany').textContent = reconsiderCompany;
+    document.getElementById('reconsiderOpponent').textContent = reconsiderOpponent;
+
+    document.getElementById('filteredCount').textContent = total;
+
+    // ✅ FIX: جلب قضايا الاستئناف/النقض المعلقة من نفس مصدر صفحة
+    // متابعة الاستئناف (sessions/details) عشان يبقوا متطابقين مع بعض
+    const { appealItems, cassationItems } = await loadPendingAppealCassationFromSessions();
+    const pendingAppeal = appealItems.length;
+    const pendingCassation = cassationItems.length;
+
+    updateWarning(appealItems, cassationItems);
+    updateCharts(
+      cases, pendingCases, pendingAppeal, pendingCassation,
+      appeal, cassation, execution, reconsider,
+      appealCompany, appealOpponent, cassationCompany, cassationOpponent,
+      executionCompany, executionOpponent, reconsiderCompany, reconsiderOpponent
+    );
+  }
+
+  // ============================================================
+  // Update Warning
+  // ============================================================
+  function updateWarning(appealItems, cassationItems) {
+    const container = document.getElementById('warningBody');
+
+    // ✅ FIX: appealItems/cassationItems دلوقتي جايين من نفس مصدر صفحة
+    // متابعة الاستئناف (sessions/details) ومعاهم daysRemaining حقيقي
+    // محسوب من تاريخ الحكم الفعلي، مش رقم عشوائي
+    const sortedAppeal = [...appealItems].sort((a, b) => a.daysRemaining - b.daysRemaining);
+    const sortedCassation = [...cassationItems].sort((a, b) => a.daysRemaining - b.daysRemaining);
+
+    const closestAppeal = sortedAppeal.length > 0 ? sortedAppeal[0] : null;
+    const closestCassation = sortedCassation.length > 0 ? sortedCassation[0] : null;
+
+    if (!closestAppeal && !closestCassation) {
+      container.innerHTML = `
+        <div class="no-warning">
+          <span class="big-icon">✅</span>
+          لا توجد قضايا استئناف أو نقض معلقة
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+
+    if (closestAppeal) {
+      const days = closestAppeal.daysRemaining;
+      let statusClass = 'safe';
+      let statusText = `${days} يوم`;
+      if (days < 10) { statusClass = 'urgent'; statusText = `🚨 ${days} يوم`; }
+      else if (days < 20) { statusClass = 'warning'; statusText = `⚠️ ${days} يوم`; }
+
+      html += `
+        <div class="warning-item">
+          <span class="warn-icon">📜</span>
+          <div class="warn-info">
+            <div class="warn-title">أقرب استئناف: رقم ${closestAppeal.CaseNumber || '—'}</div>
+            <div class="warn-detail">${closestAppeal.Subject || 'قضية استئناف'} — متبقي <strong>${days}</strong> يوم وينتهي</div>
+          </div>
+          <span class="warn-days ${statusClass}">${statusText}</span>
+        </div>
+      `;
+    }
+
+    if (closestCassation) {
+      const days = closestCassation.daysRemaining;
+      let statusClass = 'safe';
+      let statusText = `${days} يوم`;
+      if (days < 10) { statusClass = 'urgent'; statusText = `🚨 ${days} يوم`; }
+      else if (days < 20) { statusClass = 'warning'; statusText = `⚠️ ${days} يوم`; }
+
+      html += `
+        <div class="warning-item">
+          <span class="warn-icon">❌</span>
+          <div class="warn-info">
+            <div class="warn-title">أقرب نقض: رقم ${closestCassation.CaseNumber || '—'}</div>
+            <div class="warn-detail">${closestCassation.Subject || 'قضية نقض'} — متبقي <strong>${days}</strong> يوم وينتهي</div>
+          </div>
+          <span class="warn-days ${statusClass}">${statusText}</span>
+        </div>
+      `;
+    }
+
+    container.innerHTML = html;
+  }
+
+  // ============================================================
+  // Update Charts
+  // ============================================================
+  function updateCharts(
+    cases, pendingCases, pendingAppeal, pendingCassation,
+    appeal, cassation, execution, reconsider,
+    appealCompany, appealOpponent, cassationCompany, cassationOpponent,
+    executionCompany, executionOpponent, reconsiderCompany, reconsiderOpponent
+  ) {
+    // ✅ حماية: لو مكتبة Chart.js لم تُحمّل (فشل شبكة/CDN)، اخرج بأمان بدون رسم أي رسوم بيانية
+    // بدل ما نرمي خطأ يوقف updateAll ويتسبب في التراجع لبيانات تجريبية (sampleCases) في loadAllData
+    if (typeof Chart === 'undefined') {
+      console.warn('⚠️ تم تجاوز رسم الرسوم البيانية لأن Chart.js غير محمّلة.');
+      return;
+    }
+    const total = cases.length;
+    const open = cases.filter(c => isOpenStatus(c.Status) && !isPendingStatus(c.Status)).length;
+    const closed = cases.filter(c => isClosedStatus(c.Status)).length;
+
+    const allowedCategories = ['مدني', 'عمالي', 'تجاري', 'جنائي'];
+    const catMap = {};
+    cases.forEach(c => {
+      let cat = c.Category || 'أخرى';
+      if (!allowedCategories.includes(cat)) cat = 'أخرى';
+      catMap[cat] = (catMap[cat] || 0) + 1;
+    });
+    const orderedCategories = ['مدني', 'عمالي', 'تجاري', 'جنائي', 'أخرى'];
+    const catLabels = [];
+    const catValues = [];
+    orderedCategories.forEach(cat => {
+      if (catMap[cat] !== undefined) { catLabels.push(cat); catValues.push(catMap[cat]); }
+    });
+
+    const monthlyCount = new Array(12).fill(0);
+    cases.forEach(c => {
+      if (c.FilingDate) {
+        try {
+          const d = new Date(c.FilingDate);
+          if (!isNaN(d.getTime())) monthlyCount[d.getMonth()] = (monthlyCount[d.getMonth()] || 0) + 1;
+        } catch (e) {}
+      }
+    });
+
+    const chartColors = {
+      blue1: '#1a3a5c',
+      blue2: '#2563a8',
+      blue3: '#3b82f6',
+      blue4: '#60a5fa',
+      blueLight: '#93c5fd',
+      yellow1: '#D4AF37',
+      yellow2: '#E8C84A',
+      yellow3: '#F2DC8A',
+      red1: '#B91C1C',
+      red2: '#DC2626',
+      red3: '#EF4444',
+      redLight: '#FCA5A5',
+    };
+
+    const barDatalabelsCenter = {
+      color: '#ffffff',
+      font: { weight: 'bold', size: 15, family: 'Cairo' },
+      formatter: function(v) { return v > 0 ? v : ''; },
+      anchor: 'center',
+      align: 'center',
+      offset: 0,
+    };
+
+    // 1. Pie: Case Status
+    if (chartStatus) chartStatus.destroy();
+    chartStatus = new Chart(document.getElementById('chartStatus'), {
+      type: 'pie',
+      data: {
+        labels: ['متداولة', 'معلقة', 'منتهية'],
+        datasets: [{ 
+          data: [open, pendingCases, closed], 
+          backgroundColor: [chartColors.blue1, chartColors.yellow1, chartColors.red1], 
+          borderWidth: 2, 
+          borderColor: '#fff' 
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 10, family: 'Cairo' }, boxWidth: 12, padding: 8 } },
+          tooltip: { callbacks: { label: function(ctx) {
+            const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+            return `${ctx.label}: ${ctx.parsed} (${total > 0 ? ((ctx.parsed/total)*100).toFixed(1) : 0}%)`;
+          } } },
+          datalabels: {
+            color: '#fff', font: { weight: 'bold', size: 10, family: 'Cairo' },
+            formatter: function(v, ctx) {
+              const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+              if (total === 0 || v === 0) return '';
+              return `${v}\n${((v/total)*100).toFixed(1)}%`;
+            },
+            textAlign: 'center', anchor: 'center', align: 'center'
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+
+    // 2. Bar: Cases by Type
+    const typeColors = {
+      'مدني': chartColors.blue1,
+      'عمالي': chartColors.blue2,
+      'تجاري': chartColors.yellow1,
+      'جنائي': chartColors.red1,
+      'أخرى': chartColors.blue3
+    };
+    const barColors = catLabels.map(c => typeColors[c] || chartColors.blue3);
+
+    if (chartCategory) chartCategory.destroy();
+    chartCategory = new Chart(document.getElementById('chartCategory'), {
+      type: 'bar',
+      data: {
+        labels: catLabels,
+        datasets: [{ label: 'عدد القضايا', data: catValues, backgroundColor: barColors, borderRadius: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => `عدد القضايا: ${ctx.parsed.y}` } },
+          datalabels: barDatalabelsCenter
+        },
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 9 } } }, x: { ticks: { font: { size: 10 } } } }
+      },
+      plugins: [ChartDataLabels]
+    });
+
+    // 3. Line: Cases by Month
+    const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    if (chartMonthly) chartMonthly.destroy();
+    chartMonthly = new Chart(document.getElementById('chartMonthly'), {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{ 
+          label: 'عدد القضايا', 
+          data: monthlyCount, 
+          borderColor: chartColors.blue1, 
+          backgroundColor: 'rgba(26,58,92,0.06)', 
+          fill: true, 
+          tension: 0.4, 
+          pointBackgroundColor: chartColors.blue1, 
+          pointRadius: 3 
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => `عدد القضايا: ${ctx.parsed.y}` } },
+          datalabels: { display: false }
+        },
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 9 } } }, x: { ticks: { font: { size: 8 }, maxRotation: 45 } } }
+      }
+    });
+
+    // 4. Pie: Stages Distribution
+    const primary = cases.filter(c => isPrimaryStage(c.CurrentStage)).length;
+    const stageLabels = ['ابتدائي', 'استئناف', 'نقض', 'إشكال في التنفيذ', 'التماس إعادة النظر'];
+    const stageValues = [primary, appeal, cassation, execution, reconsider];
+    const stageColors = [chartColors.blue1, chartColors.yellow1, chartColors.red1, '#d97706', '#0891b2'];
+
+    if (chartStagesPie) chartStagesPie.destroy();
+    chartStagesPie = new Chart(document.getElementById('chartStagesPie'), {
+      type: 'pie',
+      data: {
+        labels: stageLabels,
+        datasets: [{ data: stageValues, backgroundColor: stageColors, borderWidth: 2, borderColor: '#fff' }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 10, family: 'Cairo' }, boxWidth: 12, padding: 8 } },
+          tooltip: { callbacks: { label: function(ctx) {
+            const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+            return `${ctx.label}: ${ctx.parsed} (${total > 0 ? ((ctx.parsed/total)*100).toFixed(1) : 0}%)`;
+          } } },
+          datalabels: {
+            color: '#fff', font: { weight: 'bold', size: 10, family: 'Cairo' },
+            formatter: function(v, ctx) {
+              const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+              if (total === 0 || v === 0) return '';
+              return `${v}\n${((v/total)*100).toFixed(1)}%`;
+            },
+            textAlign: 'center', anchor: 'center', align: 'center'
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+
+    // 5. Bar: Appeal & Cassation
+    if (chartAppealCassationBar) chartAppealCassationBar.destroy();
+    chartAppealCassationBar = new Chart(document.getElementById('chartAppealCassationBar'), {
+      type: 'bar',
+      data: {
+        labels: ['استئناف', 'نقض', 'إشكال في التنفيذ', 'التماس إعادة النظر'],
+        datasets: [
+          { label: 'الشركة', data: [appealCompany, cassationCompany, executionCompany, reconsiderCompany], backgroundColor: chartColors.blue1, borderRadius: 3 },
+          { label: 'الخصم', data: [appealOpponent, cassationOpponent, executionOpponent, reconsiderOpponent], backgroundColor: chartColors.red1, borderRadius: 3 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top', labels: { font: { size: 9, family: 'Cairo' }, boxWidth: 10, padding: 6 } },
+          tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}` } },
+          datalabels: {
+            color: '#fff',
+            font: { weight: 'bold', size: 11, family: 'Cairo' },
+            formatter: function(v) { return v > 0 ? v : ''; },
+            anchor: 'center',
+            align: 'center',
+            offset: 0
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 9 } } },
+          x: { ticks: { font: { size: 10 } } }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+
+    // 6. Bar: Pending
+    if (chartPendingAppealCassation) chartPendingAppealCassation.destroy();
+    chartPendingAppealCassation = new Chart(document.getElementById('chartPendingAppealCassation'), {
+      type: 'bar',
+      data: {
+        labels: ['استئناف معلق', 'نقض معلق'],
+        datasets: [{ 
+          label: 'عدد القضايا', 
+          data: [pendingAppeal, pendingCassation], 
+          backgroundColor: [chartColors.yellow1, chartColors.red1], 
+          borderRadius: 4 
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => `عدد القضايا: ${ctx.parsed.y}` } },
+          datalabels: barDatalabelsCenter
+        },
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 9 } } }, x: { ticks: { font: { size: 10 } } } }
+      },
+      plugins: [ChartDataLabels]
+    });
+  }
+
+  // ============================================================
+  // Filters
+  // ============================================================
+  async function applyDateFilter() {
+    const month = document.getElementById('filterMonth').value;
+    const year = document.getElementById('filterYear').value;
+    if (!month && !year) { showToast('⚠️ الرجاء اختيار شهر أو سنة'); return; }
+
+    try {
+      let filteredCases = allCases;
+      let filteredSessions = allSessions;
+
+      if (month) {
+        const m = parseInt(month);
+        filteredCases = filteredCases.filter(c => {
+          if (!c.FilingDate) return false;
+          try { const d = new Date(c.FilingDate); return !isNaN(d.getTime()) && d.getMonth()+1 === m; }
+          catch(e) { return false; }
+        });
+        filteredSessions = filteredSessions.filter(s => {
+          if (!s.SessionDate) return false;
+          try { const d = new Date(s.SessionDate); return !isNaN(d.getTime()) && d.getMonth()+1 === m; }
+          catch(e) { return false; }
+        });
+      }
+      if (year) {
+        const y = parseInt(year);
+        filteredCases = filteredCases.filter(c => {
+          if (!c.FilingDate) return false;
+          try { const d = new Date(c.FilingDate); return !isNaN(d.getTime()) && d.getFullYear() === y; }
+          catch(e) { return false; }
+        });
+        filteredSessions = filteredSessions.filter(s => {
+          if (!s.SessionDate) return false;
+          try { const d = new Date(s.SessionDate); return !isNaN(d.getTime()) && d.getFullYear() === y; }
+          catch(e) { return false; }
+        });
+      }
+
+      updateAll(filteredCases);
+      updateSessionsData(filteredSessions);
+      showToast(`✅ تم تطبيق التصفية على القضايا للجلسات (${filteredCases.length} قضية، ${filteredSessions.length} جلسة)`);
+    } catch (error) {
+      console.error(error);
+      showToast('❌ خطأ في التصفية', true);
+    }
+  }
+
+  function resetDateFilter() {
+    document.getElementById('filterMonth').value = '';
+    document.getElementById('filterYear').value = '';
+    updateAll(allCases);
+    updateSessionsData(allSessions);
+    showToast('🔄 تم إلغاء التصفية');
+  }
+
+  // ============================================================
+  // Sessions (KPI cards + charts)
+  // ============================================================
+  let sessBarChartInstance = null, sessPieChartInstance = null;
+  let sessResultPieChartInstance = null, sessActionsBarChartInstance = null;
+
+  // ✅ نفس منطق تحديد "الجلسة منتهية" المستخدم في صفحة الجلسات (sessions.html)
+  function isSessionClosed(s) {
+    return s.IsClosed === true ||
+           s.Status === 'مغلقة' || s.Status === 'closed' ||
+           s.Status === 'منتهية' || s.Status === 'عُقدت' || s.Status === 'held' ||
+           (s.Result && s.Result !== 'لم تحسم' && s.Result !== '');
+  }
+
+  function updateSessionsKPIs(sessions) {
+    const today = new Date().toISOString().split('T')[0];
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    const monthStart = new Date();
+    monthStart.setDate(1);
+
+    const todaySessions = sessions.filter(s => s.SessionDate === today);
+    const weekSessions = sessions.filter(s => new Date(s.SessionDate) >= weekStart);
+    const monthSessions = sessions.filter(s => new Date(s.SessionDate) >= monthStart);
+
+    document.getElementById('sessTodayCount').textContent = todaySessions.length;
+    document.getElementById('sessWeekCount').textContent = weekSessions.length;
+    document.getElementById('sessMonthCount').textContent = monthSessions.length;
+
+    const stages = ['ابتدائي', 'استئناف', 'نقض'];
+    const stageMap = { 'ابتدائي': ['initial'], 'استئناف': ['appeal'], 'نقض': ['cassation'] };
+    const suffix = { 'ابتدائي': 'Init', 'استئناف': 'Appeal', 'نقض': 'Cass' };
+
+    stages.forEach(stg => {
+      const stgTypes = stageMap[stg] || [stg.toLowerCase()];
+      const filterFn = (s) => {
+        const levelType = s.LitigationStageType || s.Stage || 'initial';
+        return stgTypes.includes(levelType) || s.Stage === stg;
+      };
+      document.getElementById(`sessToday${suffix[stg]}`).textContent = todaySessions.filter(filterFn).length;
+      document.getElementById(`sessWeek${suffix[stg]}`).textContent = weekSessions.filter(filterFn).length;
+      document.getElementById(`sessMonth${suffix[stg]}`).textContent = monthSessions.filter(filterFn).length;
+    });
+
+    // ===== إحصائيات الأحكام وحالات الجلسات (نفس منطق صفحة الجلسات) =====
+    const total = sessions.length;
+    const pending = sessions.filter(s => !isSessionClosed(s)).length;
+    const closed = sessions.filter(s => isSessionClosed(s)).length;
+    const company = sessions.filter(s => s.Result === 'لصالح الشركة').length;
+    const opponent = sessions.filter(s => s.Result === 'لصالح الخصم').length;
+
+    const actionAppeal = sessions.filter(s => s.AppealAction === 'استئناف').length;
+    const actionCassation = sessions.filter(s => s.AppealAction === 'نقض').length;
+    const actionExecution = sessions.filter(s => s.AppealAction === 'اشكال في التنفيذ').length;
+    const actionReconsider = sessions.filter(s => s.AppealAction === 'التماس اعادة النظر').length;
+    const actionNone = sessions.filter(s => s.AppealAction === 'لا اجراء').length;
+
+    document.getElementById('sessStatTotal').textContent = total;
+    document.getElementById('sessStatPending').textContent = pending;
+    document.getElementById('sessStatClosed').textContent = closed;
+    document.getElementById('sessStatCompany').textContent = company;
+    document.getElementById('sessStatOpponent').textContent = opponent;
+    document.getElementById('sessStatActionAppeal').textContent = actionAppeal;
+    document.getElementById('sessStatActionCassation').textContent = actionCassation;
+    document.getElementById('sessStatActionExecution').textContent = actionExecution;
+    document.getElementById('sessStatActionReconsider').textContent = actionReconsider;
+    document.getElementById('sessStatActionNone').textContent = actionNone;
+  }
+
+  function updateSessionsCharts(sessions) {
+    const stages = ['ابتدائي', 'استئناف', 'نقض', 'اشكال في التنفيذ', 'التماس اعادة النظر'];
+    const stageMap = { 'ابتدائي': ['initial'], 'استئناف': ['appeal'], 'نقض': ['cassation'] };
+    const actionStages = ['اشكال في التنفيذ', 'التماس اعادة النظر'];
+    const today = new Date().toISOString().split('T')[0];
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    const monthStart = new Date();
+    monthStart.setDate(1);
+
+    const filterFn = (s, stg) => {
+      if (actionStages.includes(stg)) return s.AppealAction === stg;
+      const stgTypes = stageMap[stg] || [stg.toLowerCase()];
+      const levelType = s.LitigationStageType || s.Stage || 'initial';
+      return stgTypes.includes(levelType) || s.Stage === stg;
+    };
+
+    const td = stages.map(stg => sessions.filter(s => s.SessionDate === today && filterFn(s, stg)).length);
+    const wk = stages.map(stg => sessions.filter(s => new Date(s.SessionDate) >= weekStart && filterFn(s, stg)).length);
+    const mn = stages.map(stg => sessions.filter(s => new Date(s.SessionDate) >= monthStart && filterFn(s, stg)).length);
+
+    const colors = ['#1e4976', '#D4AF37', '#5B21B6', '#d97706', '#0891b2'];
+
+    if (sessBarChartInstance) sessBarChartInstance.destroy();
+    sessBarChartInstance = new Chart(document.getElementById('sessBarChart'), {
+      type: 'bar',
+      data: {
+        labels: ['اليوم', 'الأسبوع', 'الشهر'],
+        datasets: stages.map((stg, i) => ({
+          label: stg,
+          data: [td[i], wk[i], mn[i]],
+          backgroundColor: colors[i],
+          borderRadius: 4
+        }))
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top', labels: { font: { family: 'Cairo', size: 10 }, boxWidth: 10, padding: 8 } },
+          tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}` } },
+          datalabels: { display: false }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { family: 'Cairo', size: 10 } } },
+          y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Cairo', size: 9 } } }
+        }
+      }
+    });
+
+    const totalByStage = stages.map(stg => sessions.filter(s => filterFn(s, stg)).length);
+    if (sessPieChartInstance) sessPieChartInstance.destroy();
+    sessPieChartInstance = new Chart(document.getElementById('sessPieChart'), {
+      type: 'pie',
+      data: {
+        labels: stages,
+        datasets: [{ data: totalByStage, backgroundColor: colors, borderColor: '#fff', borderWidth: 2 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { family: 'Cairo', size: 10 }, boxWidth: 10, padding: 8 } },
+          tooltip: { callbacks: { label: function(ctx) {
+            const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+            return `${ctx.label}: ${ctx.parsed} (${total > 0 ? ((ctx.parsed/total)*100).toFixed(1) : 0}%)`;
+          } } },
+          datalabels: {
+            color: '#fff', font: { weight: 'bold', size: 10, family: 'Cairo' },
+            formatter: function(v, ctx) {
+              const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+              if (total === 0 || v === 0) return '';
+              return `${v}`;
+            }
+          }
+        }
+      }
+    });
+
+    // ===== 3. Pie: نتيجة الأحكام (شركة vs خصم) =====
+    const resultCompany = sessions.filter(s => s.Result === 'لصالح الشركة').length;
+    const resultOpponent = sessions.filter(s => s.Result === 'لصالح الخصم').length;
+
+    if (sessResultPieChartInstance) sessResultPieChartInstance.destroy();
+    sessResultPieChartInstance = new Chart(document.getElementById('sessResultPieChart'), {
+      type: 'pie',
+      data: {
+        labels: ['لصالح الشركة', 'لصالح الخصم'],
+        datasets: [{ data: [resultCompany, resultOpponent], backgroundColor: ['#059669', '#dc2626'], borderColor: '#fff', borderWidth: 2 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { family: 'Cairo', size: 10 }, boxWidth: 10, padding: 8 } },
+          tooltip: { callbacks: { label: function(ctx) {
+            const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+            return `${ctx.label}: ${ctx.parsed} (${total > 0 ? ((ctx.parsed/total)*100).toFixed(1) : 0}%)`;
+          } } },
+          datalabels: {
+            color: '#fff', font: { weight: 'bold', size: 10, family: 'Cairo' },
+            formatter: function(v, ctx) {
+              const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+              if (total === 0 || v === 0) return '';
+              return `${v}`;
+            }
+          }
+        }
+      }
+    });
+
+    // ===== 4. Bar: الإجراءات المتخذة بعد الجلسات =====
+    const actionLabels = ['استئناف', 'نقض', 'اشكال في التنفيذ', 'التماس اعادة النظر', 'لا اجراء'];
+    const actionValues = [
+      sessions.filter(s => s.AppealAction === 'استئناف').length,
+      sessions.filter(s => s.AppealAction === 'نقض').length,
+      sessions.filter(s => s.AppealAction === 'اشكال في التنفيذ').length,
+      sessions.filter(s => s.AppealAction === 'التماس اعادة النظر').length,
+      sessions.filter(s => s.AppealAction === 'لا اجراء').length
+    ];
+    const actionColors = ['#2563eb', '#7c3aed', '#d97706', '#0891b2', '#94a3b8'];
+
+    if (sessActionsBarChartInstance) sessActionsBarChartInstance.destroy();
+    sessActionsBarChartInstance = new Chart(document.getElementById('sessActionsBarChart'), {
+      type: 'bar',
+      data: {
+        labels: actionLabels,
+        datasets: [{ label: 'عدد الجلسات', data: actionValues, backgroundColor: actionColors, borderRadius: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => `عدد الجلسات: ${ctx.parsed.y}` } },
+          datalabels: {
+            color: '#fff', font: { weight: 'bold', size: 11, family: 'Cairo' },
+            formatter: function(v) { return v > 0 ? v : ''; },
+            anchor: 'center', align: 'center', offset: 0
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 9 } } },
+          x: { ticks: { font: { size: 9 } } }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+  }
+
+  let allSessions = [];
+
+  function updateSessionsData(sessions) {
+    updateSessionsKPIs(sessions);
+    updateSessionsCharts(sessions);
+  }
+
+  async function loadSessionsData() {
+    try {
+      const resp = await fetch(`${API_URL}/sessions`);
+      const result = await resp.json();
+      allSessions = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+      updateSessionsData(allSessions);
+    } catch (error) {
+      console.warn('⚠️ لا يمكن جلب الجلسات:', error.message);
+      allSessions = [];
+      updateSessionsData([]);
+    }
+  }
+
+  // ============================================================
+  // Print Report — كل قسم في صفحة، بنفس شكل الموقع بالضبط
+  // ============================================================
+  const sectionTitles = {
+    sessions: '🗓️ الجلسات',
+    cases: '📋 القضايا',
+    stages: '⬆️ درجات التقاضي',
+    pending: '⏳ الاستئناف والنقض المعلق',
+    resources: '👨‍💼 الموارد'
+  };
+
+  function openPrintOptions() {
+    document.getElementById('printModal').classList.add('show');
+  }
+  function closePrintModal() {
+    document.getElementById('printModal').classList.remove('show');
+  }
+  function toggleAllPrintOptions(checked) {
+    document.querySelectorAll('.print-section-check').forEach(cb => cb.checked = checked);
+  }
+  document.addEventListener('change', function(e) {
+    if (e.target.classList && e.target.classList.contains('print-section-check')) {
+      const all = document.querySelectorAll('.print-section-check');
+      const allChecked = Array.from(all).every(cb => cb.checked);
+      document.getElementById('printAll').checked = allChecked;
+    }
+  });
+
+  // يستنسخ قسم كامل من الصفحة الحية، ويستبدل كل الـ canvas الخاصة بالرسومات
+  // بصور ثابتة (نفس الرسم بالظبط والألوان) عشان تتطبع صح في صفحة منفصلة
+  function cloneSectionForPrint(sectionEl) {
+    const clone = sectionEl.cloneNode(true);
+    clone.querySelectorAll('canvas').forEach(canvasClone => {
+      const originalId = canvasClone.id;
+      let chart = null;
+      try { chart = originalId ? Chart.getChart(originalId) : null; } catch (e) { chart = null; }
+      const img = document.createElement('img');
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.display = 'block';
+      if (chart) {
+        try { img.src = chart.toBase64Image(); } catch (e) { /* ignore */ }
+      }
+      canvasClone.replaceWith(img);
+    });
+    return clone;
+  }
+
+  function buildPrintPage(key, dateStr) {
+    const sectionEl = document.querySelector(`.section-container[data-section="${key}"]`);
+    if (!sectionEl) return '';
+    const clone = cloneSectionForPrint(sectionEl);
+
+    const page = document.createElement('div');
+    page.className = 'print-page';
+    page.innerHTML = `
+      <div class="print-page-letterhead">
+        <div class="ar">
+          <b>شركة الصرف الصحى بالإسكندرية</b>
+          <span>الإدارة العامة للشئون القانونية</span>
+        </div>
+        <div class="en">
+          <b>Alexandria Sanitary Drainage Company</b>
+          <span>Legal Affairs Department</span>
+        </div>
+      </div>
+      <div class="print-page-date">تاريخ الطباعة: ${dateStr} — ${sectionTitles[key] || ''}</div>
+    `;
+    page.appendChild(clone);
+    return page.outerHTML;
+  }
+
+  function runDashboardPrint() {
+    const checked = Array.from(document.querySelectorAll('.print-section-check'))
+      .filter(cb => cb.checked)
+      .map(cb => cb.value);
+
+    if (checked.length === 0) {
+      showToast('⚠️ اختر قسماً واحداً على الأقل للطباعة', true);
+      return;
+    }
+
+    // نحافظ على نفس ترتيب الأقسام كما تظهر في الصفحة
+    const orderedKeys = Array.from(document.querySelectorAll('.section-container'))
+      .map(sec => sec.getAttribute('data-section'))
+      .filter(key => checked.includes(key));
+
+    const _dn2 = new Date();
+    const dateStr = `${String(_dn2.getDate()).padStart(2,'0')}/${String(_dn2.getMonth()+1).padStart(2,'0')}/${_dn2.getFullYear()}`;
+
+    let html = '';
+    orderedKeys.forEach(key => { html += buildPrintPage(key, dateStr); });
+
+    document.getElementById('printReportArea').innerHTML = html;
+    closePrintModal();
+    // تأخير بسيط لضمان تحميل صور الرسومات في الـ DOM قبل الطباعة
+    setTimeout(() => window.print(), 400);
+  }
+
+  document.getElementById('printModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closePrintModal();
+  });
+
+  // ============================================================
+  // Init
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', async () => {
+    if (typeof initSidebar === 'function') initSidebar('dashboard');
+    document.getElementById('todayDate').textContent = getNowAr();
+    await loadAllData();
+    await loadSessionsData();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+(node:7964) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+❌ خطأ في الاستعلام: RequestError: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+    at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:411:15)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+    at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+    at Readable.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at nextAsync (node:internal/streams/from:205:22) {
+  code: 'EREQUEST',
+  originalError: Error: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+      at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:409:19)
+      at Connection.emit (node:events:509:28)
+      at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+      at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22) {
+    info: ErrorMessageToken {
+      name: 'ERROR',
+      handlerName: 'onErrorMessage',
+      number: 2627,
+      state: 1,
+      class: 14,
+      message: "Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).",
+      serverName: 'LEGAL_AFFAIRS',
+      procName: '',
+      lineNumber: 2
+    }
+  },
+  number: 2627,
+  lineNumber: 2,
+  state: 1,
+  class: 14,
+  serverName: 'LEGAL_AFFAIRS',
+  procName: '',
+  precedingErrors: []
+}
+❌ خطأ في إضافة القضية: RequestError: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+    at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:411:15)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+    at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+    at Readable.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at nextAsync (node:internal/streams/from:205:22) {
+  code: 'EREQUEST',
+  originalError: Error: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+      at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:409:19)
+      at Connection.emit (node:events:509:28)
+      at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+      at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22) {
+    info: ErrorMessageToken {
+      name: 'ERROR',
+      handlerName: 'onErrorMessage',
+      number: 2627,
+      state: 1,
+      class: 14,
+      message: "Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).",
+      serverName: 'LEGAL_AFFAIRS',
+      procName: '',
+      lineNumber: 2
+    }
+  },
+  number: 2627,
+  lineNumber: 2,
+  state: 1,
+  class: 14,
+  serverName: 'LEGAL_AFFAIRS',
+  procName: '',
+  precedingErrors: []
+}
+❌ خطأ في الاستعلام: RequestError: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+    at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:411:15)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+    at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+    at Readable.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at nextAsync (node:internal/streams/from:205:22) {
+  code: 'EREQUEST',
+  originalError: Error: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+      at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:409:19)
+      at Connection.emit (node:events:509:28)
+      at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+      at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22) {
+    info: ErrorMessageToken {
+      name: 'ERROR',
+      handlerName: 'onErrorMessage',
+      number: 2627,
+      state: 1,
+      class: 14,
+      message: "Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).",
+      serverName: 'LEGAL_AFFAIRS',
+      procName: '',
+      lineNumber: 2
+    }
+  },
+  number: 2627,
+  lineNumber: 2,
+  state: 1,
+  class: 14,
+  serverName: 'LEGAL_AFFAIRS',
+  procName: '',
+  precedingErrors: []
+}
+❌ خطأ في إضافة القضية: RequestError: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+    at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:411:15)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+    at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+    at Readable.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at nextAsync (node:internal/streams/from:205:22) {
+  code: 'EREQUEST',
+  originalError: Error: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+      at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:409:19)
+      at Connection.emit (node:events:509:28)
+      at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+      at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22) {
+    info: ErrorMessageToken {
+      name: 'ERROR',
+      handlerName: 'onErrorMessage',
+      number: 2627,
+      state: 1,
+      class: 14,
+      message: "Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).",
+      serverName: 'LEGAL_AFFAIRS',
+      procName: '',
+      lineNumber: 2
+    }
+  },
+  number: 2627,
+  lineNumber: 2,
+  state: 1,
+  class: 14,
+  serverName: 'LEGAL_AFFAIRS',
+  procName: '',
+  precedingErrors: []
+}
+❌ خطأ في الاستعلام: RequestError: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+    at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:411:15)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+    at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+    at Readable.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at nextAsync (node:internal/streams/from:205:22) {
+  code: 'EREQUEST',
+  originalError: Error: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+      at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:409:19)
+      at Connection.emit (node:events:509:28)
+      at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+      at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22) {
+    info: ErrorMessageToken {
+      name: 'ERROR',
+      handlerName: 'onErrorMessage',
+      number: 2627,
+      state: 1,
+      class: 14,
+      message: "Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).",
+      serverName: 'LEGAL_AFFAIRS',
+      procName: '',
+      lineNumber: 2
+    }
+  },
+  number: 2627,
+  lineNumber: 2,
+  state: 1,
+  class: 14,
+  serverName: 'LEGAL_AFFAIRS',
+  procName: '',
+  precedingErrors: []
+}
+❌ خطأ في إضافة القضية: RequestError: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+    at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:411:15)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+    at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+    at Readable.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at nextAsync (node:internal/streams/from:205:22) {
+  code: 'EREQUEST',
+  originalError: Error: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+      at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:409:19)
+      at Connection.emit (node:events:509:28)
+      at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+      at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22) {
+    info: ErrorMessageToken {
+      name: 'ERROR',
+      handlerName: 'onErrorMessage',
+      number: 2627,
+      state: 1,
+      class: 14,
+      message: "Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).",
+      serverName: 'LEGAL_AFFAIRS',
+      procName: '',
+      lineNumber: 2
+    }
+  },
+  number: 2627,
+  lineNumber: 2,
+  state: 1,
+  class: 14,
+  serverName: 'LEGAL_AFFAIRS',
+  procName: '',
+  precedingErrors: []
+}
+❌ خطأ في الاستعلام: RequestError: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+    at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:411:15)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+    at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+    at Readable.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at nextAsync (node:internal/streams/from:205:22) {
+  code: 'EREQUEST',
+  originalError: Error: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+      at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:409:19)
+      at Connection.emit (node:events:509:28)
+      at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+      at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22) {
+    info: ErrorMessageToken {
+      name: 'ERROR',
+      handlerName: 'onErrorMessage',
+      number: 2627,
+      state: 1,
+      class: 14,
+      message: "Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).",
+      serverName: 'LEGAL_AFFAIRS',
+      procName: '',
+      lineNumber: 2
+    }
+  },
+  number: 2627,
+  lineNumber: 2,
+  state: 1,
+  class: 14,
+  serverName: 'LEGAL_AFFAIRS',
+  procName: '',
+  precedingErrors: []
+}
+❌ خطأ في إضافة القضية: RequestError: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+    at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:411:15)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+    at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+    at Readable.emit (node:events:509:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+    at Readable.push (node:internal/streams/readable:395:5)
+    at nextAsync (node:internal/streams/from:205:22) {
+  code: 'EREQUEST',
+  originalError: Error: Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).
+      at handleError (C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\request.js:409:19)
+      at Connection.emit (node:events:509:28)
+      at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+      at RequestTokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:285:21)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22) {
+    info: ErrorMessageToken {
+      name: 'ERROR',
+      handlerName: 'onErrorMessage',
+      number: 2627,
+      state: 1,
+      class: 14,
+      message: "Violation of UNIQUE KEY constraint 'UQ__Cases__103BB8D866DD70E1'. Cannot insert duplicate key in object 'dbo.Cases'. The duplicate key value is (123456789/2026).",
+      serverName: 'LEGAL_AFFAIRS',
+      procName: '',
+      lineNumber: 2
+    }
+  },
+  number: 2627,
+  lineNumber: 2,
+  state: 1,
+  class: 14,
+  serverName: 'LEGAL_AFFAIRS',
+  procName: '',
+  precedingErrors: []
+}

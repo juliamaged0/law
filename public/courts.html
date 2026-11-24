@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحاكم والدوائر — الشؤون القانونية</title>
+  <script src="sidebar.js"></script>
+  <script src="activity-logger.js"></script>
+  <script src="permissions-guard.js"></script>
+  <style>
+    .grid-container {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1000px) { .grid-container { grid-template-columns: 1fr; } }
+
+    .form-card {
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(10,22,40,0.07);
+      position: sticky;
+      top: 80px;
+    }
+
+    .form-card-header {
+      background: linear-gradient(135deg, #0f2240, #1a3a5c);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-card-header h3 { font-size: 14px; font-weight: 800; color: white; }
+
+    .form-card-body { padding: 20px; }
+
+    .form-group { margin-bottom: 14px; }
+
+    .form-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .form-control {
+      width: 100%;
+      height: 40px;
+      background: #F8FAFD;
+      border: 1.5px solid #E4EAF2;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: 'Cairo', sans-serif;
+      color: #0F172A;
+      outline: none;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      border-color: #1a3a5c;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(26,58,92,0.1);
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: #94A3B8;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .courts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .court-card {
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(10,22,40,0.07);
+      transition: all 0.2s;
+    }
+
+    .court-card:hover { box-shadow: 0 8px 24px rgba(10,22,40,0.1); transform: translateY(-1px); }
+
+    .court-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed #E4EAF2;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .court-name-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .court-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #1a3a5c, #1e4976);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .court-name { font-size: 15px; font-weight: 800; color: #0F172A; }
+    .court-address { font-size: 12px; color: #94A3B8; margin-top: 3px; font-weight: 500; }
+
+    .floors-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .floors-section-label .count-badge {
+      background: #1a3a5c;
+      color: white;
+      padding: 0 10px;
+      border-radius: 10px;
+      font-size: 10px;
+      line-height: 20px;
+    }
+
+    .floors-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .floor-badge {
+      background: #EEF2FF;
+      color: #1a3a5c;
+      border: 1px solid #C7D2FE;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .floor-badge:hover {
+      background: #1a3a5c;
+      color: white;
+      border-color: #1a3a5c;
+      transform: scale(1.02);
+    }
+
+    /* ============================================================
+       ستايل حقول الدوائر الديناميكية
+    ============================================================ */
+    .floors-input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .floor-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .floor-input-row .form-control {
+      flex: 1;
+    }
+
+    .floor-input-row .btn-remove-floor {
+      background: #FEE2E2;
+      border: none;
+      color: #DC2626;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .floor-input-row .btn-remove-floor:hover {
+      background: #DC2626;
+      color: white;
+    }
+
+    .floor-input-row .floor-number {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94A3B8;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .btn-add-floor {
+      background: #EEF2FF;
+      border: 1.5px dashed #C7D2FE;
+      color: #1a3a5c;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-add-floor:hover {
+      background: #1a3a5c;
+      color: white;
+      border-color: #1a3a5c;
+    }
+
+    /* ============================================================
+       كروت إحصائية - إجمالي المحاكم والدوائر
+    ============================================================ */
+    .court-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 550px) { .court-stats-grid { grid-template-columns: 1fr; } }
+
+    .court-stat-card {
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 16px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(10,22,40,0.07);
+      border-right: 5px solid #1a3a5c;
+    }
+
+    .court-stat-card:nth-child(2) { border-right-color: #D4AF37; }
+
+    .court-stat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1a3a5c, #1e4976);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .court-stat-card:nth-child(2) .court-stat-icon { background: linear-gradient(135deg, #C49B2A, #D4AF37); }
+
+    .court-stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0F172A;
+      line-height: 1;
+    }
+
+    .court-stat-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #94A3B8;
+      margin-top: 4px;
+    }
+
+    /* ============================================================
+       شريط الفلتر والطباعة (بدون فلتر حالة)
+    ============================================================ */
+    .filter-print-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      border: 1px solid #E4EAF2;
+      border-radius: 16px;
+      padding: 14px 20px;
+      box-shadow: 0 4px 12px rgba(10,22,40,0.05);
+      margin-bottom: 24px;
+    }
+
+    .filter-print-bar .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .filter-print-bar .search-wrap input {
+      width: 100%;
+      padding: 8px 14px;
+      padding-right: 36px;
+      border: 1.5px solid #E4EAF2;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Cairo', sans-serif;
+      background: #F8FAFD;
+      outline: none;
+      transition: all 0.2s;
+      min-width: unset;
+    }
+
+    .filter-print-bar .search-wrap input:focus {
+      border-color: #1a3a5c;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(26,58,92,0.08);
+    }
+
+    .filter-print-bar .search-wrap .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94A3B8;
+      font-size: 14px;
+    }
+
+    .btn-print-report {
+      background: #0f2240;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .btn-print-report:hover {
+      background: #1a3a5c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10,22,40,0.20);
+    }
+
+    /* ============================================================
+       أزرار
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1a3a5c, #1e4976);
+      color: white;
+    }
+    .btn-primary:hover { background: linear-gradient(135deg, #0f2240, #1a3a5c); }
+
+    .btn-danger {
+      background: #DC2626;
+      color: white;
+      border: 1px solid #B91C1C;
+    }
+    .btn-danger:hover { 
+      background: #B91C1C; 
+      border-color: #991B1B;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    }
+
+    .btn-sm { 
+      padding: 6px 18px; 
+      font-size: 12px; 
+      border-radius: 8px; 
+      font-weight: 700;
+    }
+    .btn-danger.btn-sm { 
+      background: #EF4444; 
+      color: white;
+      border: 1.5px solid #DC2626;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+    }
+    .btn-danger.btn-sm:hover { 
+      background: #DC2626; 
+      border-color: #B91C1C;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      transform: scale(1.05);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #1a3a5c;
+      border: 1.5px solid #E4EAF2;
+    }
+    .btn-outline:hover { background: #F8FAFD; }
+
+    .btn-cancel {
+      background: #E4EAF2;
+      color: #475569;
+      border: 1px solid #D1D9E6;
+    }
+    .btn-cancel:hover { background: #D1D9E6; }
+
+    .btn-danger-large {
+      background: #DC2626;
+      color: white;
+      border: none;
+      padding: 10px 32px;
+      font-size: 14px;
+      border-radius: 10px;
+      min-width: 120px;
+    }
+    .btn-danger-large:hover {
+      background: #B91C1C;
+      box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
+      transform: scale(1.02);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: #94A3B8;
+      background: white;
+      border: 1px dashed #E4EAF2;
+      border-radius: 16px;
+    }
+    .empty-state .icon { font-size: 48px; display: block; margin-bottom: 12px; }
+    .empty-state h4 { color: #475569; font-size: 16px; margin-bottom: 6px; }
+    .empty-state p { font-size: 13px; color: #94A3B8; }
+
+    .debug-info {
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #92400E;
+      margin-top: 12px;
+      display: none;
+      word-break: break-all;
+    }
+    .debug-info.show { display: block; }
+
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .header-actions h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    .header-actions .badge-count {
+      background: #EEF2FF;
+      color: #1a3a5c;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       Toast
+    ============================================================ */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #059669;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #DC2626; }
+
+    /* ============================================================
+       Pop-up مخصص
+    ============================================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 22, 40, 0.5);
+      backdrop-filter: blur(6px);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 40px 28px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 24px 64px rgba(10, 22, 40, 0.25);
+      animation: slideUp 0.3s ease;
+      text-align: center;
+    }
+
+    .modal-icon {
+      width: 64px;
+      height: 64px;
+      background: #FEE2E2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 8px;
+    }
+
+    .modal-text {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    .modal-text strong {
+      color: #DC2626;
+    }
+
+    .modal-divider {
+      height: 1px;
+      background: #E4EAF2;
+      margin: 16px 0 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .modal-actions .btn {
+      min-width: 100px;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 10px;
+    }
+
+    /* ============================================================
+       Print Modal
+    ============================================================ */
+    .print-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(6px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1500;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .print-modal-overlay.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .print-modal-content {
+      background: white;
+      width: 90%;
+      max-width: 540px;
+      border-radius: 20px;
+      padding: 30px 35px;
+      box-shadow: 0 20px 60px rgba(10, 22, 40, 0.20);
+      border: 1px solid #E4EAF2;
+      transform: scale(0.95) translateY(20px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .print-modal-overlay.is-visible .print-modal-content {
+      transform: scale(1) translateY(0);
+    }
+
+    .print-modal-content .modal-icon {
+      font-size: 36px;
+      display: block;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .print-modal-content h3 {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .print-modal-content .sub-text {
+      text-align: center;
+      color: #94A3B8;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .print-check-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 10px 0;
+      border-top: 1px solid #E4EAF2;
+      margin-top: 6px;
+    }
+
+    .print-check-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94A3B8;
+      cursor: pointer;
+    }
+
+    .print-check-row label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #0f2240;
+      cursor: pointer;
+    }
+
+    .print-hint {
+      background: #F8FAFD;
+      border: 1px solid #E4EAF2;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      color: #0F172A;
+      margin: 12px 0 16px;
+    }
+
+    .modal-actions .btn-confirm {
+      background: #0f2240;
+      color: #ffffff;
+      border: none;
+    }
+    .modal-actions .btn-confirm:hover {
+      background: #1a3a5c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10,22,40,0.20);
+    }
+
+    /* ============================================================
+       طباعة التقرير
+    ============================================================ */
+    .print-report-area {
+      display: none;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printReportArea,
+      #printReportArea * {
+        visibility: visible;
+      }
+      #printReportArea {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        background: white;
+        padding: 15px 20px;
+        font-family: 'Cairo', 'Segoe UI', sans-serif;
+        direction: rtl;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .print-sheet {
+        padding: 5px 8px;
+        color: #000000;
+      }
+      .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 3px solid #000000;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+      .print-title-ar {
+        font-weight: 800;
+        font-size: 17px;
+        text-align: right;
+        color: #000000;
+      }
+      .print-sub-ar {
+        font-weight: 700;
+        font-size: 11px;
+        margin-top: 2px;
+        text-align: right;
+        color: #000000;
+      }
+      .print-title-en {
+        font-weight: 700;
+        font-size: 12px;
+        text-align: left;
+        color: #000000;
+      }
+      .print-sub-en {
+        font-weight: 600;
+        font-size: 10px;
+        margin-top: 2px;
+        text-align: left;
+        color: #000000;
+      }
+      .print-report-title {
+        text-align: center;
+        font-weight: 800;
+        font-size: 18px;
+        color: #000000;
+        margin-bottom: 6px;
+        letter-spacing: 1px;
+      }
+      .print-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 10px;
+        border-bottom: 2px dashed #000000;
+        padding-bottom: 6px;
+        flex-wrap: wrap;
+        gap: 3px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9px;
+        margin-bottom: 8px;
+        border: 2px solid #000000;
+      }
+      .print-table th {
+        background: #e0e0e0 !important;
+        color: #000000 !important;
+        border: 1px solid #000000;
+        padding: 5px 4px;
+        font-weight: 800;
+        text-align: center;
+        font-size: 8.5px;
+        white-space: nowrap;
+      }
+      .print-table td {
+        border: 1px solid #000000;
+        padding: 4px 5px;
+        text-align: center;
+        font-size: 8.5px;
+        vertical-align: middle;
+        color: #000000;
+      }
+      .print-table .case-divider td {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        height: 6px;
+        border-bottom: 2px solid #cccccc;
+      }
+      .print-footer {
+        text-align: center;
+        font-size: 8.5px;
+        color: #000000;
+        margin-top: 10px;
+        border-top: 2px solid #000000;
+        padding-top: 8px;
+      }
+      .print-table .text-wrap {
+        word-wrap: break-word;
+        white-space: normal;
+        max-width: 80px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px) scale(0.95); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .modal-box {
+        padding: 24px 20px 20px;
+        max-width: 340px;
+      }
+      .modal-actions {
+        flex-direction: column;
+      }
+      .modal-actions .btn {
+        width: 100%;
+      }
+      .filter-print-bar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 16px;
+      }
+      .btn-print-report {
+        justify-content: center;
+      }
+      .filter-print-bar .search-wrap {
+        min-width: unset;
+      }
+      .print-modal-content {
+        padding: 20px;
+      }
+    }
+
+    /* ============================================================
+       ستايل قائمة الدوائر داخل المودال مخصص
+    ============================================================ */
+    .modal-circuit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #F8FAFD;
+      border: 1px solid #E4EAF2;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      transition: all 0.2s;
+      direction: rtl;
+    }
+    .modal-circuit-item:hover {
+      background: #EEF2FF;
+      border-color: #C7D2FE;
+    }
+    .modal-circuit-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0F172A;
+    }
+    .btn-delete-modal-circuit {
+      background: none;
+      border: none;
+      color: #EF4444;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .btn-delete-modal-circuit:hover {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+  </style>
+</head>
+<body>
+<div class="page-body">
+
+  <!-- ===== كروت إجمالي المحاكم والدوائر ===== -->
+  <div class="court-stats-grid">
+    <div class="court-stat-card">
+      <div class="court-stat-icon">🏛️</div>
+      <div>
+        <div class="court-stat-num" id="totalCourtsStat">0</div>
+        <div class="court-stat-label">إجمالي المحاكم</div>
+      </div>
+    </div>
+    <div class="court-stat-card">
+      <div class="court-stat-icon">🔄</div>
+      <div>
+        <div class="court-stat-num" id="totalCircuitsStat">0</div>
+        <div class="court-stat-label">إجمالي الدوائر</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== شريط الفلتر والطباعة (بدون فلتر حالة) ===== -->
+  <div class="filter-print-bar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="بحث في المحاكم..." />
+    </div>
+    <button class="btn-print-report" onclick="openPrintModal()">
+      <i class="fa-solid fa-print"></i> طباعة تقرير
+    </button>
+  </div>
+
+  <div class="grid-container">
+
+    <!-- Form -->
+    <div class="form-card" id="addCourtFormCard">
+      <div class="form-card-header">
+        <span style="font-size:18px;">🏛️</span>
+        <h3>إضافة محكمة جديدة</h3>
+      </div>
+      <div class="form-card-body">
+        <form id="courtForm" onsubmit="addCourt(event)" novalidate>
+          <div class="form-group">
+            <label class="form-label">اسم المحكمة</label>
+            <input type="text" class="form-control" id="courtName" required placeholder="مثال: محكمة جنح مستأنف سيدي جابر">
+          </div>
+          <div class="form-group">
+            <label class="form-label">العنوان بالتفصيل</label>
+            <input type="text" class="form-control" id="courtAddress" required placeholder="مثال: المنشية، الإسكندرية">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">الدوائر والأدوار</label>
+            <div class="floors-input-area" id="floorsContainer">
+              <!-- سيتم إضافة حقول الدوائر ديناميكياً هنا -->
+            </div>
+            <button type="button" class="btn-add-floor" onclick="addFloorField()">
+              ➕ إضافة دائرة أخرى
+            </button>
+            <div class="form-hint">
+              💡 أضف كل دائرة في حقل منفصل
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:6px;">
+            💾 حفظ المحكمة
+          </button>
+          <button type="button" class="btn btn-cancel" id="cancelEditBtn" style="width:100%;margin-top:6px;display:none;" onclick="cancelEdit()">
+            ❌ إلغاء التعديل
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Courts List -->
+    <div>
+      <div class="header-actions">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <h2>🏛️ قائمة المحاكم</h2>
+          <span class="badge-count" id="courtsCount">0</span>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="loadCourts()">🔄 تحديث</button>
+      </div>
+      <div class="courts-list" id="courtsList">
+        <!-- سيتم تحميل المحاكم من API -->
+      </div>
+      <!-- Debug info -->
+      <div class="debug-info" id="debugInfo"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     Pop-up مخصص للتأكيد
+     ============================================================ -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title">تأكيد الحذف</div>
+    <div class="modal-text">هل أنت متأكد من حذف هذه المحكمة؟</div>
+    <div class="modal-text" style="color:#6B7280;font-size:13px;">
+      سيتم حذف جميع البيانات المرتبطة بها بشكل <strong>نهائي</strong>.
+    </div>
+    <div class="modal-text" style="color:#DC2626;font-size:13px;font-weight:700;">
+      لا يمكن التراجع عن هذا الإجراء!
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeDeleteModal()">❌ إلغاء</button>
+      <button class="btn btn-danger-large" id="confirmDeleteBtn">🗑️ حذف نهائي</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     مودال مخصص لإدارة الدوائر
+     ============================================================ -->
+<div class="modal-overlay" id="circuitsModal">
+  <div class="modal-box" style="max-width: 480px; text-align: right;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 class="modal-title" id="circuitsModalTitle" style="margin: 0; font-size: 18px; font-weight: 800;">🏛️ إدارة دوائر المحكمة</h3>
+      <button type="button" onclick="closeCircuitsModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #94A3B8;">✕</button>
+    </div>
+    <div class="modal-text" id="circuitsModalSub" style="color:#6B7280; font-size:13px; margin-bottom: 16px; text-align: right;">
+      المحكمة: <strong id="circuitsModalCourtName" style="color: #1a3a5c;">-</strong>
+    </div>
+    
+    <div class="modal-divider" style="margin: 8px 0 16px; height: 1px; background: #E4EAF2;"></div>
+
+    <!-- إضافة دائرة جديدة -->
+    <div class="form-group" style="margin-bottom: 20px; text-align: right;">
+      <label class="form-label">إضافة دائرة جديدة</label>
+      <div style="display: flex; gap: 8px;">
+        <input type="text" class="form-control" id="newCircuitNameInput" placeholder="مثال: الدور الثالث - مدني كلي">
+        <button type="button" class="btn btn-primary" onclick="addCircuitInModal()" style="padding: 0 16px; white-space: nowrap;">
+          ➕ إضافة
+        </button>
+      </div>
+    </div>
+
+    <!-- قائمة الدوائر الحالية -->
+    <label class="form-label" style="text-align: right;">الدوائر المسجلة حالياً</label>
+    <div id="modalCircuitsList" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; padding: 4px;">
+      <!-- سيتم توليد الدوائر هنا ديناميكياً -->
+    </div>
+
+    <div class="modal-divider" style="margin: 16px 0; height: 1px; background: #E4EAF2;"></div>
+    <div class="modal-actions" style="justify-content: flex-end; display: flex; gap: 12px;">
+      <button type="button" class="btn btn-cancel" onclick="closeCircuitsModal()">❌ إلغاء</button>
+      <button type="button" class="btn btn-primary" onclick="saveCircuitsFromModal()" id="saveCircuitsModalBtn">💾 حفظ التغييرات</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     Print Modal
+     ============================================================ -->
+<div class="print-modal-overlay" id="printModal">
+  <div class="print-modal-content">
+    <span class="modal-icon">🖨️</span>
+    <h3>خيارات طباعة تقرير المحاكم</h3>
+    <p class="sub-text">سيتم طباعة قائمة بجميع المحاكم والدوائر المسجلة</p>
+
+    <div class="print-check-row">
+      <label>
+        <input type="checkbox" id="printIncludeFloors" checked>
+        عرض الدوائر والأدوار
+      </label>
+    </div>
+
+    <div class="print-hint" id="printCountHint">📊 عدد المحاكم: 0</div>
+
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closePrintModal()">إلغاء</button>
+      <button class="btn btn-confirm" onclick="generatePrintReport()">
+        <i class="fa-solid fa-print"></i> طباعة التقرير
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Print Area ===== -->
+<div id="printReportArea" class="print-report-area"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ============================================================
+  // API URL
+  // ============================================================
+  const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+
+  // ============================================================
+  // عداد الدوائر
+  // ============================================================
+  let floorCounter = 0;
+  let pendingDeleteId = null;
+
+  let allCourts = [];
+  let currentFilteredCourts = [];
+
+  // ============================================================
+  // عرض رسالة
+  // ============================================================
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // ============================================================
+  // عرض معلومات تصحيح الأخطاء
+  // ============================================================
+  function showDebug(msg) {
+    const debugEl = document.getElementById('debugInfo');
+    if (debugEl) {
+      debugEl.textContent = msg;
+      debugEl.classList.add('show');
+    }
+  }
+
+  // ============================================================
+  // تحديث عداد المحاكم
+  // ============================================================
+  function updateCount(count) {
+    const el = document.getElementById('courtsCount');
+    if (el) el.textContent = count;
+  }
+
+  // ============================================================
+  // إضافة حقل دائرة جديد
+  // ============================================================
+  function addFloorField(value = '') {
+    floorCounter++;
+    const container = document.getElementById('floorsContainer');
+    const row = document.createElement('div');
+    row.className = 'floor-input-row';
+    row.id = `floor-row-${floorCounter}`;
+    
+    row.innerHTML = `
+      <span class="floor-number">#${floorCounter}</span>
+      <input type="text" class="form-control floor-input" 
+             placeholder="مثال: الدور الأول - عمالي" 
+             value="${value}" 
+             data-floor-index="${floorCounter}">
+      <button type="button" class="btn-remove-floor" onclick="removeFloorField(${floorCounter})" title="حذف هذه الدائرة">
+        ✕
+      </button>
+    `;
+    
+    container.appendChild(row);
+    updateFloorNumbers();
+  }
+
+  // ============================================================
+  // حذف حقل دائرة
+  // ============================================================
+  function removeFloorField(index) {
+    const row = document.getElementById(`floor-row-${index}`);
+    if (row) {
+      row.remove();
+      updateFloorNumbers();
+    }
+  }
+
+  // ============================================================
+  // تحديث أرقام الدوائر
+  // ============================================================
+  function updateFloorNumbers() {
+    const rows = document.querySelectorAll('.floor-input-row');
+    rows.forEach((row, idx) => {
+      const numSpan = row.querySelector('.floor-number');
+      if (numSpan) {
+        numSpan.textContent = `#${idx + 1}`;
+      }
+    });
+  }
+
+  // ============================================================
+  // جلب جميع قيم الدوائر
+  // ============================================================
+  function getFloorValues() {
+    const inputs = document.querySelectorAll('.floor-input');
+    const values = [];
+    inputs.forEach(input => {
+      const val = input.value.trim();
+      if (val) {
+        values.push(val);
+      }
+    });
+    return values;
+  }
+
+  // ============================================================
+  // دالة لتقسيم الدوائر
+  // ============================================================
+  function splitFloors(floorsStr) {
+    if (!floorsStr) return [];
+    
+    let text = floorsStr
+      .replace(/،/g, ',')
+      .replace(/;/g, ',')
+      .replace(/\n/g, ',')
+      .replace(/\r/g, ',');
+    
+    let parts = text.split(',').filter(f => f && f.trim());
+    
+    if (parts.length === 0) {
+      parts = floorsStr.split('-').filter(f => f && f.trim());
+    }
+    
+    return parts.map(f => f.trim());
+  }
+
+  // ============================================================
+  // جلب المحاكم من API
+  // ============================================================
+  async function loadCourts() {
+    const container = document.getElementById('courtsList');
+    const debugEl = document.getElementById('debugInfo');
+    
+    container.innerHTML = `
+      <div style="text-align:center;padding:40px;color:#94A3B8;">
+        ⏳ جاري تحميل المحاكم...
+      </div>
+    `;
+    
+    if (debugEl) debugEl.classList.remove('show');
+    updateCount('...');
+
+    try {
+      const response = await fetch(`${API_URL}/courts`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      let totalFloors = 0;
+      if (result.data) {
+        result.data.forEach(c => {
+          totalFloors += splitFloors(c.Floors).length;
+        });
+      }
+      
+      showDebug(`✅ تم استلام البيانات: ${result.data ? result.data.length : 0} محكمة، ${totalFloors} دائرة`);
+      
+      document.getElementById('totalCourtsStat').textContent = result.data ? result.data.length : 0;
+      document.getElementById('totalCircuitsStat').textContent = totalFloors;
+      
+      if (result.success && result.data) {
+        allCourts = result.data;
+        currentFilteredCourts = [...allCourts];
+        renderCourts(allCourts);
+      } else {
+        container.innerHTML = `
+          <div class="empty-state">
+            <span class="icon">⚠️</span>
+            <h4>فشل تحميل المحاكم</h4>
+            <p>${result.message || 'حدث خطأ في الاتصال بالخادم'}</p>
+            <button class="btn btn-primary" style="margin-top:16px;" onclick="loadCourts()">🔄 إعادة المحاولة</button>
+          </div>
+        `;
+        updateCount(0);
+        document.getElementById('totalCourtsStat').textContent = 0;
+        document.getElementById('totalCircuitsStat').textContent = 0;
+        showDebug(`❌ خطأ: ${result.message || 'غير معروف'}`);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في الاتصال بالخادم:', error);
+      container.innerHTML = `
+        <div class="empty-state">
+          <span class="icon">🔌</span>
+          <h4>لا يمكن الاتصال بالخادم</h4>
+          <p>تأكد من تشغيل الخادم</p>
+          <button class="btn btn-primary" style="margin-top:16px;" onclick="loadCourts()">🔄 إعادة المحاولة</button>
+        </div>
+      `;
+      updateCount(0);
+      document.getElementById('totalCourtsStat').textContent = 0;
+      document.getElementById('totalCircuitsStat').textContent = 0;
+      showDebug(`❌ خطأ اتصال: ${error.message}`);
+    }
+  }
+
+  // ============================================================
+  // عرض المحاكم في القائمة مع تطبيق الفلتر (بحث فقط)
+  // ============================================================
+  function renderCourts(courts) {
+    const container = document.getElementById('courtsList');
+    if (!container) return;
+
+    // تطبيق البحث فقط (بدون فلتر حالة)
+    const searchTerm = document.getElementById('searchInput')?.value || '';
+
+    let filtered = courts;
+
+    if (searchTerm) {
+      const s = searchTerm.toLowerCase();
+      filtered = filtered.filter(c =>
+        (c.Name || '').toLowerCase().includes(s) ||
+        (c.Address || '').toLowerCase().includes(s) ||
+        (c.Floors || '').toLowerCase().includes(s)
+      );
+    }
+
+    currentFilteredCourts = filtered;
+    updateCount(filtered.length);
+
+    if (!filtered || filtered.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <span class="icon">🏛️</span>
+          <h4>لا توجد محاكم مطابقة للبحث</h4>
+          <p>جرب تغيير كلمات البحث أو أضف محكمة جديدة</p>
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    let totalFloors = 0;
+    
+    filtered.forEach(court => {
+      let floors = splitFloors(court.Floors);
+      totalFloors += floors.length;
+      
+      if (floors.length === 0) {
+        floors = ['لا توجد دوائر مسجلة'];
+      }
+      
+      html += `
+        <div class="court-card" data-id="${court.Id}">
+          <div class="court-card-top">
+            <div class="court-name-wrap">
+              <div class="court-icon">🏛️</div>
+              <div>
+                <div class="court-name">${court.Name || '—'}</div>
+                <div class="court-address">📍 ${court.Address || 'لا يوجد عنوان'}</div>
+                <div style="font-size:10px;color:#94A3B8;margin-top:2px;">
+                  🆔 ${court.Id}
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              ${(typeof PermGuard === 'undefined' || PermGuard.canEdit('courts')) ? `
+              <button class="btn btn-outline btn-sm" onclick="startEditCourt(${court.Id})" title="تعديل تفاصيل المحكمة">
+                ✏️ تعديل
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="openCircuitsModal(${court.Id})" style="background: linear-gradient(135deg, #1e4976, #2d68a3);" title="تعديل وإضافة الدوائر">
+                ⚙️ تعديل الدوائر
+              </button>` : ''}
+              ${(typeof PermGuard === 'undefined' || PermGuard.canDelete('courts')) ? `
+              <button class="btn btn-danger btn-sm" onclick="openDeleteModal(${court.Id}, this)">
+                🗑️ حذف
+              </button>` : ''}
+            </div>
+          </div>
+          
+          <div class="floors-section-label">
+            🏢 الدوائر والأدوار
+            <span class="count-badge">${floors.length}</span>
+          </div>
+          <div class="floors-wrap">
+            ${floors.map((f) => {
+              return `<span class="floor-badge">${f}</span>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+    showDebug(`✅ تم عرض ${filtered.length} محكمة بنجاح مع ${totalFloors} دائرة`);
+  }
+
+  // ============================================================
+  // تطبيق البحث
+  // ============================================================
+  function applyFilters() {
+    renderCourts(allCourts);
+  }
+
+  // ============================================================
+  // Pop-up مخصص - فتح وإغلاق
+  // ============================================================
+  function openDeleteModal(courtId) {
+    pendingDeleteId = courtId;
+    document.getElementById('deleteModal').classList.add('active');
+  }
+
+  function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('active');
+    pendingDeleteId = null;
+  }
+
+  // ============================================================
+  // حذف محكمة
+  // ============================================================
+  async function confirmDelete() {
+    if (typeof PermGuard !== 'undefined' && !PermGuard.canDelete('courts')) {
+      PermGuard.denyAction('ليس لديك صلاحية حذف المحاكم.');
+      return;
+    }
+    const courtId = pendingDeleteId;
+    if (!courtId) return;
+
+    closeDeleteModal();
+
+    try {
+      const response = await fetch(`${API_URL}/courts/${courtId}`, {
+        method: 'DELETE'
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showToast('✅ تم حذف المحكمة بنجاح');
+        await loadCourts();
+      } else {
+        showToast('❌ ' + (result.message || 'حدث خطأ أثناء الحذف'), true);
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم: ' + error.message, true);
+    }
+  }
+
+  // ============================================================
+  // إضافة محكمة جديدة
+  // ============================================================
+  async function addCourt(e) {
+    e.preventDefault();
+
+    const isEditMode = !!(typeof editingCourtId !== 'undefined' && editingCourtId);
+    if (typeof PermGuard !== 'undefined') {
+      if (isEditMode && !PermGuard.canEdit('courts')) {
+        PermGuard.denyAction('ليس لديك صلاحية تعديل بيانات المحاكم.');
+        return;
+      }
+      if (!isEditMode && !PermGuard.canAdd('courts')) {
+        PermGuard.denyAction('ليس لديك صلاحية إضافة محكمة جديدة.');
+        return;
+      }
+    }
+
+    const name = document.getElementById('courtName').value.trim();
+    const address = document.getElementById('courtAddress').value.trim();
+    const floorsList = getFloorValues();
+
+    if (!name || !address) {
+      showToast('⚠️ الرجاء تعبئة اسم المحكمة والعنوان', true);
+      return;
+    }
+
+    if (floorsList.length === 0) {
+      showToast('⚠️ الرجاء إضافة دائرة واحدة على الأقل', true);
+      return;
+    }
+
+    const cleanedFloors = floorsList.join(', ');
+
+    const data = {
+      name: name,
+      address: address,
+      floors: cleanedFloors,
+      isActive: true
+    };
+
+    try {
+      const response = await fetch(`${API_URL}/courts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showToast(`✅ تم حفظ المحكمة بنجاح! (${floorsList.length} دائرة)`);
+        document.getElementById('courtForm').reset();
+        document.getElementById('floorsContainer').innerHTML = '';
+        floorCounter = 0;
+        addFloorField();
+        await loadCourts();
+      } else {
+        showToast('❌ ' + (result.message || 'حدث خطأ أثناء الحفظ'), true);
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم: ' + error.message, true);
+    }
+  }
+
+  // ============================================================
+  // دوال طباعة التقرير
+  // ============================================================
+  function openPrintModal() {
+    document.getElementById('printIncludeFloors').checked = true;
+    updatePrintCount();
+    document.getElementById('printModal').classList.add('is-visible');
+  }
+
+  function closePrintModal() {
+    document.getElementById('printModal').classList.remove('is-visible');
+  }
+
+  function updatePrintCount() {
+    const count = currentFilteredCourts.length;
+    document.getElementById('printCountHint').textContent = `📊 عدد المحاكم: ${count}`;
+  }
+
+  function generatePrintReport() {
+    const includeFloors = document.getElementById('printIncludeFloors')?.checked || false;
+    const dataToPrint = currentFilteredCourts;
+
+    const todayStr = (() => { const n=new Date(); return `${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`; })();
+
+    let rowsHtml = '';
+    if (dataToPrint.length === 0) {
+      rowsHtml = `<tr><td colspan="${includeFloors ? '4' : '3'}" style="text-align:center;padding:20px;color:#000000;">لا توجد محاكم</td></tr>`;
+    } else {
+      dataToPrint.forEach((c, index) => {
+        const floors = splitFloors(c.Floors);
+        const floorsDisplay = floors.length > 0 ? floors.join(', ') : 'لا توجد دوائر';
+
+        rowsHtml += `
+          <tr>
+            <td style="font-weight:900;text-align:right;font-size:9px;">${c.Id || '—'}</td>
+            <td style="text-align:right;font-size:9px;font-weight:700;">${c.Name || '—'}</td>
+            <td style="text-align:right;font-size:8.5px;">${c.Address || '—'}</td>
+            ${includeFloors ? `<td style="font-size:8px;text-align:right;max-width:120px;word-wrap:break-word;">${floorsDisplay}</td>` : ''}
+          </tr>
+        `;
+
+        if (index < dataToPrint.length - 1) {
+          rowsHtml += `
+            <tr class="case-divider">
+              <td colspan="${includeFloors ? '4' : '3'}"></td>
+            </tr>
+          `;
+        }
+      });
+    }
+
+    const colCount = includeFloors ? 4 : 3;
+
+    const reportHtml = `
+      <div class="print-sheet">
+        <div class="print-header">
+          <div>
+            <div class="print-title-ar">شركة الصرف الصحى بالإسكندرية</div>
+            <div class="print-sub-ar">الإدارة العامة للشئون القانونية</div>
+          </div>
+          <div style="text-align:left;">
+            <div class="print-title-en">Alexandria Sanitary Drainage Company</div>
+            <div class="print-sub-en">Legal Affairs Department</div>
+          </div>
+        </div>
+
+        <div class="print-report-title">تقرير المحاكم والدوائر</div>
+
+        <div class="print-meta">
+          <span>تاريخ الطباعة: ${todayStr}</span>
+          <span>عدد المحاكم: ${dataToPrint.length}</span>
+        </div>
+
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th style="width:8%;">#</th>
+              <th style="width:27%;">اسم المحكمة</th>
+              <th style="width:30%;">العنوان</th>
+              ${includeFloors ? '<th style="width:35%;">الدوائر والأدوار</th>' : ''}
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+
+        <div class="print-footer">
+          هذا التقرير صادر عن نظام إدارة الشؤون القانونية — شركة الصرف الصحي بالإسكندرية
+        </div>
+      </div>
+    `;
+
+    document.getElementById('printReportArea').innerHTML = reportHtml;
+    closePrintModal();
+    setTimeout(() => window.print(), 300);
+  }
+
+  // ============================================================
+  // تعديل محكمة
+  // ============================================================
+  let editingCourtId = null;
+
+  function startEditCourt(courtId) {
+    if (typeof PermGuard !== 'undefined' && !PermGuard.canEdit('courts')) {
+      PermGuard.denyAction('ليس لديك صلاحية تعديل بيانات المحاكم.');
+      return;
+    }
+    const court = allCourts.find(c => c.Id === courtId);
+    if (!court) return;
+
+    editingCourtId = courtId;
+
+    // Fill the form with current data
+    document.getElementById('courtName').value = court.Name || '';
+    document.getElementById('courtAddress').value = court.Address || '';
+
+    // Clear existing floor fields and populate with current floors
+    const floorsContainer = document.getElementById('floorsContainer');
+    floorsContainer.innerHTML = '';
+    floorCounter = 0;
+
+    const currentFloors = splitFloors(court.Floors);
+    if (currentFloors.length > 0) {
+      currentFloors.forEach(floor => {
+        addFloorField();
+        const inputs = floorsContainer.querySelectorAll('.form-control');
+        inputs[inputs.length - 1].value = floor;
+      });
+    } else {
+      addFloorField();
+    }
+
+    // Change header and button text
+    const formHeader = document.querySelector('.form-card-header h3');
+    if (formHeader) formHeader.textContent = 'تعديل محكمة: ' + (court.Name || '');
+    const submitBtn = document.querySelector('#courtForm button[type="submit"]');
+    if (submitBtn) submitBtn.innerHTML = '✏️ تحديث المحكمة';
+
+    // Scroll to form
+    document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth' });
+    // Show cancel button
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    if (cancelBtn) cancelBtn.style.display = 'block';
+  }
+
+  function cancelEdit() {
+    editingCourtId = null;
+    document.getElementById('courtForm').reset();
+    document.getElementById('floorsContainer').innerHTML = '';
+    floorCounter = 0;
+    addFloorField();
+
+    const formHeader = document.querySelector('.form-card-header h3');
+    if (formHeader) formHeader.textContent = 'إضافة محكمة جديدة';
+    const submitBtn = document.querySelector('#courtForm button[type="submit"]');
+    if (submitBtn) submitBtn.innerHTML = '💾 حفظ المحكمة';
+    // Hide cancel button
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    if (cancelBtn) cancelBtn.style.display = 'none';
+  }
+
+  // Override addCourt to handle both add and edit
+  const _origAddCourt = addCourt;
+  addCourt = async function(e) {
+    e.preventDefault();
+
+    if (!editingCourtId) {
+      return _origAddCourt(e);
+    }
+
+    // Edit mode
+    const name = document.getElementById('courtName').value.trim();
+    const address = document.getElementById('courtAddress').value.trim();
+    const floorsList = getFloorValues();
+
+    if (!name || !address) {
+      showToast('⚠️ الرجاء تعبئة اسم المحكمة والعنوان', true);
+      return;
+    }
+
+    if (floorsList.length === 0) {
+      showToast('⚠️ الرجاء إضافة دائرة واحدة على الأقل', true);
+      return;
+    }
+
+    const cleanedFloors = floorsList.join(', ');
+
+    try {
+      const response = await fetch(`${API_URL}/courts/${editingCourtId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          address: address,
+          floors: cleanedFloors
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showToast(`✅ تم تحديث المحكمة بنجاح! (${floorsList.length} دائرة)`);
+        cancelEdit();
+        await loadCourts();
+      } else {
+        showToast('❌ ' + (result.message || 'حث خطأ أثناء التحيث'), true);
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم: ' + error.message, true);
+    }
+  };
+
+  // ============================================================
+  // إدارة الدوائر عبر المودال مخصص
+  // ============================================================
+  let modalCourtId = null;
+  let modalCircuitsArray = [];
+
+  function openCircuitsModal(courtId) {
+    if (typeof PermGuard !== 'undefined' && !PermGuard.canEdit('courts')) {
+      PermGuard.denyAction('ليس لديك صلاحية تعديل دوائر المحاكم.');
+      return;
+    }
+    const court = allCourts.find(c => c.Id === courtId);
+    if (!court) return;
+
+    modalCourtId = courtId;
+    document.getElementById('circuitsModalCourtName').textContent = court.Name || '';
+    
+    // Parse current floors
+    modalCircuitsArray = splitFloors(court.Floors);
+    
+    // Clear input
+    document.getElementById('newCircuitNameInput').value = '';
+    
+    // Render list
+    renderModalCircuits();
+    
+    // Open modal
+    document.getElementById('circuitsModal').classList.add('active');
+  }
+
+  function closeCircuitsModal() {
+    document.getElementById('circuitsModal').classList.remove('active');
+    modalCourtId = null;
+    modalCircuitsArray = [];
+  }
+
+  function renderModalCircuits() {
+    const container = document.getElementById('modalCircuitsList');
+    if (!container) return;
+
+    if (modalCircuitsArray.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; color: #94A3B8; font-size: 12px; padding: 16px 0; direction: rtl;">
+          📭 لا توجد دوائر مسجلة لهذه المحكمة
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    modalCircuitsArray.forEach((circuit, index) => {
+      html += `
+        <div class="modal-circuit-item">
+          <span class="modal-circuit-name">${circuit}</span>
+          <button type="button" class="btn-delete-modal-circuit" onclick="deleteCircuitInModal(${index})" title="حذف الدائرة">
+            ✕
+          </button>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  }
+
+  function addCircuitInModal() {
+    const input = document.getElementById('newCircuitNameInput');
+    const value = input.value.trim();
+    if (!value) {
+      showToast('⚠️ الرجاء إدخال اسم الدائرة', true);
+      return;
+    }
+
+    if (modalCircuitsArray.includes(value)) {
+      showToast('⚠️ هذه الدائرة مضافة بالفعل', true);
+      return;
+    }
+
+    modalCircuitsArray.push(value);
+    input.value = '';
+    renderModalCircuits();
+    showToast('➕ تم إضافة الدائرة إلى القائمة المؤقتة');
+  }
+
+  function deleteCircuitInModal(index) {
+    const deletedName = modalCircuitsArray[index];
+    modalCircuitsArray.splice(index, 1);
+    renderModalCircuits();
+    showToast(`🗑️ تم إزالة "${deletedName}" من القائمة المؤقتة`);
+  }
+
+  async function saveCircuitsFromModal() {
+    if (!modalCourtId) return;
+
+    const court = allCourts.find(c => c.Id === modalCourtId);
+    if (!court) return;
+
+    const cleanedFloors = modalCircuitsArray.join(', ');
+
+    try {
+      const response = await fetch(`${API_URL}/courts/${modalCourtId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: court.Name,
+          address: court.Address,
+          floors: cleanedFloors
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showToast('✅ تم حفظ تعديلات الدوائر بنجاح');
+        closeCircuitsModal();
+        await loadCourts();
+      } else {
+        showToast('❌ ' + (result.message || 'حدث خطأ أثناء تحديث الدوائر'), true);
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم: ' + error.message, true);
+    }
+  }
+
+  // ============================================================
+  // ربط الأحداث
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof PermGuard !== 'undefined' && !PermGuard.blockPageIfNoAccess('courts')) return;
+
+    if (typeof PermGuard !== 'undefined' && !PermGuard.canAdd('courts')) {
+      const addCard = document.getElementById('addCourtFormCard');
+      if (addCard) addCard.style.display = 'none';
+    }
+
+    document.getElementById('searchInput')?.addEventListener('input', applyFilters);
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+    
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeDeleteModal();
+      }
+    });
+
+    document.getElementById('circuitsModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeCircuitsModal();
+      }
+    });
+
+    if (typeof initSidebar === 'function') {
+      initSidebar('courts');
+    }
+    addFloorField();
+    loadCourts();
+    updatePrintCount();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة المحذوفات - الأرشيف</title>
+    <link href="css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <script src="activity-logger.js"></script>
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 20px 30px;
+            border-radius: 16px;
+            color: white;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .archive-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .archive-table th {
+            background: #f8fafc;
+            padding: 15px;
+            text-align: right;
+            font-weight: 700;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .archive-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        .archive-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .btn-restore {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .btn-restore:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-restore:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-erase {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            transition: all 0.2s;
+            margin-inline-start: 8px;
+        }
+
+        .btn-erase:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .btn-erase-all {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .btn-erase-all:hover {
+            background: #fecaca;
+        }
+
+        .badge-type {
+            background: #e2e8f0;
+            color: #475569;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-type.session {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-type.case {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-type.lawyer {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-type.court {
+            background: #fce4ec;
+            color: #7f1d1d;
+        }
+
+        .badge-type.litigationlevel {
+            background: #ede9fe;
+            color: #4c1d95;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #f0fdf4;
+            border-right: 4px solid #22c55e;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(calc(100% + 40px));
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+            min-width: 300px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            color: #166534;
+            font-size: 0.95rem;
+        }
+
+        .toast-message {
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .mode-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .mode-indicator.online {
+            background: rgba(52, 211, 153, 0.2);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .mode-indicator.offline {
+            background: rgba(251, 191, 36, 0.2);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .mode-indicator.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .count-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        /* ===== نافذة تأكيد مخصصة ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            transform: translateY(10px) scale(0.97);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .modal-overlay.show .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #fef3c7;
+            color: #d97706;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 16px auto;
+        }
+
+        .modal-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .modal-message {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-btn-confirm {
+            background: #10b981;
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background: #059669;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #e2e8f0;
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-refresh {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .btn-refresh:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .btn-refresh:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .warning-banner {
+            background: #fef3c7;
+            border-right: 4px solid #f59e0b;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #92400e;
+        }
+
+        .warning-banner i {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .archive-table {
+                font-size: 0.85rem;
+            }
+            .archive-table th,
+            .archive-table td {
+                padding: 10px 8px;
+            }
+            .toast {
+                min-width: unset;
+                right: 10px;
+                left: 10px;
+                bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 style="margin:0;font-size:1.8rem;font-weight:800;">🗑️ سلة المحذوفات</h1>
+                <p style="margin:5px 0 0 0;opacity:0.8;">استعادة العناصر التي تم حذفها عن طريق الخطأ</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <span id="modeIndicator" class="mode-indicator online">
+                    <i class="fa-solid fa-circle" style="font-size:0.6rem;" id="statusDot"></i>
+                    <span id="statusText">متصل</span>
+                </span>
+                <span class="count-badge" id="countBadge">0 عنصر</span>
+                <button class="btn-erase-all" onclick="eraseAll()" id="eraseAllBtn">
+                    <i class="fa-solid fa-trash-can"></i> مسح الكل
+                </button>
+                <button class="btn-refresh" onclick="loadArchive()" id="refreshBtn">
+                    <i class="fa-solid fa-rotate"></i> تحديث
+                </button>
+            </div>
+        </div>
+
+        <!-- تنبيه عند العمل محلياً -->
+        <div id="localWarning" style="display:none;" class="warning-banner">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+                <strong>⚠️ وضع المحاكاة المحلي</strong>
+                <span style="font-size:0.9rem;display:block;">يتم عرض بيانات تجريبية. للعمل مع البيانات الحقيقية، قم بتشغيل الخادم وافتح الصفحة عبر http://localhost:9000</span>
+            </div>
+        </div>
+
+        <table class="archive-table">
+            <thead>
+                <tr>
+                    <th style="width:12%;">نوع العنصر</th>
+                    <th style="width:45%;">التفاصيل</th>
+                    <th style="width:20%;">تاريخ الحذف</th>
+                    <th style="width:23%;">إجراء</th>
+                </tr>
+            </thead>
+            <tbody id="archiveBody">
+                <tr>
+                    <td colspan="4" style="text-align:center;padding:40px;">
+                        <div class="loading-spinner"></div>
+                        <br>
+                        <span style="color:#94a3b8;">جاري تحميل البيانات...</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-icon">✓</div>
+        <div class="toast-content">
+            <div class="toast-title">نجاح</div>
+            <div class="toast-message" id="toastMessage">تمت العملية بنجاح</div>
+        </div>
+    </div>
+
+    <!-- نافذة تأكيد مخصصة -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="modal-title">تأكيد الاستعادة</div>
+            <div class="modal-message" id="confirmModalMessage">هل أنت متأكد من رغبتك في استعادة هذا العنصر؟</div>
+            <div class="modal-actions">
+                <button class="modal-btn-cancel" id="confirmModalCancel">إلغاء</button>
+                <button class="modal-btn-confirm" id="confirmModalOk">تأكيد الاستعادة</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sidebar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initSidebar === 'function') {
+                initSidebar('archive');
+            }
+            loadArchive();
+        });
+
+        // ===== تسمية أنواع السجلات =====
+        const TYPE_LABELS = {
+            'Session': { label: 'جلسة', icon: '📅', class: 'session' },
+            'Case': { label: 'قضية', icon: '⚖️', class: 'case' },
+            'Lawyer': { label: 'محامي', icon: '👨‍⚖️', class: 'lawyer' },
+            'Court': { label: 'محكمة', icon: '🏛️', class: 'court' },
+            'LitigationLevel': { label: 'درجة تقاضي', icon: '📋', class: 'litigationlevel' }
+        };
+
+        // ===== بيانات تجريبية للاستخدام المحلي =====
+        const MOCK_DATA = [
+            {
+                Id: 1,
+                RecordType: 'Session',
+                DeletedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+                RecordData: JSON.stringify({
+                    SessionDate: '2026-07-11T10:00:00',
+                    Stage: 'الاستئناف',
+                    Subject: 'جلسة مرافعة'
+                })
+            },
+            {
+                Id: 2,
+                RecordType: 'Case',
+                DeletedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+                RecordData: JSON.stringify({
+                    case: {
+                        CaseNumber: '2023/45',
+                        CaseYear: '2023',
+                        Subject: 'نزاع ملكية',
+                        Opponent: 'أحمد محمد'
+                    }
+                })
+            },
+            {
+                Id: 3,
+                RecordType: 'Lawyer',
+                DeletedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+                RecordData: JSON.stringify({
+                    FullName: 'محمد علي',
+                    Code: 'LAW-001'
+                })
+            },
+            {
+                Id: 4,
+                RecordType: 'Court',
+                DeletedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
+                RecordData: JSON.stringify({
+                    Name: 'محكمة النقض',
+                    Address: 'القاهرة'
+                })
+            }
+        ];
+
+        // ===== بناء التفاصيل حسب النوع =====
+        function buildDetails(recordType, dataObj) {
+            const fmtDate = (d) => {
+                if (!d) return 'غير محدد';
+                try {
+                    const isoMatch = String(d).match(/^(\d{4})-(\d{2})-(\d{2})/);
+                    if (isoMatch) return `${isoMatch[3]}/${isoMatch[2]}/${isoMatch[1]}`;
+                    const dt = new Date(d);
+                    if (isNaN(dt.getTime())) return String(d).split('T')[0] || 'غير محدد';
+                    const dd = String(dt.getDate()).padStart(2, '0');
+                    const mm = String(dt.getMonth() + 1).padStart(2, '0');
+                    const yyyy = dt.getFullYear();
+                    return `${dd}/${mm}/${yyyy}`;
+                } catch {
+                    return String(d).split('T')[0] || 'غير محدد';
+                }
+            };
+
+            switch (recordType) {
+                case 'Session':
+                    return `📅 ${fmtDate(dataObj.SessionDate)} | ${dataObj.Stage || 'غير محدد'}${dataObj.Subject ? ' | 📝 ' + dataObj.Subject : ''}`;
+
+                case 'Case': {
+                    const c = dataObj.case || dataObj;
+                    return `📋 ${c.CaseNumber || '—'} / ${c.CaseYear || ''} | ${c.Subject || 'غير محدد'} | 👤 ${c.Opponent || '—'}`;
+                }
+
+                case 'Lawyer':
+                    return `👤 ${dataObj.FullName || 'غير محدد'} ${dataObj.Code ? '| 🆔 ' + dataObj.Code : ''}`;
+
+                case 'Court':
+                    return `🏛️ ${dataObj.Name || 'غير محدد'} ${dataObj.Address ? '| 📍 ' + dataObj.Address : ''}`;
+
+                case 'LitigationLevel':
+                    return `⚖️ ${dataObj.StageType || 'غير محدد'} | 🏛️ ${dataObj.CourtName || '—'} | 🔢 ${dataObj.TrackingCode || '—'}`;
+
+                default:
+                    return '📄 عنصر محذوف';
+            }
+        }
+
+        // ===== التحقق من وضع التشغيل =====
+        function isLocalFile() {
+            return window.location.protocol === 'file:';
+        }
+
+        function getApiBaseUrl() {
+            // إذا كان الملف مفتوحاً محلياً، استخدم localhost
+            if (isLocalFile()) {
+                return 'http://localhost:9000';
+            }
+            // وإلا استخدم نفس origin
+            return window.location.origin;
+        }
+
+        // ===== الدالة الرئيسية لجلب البيانات =====
+        async function loadArchive() {
+            const tbody = document.getElementById('archiveBody');
+            const modeIndicator = document.getElementById('modeIndicator');
+            const statusText = document.getElementById('statusText');
+            const statusDot = document.getElementById('statusDot');
+            const countBadge = document.getElementById('countBadge');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const localWarning = document.getElementById('localWarning');
+
+            // تعطيل زر التحديث أثناء التحميل
+            refreshBtn.disabled = true;
+
+            try {
+                // عرض حالة التحميل
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align:center;padding:40px;">
+                            <div class="loading-spinner"></div>
+                            <br>
+                            <span style="color:#94a3b8;">جاري تحميل البيانات...</span>
+                        </td>
+                    </tr>
+                `;
+
+                // تحديد الرابط
+                const baseUrl = getApiBaseUrl();
+                const apiUrl = `${baseUrl}/api/archive`;
+                
+                console.log('📡 محاولة الاتصال:', apiUrl);
+                console.log('📁 وضع التشغيل:', isLocalFile() ? 'ملف محلي (file://)' : 'خادم (http://)');
+
+                // محاولة الاتصال بالخادم
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-Username': localStorage.getItem('username') || ''
+                    },
+                    // مهلة 3 ثواني
+                    signal: AbortSignal.timeout(3000)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                console.log('📦 تم استلام البيانات:', result);
+
+                // تحديث حالة الاتصال - متصل
+                modeIndicator.className = 'mode-indicator online';
+                statusDot.style.color = '#22c55e';
+                statusText.textContent = '🟢 متصل';
+                localWarning.style.display = 'none';
+
+                if (result.success && result.data && result.data.length > 0) {
+                    // عرض البيانات
+                    let html = '';
+                    result.data.forEach((item, index) => {
+                        try {
+                            const d2 = new Date(item.DeletedAt);
+                            const date = isNaN(d2.getTime()) ? item.DeletedAt : `${String(d2.getDate()).padStart(2,'0')}/${String(d2.getMonth()+1).padStart(2,'0')}/${d2.getFullYear()} ${String(d2.getHours()).padStart(2,'0')}:${String(d2.getMinutes()).padStart(2,'0')}`;
+                            
+                            const dataObj = typeof item.RecordData === 'string' 
+                                ? JSON.parse(item.RecordData) 
+                                : item.RecordData;
+                            
+                            const typeInfo = TYPE_LABELS[item.RecordType] || { label: item.RecordType || 'عنصر', class: '' };
+                            const details = buildDetails(item.RecordType, dataObj);
+                            
+                            html += `
+                                <tr>
+                                    <td>
+                                        <span class="badge-type ${typeInfo.class}">
+                                            ${typeInfo.icon || '📄'} ${typeInfo.label}
+                                        </span>
+                                    </td>
+                                    <td>${details}</td>
+                                    <td>${date}</td>
+                                    <td>
+                                        <button class="btn-restore" onclick="restoreItem(${item.Id})">
+                                            <i class="fa-solid fa-rotate-left"></i> استعادة
+                                        </button>
+                                        <button class="btn-erase" onclick="eraseItem(${item.Id})">
+                                            <i class="fa-solid fa-trash"></i> مسح نهائي
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        } catch (itemError) {
+                            console.error('❌ خطأ في معالجة العنصر رقم', index, itemError);
+                        }
+                    });
+                    
+                    tbody.innerHTML = html;
+                    countBadge.textContent = `${result.data.length} عنصر`;
+                    
+                } else {
+                    // لا توجد بيانات
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    <h3>سلة المحذوفات فارغة</h3>
+                                    <p style="color:#94a3b8;">لم يتم العثور على أي عناصر محذوفة</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    countBadge.textContent = '0 عنصر';
+                }
+
+            } catch (error) {
+                console.error('❌ خطأ في التحميل:', error);
+                
+                // إذا كان الملف محلياً، استخدم البيانات التجريبية
+                if (isLocalFile()) {
+                    console.log('🔄 استخدام البيانات التجريبية (وضع المحاكاة)');
+                    
+                    modeIndicator.className = 'mode-indicator offline';
+                    statusDot.style.color = '#f59e0b';
+                    statusText.textContent = '🟡 محاكاة';
+                    localWarning.style.display = 'flex';
+                    
+                    // عرض البيانات التجريبية
+                    let html = '';
+                    MOCK_DATA.forEach(item => {
+                        try {
+                            const d2 = new Date(item.DeletedAt);
+                            const date = isNaN(d2.getTime()) ? item.DeletedAt : `${String(d2.getDate()).padStart(2,'0')}/${String(d2.getMonth()+1).padStart(2,'0')}/${d2.getFullYear()} ${String(d2.getHours()).padStart(2,'0')}:${String(d2.getMinutes()).padStart(2,'0')}`;
+                            
+                            const dataObj = JSON.parse(item.RecordData);
+                            const typeInfo = TYPE_LABELS[item.RecordType] || { label: item.RecordType || 'عنصر', class: '' };
+                            const details = buildDetails(item.RecordType, dataObj);
+                            
+                            html += `
+                                <tr>
+                                    <td>
+                                        <span class="badge-type ${typeInfo.class}" style="opacity:0.7;">
+                                            ${typeInfo.icon || '📄'} ${typeInfo.label}
+                                        </span>
+                                        <span style="font-size:0.6rem;color:#94a3b8;display:block;">(محاكاة)</span>
+                                    </td>
+                                    <td style="opacity:0.7;">${details}</td>
+                                    <td style="opacity:0.7;">${date}</td>
+                                    <td>
+                                        <button class="btn-restore" disabled style="opacity:0.5;cursor:not-allowed;">
+                                            <i class="fa-solid fa-lock"></i> غير متاح
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        } catch (e) {}
+                    });
+                    
+                    tbody.innerHTML = html;
+                    countBadge.textContent = `${MOCK_DATA.length} عنصر (محاكاة)`;
+                    
+                } else {
+                    // خطأ في الخادم
+                    modeIndicator.className = 'mode-indicator error';
+                    statusDot.style.color = '#ef4444';
+                    statusText.textContent = '🔴 خطأ';
+                    
+                    let errorMessage = 'حدث خطأ في تحميل البيانات';
+                    let errorDetails = '';
+                    
+                    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        errorMessage = '⚠️ الخادم غير متصل';
+                        errorDetails = 'تأكد من تشغيل الخادم على المنفذ 9000';
+                    } else if (error.message.includes('401')) {
+                        errorMessage = '⚠️ غير مصرح';
+                        errorDetails = 'يجب تسجيل الدخول أولاً';
+                    } else if (error.message.includes('403')) {
+                        errorMessage = '⚠️ ممنوع';
+                        errorDetails = 'ليس لديك صلاحية الوصول';
+                    } else if (error.message.includes('404')) {
+                        errorMessage = '⚠️ الرابط غير موجود';
+                        errorDetails = 'تأكد من صحة مسار API';
+                    } else if (error.message.includes('500')) {
+                        errorMessage = '⚠️ خطأ في الخادم';
+                        errorDetails = 'حدث خطأ داخلي في الخادم';
+                    } else {
+                        errorMessage = error.message;
+                    }
+                    
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4" style="text-align:center;padding:40px;">
+                                <i class="fa-solid fa-circle-exclamation" style="font-size:2.5rem;color:#ef4444;display:block;margin-bottom:15px;"></i>
+                                <strong style="color:#ef4444;font-size:1.1rem;">${errorMessage}</strong>
+                                ${errorDetails ? `<br><span style="color:#94a3b8;font-size:0.9rem;">${errorDetails}</span>` : ''}
+                                <br><br>
+                                <button onclick="loadArchive()" style="padding:10px 24px;background:#3b82f6;color:white;border:none;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700;">
+                                    <i class="fa-solid fa-rotate"></i> إعادة المحاولة
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    countBadge.textContent = '⚠️ خطأ';
+                }
+            } finally {
+                // إعادة تفعيل زر التحديث
+                refreshBtn.disabled = false;
+            }
+        }
+
+        // ===== نافذة تأكيد مخصصة بدل confirm() الافتراضية =====
+        function showConfirmModal(message) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('confirmModal');
+                const msgEl = document.getElementById('confirmModalMessage');
+                const okBtn = document.getElementById('confirmModalOk');
+                const cancelBtn = document.getElementById('confirmModalCancel');
+
+                msgEl.textContent = message;
+                overlay.classList.add('show');
+
+                function cleanup(result) {
+                    overlay.classList.remove('show');
+                    okBtn.removeEventListener('click', onOk);
+                    cancelBtn.removeEventListener('click', onCancel);
+                    overlay.removeEventListener('click', onOverlayClick);
+                    resolve(result);
+                }
+
+                function onOk() { cleanup(true); }
+                function onCancel() { cleanup(false); }
+                function onOverlayClick(e) { if (e.target === overlay) cleanup(false); }
+
+                okBtn.addEventListener('click', onOk);
+                cancelBtn.addEventListener('click', onCancel);
+                overlay.addEventListener('click', onOverlayClick);
+            });
+        }
+
+        // ===== دالة الاستعادة =====
+        async function restoreItem(id) {
+            const confirmed = await showConfirmModal('هل أنت متأكد من رغبتك في استعادة هذا العنصر؟');
+            if (!confirmed) return;
+            
+            try {
+                const baseUrl = getApiBaseUrl();
+                const response = await fetch(`${baseUrl}/api/archive/restore/${id}`, { 
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-Username': localStorage.getItem('username') || ''
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('✅ تم استعادة العنصر بنجاح');
+                    
+                    if (result.pageUrl) {
+                        setTimeout(() => {
+                            window.location.href = result.pageUrl;
+                        }, 1000);
+                    } else {
+                        setTimeout(() => loadArchive(), 500);
+                    }
+                } else {
+                    showToast(result.message || '❌ حدث خطأ أثناء الاستعادة', true);
+                }
+            } catch (error) {
+                console.error('❌ خطأ في الاستعادة:', error);
+                showToast('❌ حدث خطأ أثناء الاستعادة: ' + error.message, true);
+            }
+        }
+
+        // ===== دالة المسح النهائي لعنصر واحد =====
+        async function eraseItem(id) {
+            const confirmed = await showConfirmModal('هل أنت متأكد من المسح النهائي لهذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.');
+            if (!confirmed) return;
+
+            try {
+                const baseUrl = getApiBaseUrl();
+                const response = await fetch(`${baseUrl}/api/archive/erase/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-Username': localStorage.getItem('username') || ''
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('✅ تم مسح العنصر نهائياً');
+                    setTimeout(() => loadArchive(), 500);
+                } else {
+                    showToast(result.message || '❌ حدث خطأ أثناء المسح', true);
+                }
+            } catch (error) {
+                console.error('❌ خطأ في المسح:', error);
+                showToast('❌ حدث خطأ أثناء المسح: ' + error.message, true);
+            }
+        }
+
+        // ===== دالة مسح كل عناصر الأرشيف الظاهرة حالياً =====
+        async function eraseAll() {
+            const confirmed = await showConfirmModal('هل أنت متأكد من مسح كل عناصر الأرشيف نهائياً؟ لا يمكن التراجع عن هذا الإجراء.');
+            if (!confirmed) return;
+
+            try {
+                const baseUrl = getApiBaseUrl();
+                const response = await fetch(`${baseUrl}/api/archive/erase-all`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-Username': localStorage.getItem('username') || ''
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('✅ تم مسح كل العناصر نهائياً');
+                    setTimeout(() => loadArchive(), 500);
+                } else {
+                    showToast(result.message || '❌ حدث خطأ أثناء المسح', true);
+                }
+            } catch (error) {
+                console.error('❌ خطأ في مسح الكل:', error);
+                showToast('❌ حدث خطأ أثناء المسح: ' + error.message, true);
+            }
+        }
+
+        // ===== دالة عرض الإشعارات =====
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastTitle = document.querySelector('.toast-title');
+            const toastIcon = document.querySelector('.toast-icon');
+
+            toastMessage.textContent = message;
+            
+            if (isError) {
+                toast.style.background = '#fef2f2';
+                toast.style.borderRight = '4px solid #ef4444';
+                toastTitle.textContent = 'خطأ';
+                toastTitle.style.color = '#ef4444';
+                toastIcon.textContent = '✕';
+                toastIcon.style.background = '#fee2e2';
+                toastIcon.style.color = '#ef4444';
+            } else {
+                toast.style.background = '#f0fdf4';
+                toast.style.borderRight = '4px solid #22c55e';
+                toastTitle.textContent = 'نجاح';
+                toastTitle.style.color = '#166534';
+                toastIcon.textContent = '✓';
+                toastIcon.style.background = '#dcfce7';
+                toastIcon.style.color = '#16a34a';
+            }
+
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        // ===== إعادة التحميل التلقائي كل 30 ثانية =====
+        let autoRefreshInterval = null;
+
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(() => {
+                console.log('🔄 تحديث تلقائي...');
+                loadArchive();
+            }, 30000);
+        }
+
+        // بدء التحديث التلقائي بعد التحميل الأول
+        setTimeout(startAutoRefresh, 5000);
+    </script>
+</body>
+</html>

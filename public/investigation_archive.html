@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أرشيف التحقيقات - سلة المحذوفات</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #0a1628 0%, #1e4976 100%);
+            padding: 20px 30px;
+            border-radius: 16px;
+            color: white;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .archive-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .archive-table th {
+            background: #f8fafc;
+            padding: 15px;
+            text-align: right;
+            font-weight: 700;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .archive-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        .archive-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .btn-restore {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .btn-restore:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-restore:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .badge-type {
+            background: #e2e8f0;
+            color: #475569;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-type.type-a {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .badge-type.type-b {
+            background: #EEF2FF;
+            color: #3730A3;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #f0fdf4;
+            border-right: 4px solid #22c55e;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(calc(100% + 40px));
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+            min-width: 300px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            color: #166534;
+            font-size: 0.95rem;
+        }
+
+        .toast-message {
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .count-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        /* ===== نافذة تأكيد مخصصة ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            transform: translateY(10px) scale(0.97);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .modal-overlay.show .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #fef3c7;
+            color: #d97706;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 16px auto;
+        }
+
+        .modal-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .modal-message {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-btn-confirm {
+            background: #10b981;
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background: #059669;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #e2e8f0;
+            border-radius: 50%;
+            border-top-color: #0a1628;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-refresh {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .btn-refresh:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .btn-refresh:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .archive-table {
+                font-size: 0.85rem;
+            }
+            .archive-table th,
+            .archive-table td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 style="margin:0;font-size:1.8rem;font-weight:800;">🗑️ أرشيف التحقيقات</h1>
+                <p style="margin:5px 0 0 0;opacity:0.8;">استعادة التحقيقات المحذوفة وإعادتها للوحة التحكم</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <span class="count-badge" id="countBadge">0 تحقيق</span>
+                <button class="btn-refresh" onclick="loadArchive()" id="refreshBtn">
+                    <i class="fa-solid fa-rotate"></i> تحديث
+                </button>
+            </div>
+        </div>
+
+        <table class="archive-table">
+            <thead>
+                <tr>
+                    <th style="width:15%;">رقم المذكرة</th>
+                    <th style="width:20%;">الموظفون</th>
+                    <th style="width:12%;">نوع التحقيق</th>
+                    <th style="width:25%;">ملخص الواقعة</th>
+                    <th style="width:15%;">تاريخ الحذف</th>
+                    <th style="width:13%;">إجراء</th>
+                </tr>
+            </thead>
+            <tbody id="archiveBody">
+                <tr>
+                    <td colspan="6" style="text-align:center;padding:40px;">
+                        <div class="loading-spinner"></div>
+                        <br>
+                        <span style="color:#94a3b8;">جاري تحميل الأرشيف...</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-icon">✓</div>
+        <div class="toast-content">
+            <div class="toast-title">نجاح</div>
+            <div class="toast-message" id="toastMessage">تمت العملية بنجاح</div>
+        </div>
+    </div>
+
+    <!-- نافذة تأكيد مخصصة -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="modal-title">تأكيد الاستعادة</div>
+            <div class="modal-message" id="confirmModalMessage">هل أنت متأكد من رغبتك في استعادة هذا التحقيق؟</div>
+            <div class="modal-actions">
+                <button class="modal-btn-cancel" id="confirmModalCancel">إلغاء</button>
+                <button class="modal-btn-confirm" id="confirmModalOk">تأكيد الاستعادة</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sidebar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initSidebar === 'function') {
+                initSidebar('investigation-archive');
+            }
+            loadArchive();
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        async function loadArchive() {
+            const tbody = document.getElementById('archiveBody');
+            const countBadge = document.getElementById('countBadge');
+            const refreshBtn = document.getElementById('refreshBtn');
+
+            refreshBtn.disabled = true;
+
+            try {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center;padding:40px;">
+                            <div class="loading-spinner"></div>
+                            <br>
+                            <span style="color:#94a3b8;">جاري تحميل البيانات...</span>
+                        </td>
+                    </tr>
+                `;
+
+                const response = await fetch('/api/archive/investigations', {
+                    headers: {
+                        'X-Username': localStorage.getItem('username') || ''
+                    }
+                });
+                const result = await response.json();
+
+                if (result.success && result.data && result.data.length > 0) {
+                    let html = '';
+                    result.data.forEach(item => {
+                        try {
+                            const d2 = new Date(item.DeletedAt);
+                            const date = isNaN(d2.getTime()) ? item.DeletedAt : `${String(d2.getDate()).padStart(2,'0')}/${String(d2.getMonth()+1).padStart(2,'0')}/${d2.getFullYear()} ${String(d2.getHours()).padStart(2,'0')}:${String(d2.getMinutes()).padStart(2,'0')}`;
+
+                            const dataObj = typeof item.RecordData === 'string'
+                                ? JSON.parse(item.RecordData)
+                                : item.RecordData;
+
+                            const inv = dataObj.investigation || {};
+                            const emps = dataObj.employees || [];
+                            const empNames = emps.map(e => e.EmployeeName || e.FullName).join(', ') || '—';
+
+                            const typeBadge = inv.InvestigationType === 'أ'
+                                ? `<span class="badge-type type-a">نوع أ — جريمة</span>`
+                                : `<span class="badge-type type-b">نوع ب — مخالفة</span>`;
+
+                            html += `
+                                <tr>
+                                    <td style="font-weight:700;color:var(--navy-700);">${inv.MemoNumber || '—'}</td>
+                                    <td>${empNames}</td>
+                                    <td>${typeBadge}</td>
+                                    <td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${inv.MemoSummary || ''}">${inv.MemoSummary || '—'}</td>
+                                    <td>${date}</td>
+                                    <td>
+                                        <button class="btn-restore" onclick="restoreItem(${item.Id})">
+                                            <i class="fa-solid fa-rotate-left"></i> استعادة
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        } catch (itemError) {
+                            console.error('Error parsing item data:', itemError);
+                        }
+                    });
+
+                    tbody.innerHTML = html;
+                    countBadge.textContent = `${result.data.length} تحقيق`;
+                } else {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    <h3>أرشيف التحقيقات فارغ</h3>
+                                    <p style="color:#94a3b8;">لم يتم العثور على أي تحقيقات مؤرشفة</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    countBadge.textContent = '0 تحقيق';
+                }
+            } catch (error) {
+                console.error('Error loading archive:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center;padding:40px;color:#ef4444;">
+                            <i class="fa-solid fa-circle-exclamation" style="font-size:2rem;margin-bottom:10px;"></i>
+                            <br>
+                            <strong>فشل اتصال الخادم بقاعدة البيانات</strong>
+                        </td>
+                    </tr>
+                `;
+                countBadge.textContent = '⚠️ خطأ';
+            } finally {
+                refreshBtn.disabled = false;
+            }
+        }
+
+        function showConfirmModal(message) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('confirmModal');
+                const msgEl = document.getElementById('confirmModalMessage');
+                const okBtn = document.getElementById('confirmModalOk');
+                const cancelBtn = document.getElementById('confirmModalCancel');
+
+                msgEl.textContent = message;
+                overlay.classList.add('show');
+
+                function cleanup(result) {
+                    overlay.classList.remove('show');
+                    okBtn.removeEventListener('click', onOk);
+                    cancelBtn.removeEventListener('click', onCancel);
+                    resolve(result);
+                }
+
+                function onOk() { cleanup(true); }
+                function onCancel() { cleanup(false); }
+
+                okBtn.addEventListener('click', onOk);
+                cancelBtn.addEventListener('click', onCancel);
+            });
+        }
+
+        async function restoreItem(archiveId) {
+            const confirmed = await showConfirmModal('هل أنت متأكد من رغبتك في استعادة هذا التحقيق وإعادته للوحة التحكم الرئيسية؟');
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(`/api/archive/restore/${archiveId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Username': localStorage.getItem('username') || ''
+                    }
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('✅ تم استعادة التحقيق بنجاح!');
+                    loadArchive();
+                } else {
+                    alert('⚠️ فشل في الاستعادة: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error restoring item:', error);
+                alert('⚠️ خطأ في الاتصال بالخادم');
+            }
+        }
+    </script>
+</body>
+</html>

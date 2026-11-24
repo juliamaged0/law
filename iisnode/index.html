@@ -1,0 +1,87 @@
+<html>
+<head>
+    <title>iisnode logs</title>
+    <style type="text/css">
+        body
+        {
+            font-family: "Trebuchet MS" , Arial, Helvetica, sans-serif;
+        }
+        table
+        {
+            border-collapse: collapse;
+        }
+        td, th
+        {
+            border: 1px solid lightgray;
+            padding: 3px 7px 2px 7px;
+        }
+        th
+        {
+            text-align: left;
+            padding-top: 5px;
+            padding-bottom: 4px;
+            background-color: Gray;
+            color: #ffffff;
+        }
+        td.stderr
+        {
+            color: Red;
+        }
+    </style>
+</head>
+<body>
+    <table id="logFilesTable">
+        <tr>
+            <th>
+                Computer name
+            </th>
+            <th>
+                PID
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Created
+            </th>
+            <th>
+                Link
+            </th>
+        </tr>
+    </table>
+    <p id="lastUpdated"></p>
+    <script type="text/javascript">
+
+        // this is replaced with actual data at runtime by code in interceptor.js
+        var logFiles = [{"file":"LEGAL_AFFAIRS-10164-stderr-1790158478269.txt","computername":"LEGAL_AFFAIRS","pid":10164,"type":"stderr","created":1790158478269},{"file":"LEGAL_AFFAIRS-10164-stdout-1790158478266.txt","computername":"LEGAL_AFFAIRS","pid":10164,"type":"stdout","created":1790158478266},{"file":"LEGAL_AFFAIRS-1904-stderr-1792057711273.txt","computername":"LEGAL_AFFAIRS","pid":1904,"type":"stderr","created":1792057711273},{"file":"LEGAL_AFFAIRS-1904-stdout-1792057711270.txt","computername":"LEGAL_AFFAIRS","pid":1904,"type":"stdout","created":1792057711270},{"file":"LEGAL_AFFAIRS-5328-stderr-1790157012256.txt","computername":"LEGAL_AFFAIRS","pid":5328,"type":"stderr","created":1790157012256},{"file":"LEGAL_AFFAIRS-5328-stdout-1790157012252.txt","computername":"LEGAL_AFFAIRS","pid":5328,"type":"stdout","created":1790157012252},{"file":"LEGAL_AFFAIRS-7448-stderr-1790851779478.txt","computername":"LEGAL_AFFAIRS","pid":7448,"type":"stderr","created":1790851779478},{"file":"LEGAL_AFFAIRS-7448-stdout-1790851779475.txt","computername":"LEGAL_AFFAIRS","pid":7448,"type":"stdout","created":1790851779475},{"file":"LEGAL_AFFAIRS-7796-stderr-1792055810284.txt","computername":"LEGAL_AFFAIRS","pid":7796,"type":"stderr","created":1792055810284},{"file":"LEGAL_AFFAIRS-7796-stdout-1792055810281.txt","computername":"LEGAL_AFFAIRS","pid":7796,"type":"stdout","created":1792055810281},{"file":"LEGAL_AFFAIRS-8220-stderr-1790163700419.txt","computername":"LEGAL_AFFAIRS","pid":8220,"type":"stderr","created":1790163700419},{"file":"LEGAL_AFFAIRS-8220-stdout-1790163700415.txt","computername":"LEGAL_AFFAIRS","pid":8220,"type":"stdout","created":1790163700415},{"file":"LEGAL_AFFAIRS-8220-stdout-1790578256896.txt","computername":"LEGAL_AFFAIRS","pid":8220,"type":"stdout","created":1790578256896},{"file":"LEGAL_AFFAIRS-8220-stdout-1790839155764.txt","computername":"LEGAL_AFFAIRS","pid":8220,"type":"stdout","created":1790839155764},{"file":"LEGAL_AFFAIRS-8992-stderr-1792055365883.txt","computername":"LEGAL_AFFAIRS","pid":8992,"type":"stderr","created":1792055365883},{"file":"LEGAL_AFFAIRS-8992-stdout-1792055365881.txt","computername":"LEGAL_AFFAIRS","pid":8992,"type":"stdout","created":1792055365881},{"file":"LEGAL_AFFAIRS-9164-stderr-1790852370136.txt","computername":"LEGAL_AFFAIRS","pid":9164,"type":"stderr","created":1790852370136},{"file":"LEGAL_AFFAIRS-9164-stdout-1790852370132.txt","computername":"LEGAL_AFFAIRS","pid":9164,"type":"stdout","created":1790852370132},{"file":"LEGAL_AFFAIRS-9164-stdout-1791356352284.txt","computername":"LEGAL_AFFAIRS","pid":9164,"type":"stdout","created":1791356352284},{"file":"LEGAL_AFFAIRS-9164-stdout-1791876015386.txt","computername":"LEGAL_AFFAIRS","pid":9164,"type":"stdout","created":1791876015386},{"file":"LEGAL_AFFAIRS-9652-stderr-1790157985301.txt","computername":"LEGAL_AFFAIRS","pid":9652,"type":"stderr","created":1790157985301},{"file":"LEGAL_AFFAIRS-9652-stdout-1790157985298.txt","computername":"LEGAL_AFFAIRS","pid":9652,"type":"stdout","created":1790157985298}];
+        var lastUpdated = 1792057712205;
+        var date = new Date();
+
+        date.setTime(lastUpdated);
+        document.getElementById('lastUpdated').innerHTML = 'Index was last updated ' + date;
+
+        logFiles.sort(function (a, b) {
+            return b.created - a.created;
+        });
+
+        var logFilesTable = document.getElementById("logFilesTable");
+        for (var i = 0; i < logFiles.length; i++) {
+            var logFile = logFiles[i];
+            date.setTime(logFile.created);
+            var row = logFilesTable.insertRow(-1);
+            var computerNameCell = row.insertCell(0);
+            var pidCell = row.insertCell(1);
+            var typeCell = row.insertCell(2);
+            var dateCell = row.insertCell(3);
+            var logCell = row.insertCell(4);
+            computerNameCell.innerHTML = logFile.computername;
+            pidCell.innerHTML = logFile.pid.toString();
+            typeCell.innerHTML = logFile.type;
+            typeCell.setAttribute('class', logFile.type);
+            dateCell.innerHTML = date.toString();
+            logCell.innerHTML = '<a href="' + logFile.file + '">log</a>';
+        };
+
+    </script>
+</body>
+</html>

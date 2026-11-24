@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفاصيل التحقيق</title>
+  <script src="sidebar.js"></script>
+  <style>
+    /* ── نفس الأنماط السابقة ── */
+    .details-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+    @media (max-width: 1000px) { .details-layout { grid-template-columns: 1fr; } }
+    .info-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-sm); position: sticky; top: 80px;
+    }
+    .info-card-header {
+      background: linear-gradient(135deg, var(--navy-800), var(--navy-700));
+      padding: 14px 18px;
+    }
+    .info-card-header h3 { font-size: 13px; font-weight: 800; color: white; }
+    .info-card-header .inv-id {
+      font-size: 18px; font-weight: 900; color: var(--gold-400); margin-top: 2px;
+    }
+    .info-body { padding: 16px; }
+    .info-row {
+      display: flex; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px dashed var(--border);
+      font-size: 12.5px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .label { color: var(--text-muted); font-weight: 600; }
+    .info-row .value { font-weight: 700; color: var(--text-primary); text-align: left; }
+    .type-badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 20px; font-size: 11.5px; font-weight: 700;
+    }
+    .type-a { background: #FEE2E2; color: #991B1B; }
+    .type-b { background: #EEF2FF; color: #3730A3; }
+    .status-pill {
+      display: inline-block; padding: 4px 12px;
+      border-radius: 20px; font-size: 11px; font-weight: 700; margin-top: 8px;
+    }
+    .s-open    { background: #DCFCE7; color: #15803D; }
+    .s-decided { background: #DBEAFE; color: #1D4ED8; }
+    .s-appeal  { background: #FEF3C7; color: #92400E; }
+    .s-closed  { background: #F1F5F9; color: #475569; }
+    .stepper {
+      display: flex; gap: 0;
+      margin-bottom: 22px;
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-xs);
+    }
+    .step {
+      flex: 1; padding: 12px 8px; text-align: center;
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      border-left: 1px solid var(--border); cursor: pointer;
+      transition: all 0.2s; background: var(--surface-2);
+    }
+    .step:last-child { border-left: none; }
+    .step .step-num { display: block; font-size: 18px; margin-bottom: 4px; }
+    .step.done  { background: #DCFCE7; color: #15803D; }
+    .step.active{ background: var(--navy-800); color: white; }
+    .step:hover { filter: brightness(0.95); }
+    .section-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-sm); margin-bottom: 18px;
+      scroll-margin-top: 80px;
+    }
+    .sc-header {
+      padding: 13px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sc-header h4 { font-size: 13.5px; font-weight: 800; color: var(--navy-700); }
+    .sc-body { padding: 18px; }
+    .summons-list { display: flex; flex-direction: column; gap: 10px; }
+    .summons-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 14px; border: 1px solid var(--border);
+      border-radius: 10px; background: var(--surface-2);
+    }
+    .summons-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--navy-700); color: white;
+      font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .summons-responded { border-color: #86EFAC; background: #F0FDF4; }
+    .summons-responded .summons-num { background: #15803D; }
+    .add-summons-form {
+      display: grid; grid-template-columns: 1fr 1fr auto;
+      gap: 10px; align-items: end; margin-top: 14px;
+      padding-top: 14px; border-top: 1px dashed var(--border);
+    }
+    @media (max-width: 700px) { .add-summons-form { grid-template-columns: 1fr; } }
+    .attendance-field { display: none; }
+    .attendance-field.show { display: block; }
+
+    .witness-list { display: flex; flex-direction: column; gap: 10px; }
+    .witness-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 14px; border: 1px solid var(--border);
+      border-radius: 10px; background: var(--surface-2);
+    }
+    .witness-item .witness-info { flex: 1; }
+    .witness-item .witness-info .name { font-size: 13px; font-weight: 700; }
+    .witness-item .witness-info .details { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+    .add-witness-form {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-top: 14px;
+      padding-top: 14px; border-top: 1px dashed var(--border);
+    }
+    @media (max-width: 700px) { .add-witness-form { grid-template-columns: 1fr; } }
+    .add-witness-form .full { grid-column: span 2; }
+    @media (max-width: 700px) { .add-witness-form .full { grid-column: span 1; } }
+    .add-witness-form .form-control[readonly] { background: #f1f5f9; cursor: default; }
+    .add-witness-form select.form-control { height: 42px; }
+
+    .decision-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 700px) { .decision-form { grid-template-columns: 1fr; } }
+    .decision-form .full { grid-column: span 2; }
+    .appeal-toggle {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: var(--surface-2);
+      border: 1.5px solid var(--border); border-radius: 10px;
+      margin-bottom: 14px; cursor: pointer;
+    }
+    .appeal-toggle input[type=checkbox] { width: 18px; height: 18px; cursor: pointer; }
+    .appeal-fields { display: none; }
+    .appeal-fields.show { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 700px) { .appeal-fields.show { grid-template-columns: 1fr; } }
+    .final-memo-upload {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--surface-2);
+      transition: all 0.2s;
+      position: relative;
+    }
+    .final-memo-upload:hover { border-color: var(--navy-600); background: #EEF2FF; }
+    .final-memo-upload input { display: none; }
+    .final-memo-upload .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .final-memo-upload .upload-text { font-size: 13px; font-weight: 700; color: var(--text-muted); }
+    .final-memo-upload .upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .final-file-preview {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: #F0FDF4;
+      border: 1px solid #86EFAC;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 12px;
+    }
+    .final-file-preview.show { display: flex; }
+    .final-file-preview .file-name { font-weight: 700; color: #15803D; }
+    .final-file-preview .remove-file {
+      background: none; border: none; color: #DC2626; font-weight: 800; cursor: pointer; font-size: 14px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; }
+    .form-control {
+      width: 100%; height: 40px;
+      background: var(--surface-2); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 0 12px;
+      font-size: 13px; font-family: 'Cairo', sans-serif;
+      color: var(--text-primary); outline: none; transition: all 0.2s; box-sizing: border-box;
+    }
+    textarea.form-control { height: auto; padding: 10px 12px; resize: vertical; min-height: 60px; }
+    .form-control:focus { border-color: var(--navy-600); background: white; box-shadow: 0 0 0 3px rgba(30,73,118,0.1); }
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #059669; color: white;
+      padding: 12px 24px; border-radius: 12px;
+      font-size: 13px; font-weight: 700; z-index: 9999;
+      transition: transform 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #DC2626; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 7px; padding: 0 18px; height: 40px;
+      border-radius: var(--radius-sm); font-size: 13px; font-weight: 700;
+      font-family: 'Cairo', sans-serif; cursor: pointer; text-decoration: none;
+      transition: var(--transition); border: none; line-height: 1;
+    }
+    .btn-primary { background: var(--navy-700); color: white; }
+    .btn-primary:hover { background: var(--navy-600); }
+    .btn-ghost { background: white; color: var(--text-secondary); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--surface-2); color: var(--navy-700); }
+    .btn-sm { height: 32px; padding: 0 12px; font-size: 12px; }
+
+    /* ── تقرير الطباعة ── */
+    #printReportArea { display: none; }
+    .pr-header { text-align:center; margin-bottom:18px; border-bottom:2px solid #1E4976; padding-bottom:12px; }
+    .pr-header h1 { font-size:18px; margin:0 0 4px; }
+    .pr-header .pr-sub { font-size:12px; color:#555; }
+    .pr-section { margin-bottom:16px; page-break-inside: avoid; }
+    .pr-section h2 { font-size:14px; background:#F1F5F9; padding:6px 10px; border-right:4px solid #1E4976; margin:0 0 8px; }
+    .pr-grid { display:grid; grid-template-columns: 1fr 1fr; gap:6px 18px; font-size:12.5px; }
+    .pr-grid .pr-row { display:flex; justify-content:space-between; border-bottom:1px dotted #ccc; padding:4px 0; }
+    .pr-grid .pr-row .pr-label { color:#555; font-weight:700; }
+    .pr-grid .pr-row .pr-value { font-weight:700; }
+    .pr-table { width:100%; border-collapse:collapse; font-size:12px; margin-top:6px; }
+    .pr-table th, .pr-table td { border:1px solid #ccc; padding:6px 8px; text-align:right; }
+    .pr-table th { background:#F1F5F9; }
+    .pr-text-block { font-size:12.5px; line-height:1.8; white-space:pre-wrap; border:1px solid #ddd; border-radius:6px; padding:10px; background:#FAFBFC; }
+    .pr-empty { color:#888; font-size:12px; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #printReportArea, #printReportArea * { visibility: visible; }
+      #printReportArea { display: block; position: absolute; top: 0; right: 0; left: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-body">
+<div class="details-layout">
+
+  <!-- ── Info Sidebar ── -->
+  <div>
+    <div class="info-card">
+      <div class="info-card-header">
+        <h3>ملف التحقيق</h3>
+        <div class="inv-id" id="invIdDisplay">—</div>
+        <div id="statusPill" class="status-pill s-open">قيد التحقيق</div>
+      </div>
+      <div class="info-body">
+        <div class="info-row"><span class="label">النوع</span><span class="value" id="si-type">—</span></div>
+        <div class="info-row"><span class="label">رقم الملف</span><span class="value" id="si-memo">—</span></div>
+        <div class="info-row"><span class="label">تاريخ الواقعة</span><span class="value" id="si-date">—</span></div>
+        <div class="info-row"><span class="label">المحامي المسؤول</span><span class="value" id="si-manager">—</span></div>
+        <div class="info-row"><span class="label">عدد الموظفين</span><span class="value" id="si-emps">—</span></div>
+        <div class="info-row"><span class="label">مكان الواقعة</span><span class="value" id="si-place">—</span></div>
+        <div class="info-row"><span class="label">القيمة المادية</span><span class="value" id="si-claim">—</span></div>
+        <div class="info-row"><span class="label">مرفوع من</span><span class="value" id="si-plaintiff">—</span></div>
+        <div class="info-row"><span class="label">المشكو في حقه</span><span class="value" id="si-defendant">—</span></div>
+        <div class="info-row"><span class="label">الاستدعاءات</span><span class="value" id="si-summons">0</span></div>
+        <div class="info-row"><span class="label">الشهود</span><span class="value" id="si-witnesses">0</span></div>
+        <div class="info-row"><span class="label">القرار</span><span class="value" id="si-decision">لم يصدر</span></div>
+        <div class="info-row"><span class="label">التظلم</span><span class="value" id="si-appeal">—</span></div>
+      </div>
+      <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:8px;">
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="printReport()">🖨️ طباعة تقرير</button>
+        <a href="investigations_dashboard.html" class="btn btn-ghost" style="width:100%;justify-content:center;" onclick="sessionStorage.setItem('reloadInvestigations','true')">← العودة للقائمة</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main Content ── -->
+  <div>
+
+    <!-- Stepper -->
+    <div class="stepper" id="stepper">
+      <div class="step active" data-target="section-summons"  id="step2"><span class="step-num">📢</span>الاستدعاءات</div>
+      <div class="step"        data-target="section-witnesses" id="step3"><span class="step-num">👥</span>الشهود</div>
+      <div class="step"        data-target="section-employee-statements" id="step4"><span class="step-num">📝</span>أقوال الموظفين</div>
+      <div class="step"        data-target="section-decision" id="step5"><span class="step-num">🏛️</span>عرض علي رئيس مجلس الإدارة</div>
+      <div class="step"        data-target="section-appeal"   id="step6"><span class="step-num">🔄</span>تظلم</div>
+      <div class="step"        data-target="section-final"    id="step7"><span class="step-num">✅</span>القرار النهائي</div>
+      <div class="step"        data-target="section-memo"     id="step8"><span class="step-num">📝</span>مذكرة الختام</div>
+      <div class="step"        data-target="section-general-notes" id="step9"><span class="step-num">📌</span>ملاحظات عامة</div>
+    </div>
+
+    <!-- ── الاستدعاءات ── -->
+    <div class="section-card" id="section-summons">
+      <div class="sc-header">
+        <h4>📢 سجل الاستدعاءات</h4>
+        <span id="summonsBadge" style="font-size:12px;color:var(--text-muted);font-weight:700;">0 استدعاء</span>
+      </div>
+      <div class="sc-body">
+        <div class="summons-list" id="summonsList">
+          <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">لا يوجد استدعاءات بعد</div>
+        </div>
+
+        <div class="add-summons-form" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto;">
+          <div class="form-group" id="summonsEmpGroup" style="display:none;">
+            <label class="form-label">الموظف المستدعى</label>
+            <select class="form-control" id="summonsEmployeeSelect">
+              <option value="">جميع الموظفين</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">تاريخ الاستدعاء</label>
+            <input type="date" class="form-control" id="summonsDate">
+          </div>
+          <div class="form-group">
+            <label class="form-label">استجاب الموظف؟</label>
+            <select class="form-control" id="summonsResponse" onchange="toggleAttendanceField()">
+              <option value="لم يستجب">لم يستجب</option>
+              <option value="استجاب">استجاب وحضر</option>
+            </select>
+          </div>
+          <div class="form-group attendance-field" id="attendanceField">
+            <label class="form-label">تاريخ الحضور</label>
+            <input type="date" class="form-control" id="attendanceDate">
+          </div>
+          <button class="btn btn-primary" onclick="addSummons()" style="height:40px;white-space:nowrap;">💾 حفظ الاستدعاء</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── الشهود ── -->
+    <div class="section-card" id="section-witnesses">
+      <div class="sc-header">
+        <h4>👥 الشهود</h4>
+        <span id="witnessBadge" style="font-size:12px;color:var(--text-muted);font-weight:700;">0 شاهد</span>
+      </div>
+      <div class="sc-body">
+        <div class="witness-list" id="witnessList">
+          <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">لا يوجد شهود مسجلين</div>
+        </div>
+
+        <div class="add-witness-form">
+          <div class="form-group full">
+            <label class="form-label">اختر الموظف (أو اكتب يدوياً)</label>
+            <select class="form-control" id="witnessEmployeeSelect" onchange="onWitnessSelect(this)">
+              <option value="">— اختر موظفاً —</option>
+              <option value="manual">✏️ إدخال يدوي (غير موظف)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">اسم الشاهد *</label>
+            <input type="text" class="form-control" id="witnessName" placeholder="الاسم الكامل">
+          </div>
+          <div class="form-group">
+            <label class="form-label">الرقم القومي</label>
+            <input type="text" class="form-control" id="witnessNationalId" placeholder="14 رقم">
+          </div>
+          <div class="form-group">
+            <label class="form-label">رقم الموبايل</label>
+            <input type="text" class="form-control" id="witnessMobile" placeholder="01xxxxxxxxx">
+          </div>
+          <div class="form-group">
+            <label class="form-label">العنوان</label>
+            <input type="text" class="form-control" id="witnessAddress" placeholder="العنوان بالتفصيل">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">البيان / الإفادة</label>
+            <textarea class="form-control" id="witnessStatement" rows="2" placeholder="ما الذي سيدلي به الشاهد..."></textarea>
+          </div>
+          <div class="full" style="display:flex; justify-content:flex-end;">
+            <button class="btn btn-primary" onclick="addWitness()">＋ إضافة شاهد</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── أقوال الموظفين ── -->
+    <div class="section-card" id="section-employee-statements">
+      <div class="sc-header">
+        <h4>📝 أقوال الموظفين</h4>
+      </div>
+      <div class="sc-body" id="employeeStatementsContainer">
+        <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">لا يوجد موظفين مسجلين</div>
+      </div>
+    </div>
+
+    <!-- ── عرض علي رئيس مجلس الإدارة ── -->
+    <div class="section-card" id="section-decision">
+      <div class="sc-header">
+        <h4>🏛️ عرض علي رئيس مجلس الإدارة</h4>
+      </div>
+      <div class="sc-body">
+        <div class="decision-form">
+          <div class="form-group">
+            <label class="form-label">تاريخ العرض</label>
+            <input type="date" class="form-control" id="committeeDate">
+          </div>
+          <div class="form-group">
+            <label class="form-label">المحامي / المسؤول عن العرض</label>
+            <input type="text" class="form-control" id="committeeHead" placeholder="اسم مسؤول العرض">
+          </div>
+          <div class="form-group">
+            <label class="form-label">القرار الموصى به</label>
+            <select class="form-control" id="committeeDecision">
+              <option value="">— اختر القرار —</option>
+              <option value="إنذار">إنذار</option>
+              <option value="خصم أيام">خصم أيام</option>
+              <option value="وقف عن العمل">وقف عن العمل</option>
+              <option value="خفض درجة">خفض درجة</option>
+              <option value="فصل">فصل</option>
+              <option value="حفظ التحقيق">حفظ التحقيق — لا جزاء</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">قيمة الجزاء (أيام / درجة)</label>
+            <input type="text" class="form-control" id="penaltyValue" placeholder="مثال: 3 أيام">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">ملاحظات والتوجيهات</label>
+            <textarea class="form-control" id="committeeNotes" rows="2" placeholder="أي ملاحظات أو توجيهات إضافية..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveDecision()" style="margin-top:10px;">💾 حفظ تفاصيل العرض</button>
+      </div>
+    </div>
+
+    <!-- ── التظلم ── -->
+    <div class="section-card" id="section-appeal">
+      <div class="sc-header">
+        <h4>🔄 تظلم</h4>
+      </div>
+      <div class="sc-body">
+        <label class="appeal-toggle">
+          <input type="checkbox" id="hasAppeal" onchange="toggleAppeal()">
+          <span style="font-size:13px;font-weight:700;">الموظف قدّم تظلماً</span>
+        </label>
+
+        <div class="appeal-fields" id="appealFields">
+          <div class="form-group">
+            <label class="form-label">تاريخ التظلم</label>
+            <input type="date" class="form-control" id="appealDate">
+          </div>
+          <div class="form-group">
+            <label class="form-label">نتيجة التظلم</label>
+            <select class="form-control" id="appealResult">
+              <option value="">— قيد النظر —</option>
+              <option value="رُفض التظلم">رُفض التظلم — تأييد القرار</option>
+              <option value="قُبل التظلم">قُبل التظلم — إلغاء الجزاء</option>
+              <option value="تخفيض الجزاء">قُبل جزئياً — تخفيض الجزاء</option>
+            </select>
+          </div>
+          <div class="form-group" style="grid-column:span 2;">
+            <label class="form-label">تفاصيل التظلم</label>
+            <textarea class="form-control" id="appealNotes" rows="2" placeholder="ملخص التظلم والنتيجة..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-ghost" onclick="saveAppeal()" style="margin-top:10px;">💾 حفظ بيانات التظلم</button>
+      </div>
+    </div>
+
+    <!-- ── القرار النهائي ── -->
+    <div class="section-card" id="section-final">
+      <div class="sc-header">
+        <h4>✅ القرار النهائي وإغلاق الملف</h4>
+      </div>
+      <div class="sc-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="form-group" style="grid-column:span 2;">
+            <label class="form-label">القرار النهائي</label>
+            <input type="text" class="form-control" id="finalDecision" placeholder="القرار بعد الطعن أو القرار الابتدائي">
+          </div>
+          <div class="form-group" style="grid-column:span 2;">
+            <label class="form-label">إجراء القرار النهائي</label>
+            <select class="form-control" id="finalActionType" onchange="toggleFinalActionFields()">
+              <option value="hr">إرسال للموارد البشرية</option>
+              <option value="save">حفظ الملف (إغلاق وتحفيظ الملف)</option>
+            </select>
+          </div>
+          <div class="form-group" id="hrDateGroup">
+            <label class="form-label">تاريخ الإرسال للموارد البشرية</label>
+            <input type="date" class="form-control" id="hrSentDate">
+          </div>
+          <div class="form-group" id="saveDateGroup" style="display:none;">
+            <label class="form-label">تاريخ حفظ الملف</label>
+            <input type="date" class="form-control" id="fileSaveDate">
+          </div>
+          <div class="form-group" style="grid-column:span 2;">
+            <label class="form-label" id="finalNotesLabel">ملاحظات للموارد البشرية / حفظ الملف</label>
+            <textarea class="form-control" id="hrNotes" rows="2" placeholder="أي ملاحظات أو تعليمات خاصة..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveFinalDecision()" style="margin-top:10px;">💾 حفظ القرار وإغلاق التحقيق</button>
+      </div>
+    </div>
+
+    <!-- ── مذكرة الختام ── -->
+    <div class="section-card" id="section-memo">
+      <div class="sc-header">
+        <h4>📝 مذكرة الملخص الختامي</h4>
+      </div>
+      <div class="sc-body">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label">نص المذكرة الختامية</label>
+          <textarea class="form-control" id="finalMemoText" rows="4" placeholder="اكتب هنا ملخص كامل للتحقيق وإجراءاته ونتائجه..."></textarea>
+        </div>
+
+        <div class="final-memo-upload" onclick="document.getElementById('finalMemoFile').click()">
+          <input type="file" id="finalMemoFile" accept=".pdf,.doc,.docx" onchange="showFinalFile(this)">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text">رفع ملف المذكرة الختامية (اختياري)</div>
+          <div class="upload-hint">PDF أو Word — حجم أقصى 10MB</div>
+        </div>
+
+        <div class="final-file-preview" id="finalFilePreview">
+          <span class="file-name" id="finalFileName">ملف مرفق</span>
+          <button class="remove-file" onclick="clearFinalFile()">✕</button>
+        </div>
+
+        <button class="btn btn-primary" onclick="saveFinalMemo()" style="margin-top:14px;">💾 حفظ المذكرة الختامية</button>
+      </div>
+    </div>
+
+    <!-- ── ملاحظات عامة على التحقيق ── -->
+    <div class="section-card" id="section-general-notes">
+      <div class="sc-header">
+        <h4>📌 ملاحظات عامة على التحقيق</h4>
+      </div>
+      <div class="sc-body">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label">ملاحظات وتوجيهات عامة لمتابعة التحقيق</label>
+          <textarea class="form-control" id="generalNotes" rows="4" placeholder="اكتب هنا أي ملاحظات عامة حول ملف التحقيق أو مجريات المتابعة..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="saveGeneralNotes()">💾 حفظ الملاحظات</button>
+      </div>
+    </div>
+
+  </div><!-- end main -->
+</div><!-- end layout -->
+</div><!-- end page-body -->
+
+<!-- ── منطقة التقرير القابل للطباعة (مخفية على الشاشة، تظهر عند الطباعة فقط) ── -->
+<div id="printReportArea"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let investigationId = null;
+  let summonsData = [];
+  let witnessesData = [];
+  let employeesList = [];
+  let currentInvestigationData = null; // آخر بيانات تحقيق تم تحميلها (تُستخدم في بناء تقرير الطباعة)
+
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // ══════════════════════════════════════════
+  // ── دالة موحّدة للاتصال بالـ API ──
+  // بتوضح السبب الحقيقي للخطأ بدل رسالة عامة واحدة
+  // ══════════════════════════════════════════
+  async function apiFetch(url, options = {}) {
+    let response;
+    try {
+      // نظام الأمان في التطبيق بيعتمد على إرسال اسم المستخدم كـ header
+      // (نفس الطريقة المستخدمة في sidebar.js) عشان السيرفر يتحقق من الصلاحية
+      const username = localStorage.getItem('username') || '';
+      response = await fetch(url, {
+        // نضمن إرسال الكوكيز/الجلسة مع كل طلب، حتى لو السيرفر على دومين/بورت فرعي مختلف
+        credentials: 'include',
+        ...options,
+        headers: {
+          'X-Username': username,
+          ...(options.headers || {})
+        }
+      });
+    } catch (networkError) {
+      // فشل الاتصال نفسه: سيرفر مش شغال / URL غلط / مفيش نت
+      console.error('🔌 فشل الاتصال بالسيرفر:', networkError);
+      throw new Error('تعذر الوصول للسيرفر. تأكدي إن السيرفر شغال والاتصال بالإنترنت متاح.');
+    }
+
+    // ── جلسة منتهية / مش مسجلة دخول ──
+    if (response.status === 401) {
+      console.error(`🔒 401 غير مصرح من ${url} — الجلسة منتهية أو غير مسجلة دخول`);
+      throw new Error('غير مصرح لك (401) — الجلسة منتهية أو التوكن/الكوكي مش بيتبعت صح. راجعي إعداد تسجيل الدخول.');
+    }
+
+    if (response.status === 403) {
+      console.error(`⛔ 403 ممنوع من ${url} — لا توجد صلاحية كافية`);
+      throw new Error('ليس لديك صلاحية للقيام بهذا الإجراء.');
+    }
+
+    let rawText = '';
+    try {
+      rawText = await response.text();
+    } catch (readError) {
+      console.error('📄 فشل قراءة رد السيرفر:', readError);
+      throw new Error(`تعذرت قراءة رد السيرفر (كود ${response.status}).`);
+    }
+
+    let data = null;
+    try {
+      data = rawText ? JSON.parse(rawText) : null;
+    } catch (parseError) {
+      // السيرفر رجّع حاجة مش JSON (مثلاً صفحة HTML لخطأ 404/500)
+      console.error(`📛 رد غير متوقع من ${url} — كود ${response.status}:`, rawText.slice(0, 500));
+      throw new Error(`السيرفر رجّع رد غير متوقع (كود ${response.status}). راجعي الـ Console لمزيد من التفاصيل.`);
+    }
+
+    if (!response.ok) {
+      const serverMsg = (data && (data.message || data.error)) || `كود الحالة ${response.status}`;
+      console.error(`⚠️ خطأ من ${url}:`, serverMsg, data);
+      throw new Error(serverMsg);
+    }
+
+    return data;
+  }
+
+  // ── جلب قائمة الموظفين للقائمة المنسدلة ──
+  async function loadEmployees() {
+    try {
+      const result = await apiFetch('/api/employees');
+      if (result.success) {
+        employeesList = result.data;
+        populateEmployeeDropdown();
+      } else {
+        console.warn('⚠️ فشل في تحميل الموظفين:', result.message);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في جلب الموظفين:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  function populateEmployeeDropdown() {
+    const select = document.getElementById('witnessEmployeeSelect');
+    const firstOption = select.options[0];
+    select.innerHTML = '';
+    select.appendChild(firstOption);
+    const manualOption = document.createElement('option');
+    manualOption.value = 'manual';
+    manualOption.textContent = '✏️ إدخال يدوي (غير موظف)';
+    select.appendChild(manualOption);
+
+    employeesList.forEach(emp => {
+      const option = document.createElement('option');
+      option.value = emp.employeeCode;
+      option.textContent = `${emp.employeeCode} - ${emp.employeeName}`;
+      select.appendChild(option);
+    });
+  }
+
+  function onWitnessSelect(selectEl) {
+    const code = selectEl.value;
+    const nameField = document.getElementById('witnessName');
+    const nidField = document.getElementById('witnessNationalId');
+    const mobileField = document.getElementById('witnessMobile');
+    const addressField = document.getElementById('witnessAddress');
+
+    if (code && code !== 'manual') {
+      const emp = employeesList.find(e => e.employeeCode === code);
+      if (emp) {
+        nameField.value = emp.employeeName;
+        nidField.value = emp.nationalId || '';
+        mobileField.value = emp.mobile || '';
+        addressField.value = emp.address || '';
+        nameField.readOnly = true;
+        nidField.readOnly = true;
+        mobileField.readOnly = true;
+        addressField.readOnly = true;
+      } else {
+        clearWitnessFields();
+      }
+    } else {
+      nameField.readOnly = false;
+      nidField.readOnly = false;
+      mobileField.readOnly = false;
+      addressField.readOnly = false;
+      // لا نمسح الحقول، يمكن للمستخدم تعديلها
+    }
+  }
+
+  function clearWitnessFields() {
+    document.getElementById('witnessName').value = '';
+    document.getElementById('witnessNationalId').value = '';
+    document.getElementById('witnessMobile').value = '';
+    document.getElementById('witnessAddress').value = '';
+    document.getElementById('witnessName').readOnly = false;
+    document.getElementById('witnessNationalId').readOnly = false;
+    document.getElementById('witnessMobile').readOnly = false;
+    document.getElementById('witnessAddress').readOnly = false;
+  }
+
+  // ── تحميل بيانات التحقيق ──
+  async function loadInvestigation(id) {
+    try {
+      const result = await apiFetch(`/api/investigations/${id}`);
+      if (result.success) {
+        displayInvestigation(result.data);
+      } else {
+        showToast('❌ فشل في تحميل التحقيق: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في تحميل التحقيق:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  function displayInvestigation(data) {
+    currentInvestigationData = data;
+    const inv = data.investigation;
+    const employees = data.employees || [];
+    const summons = data.summons || [];
+    const witnesses = data.witnesses || [];
+    const decision = data.decision;
+    const appeal = data.appeal;
+    const finalDecision = data.finalDecision;
+    const finalMemo = data.finalMemo;
+
+    document.getElementById('invIdDisplay').textContent = inv.MemoNumber || '—';
+    document.getElementById('si-memo').textContent = inv.MemoNumber || '—';
+    document.getElementById('si-date').textContent = inv.IncidentDate ? (() => { const isoM = String(inv.IncidentDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return isoM ? `${isoM[3]}/${isoM[2]}/${isoM[1]}` : inv.IncidentDate; })() : '—';
+    document.getElementById('si-manager').textContent = inv.ManagerName || '—';
+    document.getElementById('si-emps').textContent = employees.length + ' موظف';
+    document.getElementById('si-place').textContent = inv.IncidentPlace || '—';
+    document.getElementById('si-claim').textContent = inv.ClaimValue || '—';
+    document.getElementById('si-plaintiff').textContent = inv.Plaintiff || '—';
+    document.getElementById('si-defendant').textContent = inv.Defendant || '—';
+
+    const typeBadge = inv.InvestigationType === 'أ'
+      ? '<span class="type-badge type-a">نوع أ</span>'
+      : '<span class="type-badge type-b">نوع ب</span>';
+    document.getElementById('si-type').innerHTML = typeBadge;
+
+    const statusMap = { 'جارية':'s-open', 'صدر قرار':'s-decided', 'طعن':'s-appeal', 'مغلقة':'s-closed' };
+    const statusLabelMap = { 'جارية':'قيد التحقيق', 'صدر قرار':'مجلس إدارة', 'طعن':'طعن', 'مغلقة':'منتهية' };
+    const statusPill = document.getElementById('statusPill');
+    statusPill.textContent = statusLabelMap[inv.Status] || inv.Status || 'قيد التحقيق';
+    statusPill.className = 'status-pill ' + (statusMap[inv.Status] || 's-open');
+    if (document.getElementById('generalNotes')) {
+      document.getElementById('generalNotes').value = inv.Notes || '';
+    }
+
+    // إعداد منسدلة الموظفين للاستدعاء إذا كان هناك أكثر من موظف
+    const summonsEmpGroup = document.getElementById('summonsEmpGroup');
+    const summonsEmpSelect = document.getElementById('summonsEmployeeSelect');
+    if (employees.length > 1) {
+      summonsEmpGroup.style.display = 'flex';
+      summonsEmpSelect.innerHTML = '<option value="">جميع الموظفين في التحقيق</option>';
+      employees.forEach(emp => {
+        const opt = document.createElement('option');
+        opt.value = emp.EmployeeName;
+        opt.textContent = `${emp.EmployeeName} (كود: ${emp.EmployeeCode})`;
+        summonsEmpSelect.appendChild(opt);
+      });
+    } else {
+      summonsEmpGroup.style.display = 'none';
+    }
+
+    if (decision) {
+      document.getElementById('si-decision').textContent = decision.DecisionType || 'لم يصدر';
+    } else {
+      document.getElementById('si-decision').textContent = 'لم يصدر';
+    }
+
+    if (appeal && appeal.HasAppeal) {
+      document.getElementById('si-appeal').textContent = appeal.AppealResult || 'قيد النظر';
+    } else {
+      document.getElementById('si-appeal').textContent = 'لا يوجد';
+    }
+
+    summonsData = summons;
+    renderSummons();
+
+    witnessesData = witnesses;
+    renderWitnesses();
+
+    // عرض أقوال الموظفين
+    const statementsContainer = document.getElementById('employeeStatementsContainer');
+    if (employees.length > 0) {
+      let html = '';
+      employees.forEach(emp => {
+        const statement = emp.EmployeeStatement || '';
+        html += `
+          <div style="border-bottom:1px solid var(--border);padding:12px 0;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+              <span>👤 ${emp.EmployeeName} (كود: ${emp.EmployeeCode})</span>
+              <button class="btn btn-ghost btn-sm" onclick="saveEmployeeStatement('${emp.EmployeeCode}', this)" style="padding:4px 10px;font-size:12px;min-height:auto;">
+                <i class="fa-solid fa-floppy-disk" style="margin-left:4px;"></i>حفظ الأقوال
+              </button>
+            </div>
+            <textarea class="form-control emp-statement-input" data-code="${emp.EmployeeCode}" rows="3" placeholder="اكتب هنا أقوال الموظف..." style="font-size:12.5px;width:100%;resize:vertical;">${statement}</textarea>
+          </div>
+        `;
+      });
+      statementsContainer.innerHTML = html;
+    } else {
+      statementsContainer.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">لا يوجد موظفين مسجلين</div>';
+    }
+
+    if (decision) {
+      document.getElementById('committeeDate').value = decision.CommitteeDate ? decision.CommitteeDate.split('T')[0] : '';
+      document.getElementById('committeeHead').value = decision.CommitteeHead || '';
+      document.getElementById('committeeDecision').value = decision.DecisionType || '';
+      document.getElementById('penaltyValue').value = decision.PenaltyValue || '';
+      document.getElementById('committeeNotes').value = decision.Notes || '';
+    }
+
+    if (appeal) {
+      document.getElementById('hasAppeal').checked = appeal.HasAppeal ? true : false;
+      toggleAppeal();
+      document.getElementById('appealDate').value = appeal.AppealDate ? appeal.AppealDate.split('T')[0] : '';
+      document.getElementById('appealResult').value = appeal.AppealResult || '';
+      document.getElementById('appealNotes').value = appeal.AppealNotes || '';
+    }
+
+    if (finalDecision) {
+      document.getElementById('finalDecision').value = finalDecision.FinalDecisionText || '';
+      const actionType = finalDecision.ActionType || (finalDecision.FileSaveDate ? 'save' : 'hr');
+      document.getElementById('finalActionType').value = actionType;
+      toggleFinalActionFields();
+      document.getElementById('hrSentDate').value = finalDecision.HRSentDate ? finalDecision.HRSentDate.split('T')[0] : '';
+      document.getElementById('fileSaveDate').value = finalDecision.FileSaveDate ? finalDecision.FileSaveDate.split('T')[0] : '';
+      document.getElementById('hrNotes').value = finalDecision.HRNotes || '';
+    }
+
+    if (finalMemo) {
+      document.getElementById('finalMemoText').value = finalMemo.MemoText || '';
+      if (finalMemo.FileName) {
+        document.getElementById('finalFileName').textContent = finalMemo.FileName;
+        document.getElementById('finalFilePreview').classList.add('show');
+      }
+    }
+
+    updateStepperByStatus(inv.Status);
+  }
+
+  function updateStepperByStatus(status) {
+    const steps = document.querySelectorAll('.step');
+    steps.forEach(s => s.className = 'step');
+
+    if (status === 'جارية') {
+      document.getElementById('step2').className = 'step active';
+    } else if (status === 'صدر قرار') {
+      document.getElementById('step2').className = 'step done';
+      document.getElementById('step3').className = 'step done';
+      document.getElementById('step4').className = 'step done';
+      document.getElementById('step5').className = 'step done';
+      document.getElementById('step6').className = 'step active';
+    } else if (status === 'طعن') {
+      document.getElementById('step2').className = 'step done';
+      document.getElementById('step3').className = 'step done';
+      document.getElementById('step4').className = 'step done';
+      document.getElementById('step5').className = 'step done';
+      document.getElementById('step6').className = 'step done';
+      document.getElementById('step7').className = 'step active';
+    } else if (status === 'مغلقة') {
+      document.getElementById('step2').className = 'step done';
+      document.getElementById('step3').className = 'step done';
+      document.getElementById('step4').className = 'step done';
+      document.getElementById('step5').className = 'step done';
+      document.getElementById('step6').className = 'step done';
+      document.getElementById('step7').className = 'step done';
+      document.getElementById('step8').className = 'step active';
+    }
+  }
+
+  // ── الاستدعاءات ──
+  function renderSummons() {
+    const list = document.getElementById('summonsList');
+    document.getElementById('summonsBadge').textContent = summonsData.length + ' استدعاء';
+    document.getElementById('si-summons').textContent = summonsData.length;
+
+    if (summonsData.length === 0) {
+      list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">لا يوجد استدعاءات بعد</div>';
+      return;
+    }
+
+    list.innerHTML = summonsData.map((s, i) => {
+      const responded = s.Response === 'استجاب';
+      const empName = s.EmployeeName || s.employeeName || '';
+      return `
+        <div class="summons-item ${responded ? 'summons-responded' : ''}">
+          <div class="summons-num">${i + 1}</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;">
+              استدعاء ${i + 1} ${empName ? `<span style="color:var(--navy-700);font-size:12px;">(${empName})</span>` : ''}
+            </div>
+            <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;" dir="ltr">${s.SummonsDate}</div>
+            ${responded ? `<div style="font-size:11px;color:#15803D;margin-top:2px;">✅ حضر في ${s.AttendanceDate || '—'}</div>` : ''}
+          </div>
+          <span style="font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;
+            background:${responded ? '#DCFCE7' : '#FEE2E2'};
+            color:${responded ? '#15803D' : '#991B1B'};">
+            ${s.Response}
+          </span>
+        </div>`;
+    }).join('');
+  }
+
+  function toggleAttendanceField() {
+    const val = document.getElementById('summonsResponse').value;
+    const field = document.getElementById('attendanceField');
+    if (val === 'استجاب') {
+      field.classList.add('show');
+    } else {
+      field.classList.remove('show');
+    }
+  }
+
+  function toggleFinalActionFields() {
+    const actionType = document.getElementById('finalActionType').value;
+    const hrGroup = document.getElementById('hrDateGroup');
+    const saveGroup = document.getElementById('saveDateGroup');
+    const notesLabel = document.getElementById('finalNotesLabel');
+
+    if (actionType === 'save') {
+      hrGroup.style.display = 'none';
+      saveGroup.style.display = 'flex';
+      notesLabel.textContent = 'ملاحظات حفظ الملف';
+    } else {
+      hrGroup.style.display = 'flex';
+      saveGroup.style.display = 'none';
+      notesLabel.textContent = 'ملاحظات للموارد البشرية';
+    }
+  }
+
+  async function addSummons() {
+    const date     = document.getElementById('summonsDate').value;
+    const response = document.getElementById('summonsResponse').value;
+    const employeeSelect = document.getElementById('summonsEmployeeSelect');
+    const employeeName = (employeeSelect && employeeSelect.value) ? employeeSelect.value : null;
+    let attendance = null;
+
+    if (!date) { showToast('❌ اختاري تاريخ الاستدعاء', true); return; }
+
+    if (response === 'استجاب') {
+      attendance = document.getElementById('attendanceDate').value;
+      if (!attendance) {
+        showToast('❌ أدخلي تاريخ الحضور', true);
+        return;
+      }
+    }
+
+    try {
+      const payload = { summonsDate: date, response, attendanceDate: attendance, employeeName };
+      const result = await apiFetch(`/api/investigations/${investigationId}/summons`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (result.success) {
+        await loadInvestigation(investigationId);
+        showToast('✅ تم حفظ الاستدعاء بنجاح');
+        document.getElementById('summonsDate').value = '';
+        document.getElementById('attendanceDate').value = '';
+        document.getElementById('summonsResponse').value = 'لم يستجب';
+        document.getElementById('attendanceField').classList.remove('show');
+      } else {
+        showToast('❌ فشل في إضافة الاستدعاء: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في إضافة الاستدعاء:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  // ── الشهود ──
+  function renderWitnesses() {
+    const list = document.getElementById('witnessList');
+    document.getElementById('witnessBadge').textContent = witnessesData.length + ' شاهد';
+    document.getElementById('si-witnesses').textContent = witnessesData.length;
+
+    if (witnessesData.length === 0) {
+      list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">لا يوجد شهود مسجلين</div>';
+      return;
+    }
+
+    list.innerHTML = witnessesData.map((w, i) => `
+      <div class="witness-item">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--gold-500);color:var(--navy-900);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">${i + 1}</div>
+        <div class="witness-info">
+          <div class="name">${w.Name}</div>
+          <div class="details">
+            ${w.NationalId ? `رقم قومي: ${w.NationalId} | ` : ''}
+            ${w.Mobile ? `موبايل: ${w.Mobile}` : ''}
+            ${w.Address ? `| ${w.Address}` : ''}
+            ${w.EmployeeCode ? `(كود الموظف: ${w.EmployeeCode})` : ''}
+          </div>
+          ${w.Statement ? `<div style="font-size:12px;color:var(--text-secondary);margin-top:4px;background:#F8FAFD;padding:6px 10px;border-radius:6px;">📝 ${w.Statement}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function addWitness() {
+    const select = document.getElementById('witnessEmployeeSelect');
+    const employeeCode = select.value;
+    const name = document.getElementById('witnessName').value.trim();
+    const nationalId = document.getElementById('witnessNationalId').value.trim();
+    const mobile = document.getElementById('witnessMobile').value.trim();
+    const address = document.getElementById('witnessAddress').value.trim();
+    const statement = document.getElementById('witnessStatement').value.trim();
+
+    let finalEmployeeCode = null;
+    let finalName = name;
+    let finalNationalId = nationalId;
+    let finalMobile = mobile;
+    let finalAddress = address;
+
+    if (employeeCode && employeeCode !== 'manual') {
+      finalEmployeeCode = employeeCode;
+      const emp = employeesList.find(e => e.employeeCode === employeeCode);
+      if (emp) {
+        finalName = emp.employeeName;
+        finalNationalId = emp.nationalId || '';
+        finalMobile = emp.mobile || '';
+        finalAddress = emp.address || '';
+      }
+    }
+
+    if (!finalName) {
+      showToast('❌ اسم الشاهد مطلوب (اختر موظفاً أو اكتب الاسم)', true);
+      return;
+    }
+
+    try {
+      const payload = {
+        employeeCode: finalEmployeeCode,
+        name: finalName,
+        nationalId: finalNationalId,
+        mobile: finalMobile,
+        address: finalAddress,
+        statement: statement
+      };
+      const result = await apiFetch(`/api/investigations/${investigationId}/witnesses`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (result.success) {
+        showToast('✅ تم إضافة الشاهد بنجاح');
+        document.getElementById('witnessEmployeeSelect').value = '';
+        document.getElementById('witnessName').value = '';
+        document.getElementById('witnessNationalId').value = '';
+        document.getElementById('witnessMobile').value = '';
+        document.getElementById('witnessAddress').value = '';
+        document.getElementById('witnessStatement').value = '';
+        document.getElementById('witnessName').readOnly = false;
+        document.getElementById('witnessNationalId').readOnly = false;
+        document.getElementById('witnessMobile').readOnly = false;
+        document.getElementById('witnessAddress').readOnly = false;
+        await loadInvestigation(investigationId);
+      } else {
+        showToast('❌ فشل في إضافة الشاهد: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في إضافة الشاهد:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  // ── حفظ قرار اللجنة ──
+  async function saveDecision() {
+    const committeeDate = document.getElementById('committeeDate').value;
+    const committeeHead = document.getElementById('committeeHead').value.trim();
+    const decisionType = document.getElementById('committeeDecision').value;
+    const penaltyValue = document.getElementById('penaltyValue').value.trim();
+    const notes = document.getElementById('committeeNotes').value.trim();
+
+    if (!decisionType) { showToast('❌ اختاري قرار اللجنة أولاً', true); return; }
+
+    try {
+      const payload = { committeeDate, committeeHead, decisionType, penaltyValue, notes };
+      const result = await apiFetch(`/api/investigations/${investigationId}/decision`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (result.success) {
+        showToast('✅ تم حفظ قرار اللجنة');
+        await loadInvestigation(investigationId);
+      } else {
+        showToast('❌ فشل في حفظ القرار: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في حفظ قرار اللجنة:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  // ── حفظ الطعن ──
+  async function saveAppeal() {
+    const hasAppeal = document.getElementById('hasAppeal').checked;
+    const appealDate = document.getElementById('appealDate').value;
+    const appealResult = document.getElementById('appealResult').value;
+    const appealNotes = document.getElementById('appealNotes').value.trim();
+
+    try {
+      const payload = { hasAppeal, appealDate, appealResult, appealNotes };
+      const result = await apiFetch(`/api/investigations/${investigationId}/appeal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (result.success) {
+        showToast('✅ تم حفظ بيانات الطعن');
+        await loadInvestigation(investigationId);
+      } else {
+        showToast('❌ فشل في حفظ الطعن: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في حفظ الطعن:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  // ── حفظ القرار النهائي ──
+  async function saveFinalDecision() {
+    const finalDecisionText = document.getElementById('finalDecision').value.trim();
+    const actionType = document.getElementById('finalActionType').value;
+    const hrSentDate = document.getElementById('hrSentDate').value;
+    const fileSaveDate = document.getElementById('fileSaveDate').value;
+    const hrNotes = document.getElementById('hrNotes').value.trim();
+
+    if (!finalDecisionText) { showToast('❌ أدخلي القرار النهائي أولاً', true); return; }
+
+    if (actionType === 'hr' && !hrSentDate) {
+      showToast('❌ أدخلي تاريخ الإرسال للموارد البشرية', true);
+      return;
+    }
+    if (actionType === 'save' && !fileSaveDate) {
+      showToast('❌ أدخلي تاريخ حفظ الملف', true);
+      return;
+    }
+
+    try {
+      const payload = { finalDecisionText, actionType, hrSentDate, fileSaveDate, hrNotes };
+      const result = await apiFetch(`/api/investigations/${investigationId}/final-decision`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (result.success) {
+        showToast('✅ تم حفظ القرار النهائي وإغلاق التحقيق بنجاح');
+        await loadInvestigation(investigationId);
+      } else {
+        showToast('❌ فشل في حفظ القرار النهائي: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في حفظ القرار النهائي:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  // ── حفظ المذكرة الختامية ──
+  async function saveFinalMemo() {
+    const memoText = document.getElementById('finalMemoText').value.trim();
+    if (!memoText) { showToast('⚠️ أدخلي نص المذكرة الختامية', true); return; }
+
+    try {
+      const payload = { memoText, fileName: '', filePath: '' };
+      const result = await apiFetch(`/api/investigations/${investigationId}/final-memo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (result.success) {
+        showToast('✅ تم حفظ المذكرة الختامية');
+        await loadInvestigation(investigationId);
+      } else {
+        showToast('❌ فشل في حفظ المذكرة: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في حفظ المذكرة الختامية:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  // ── حفظ الملاحظات العامة ──
+  async function saveGeneralNotes() {
+    const notes = document.getElementById('generalNotes').value.trim();
+    try {
+      const result = await apiFetch(`/api/investigations/${investigationId}/notes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notes })
+      });
+      if (result.success) {
+        showToast('✅ تم حفظ الملاحظات بنجاح');
+        if (currentInvestigationData && currentInvestigationData.investigation) {
+          currentInvestigationData.investigation.Notes = notes;
+        }
+      } else {
+        showToast('❌ فشل في حفظ الملاحظات: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في حفظ الملاحظات:', error);
+      showToast('❌ ' + error.message, true);
+    }
+  }
+
+  // ── حفظ أقوال الموظف ──
+  async function saveEmployeeStatement(employeeCode, btnEl) {
+    const card = btnEl.closest('div').parentElement;
+    const textarea = card.querySelector('.emp-statement-input');
+    const statement = textarea.value.trim();
+    
+    const originalText = btnEl.innerHTML;
+    btnEl.disabled = true;
+    btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="margin-left:4px;"></i>جاري الحفظ...';
+
+    try {
+      const result = await apiFetch(`/api/investigations/${investigationId}/employee-statement`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ employeeCode, statement })
+      });
+      if (result.success) {
+        showToast('✅ تم حفظ أقوال الموظف بنجاح');
+      } else {
+        showToast('❌ فشل حفظ الأقوال: ' + result.message, true);
+      }
+    } catch (error) {
+      console.error('❌ خطأ في حفظ أقوال الموظف:', error);
+      showToast('❌ ' + error.message, true);
+    } finally {
+      btnEl.disabled = false;
+      btnEl.innerHTML = originalText;
+    }
+  }
+
+  // ── ملفات ──
+  function showFinalFile(input) {
+    const preview = document.getElementById('finalFilePreview');
+    if (input.files && input.files[0]) {
+      document.getElementById('finalFileName').textContent = input.files[0].name;
+      preview.classList.add('show');
+    }
+  }
+
+  function clearFinalFile() {
+    document.getElementById('finalMemoFile').value = '';
+    document.getElementById('finalFilePreview').classList.remove('show');
+  }
+
+  function toggleAppeal() {
+    const show = document.getElementById('hasAppeal').checked;
+    document.getElementById('appealFields').className = 'appeal-fields' + (show ? ' show' : '');
+  }
+
+  function setupStepperNavigation() {
+    document.querySelectorAll('.step').forEach(step => {
+      step.addEventListener('click', function() {
+        const targetId = this.dataset.target;
+        if (targetId) {
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+  }
+
+  // ══════════════════════════════════════════
+  // ── تقرير الطباعة ──
+  // ══════════════════════════════════════════
+
+  function prDate(d) {
+    if (!d) return '—';
+    const isoMatch = String(d).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoMatch) return `${isoMatch[3]}/${isoMatch[2]}/${isoMatch[1]}`;
+    const dt = new Date(d);
+    if (isNaN(dt.getTime())) return '—';
+    return `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
+  }
+
+  function buildPrintReportHtml(data) {
+    const inv = data.investigation || {};
+    const employees = data.employees || [];
+    const summons = data.summons || [];
+    const witnesses = data.witnesses || [];
+    const decision = data.decision;
+    const appeal = data.appeal;
+    const finalDecision = data.finalDecision;
+    const finalMemo = data.finalMemo;
+
+    const typeLabel = inv.InvestigationType === 'أ' ? 'نوع أ — جريمة' : 'نوع ب — مخالفة';
+
+    // ── معلومات المذكرة الأساسية ──
+    let html = `
+      <div class="pr-header">
+        <h1>تقرير تحقيق رقم ${inv.MemoNumber || '—'}</h1>
+        <div class="pr-sub">تاريخ الطباعة: ${prDate(new Date())}</div>
+      </div>
+
+      <div class="pr-section">
+        <h2>📄 بيانات الملف</h2>
+        <div class="pr-grid">
+          <div class="pr-row"><span class="pr-label">رقم الملف</span><span class="pr-value">${inv.MemoNumber || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">تاريخ المذكرة</span><span class="pr-value">${prDate(inv.MemoDate)}</span></div>
+          <div class="pr-row"><span class="pr-label">تاريخ استلام الملف</span><span class="pr-value">${prDate(inv.ReceiptDate || inv.MemoDate)}</span></div>
+          <div class="pr-row"><span class="pr-label">النوع</span><span class="pr-value">${typeLabel}</span></div>
+          <div class="pr-row"><span class="pr-label">الحالة</span><span class="pr-value">${inv.Status || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">المحامي المسؤول</span><span class="pr-value">${inv.ManagerName || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">تاريخ الواقعة</span><span class="pr-value">${prDate(inv.IncidentDate)}</span></div>
+          <div class="pr-row"><span class="pr-label">مكان الواقعة</span><span class="pr-value">${inv.IncidentPlace || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">القيمة المادية</span><span class="pr-value">${inv.ClaimValue || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">مرفوع من</span><span class="pr-value">${inv.Plaintiff || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">المشكو في حقه</span><span class="pr-value">${inv.Defendant || '—'}</span></div>
+        </div>
+        ${inv.MemoSummary ? `<div style="margin-top:10px;"><div class="pr-label" style="font-size:12px;margin-bottom:4px;">ملخص المذكرة</div><div class="pr-text-block">${inv.MemoSummary}</div></div>` : ''}
+        ${inv.IncidentDescription ? `<div style="margin-top:10px;"><div class="pr-label" style="font-size:12px;margin-bottom:4px;">وصف الواقعة</div><div class="pr-text-block">${inv.IncidentDescription}</div></div>` : ''}
+      </div>
+
+      <div class="pr-section">
+        <h2>👤 الموظفون محل التحقيق (${employees.length})</h2>
+        ${employees.length ? `
+        <table class="pr-table">
+          <thead><tr><th>الاسم</th><th>الكود</th><th>الدرجة الوظيفية</th><th>منطقة العمل</th></tr></thead>
+          <tbody>
+            ${employees.map(e => `<tr><td>${e.EmployeeName || '—'}</td><td>${e.EmployeeCode || '—'}</td><td>${e.JobGrade || '—'}</td><td>${e.WorkArea || '—'}</td></tr>`).join('')}
+          </tbody>
+        </table>` : `<div class="pr-empty">لا يوجد موظفون مسجلون</div>`}
+      </div>
+
+      <div class="pr-section">
+        <h2>📢 سجل الاستدعاءات (${summons.length})</h2>
+        ${summons.length ? `
+        <table class="pr-table">
+          <thead><tr><th>#</th><th>الموظف</th><th>تاريخ الاستدعاء</th><th>الاستجابة</th><th>تاريخ الحضور</th></tr></thead>
+          <tbody>
+            ${summons.map((s, i) => `<tr><td>${i + 1}</td><td>${s.EmployeeName || '—'}</td><td>${prDate(s.SummonsDate)}</td><td>${s.Response || '—'}</td><td>${s.AttendanceDate ? prDate(s.AttendanceDate) : '—'}</td></tr>`).join('')}
+          </tbody>
+        </table>` : `<div class="pr-empty">لا يوجد استدعاءات</div>`}
+      </div>
+
+      <div class="pr-section">
+        <h2>👥 الشهود (${witnesses.length})</h2>
+        ${witnesses.length ? `
+        <table class="pr-table">
+          <thead><tr><th>الاسم</th><th>الرقم القومي</th><th>الموبايل</th><th>البيان</th></tr></thead>
+          <tbody>
+            ${witnesses.map(w => `<tr><td>${w.Name || '—'}</td><td>${w.NationalId || '—'}</td><td>${w.Mobile || '—'}</td><td>${w.Statement || '—'}</td></tr>`).join('')}
+          </tbody>
+        </table>` : `<div class="pr-empty">لا يوجد شهود مسجلون</div>`}
+      </div>
+
+      <div class="pr-section">
+        <h2>🏛️ عرض علي رئيس مجلس الإدارة</h2>
+        ${decision ? `
+        <div class="pr-grid">
+          <div class="pr-row"><span class="pr-label">تاريخ العرض</span><span class="pr-value">${prDate(decision.CommitteeDate)}</span></div>
+          <div class="pr-row"><span class="pr-label">المسؤول عن العرض</span><span class="pr-value">${decision.CommitteeHead || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">القرار الموصى به</span><span class="pr-value">${decision.DecisionType || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">قيمة الجزاء</span><span class="pr-value">${decision.PenaltyValue || '—'}</span></div>
+        </div>
+        ${decision.Notes ? `<div style="margin-top:8px;"><div class="pr-label" style="font-size:12px;margin-bottom:4px;">الملاحظات والتوجيهات</div><div class="pr-text-block">${decision.Notes}</div></div>` : ''}
+        ` : `<div class="pr-empty">لم يتم العرض بعد</div>`}
+      </div>
+
+      <div class="pr-section">
+        <h2>🔄 تظلم</h2>
+        ${appeal && appeal.HasAppeal ? `
+        <div class="pr-grid">
+          <div class="pr-row"><span class="pr-label">تاريخ التظلم</span><span class="pr-value">${prDate(appeal.AppealDate)}</span></div>
+          <div class="pr-row"><span class="pr-label">نتيجة التظلم</span><span class="pr-value">${appeal.AppealResult || 'قيد النظر'}</span></div>
+        </div>
+        ${appeal.AppealNotes ? `<div style="margin-top:8px;"><div class="pr-text-block">${appeal.AppealNotes}</div></div>` : ''}
+        ` : `<div class="pr-empty">لا يوجد تظلم</div>`}
+      </div>
+
+      <div class="pr-section">
+        <h2>✅ القرار النهائي</h2>
+        ${finalDecision ? `
+        <div class="pr-grid">
+          <div class="pr-row"><span class="pr-label">القرار النهائي</span><span class="pr-value">${finalDecision.FinalDecisionText || '—'}</span></div>
+          <div class="pr-row"><span class="pr-label">تاريخ الإرسال للموارد البشرية</span><span class="pr-value">${prDate(finalDecision.HRSentDate)}</span></div>
+        </div>
+        ${finalDecision.HRNotes ? `<div style="margin-top:8px;"><div class="pr-text-block">${finalDecision.HRNotes}</div></div>` : ''}
+        ` : `<div class="pr-empty">لم يصدر قرار نهائي بعد</div>`}
+      </div>
+
+      <div class="pr-section">
+        <h2>📝 مذكرة الملخص الختامي</h2>
+        ${finalMemo && finalMemo.MemoText ? `<div class="pr-text-block">${finalMemo.MemoText}</div>` : `<div class="pr-empty">لم تُكتب مذكرة ختامية بعد</div>`}
+      </div>
+
+      ${inv.Notes ? `
+      <div class="pr-section">
+        <h2>📌 ملاحظات عامة</h2>
+        <div class="pr-text-block">${inv.Notes}</div>
+      </div>` : ''}
+    `;
+
+    return html;
+  }
+
+  function printReport() {
+    if (!currentInvestigationData) {
+      showToast('⏳ لسه البيانات بتحمل، جربي تاني كمان لحظة', true);
+      return;
+    }
+    const area = document.getElementById('printReportArea');
+    area.innerHTML = buildPrintReportHtml(currentInvestigationData);
+    window.print();
+  }
+
+  // ── التهيئة ──
+  window.addEventListener('DOMContentLoaded', async () => {
+    if (typeof initSidebar === 'function') initSidebar('investigation-details');
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (id) {
+      investigationId = id;
+      await loadEmployees();
+      await loadInvestigation(id);
+      // ── فتح مباشر من زر "تقرير" في لوحة التحقيقات: نطبع أوتوماتيك بعد التحميل ──
+      if (params.get('print') === '1') {
+        setTimeout(printReport, 300);
+      }
+    } else {
+      showToast('❌ لم يتم تحديد رقم التحقيق', true);
+    }
+    setupStepperNavigation();
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('summonsDate').value = today;
+    document.getElementById('attendanceDate').value = today;
+  });
+</script>
+</body>
+</html>

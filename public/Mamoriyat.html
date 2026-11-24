@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقرير المأموريات المتقدم - الشركة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="sidebar.js"></script>
+<script src="activity-logger.js"></script>
+<link rel="stylesheet" href="css/sessions.css">
+<style>
+    /* ===== أدوات التحكم ===== */
+    .no-print { }
+
+    .toolbar-note {
+        font-size: 0.8rem;
+        color: #5b7d9c;
+        font-weight: 600;
+        margin-top: 6px;
+    }
+
+    .control-btn {
+        background: #1a5a8a;
+        color: #fff;
+        border: none;
+        border-radius: 40px;
+        padding: 10px 22px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+    .control-btn:hover { background: #0f4770; transform: translateY(-1px); }
+    .control-btn.secondary { background: #2a7ca8; }
+    .control-btn.secondary:hover { background: #1f6289; }
+    .control-btn.success { background: #059669; }
+    .control-btn.success:hover { background: #047a54; }
+    .control-btn.ghost { background: #eef3f8; color: #1a5a8a; }
+    .control-btn.ghost:hover { background: #e1ecf6; }
+
+    /* ===== لوحة الفلاتر ===== */
+    .filter-panel {
+        background: #ffffff;
+        border: 1px solid #e2ebf5;
+        border-radius: 14px;
+        padding: 22px 24px;
+        margin: 16px 0 22px;
+        box-shadow: 0 4px 14px rgba(0,20,40,0.05);
+    }
+    .filter-row {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        margin-bottom: 14px;
+    }
+    .filter-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 160px;
+    }
+    .filter-field label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #45607a;
+    }
+    .filter-field input[type="date"],
+    .filter-field select,
+    .filter-field input[type="text"] {
+        border: 1px solid #cfe0ee;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-family: 'Cairo', sans-serif;
+        font-size: 0.88rem;
+        color: #16232f;
+        background: #fff;
+    }
+
+    /* حقل تاريخ مخصص بصيغة يوم/شهر/سنة */
+    .date-field-wrap { position: relative; display: inline-block; width: 100%; }
+    .date-field-wrap input[type="date"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    .date-field-wrap input[type="text"].date-display {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        cursor: pointer;
+        pointer-events: auto;
+        direction: ltr;
+        text-align: right;
+    }
+
+    .columns-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 20px;
+        background: #f6faff;
+        border: 1px solid #e2ebf5;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+    }
+    .col-check {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #24425e;
+        cursor: pointer;
+        user-select: none;
+    }
+    .col-check input {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: #1a5a8a;
+    }
+
+    /* ===== ورقة المأمورية ===== */
+    .mamoriya-wrap {
+        display: flex;
+        justify-content: center;
+        margin-top: 22px;
+    }
+
+    .mamoriya-sheet {
+        background: #ffffff;
+        width: 100%;
+        max-width: 1100px;
+        padding: 46px 52px 40px;
+        border-radius: 6px;
+        box-shadow: 0 10px 30px rgba(0,20,40,0.08);
+        border: 1px solid #e2ebf5;
+        font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+        color: #16232f;
+        line-height: 1.9;
+    }
+
+    .letterhead {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+    }
+    .letterhead-en { text-align: left; flex: 1; }
+    .letterhead-ar { text-align: right; flex: 1; }
+    .en-title { font-weight: 700; font-size: 0.92rem; color: #16232f; }
+    .en-sub { font-weight: 700; font-size: 0.92rem; margin-top: 2px; }
+    .en-sub2 { font-weight: 700; font-size: 0.82rem; margin-top: 4px; line-height: 1.5; }
+    .ar-title { font-weight: 800; font-size: 1.05rem; color: #16232f; }
+    .ar-sub { font-weight: 700; font-size: 0.9rem; margin-top: 2px; }
+    .ar-sub2 { font-weight: 700; font-size: 0.85rem; margin-top: 4px; line-height: 1.6; }
+    .letterhead-logo {
+        flex: 0 0 70px;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #bfe3f2, #1a5a8a 70%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        box-shadow: inset 0 0 0 3px rgba(255,255,255,0.5);
+        margin-top: 4px;
+    }
+
+    .letter-divider { border: none; border-top: 2px solid #16232f; margin: 16px 0 26px; }
+
+    .letter-to { font-weight: 800; font-size: 1.02rem; text-align: center; margin-bottom: 18px; outline: none; border-radius: 6px; padding: 2px 4px; }
+    .letter-greeting { font-weight: 800; font-size: 1rem; margin-bottom: 14px; outline: none; border-radius: 6px; padding: 2px 4px; }
+    .letter-body { font-weight: 600; font-size: 0.98rem; margin-bottom: 26px; outline: none; border-radius: 6px; padding: 2px 4px; }
+    .editable-day {
+        display: inline-block;
+        min-width: 90px;
+        font-weight: 800;
+        color: #0b2b4a;
+        border-bottom: 2px dotted #7ea3c1;
+        padding: 0 4px;
+        outline: none;
+    }
+
+    [contenteditable="true"]:hover { background: #f6faff; }
+    [contenteditable="true"]:focus { background: #eef6ff; box-shadow: 0 0 0 2px #cfe3f5; }
+
+    table.mamoriya-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 6px 0 30px;
+        font-size: 0.85rem;
+    }
+    table.mamoriya-table th {
+        background: #eef3f8;
+        border: 1px solid #16232f;
+        padding: 10px 6px;
+        font-weight: 800;
+        text-align: center;
+        color: #16232f;
+    }
+    table.mamoriya-table td {
+        border: 1px solid #16232f;
+        padding: 8px 6px;
+        text-align: center;
+        vertical-align: middle;
+        min-height: 20px;
+    }
+    table.mamoriya-table td[contenteditable="true"] { outline: none; }
+    .row-index { font-weight: 700; background: #fafdff; }
+    .row-group {
+        background: #1a5a8a;
+        color: #fff;
+        font-weight: 800;
+        text-align: right;
+        padding: 9px 14px;
+        border: 1px solid #16232f;
+    }
+
+    .del-cell button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        line-height: 1;
+        padding: 4px 6px;
+        border-radius: 8px;
+        transition: 0.15s;
+    }
+    .del-cell button:hover { background: #fecaca; transform: scale(1.15); }
+
+    .add-row-bar { text-align: center; margin: -18px 0 26px; }
+    .add-row-bar button {
+        background: #eef3f8;
+        border: 1px dashed #9db8cf;
+        color: #1a5a8a;
+        font-weight: 700;
+        font-size: 0.82rem;
+        padding: 7px 18px;
+        border-radius: 30px;
+        cursor: pointer;
+    }
+    .add-row-bar button:hover { background: #e1ecf6; }
+
+    .letter-closing { font-weight: 800; font-size: 0.98rem; margin: 20px 0 40px; outline: none; border-radius: 6px; padding: 2px 4px; }
+    .letter-signature { text-align: center; font-weight: 800; font-size: 0.98rem; }
+    .letter-signature div { outline: none; border-radius: 6px; padding: 2px 4px; }
+    .sig-name { margin-top: 10px; }
+
+    .empty-hint {
+        text-align: center;
+        color: #8aa3ba;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: -14px 0 20px;
+    }
+
+    /* ===== ترقيم الصفحات (Pagination) للجدول الطويل ===== */
+    tr.pg-hidden { display: none !important; }
+
+    .table-pagination-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin: 14px auto;
+        padding: 10px 16px;
+        background: #fff;
+        border: 1px solid #e2eaf2;
+        border-radius: 40px;
+        box-shadow: 0 4px 14px rgba(15,58,92,.07);
+        width: fit-content;
+    }
+    .table-pagination-bar .pg-info {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #5b7d9c;
+        white-space: nowrap;
+    }
+    .table-pagination-bar .pg-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .table-pagination-bar button.pg-btn {
+        background: linear-gradient(135deg, #2a7ca8, #0f3a5c);
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        padding: 7px 16px;
+        font-family: 'Cairo', sans-serif;
+        font-weight: 700;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: transform .15s, box-shadow .15s, opacity .15s;
+        white-space: nowrap;
+    }
+    .table-pagination-bar button.pg-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(15,58,92,.22); }
+    .table-pagination-bar button.pg-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .table-pagination-bar .pg-page-indicator {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #0a2740;
+        background: #eaf3fb;
+        border-radius: 30px;
+        padding: 6px 14px;
+        white-space: nowrap;
+    }
+
+    /* ===== الطباعة ===== */
+    @media print {
+        body * { visibility: hidden; }
+        .mamoriya-sheet, .mamoriya-sheet * { visibility: visible; }
+        .mamoriya-sheet {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            margin: 0 auto;
+            box-shadow: none;
+            border: none;
+            width: 100%;
+            max-width: 100%;
+            padding: 20px 34px;
+        }
+        .no-print { display: none !important; }
+        .del-cell { display: none !important; }
+        table.mamoriya-table th:last-child,
+        table.mamoriya-table td.del-cell { display: none !important; }
+
+        /* ✅ عند الطباعة تظهر كل الصفوف حتى لو كانت مخفية بسبب ترقيم الصفحات */
+        tr.pg-hidden { display: table-row !important; }
+    }
+</style>
+</head>
+<body>
+<div id="sidebar-container"></div>
+<div class="sessions-content" id="mamoriyatContent">
+
+    <!-- HEADER -->
+    <div class="page-header-simple no-print">
+        <h1>📄 تقرير المأموريات المتقدم</h1>
+        <span class="date-badge" id="currentDateDisplay">اليوم</span>
+    </div>
+
+    <!-- لوحة الفلاتر -->
+    <div class="filter-panel no-print">
+        <div class="filter-row">
+            <div class="filter-field">
+                <label>من تاريخ</label>
+                <div class="date-field-wrap">
+                    <input type="text" class="date-display" id="filterDateFrom_display" placeholder="dd/mm/yyyy" readonly>
+                    <input type="date" id="filterDateFrom" lang="en-GB">
+                </div>
+            </div>
+            <div class="filter-field">
+                <label>إلى تاريخ</label>
+                <div class="date-field-wrap">
+                    <input type="text" class="date-display" id="filterDateTo_display" placeholder="dd/mm/yyyy" readonly>
+                    <input type="date" id="filterDateTo" lang="en-GB">
+                </div>
+            </div>
+            <div class="filter-field">
+                <label>تصفية حسب المحامي</label>
+                <select id="filterLawyer"><option value="">جميع المحامين</option></select>
+            </div>
+            <div class="filter-field">
+                <label>&nbsp;</label>
+                <button class="control-btn secondary" onclick="loadMamoriyatData()">🔄 تحديث</button>
+            </div>
+        </div>
+
+        <div class="filter-field" style="margin-bottom:10px;">
+            <label>الأعمدة الظاهرة (اختر ما تريد عرضه)</label>
+        </div>
+        <div class="columns-panel" id="columnsPanel"></div>
+
+        <div id="mamoriyatStatusMessage" class="mamoriyat-status-msg" style="display:none; color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 10px 16px; font-size: 13.5px; font-weight: 700; margin-bottom: 14px;"></div>
+
+        <div class="filter-row">
+            <div class="filter-field">
+                <label>&nbsp;</label>
+                <button class="control-btn" onclick="addManualRow()">➕ إضافة صف يدوي</button>
+            </div>
+            <div class="filter-field">
+                <label>&nbsp;</label>
+                <button class="control-btn success" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+            </div>
+            <div class="filter-field" style="max-width:300px;">
+                <span class="toolbar-note">💡 يتم جلب البيانات من القضايا والجلسات ودرجات التقاضي حسب الفترة المحددة. يمكنك تعديل أي خانة أو حذف أي صف قبل الطباعة.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- المستند القابل للطباعة -->
+    <div class="mamoriya-wrap">
+        <div class="mamoriya-sheet" id="mamoriyaSheet">
+
+            <div class="letterhead">
+                <div class="letterhead-en">
+                    <div class="en-title">Alexandria Sanitary Drainage Company</div>
+                    <div class="en-sub">A.E.S.C.</div>
+                </div>
+                <div class="letterhead-logo">💧</div>
+                <div class="letterhead-ar">
+                    <div class="ar-title">شركة الصرف الصحى بالإسكندرية</div>
+                    <div class="ar-sub2">الإدارة العامة للشئون القانونية</div>
+                </div>
+            </div>
+
+            <hr class="letter-divider">
+
+            <div class="letter-to" contenteditable="true">السيد المهندس / رئيس مجلس الإدارة والعضو المنتدب</div>
+            <div class="letter-greeting" contenteditable="true">تحية طيبة وبعد،</div>
+            <div class="letter-body" contenteditable="true">
+                يرجى التكرم بالموافقة على منح السادة المحامين المدرجة أسماؤهم مأمورية حضور الجلسات عن الفترة من
+                <span id="periodFromSpan" class="editable-day" contenteditable="true">.........</span>
+                إلى
+                <span id="periodToSpan" class="editable-day" contenteditable="true">.........</span>
+                وذلك لحضور جلسات القضايا بدرجاتها المختلفة.
+            </div>
+
+            <table class="mamoriya-table" id="mamoriyaTable">
+                <thead id="mamoriyaThead">
+                    <tr id="mamoriyaTheadRow">
+                        <th style="width:40px;">م</th>
+                    </tr>
+                </thead>
+                <tbody id="mamoriyaTbody"></tbody>
+            </table>
+
+            <div class="add-row-bar no-print">
+                <button onclick="addManualRow()">➕ إضافة صف</button>
+            </div>
+            <div class="empty-hint" id="emptyHint" style="display:none;">لا توجد بيانات في الفترة المحددة — يمكنك إضافة الصفوف يدويًا.</div>
+
+            <div class="table-pagination-bar no-print" id="mamoriyaTable-pagination"></div>
+
+            <div class="letter-closing" contenteditable="true">وتفضلوا بقبول وافر الاحترام والتقدير،</div>
+
+            <div class="letter-signature">
+                <div contenteditable="true">مدير عام الشئون القانونية</div>
+                <div class="sig-name" contenteditable="true">" أ / اشرف عبد العظيم "</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+    let rowCounter = 0;
+    let allData = { cases: [], sessions: [], lawyers: [], litigationLevels: [] };
+    let currentColumns = [];
+
+    // ===== تعريف الأعمدة =====
+    const AVAILABLE_COLUMNS = [
+        { key: 'LawyerName', label: 'اسم المحامي', default: true },
+        { key: 'LawyerCode', label: 'كود المحامي', default: true },
+        { key: 'CaseNumber', label: 'رقم القضية', default: true },
+        { key: 'CaseSubject', label: 'موضوع القضية', default: true },
+        { key: 'CaseDescription', label: 'ملخص القضية', default: true },
+        { key: 'CaseCategory', label: 'النوع', default: true },
+        { key: 'CaseStage', label: 'درجة القضية', default: true },
+        { key: 'CaseStatus', label: 'حالة القضية', default: false },
+        { key: 'CourtName', label: 'المحكمة', default: true },
+        { key: 'CircuitName', label: 'الدائرة', default: true },
+        { key: 'Opponent', label: 'الخصم', default: true },
+        { key: 'SessionDate', label: 'تاريخ الجلسة', default: true },
+        { key: 'SessionTime', label: 'ميعاد الجلسة', default: false },
+        { key: 'SessionAction', label: 'قرار الجلسة', default: true },
+        { key: 'NextSessionDate', label: 'الجلسة القادمة', default: false },
+        { key: 'LitigationType', label: 'نوع درجة التقاضي', default: false },
+        { key: 'LitigationStatus', label: 'حالة درجة التقاضي', default: false },
+        { key: 'Notes', label: 'ملاحظات', default: false }
+    ];
+
+    // ===== دوال مساعدة =====
+    function formatArabicDate(isoDate) {
+        if (!isoDate) return '';
+        try {
+            const m = String(isoDate).match(/^(\d{4})-(\d{2})-(\d{2})/);
+            if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+            const d = new Date(isoDate + 'T00:00:00');
+            if (isNaN(d.getTime())) return isoDate;
+            return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+        } catch (e) { return isoDate; }
+    }
+
+    function formatDate(isoDate) {
+        if (!isoDate) return '';
+        try {
+            const d = new Date(isoDate + 'T00:00:00');
+            return d.toISOString().split('T')[0];
+        } catch (e) { return isoDate; }
+    }
+
+    // ✅ تنسيق عرض التاريخ في التقرير: يوم/شهر/سنة (وليس شهر/يوم/سنة)
+    function formatDisplayDate(isoDate) {
+        if (!isoDate) return '';
+        const s = String(isoDate);
+        const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+        try {
+            const d = new Date(s);
+            if (isNaN(d.getTime())) return s;
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        } catch (e) { return s; }
+    }
+
+    // مفاتيح الأعمدة اللي بتمثل تاريخ عشان تتعرض بصيغة يوم/شهر/سنة
+    const DATE_COLUMN_KEYS = ['SessionDate', 'NextSessionDate'];
+
+    function formatSessionTime(time) {
+        if (!time) return '';
+        if (typeof time === 'string' && time.length >= 5) return time.slice(0, 5);
+        return time;
+    }
+
+    // ✅ قرار الجلسة: نفس منطق صفحة الجلسات — من ActionTaken (بييجي هنا في s.Action)،
+    // ولو فاضي بنرجع لعمود Notes القديم (إلا لو نص وصفي تلقائي بيبدأ بـ "المحكمة:")
+    function isAutoMetaNotes(txt) {
+        return typeof txt === 'string' && txt.trim().startsWith('المحكمة:');
+    }
+    function resolveSessionAction(s) {
+        if (s.Action && s.Action !== '—') return s.Action;
+        if (s.Notes && !isAutoMetaNotes(s.Notes)) return s.Notes;
+        return '—';
+    }
+
+    // ===== بناء لوحة الأعمدة =====
+    function buildColumnsPanel() {
+        const panel = document.getElementById('columnsPanel');
+        panel.innerHTML = AVAILABLE_COLUMNS.map(c => `
+            <label class="col-check">
+                <input type="checkbox" id="col_${c.key}" data-colkey="${c.key}" ${c.default ? 'checked' : ''}>
+                ${c.label}
+            </label>
+        `).join('');
+
+        // تحديث الأعمدة الحالية عند تغيير أي checkbox
+        panel.addEventListener('change', (e) => {
+            if (e.target.matches('input[type="checkbox"]')) {
+                updateTableColumns();
+            }
+        });
+    }
+
+    // ===== تحديث أعمدة الجدول =====
+    function updateTableColumns() {
+        const checkboxes = document.querySelectorAll('#columnsPanel input[type="checkbox"]');
+        const visibleKeys = [];
+        checkboxes.forEach(cb => {
+            if (cb.checked) visibleKeys.push(cb.dataset.colkey);
+        });
+
+        // تحديث رأس الجدول
+        const theadRow = document.getElementById('mamoriyaTheadRow');
+        // الاحتفاظ بعمود "م"
+        let thHtml = `<th style="width:40px;">م</th>`;
+        visibleKeys.forEach(key => {
+            const colDef = AVAILABLE_COLUMNS.find(c => c.key === key);
+            thHtml += `<th data-col="${key}">${colDef ? colDef.label : key}</th>`;
+        });
+        thHtml += `<th class="no-print" style="width:40px;">حذف</th>`;
+        theadRow.innerHTML = thHtml;
+
+        // تحديث خلايا الجسم
+        document.querySelectorAll('#mamoriyaTbody tr').forEach(tr => {
+            const cells = tr.querySelectorAll('td:not(.row-index):not(.del-cell)');
+            const rowData = {};
+            cells.forEach(cell => {
+                const key = cell.dataset.col;
+                if (key) rowData[key] = cell.textContent;
+            });
+            // إعادة بناء الخلايا
+            let tdHtml = `<td class="row-index">${tr.querySelector('.row-index')?.textContent || ''}</td>`;
+            visibleKeys.forEach(key => {
+                const val = rowData[key] || '';
+                tdHtml += `<td data-col="${key}" contenteditable="true">${val}</td>`;
+            });
+            tdHtml += `<td class="no-print del-cell"><button onclick="deleteRow(this)" title="حذف الصف">🗑️</button></td>`;
+            tr.innerHTML = tdHtml;
+        });
+        currentColumns = visibleKeys;
+    }
+
+    // ===== جلب البيانات =====
+    async function fetchAllData() {
+        try {
+            const [casesRes, sessionsRes, lawyersRes, levelsRes] = await Promise.all([
+                fetch(`${API_URL}/cases`).then(r => r.json()),
+                fetch(`${API_URL}/sessions`).then(r => r.json()),
+                fetch(`${API_URL}/lawyers`).then(r => r.json()),
+                fetch(`${API_URL}/litigation-levels`).then(r => r.json())
+            ]);
+
+            allData.cases = casesRes.data || [];
+            allData.sessions = sessionsRes.data || [];
+            allData.lawyers = lawyersRes.data || [];
+            allData.litigationLevels = levelsRes.data || [];
+
+            // تعبئة قائمة المحامين في الفلتر
+            const lawyerSelect = document.getElementById('filterLawyer');
+            const currentVal = lawyerSelect.value;
+            lawyerSelect.innerHTML = '<option value="">جميع المحامين</option>';
+            allData.lawyers.forEach(l => {
+                lawyerSelect.innerHTML += `<option value="${l.FullName}">${l.FullName} (${l.Code || ''})</option>`;
+            });
+            if (currentVal) lawyerSelect.value = currentVal;
+
+            console.log(`✅ تم جلب: ${allData.cases.length} قضية، ${allData.sessions.length} جلسة، ${allData.lawyers.length} محامي، ${allData.litigationLevels.length} درجة تقاضي`);
+        } catch (e) {
+            console.error('❌ فشل جلب البيانات:', e);
+        }
+    }
+
+    // ===== توليد بيانات المأمورية =====
+    function generateMamoriyaData() {
+        const from = document.getElementById('filterDateFrom').value;
+        const to = document.getElementById('filterDateTo').value;
+        const filterLawyer = document.getElementById('filterLawyer').value;
+
+        // تجميع البيانات
+        const result = [];
+
+        // 1. من الجلسات
+        allData.sessions.forEach(s => {
+            const sessionDate = s.SessionDate || '';
+            if (from && sessionDate < from) return;
+            if (to && sessionDate > to) return;
+
+            const lawyerName = s.AttendingName || s.LawyerName || '';
+            if (filterLawyer && lawyerName !== filterLawyer) return;
+
+            // البحث عن القضية المرتبطة
+            const caseData = allData.cases.find(c => c.CaseNumber === s.CaseNumber || c.Id === s.CaseId);
+            // البحث عن درجة التقاضي المرتبطة
+            const levelData = allData.litigationLevels.find(l => l.Id === s.LitigationLevelId || l.TrackingCode === s.CaseNumber);
+
+            result.push({
+                LawyerName: lawyerName,
+                LawyerCode: allData.lawyers.find(l => l.FullName === lawyerName)?.Code || '',
+                CaseNumber: s.CaseNumber || s.CaseId || '—',
+                CaseSubject: s.Subject || caseData?.Subject || '—',
+                CaseDescription: s.Description || caseData?.Description || '',
+                CaseCategory: s.Category || caseData?.Category || 'مدني',
+                CaseStage: s.Stage || caseData?.CurrentStage || 'ابتدائي',
+                CaseStatus: s.Status || caseData?.Status || 'متداولة',
+                CourtName: s.CourtName || caseData?.CourtName || '',
+                CircuitName: s.CircuitName || caseData?.CircuitName || '',
+                Opponent: s.Opponent || caseData?.Opponent || '—',
+                SessionDate: s.SessionDate || '',
+                SessionTime: formatSessionTime(s.SessionTime),
+                SessionAction: resolveSessionAction(s),
+                NextSessionDate: s.NextDate || '',
+                LitigationType: levelData?.StageType || '',
+                LitigationStatus: levelData?.Status || '',
+                Notes: s.Notes || s.SessionNotes || ''
+            });
+        });
+
+        // 2. من درجات التقاضي (اللي مالهاش جلسات في الفترة)
+        allData.litigationLevels.forEach(l => {
+            const launchDate = l.LaunchDate || '';
+            if (from && launchDate < from) return;
+            if (to && launchDate > to) return;
+
+            const lawyerName = l.LawyerName || l.LawyerFullName || '';
+            if (filterLawyer && lawyerName !== filterLawyer) return;
+
+            // هل له جلسة مسجلة؟ نتحقق
+            const hasSession = result.some(r => 
+                r.LawyerName === lawyerName && 
+                r.CaseNumber === l.CaseNumber &&
+                r.SessionDate === launchDate
+            );
+            if (hasSession) return;
+
+            result.push({
+                LawyerName: lawyerName,
+                LawyerCode: allData.lawyers.find(lw => lw.FullName === lawyerName)?.Code || '',
+                CaseNumber: l.CaseNumber || l.TrackingCode || '—',
+                CaseSubject: l.CaseName || l.CaseNumber || '—',
+                CaseDescription: l.Description || '',
+                CaseCategory: l.CaseCategory || 'مدني',
+                CaseStage: l.StageType === 'appeal' ? 'استئناف' : l.StageType === 'cassation' ? 'نقض' : 'ابتدائي',
+                CaseStatus: l.Status === 'closed' ? 'مغلقة' : 'مفتوحة',
+                CourtName: l.CourtName || '',
+                CircuitName: '',
+                Opponent: l.CaseOpponent || '—',
+                SessionDate: l.LaunchDate || '',
+                SessionTime: '',
+                SessionAction: '—',
+                NextSessionDate: '',
+                LitigationType: l.StageType || '',
+                LitigationStatus: l.Status || '',
+                Notes: l.Notes || ''
+            });
+        });
+
+        // 3. من القضايا (اللي مالهاش جلسات ولا درجات تقاضي في الفترة)
+        allData.cases.forEach(c => {
+            const filingDate = c.FilingDate || '';
+            if (from && filingDate < from) return;
+            if (to && filingDate > to) return;
+
+            const lawyerName = c.LawyerName || '';
+            if (filterLawyer && lawyerName !== filterLawyer) return;
+
+            const hasEntry = result.some(r => 
+                r.LawyerName === lawyerName && 
+                r.CaseNumber === c.CaseNumber
+            );
+            if (hasEntry) return;
+
+            result.push({
+                LawyerName: lawyerName,
+                LawyerCode: c.LawyerCode || '',
+                CaseNumber: c.CaseNumber || '—',
+                CaseSubject: c.Subject || '—',
+                CaseDescription: c.Description || '',
+                CaseCategory: c.Category || 'مدني',
+                CaseStage: c.CurrentStage || 'ابتدائي',
+                CaseStatus: c.Status || 'مفتوحة',
+                CourtName: c.CourtName || '',
+                CircuitName: c.CircuitName || '',
+                Opponent: c.Opponent || '—',
+                SessionDate: '',
+                SessionTime: '',
+                SessionAction: '—',
+                NextSessionDate: '',
+                LitigationType: '',
+                LitigationStatus: '',
+                Notes: c.Notes || ''
+            });
+        });
+
+        // ترتيب النتائج حسب المحامي ثم التاريخ
+        result.sort((a, b) => {
+            if (a.LawyerName !== b.LawyerName) return a.LawyerName.localeCompare(b.LawyerName, 'ar');
+            if (a.SessionDate && b.SessionDate) return a.SessionDate.localeCompare(b.SessionDate);
+            return 0;
+        });
+
+        return result;
+    }
+
+    // ============================================================
+    // ✅ ترقيم الصفحات للجدول الطويل (كل 40 سطر تلقائيًا + السابق/التالي)
+    // بيحترم صفوف عناوين المجموعات (اسم المحامي) وبيظهر كل الصفوف تلقائيًا عند الطباعة
+    // ============================================================
+    const TABLE_PAGE_SIZE = 20;
+    const tablePaginationState = {}; // { tableId: { page: N } }
+
+    function getPaginationDataRows(tableId) {
+        // صف بيانات حقيقي = فيه خانة .row-index (عناوين المجموعات مالهاش row-index)
+        return Array.from(document.querySelectorAll(`#${tableId} tbody tr`)).filter(tr => tr.querySelector('.row-index'));
+    }
+
+    function isFilterVisibleRow(tr) {
+        return tr.style.display !== 'none';
+    }
+
+    function updatePaginationGroupVisibility(tableId) {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        if (!tbody) return;
+        let currentGroup = null;
+        let hasVisible = false;
+        Array.from(tbody.children).forEach(tr => {
+            if (tr.querySelector('.row-group')) {
+                if (currentGroup) currentGroup.style.display = hasVisible ? '' : 'none';
+                currentGroup = tr;
+                hasVisible = false;
+            } else if (tr.querySelector('.row-index')) {
+                if (isFilterVisibleRow(tr) && !tr.classList.contains('pg-hidden')) hasVisible = true;
+            }
+        });
+        if (currentGroup) currentGroup.style.display = hasVisible ? '' : 'none';
+    }
+
+    function renderPaginationBar(tableId, page, totalPages, total) {
+        const bar = document.getElementById(`${tableId}-pagination`);
+        if (!bar) return;
+
+        if (total <= TABLE_PAGE_SIZE) {
+            bar.innerHTML = '';
+            bar.style.display = 'none';
+            return;
+        }
+        bar.style.display = 'flex';
+
+        const start = total === 0 ? 0 : (page - 1) * TABLE_PAGE_SIZE + 1;
+        const end = Math.min(page * TABLE_PAGE_SIZE, total);
+
+        bar.innerHTML = `
+            <span class="pg-info">عرض ${start}–${end} من إجمالي ${total} سطر</span>
+            <div class="pg-nav">
+                <button type="button" class="pg-btn" onclick="changeTablePage('${tableId}', -1)" ${page <= 1 ? 'disabled' : ''}>السابق</button>
+                <span class="pg-page-indicator">صفحة ${page} من ${totalPages}</span>
+                <button type="button" class="pg-btn" onclick="changeTablePage('${tableId}', 1)" ${page >= totalPages ? 'disabled' : ''}>التالي</button>
+            </div>
+        `;
+    }
+
+    function applyTablePagination(tableId) {
+        const state = tablePaginationState[tableId] || (tablePaginationState[tableId] = { page: 1 });
+        const dataRows = getPaginationDataRows(tableId);
+        const filteredRows = dataRows.filter(isFilterVisibleRow);
+        const total = filteredRows.length;
+        const totalPages = Math.max(1, Math.ceil(total / TABLE_PAGE_SIZE));
+
+        if (state.page > totalPages) state.page = totalPages;
+        if (state.page < 1) state.page = 1;
+
+        const start = (state.page - 1) * TABLE_PAGE_SIZE;
+        const end = start + TABLE_PAGE_SIZE;
+
+        dataRows.forEach(tr => tr.classList.remove('pg-hidden'));
+        filteredRows.forEach((tr, i) => {
+            if (i < start || i >= end) {
+                tr.classList.add('pg-hidden');
+            } else {
+                const cell = tr.querySelector('.row-index');
+                if (cell) cell.textContent = i + 1;
+            }
+        });
+
+        updatePaginationGroupVisibility(tableId);
+        renderPaginationBar(tableId, state.page, totalPages, total);
+    }
+
+    function resetTablePagination(tableId) {
+        tablePaginationState[tableId] = { page: 1 };
+    }
+
+    function changeTablePage(tableId, delta) {
+        const state = tablePaginationState[tableId] || (tablePaginationState[tableId] = { page: 1 });
+        state.page += delta;
+        applyTablePagination(tableId);
+        const sheet = document.getElementById(tableId.replace(/Table$/, 'Sheet'));
+        if (sheet) sheet.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ===== عرض البيانات في الجدول =====
+    function renderMamoriyat(data) {
+        const tbody = document.getElementById('mamoriyaTbody');
+        tbody.innerHTML = '';
+        rowCounter = 0;
+
+        const visibleKeys = [];
+        document.querySelectorAll('#columnsPanel input[type="checkbox"]:checked').forEach(cb => {
+            visibleKeys.push(cb.dataset.colkey);
+        });
+
+        if (!data || data.length === 0) {
+            document.getElementById('emptyHint').style.display = 'block';
+            resetTablePagination('mamoriyaTable');
+            applyTablePagination('mamoriyaTable');
+            return;
+        }
+        document.getElementById('emptyHint').style.display = 'none';
+
+        // تجميع حسب المحامي
+        const grouped = new Map();
+        data.forEach(item => {
+            const name = item.LawyerName || 'غير محدد';
+            if (!grouped.has(name)) grouped.set(name, []);
+            grouped.get(name).push(item);
+        });
+
+        let groupCounter = 0;
+        grouped.forEach((items, lawyerName) => {
+            // صف رأس المجموعة
+            const groupTr = document.createElement('tr');
+            groupTr.className = 'no-print';
+            const colSpan = visibleKeys.length + 2;
+            groupTr.innerHTML = `<td colspan="${colSpan}" class="row-group">👤 المحامي: ${lawyerName} (${items.length})</td>`;
+            tbody.appendChild(groupTr);
+
+            items.forEach(item => {
+                rowCounter++;
+                const tr = document.createElement('tr');
+                let tdHtml = `<td class="row-index">${rowCounter}</td>`;
+                visibleKeys.forEach(key => {
+                    const raw = item[key] || '';
+                    const val = DATE_COLUMN_KEYS.includes(key) ? formatDisplayDate(raw) : raw;
+                    tdHtml += `<td data-col="${key}" contenteditable="true">${val}</td>`;
+                });
+                tdHtml += `<td class="no-print del-cell"><button onclick="deleteRow(this)" title="حذف الصف">🗑️</button></td>`;
+                tr.innerHTML = tdHtml;
+                tbody.appendChild(tr);
+            });
+        });
+
+        // ✅ نبدأ دايمًا من أول صفحة (40 سطر) عند توليد بيان مأموريات جديد
+        resetTablePagination('mamoriyaTable');
+        applyTablePagination('mamoriyaTable');
+    }
+
+    // ===== تحميل البيانات =====
+    async function loadMamoriyatData() {
+        const from = document.getElementById('filterDateFrom').value;
+        const to = document.getElementById('filterDateTo').value;
+        const filterLawyer = document.getElementById('filterLawyer').value;
+
+        // تحديث التواريخ في النص
+        document.getElementById('periodFromSpan').textContent = from ? formatDisplayDate(from) : '........';
+        document.getElementById('periodToSpan').textContent = to ? formatDisplayDate(to) : '........';
+        document.getElementById('currentDateDisplay').textContent = 
+            from || to ? `من ${from ? formatDisplayDate(from) : '....'} إلى ${to ? formatDisplayDate(to) : '....'}` : 'جميع الفترات';
+
+        // جلب البيانات إذا لم تكن موجودة
+        if (allData.cases.length === 0) {
+            await fetchAllData();
+        }
+
+        const data = generateMamoriyaData();
+        renderMamoriyat(data);
+
+        // ✅ عرض الرسالة الخضراء لتأكيد جلب البيانات
+        let periodText = 'لجميع الفترات';
+        if (from && to) periodText = `للفترة من ${formatDisplayDate(from)} إلى ${formatDisplayDate(to)}`;
+        else if (from) periodText = `للفترة من ${formatDisplayDate(from)}`;
+        else if (to) periodText = `للفترة حتى ${formatDisplayDate(to)}`;
+
+        let lawyerText = filterLawyer ? ` | للمحامي: ${filterLawyer}` : '';
+
+        const statusMsgEl = document.getElementById('mamoriyatStatusMessage');
+        if (statusMsgEl) {
+            statusMsgEl.innerHTML = `✅ تم جلب بيان المأموريات (${data.length} مأمورية) ${periodText}${lawyerText}`;
+            statusMsgEl.style.display = 'block';
+        }
+    }
+
+    // ===== إدارة الصفوف =====
+    function addManualRow() {
+        const tbody = document.getElementById('mamoriyaTbody');
+        const visibleKeys = [];
+        document.querySelectorAll('#columnsPanel input[type="checkbox"]:checked').forEach(cb => {
+            visibleKeys.push(cb.dataset.colkey);
+        });
+
+        rowCounter++;
+        const tr = document.createElement('tr');
+        let tdHtml = `<td class="row-index">${rowCounter}</td>`;
+        visibleKeys.forEach(key => {
+            tdHtml += `<td data-col="${key}" contenteditable="true"></td>`;
+        });
+        tdHtml += `<td class="no-print del-cell"><button onclick="deleteRow(this)" title="حذف الصف">🗑️</button></td>`;
+        tr.innerHTML = tdHtml;
+        tbody.appendChild(tr);
+        document.getElementById('emptyHint').style.display = 'none';
+
+        // ✅ نروح لآخر صفحة عشان تبان الصف الجديد اللي اتضاف على طول
+        const state = tablePaginationState['mamoriyaTable'] || (tablePaginationState['mamoriyaTable'] = { page: 1 });
+        state.page = Number.MAX_SAFE_INTEGER;
+        applyTablePagination('mamoriyaTable');
+    }
+
+    function deleteRow(btn) {
+        const tr = btn.closest('tr');
+        if (tr) tr.remove();
+        renumberRows();
+        const remaining = document.querySelectorAll('#mamoriyaTbody tr:not(.row-group)').length;
+        document.getElementById('emptyHint').style.display = remaining === 0 ? 'block' : 'none';
+        applyTablePagination('mamoriyaTable');
+    }
+
+    function renumberRows() {
+        rowCounter = 0;
+        document.querySelectorAll('#mamoriyaTbody tr:not(.row-group)').forEach(tr => {
+            rowCounter++;
+            const idxCell = tr.querySelector('.row-index');
+            if (idxCell) idxCell.textContent = rowCounter;
+        });
+    }
+
+    // ===== إعداد الفلاتر والأعمدة =====
+    function initFilters() {
+        // تواريخ افتراضية: أول الشهر حتى اليوم
+        const today = new Date();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        const fromDate = firstDay.toISOString().split('T')[0];
+        const toDate = today.toISOString().split('T')[0];
+
+        document.getElementById('filterDateFrom').value = fromDate;
+        document.getElementById('filterDateTo').value = toDate;
+
+        buildColumnsPanel();
+    }
+
+    // ===== حدث تغيير الأعمدة والإعداد =====
+    document.addEventListener('DOMContentLoaded', function () {
+        initFilters();
+        wireCustomDateField('filterDateFrom');
+        wireCustomDateField('filterDateTo');
+
+        fetchAllData().then(() => {
+            loadMamoriyatData();
+        });
+
+        // عند تغيير أي فلتر، نحدث البيانات تلقائياً
+        document.getElementById('filterDateFrom').addEventListener('change', loadMamoriyatData);
+        document.getElementById('filterDateFrom').addEventListener('input', loadMamoriyatData);
+        document.getElementById('filterDateTo').addEventListener('change', loadMamoriyatData);
+        document.getElementById('filterDateTo').addEventListener('input', loadMamoriyatData);
+        document.getElementById('filterLawyer').addEventListener('change', loadMamoriyatData);
+
+        if (typeof initSidebar === 'function') {
+            initSidebar('mamoriyat');
+        }
+    });
+
+    function formatDisplayDate(v) {
+        if (!v) return '';
+        const s = String(v).trim();
+        const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        }
+        return s;
+    }
+    function syncDateDisplay(nativeId) {
+        const native = document.getElementById(nativeId);
+        const display = document.getElementById(nativeId + '_display');
+        if (!native || !display) return;
+        display.value = native.value ? formatDisplayDate(native.value) : '';
+    }
+    function wireCustomDateField(nativeId) {
+        const native = document.getElementById(nativeId);
+        const display = document.getElementById(nativeId + '_display');
+        if (!native || !display) return;
+        const openPicker = () => {
+            if (typeof native.showPicker === 'function') {
+                try { native.showPicker(); } catch (e) { native.focus(); }
+            } else {
+                native.focus();
+            }
+        };
+        display.addEventListener('click', openPicker);
+        native.addEventListener('input', () => syncDateDisplay(nativeId));
+        native.addEventListener('change', () => syncDateDisplay(nativeId));
+        syncDateDisplay(nativeId);
+    }
+</script>
+</body>
+</html>

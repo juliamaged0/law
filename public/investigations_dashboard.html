@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التحقيقات — لوحة التحكم</title>
+  <script src="sidebar.js"></script>
+  <style>
+    /* ── نفس الأنماط السابقة ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 1000px) { .stats-row { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 600px)  { .stats-row { grid-template-columns: 1fr; } }
+
+    .kpi {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .kpi-icon {
+      width: 50px; height: 50px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .kpi-num  { font-size: 30px; font-weight: 900; color: var(--navy-800); line-height: 1; }
+    .kpi-label{ font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
+
+    .filter-bar {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      display: flex; gap: 12px; flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-xs);
+    }
+    .filter-bar input, .filter-bar select {
+      height: 38px; border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 0 12px;
+      font-size: 13px; font-family: 'Cairo', sans-serif;
+      background: var(--bg-page); color: var(--text-primary);
+      outline: none;
+    }
+    .filter-bar input { flex: 1; min-width: 180px; }
+
+    .table-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .table-card-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .table-card-header h3 { font-size: 14px; font-weight: 800; color: var(--navy-700); }
+
+    .inv-table { width: 100%; border-collapse: collapse; text-align: right; }
+    .inv-table th {
+      background: var(--surface-2); padding: 11px 14px;
+      font-size: 11.5px; font-weight: 700; color: var(--text-secondary);
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    .inv-table td {
+      padding: 12px 14px; font-size: 13px;
+      border-bottom: 1px solid #F1F5F9;
+      vertical-align: middle; color: var(--text-primary);
+    }
+    .inv-table tr:last-child td { border-bottom: none; }
+    .inv-table tr:hover td { background: #FAFBFD; }
+
+    /* ── صفوف الموظفين الإضافيين (sub-table) ── */
+    .sub-emp-row td {
+      background: #FAFBFC;
+      border-bottom: 1px dashed #E2E8F0;
+      font-size: 12px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+    .sub-emp-row:hover td { background: #F1F5F9; }
+    .sub-emp-name { color: var(--text-secondary); padding-right: 8px; }
+    .emp-count-badge {
+      display: inline-block; margin-right: 6px;
+      font-size: 10.5px; font-weight: 800;
+      background: var(--navy-700); color: white;
+      border-radius: 20px; padding: 1px 7px;
+      vertical-align: middle;
+    }
+
+    .type-badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 20px; font-size: 11.5px; font-weight: 700;
+    }
+    .type-a { background: #FEE2E2; color: #991B1B; }
+    .type-b { background: #EEF2FF; color: #3730A3; }
+
+    .status-badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 20px; font-size: 11px; font-weight: 700;
+    }
+    .s-open    { background: #DCFCE7; color: #15803D; }
+    .s-decided { background: #DBEAFE; color: #1D4ED8; }
+    .s-appeal  { background: #FEF3C7; color: #92400E; }
+    .s-closed  { background: #F1F5F9; color: #475569; }
+
+
+    /* ── الترقيم (Pagination) ── */
+    .table-section { margin-bottom: 22px; }
+    .pager {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .pager-btn {
+      width: 38px; height: 34px; border-radius: 8px;
+      border: 1px solid var(--border); background: white;
+      color: var(--navy-700); font-size: 18px; font-weight: 800;
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Cairo', sans-serif; line-height: 1;
+    }
+    .pager-btn:hover:not(:disabled) { background: var(--navy-700); color: white; }
+    .pager-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .pager-info { font-size: 12.5px; font-weight: 700; color: var(--text-secondary); min-width: 150px; text-align: center; }
+
+    .empty-state {
+      text-align: center; padding: 52px 20px; color: var(--text-muted);
+    }
+    .empty-state .ei { font-size: 44px; margin-bottom: 12px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 7px; padding: 0 18px; height: 40px;
+      border-radius: var(--radius-sm); font-size: 13px; font-weight: 700;
+      font-family: 'Cairo', sans-serif; cursor: pointer; text-decoration: none;
+      transition: var(--transition); border: none; line-height: 1;
+    }
+    .btn-primary {
+      background: var(--navy-700); color: white;
+    }
+    .btn-primary:hover { background: var(--navy-600); }
+    .btn-ghost {
+      background: white; color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--surface-2); color: var(--navy-700); }
+    .btn-sm { height: 32px; padding: 0 12px; font-size: 12px; border-radius: 6px; }
+
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #059669; color: white;
+      padding: 12px 24px; border-radius: 12px;
+      font-size: 13px; font-weight: 700; z-index: 9999;
+      transition: transform 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #DC2626; }
+
+    .print-report-area { display: none; }
+    @media print {
+      body * { visibility: hidden !important; }
+      #printStagnantArea, #printStagnantArea * { visibility: visible !important; }
+      #printStagnantArea {
+        display: block !important;
+        position: absolute; top: 0; right: 0; left: 0;
+        width: 100%; background: white;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page-body">
+
+  <!-- KPIs -->
+  <div class="stats-row" id="kpiRow">
+    <div class="kpi">
+      <div class="kpi-icon" style="background:#EEF2FF;color:#3730A3;">🔍</div>
+      <div><div class="kpi-num" id="kTotal">0</div><div class="kpi-label">إجمالي التحقيقات</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon" style="background:#DCFCE7;color:#15803D;">⏳</div>
+      <div><div class="kpi-num" id="kOpen">0</div><div class="kpi-label">قيد التحقيق</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon" style="background:#FEE2E2;color:#991B1B;">⚖️</div>
+      <div><div class="kpi-num" id="kTypeA">0</div><div class="kpi-label">نوع أ (جرائم)</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon" style="background:#EEF2FF;color:#1D4ED8;">📋</div>
+      <div><div class="kpi-num" id="kTypeB">0</div><div class="kpi-label">نوع ب (مخالفات)</div></div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="🔍 بحث في: رقم الملف، كود الموظف، اسم الموظف، المحامي..." oninput="filterTable()">
+    <select id="filterType" onchange="filterTable()">
+      <option value="">كل الأنواع</option>
+      <option value="أ">نوع أ — جرائم</option>
+      <option value="ب">نوع ب — مخالفات</option>
+    </select>
+    <select id="filterStatus" onchange="filterTable()">
+      <option value="">كل الحالات</option>
+      <option value="جارية">قيد التحقيق</option>
+      <option value="صدر قرار">مجلس إدارة</option>
+      <option value="طعن">طعن</option>
+      <option value="مغلقة">منتهية</option>
+    </select>
+    <button type="button" onclick="printStagnantReport()" class="btn btn-ghost" style="white-space:nowrap;color:var(--navy-700);border-color:var(--border);" title="طباعة تقرير بالملفات التي لم يتخذ فيها أي إجراء">🖨️ تقرير الملفات بدون إجراءات</button>
+    <a href="new_investigation.html" class="btn btn-primary" style="white-space:nowrap;">＋ تحقيق جديد</a>
+  </div>
+
+  <!-- جدول نوع A -->
+  <div class="table-section" id="sectionA">
+    <div class="table-card">
+      <div class="table-card-header">
+        <h3>⚖️ سجل التحقيقات — نوع أ (جرائم)</h3>
+        <span id="tableCountA" style="font-size:12px;color:var(--text-muted);font-weight:600;"></span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>رقم التحقيق</th>
+              <th>اسم الموظف</th>
+              <th>المحامي</th>
+              <th>الكود</th>
+              <th>النوع</th>
+              <th>الواقعة</th>
+              <th>تاريخ الواقعة</th>
+              <th>الحالة</th>
+              <th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="invTableBodyA"></tbody>
+        </table>
+      </div>
+      <div class="pager" id="pagerA"></div>
+    </div>
+  </div>
+
+  <!-- جدول نوع B -->
+  <div class="table-section" id="sectionB">
+    <div class="table-card">
+      <div class="table-card-header">
+        <h3>📋 سجل التحقيقات — نوع ب (مخالفات)</h3>
+        <span id="tableCountB" style="font-size:12px;color:var(--text-muted);font-weight:600;"></span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>رقم التحقيق</th>
+              <th>اسم الموظف</th>
+              <th>المحامي</th>
+              <th>الكود</th>
+              <th>النوع</th>
+              <th>الواقعة</th>
+              <th>تاريخ الواقعة</th>
+              <th>الحالة</th>
+              <th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="invTableBodyB"></tbody>
+        </table>
+      </div>
+      <div class="pager" id="pagerB"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="printStagnantArea" class="print-report-area"></div>
+
+<script>
+  let allData = [];
+  const PAGE_SIZE = 10;
+  const pageState = { A: 1, B: 1 };
+  const listState = { A: [], B: [] };
+
+  // ترتيب بحسب رقم التحقيق تصاعدياً (1 ثم 2 ثم 3 ... وليس 1 ثم 10 ثم 2)
+  const AR_DIGITS = { '٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9' };
+  const memoCollator = new Intl.Collator('ar', { numeric: true });
+  function memoNum(v) {
+    const s = String(v == null ? '' : v).replace(/[٠-٩]/g, c => AR_DIGITS[c]);
+    const m = s.match(/\d+/);
+    return m ? parseInt(m[0], 10) : Infinity;
+  }
+  function compareMemo(a, b) {
+    const na = memoNum(a.MemoNumber), nb = memoNum(b.MemoNumber);
+    if (na !== nb) return na < nb ? -1 : 1;
+    return memoCollator.compare(String(a.MemoNumber || ''), String(b.MemoNumber || ''));
+  }
+
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  async function loadInvestigations() {
+    try {
+      const response = await fetch('/api/investigations');
+      const result = await response.json();
+      if (result.success) {
+        allData = result.data;
+        filterTable(true); // يطبّق الفلاتر الحالية ويحافظ على الصفحة الحالية
+      } else {
+        showToast('❌ فشل في تحميل التحقيقات: ' + result.message, true);
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم', true);
+    }
+  }
+
+  function renderKPIs(data) {
+    document.getElementById('kTotal').textContent = data.length;
+    document.getElementById('kOpen').textContent  = data.filter(d => d.Status === 'جارية').length;
+    document.getElementById('kTypeA').textContent = data.filter(d => d.InvestigationType === 'أ').length;
+    document.getElementById('kTypeB').textContent = data.filter(d => d.InvestigationType === 'ب').length;
+  }
+
+  // يقسّم البيانات لجدولين (أ / ب) ويرتبهم برقم التحقيق
+  function renderTables(data, keepPage = false) {
+    const sorted = data.slice().sort(compareMemo);
+    listState.A = sorted.filter(d => d.InvestigationType === 'أ');
+    listState.B = sorted.filter(d => d.InvestigationType !== 'أ');
+    if (!keepPage) { pageState.A = 1; pageState.B = 1; }
+    renderPage('A');
+    renderPage('B');
+  }
+
+  function renderPage(k) {
+    const list = listState[k];
+    const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+    if (pageState[k] > totalPages) pageState[k] = totalPages;
+    if (pageState[k] < 1) pageState[k] = 1;
+
+    const startIdx = (pageState[k] - 1) * PAGE_SIZE;
+    const pageItems = list.slice(startIdx, startIdx + PAGE_SIZE);
+
+    renderTable(pageItems, 'invTableBody' + k);
+    document.getElementById('tableCount' + k).textContent = list.length + ' تحقيق';
+
+    // الأسهم: في الواجهة العربية (RTL) السهم الأيمن = السابق، الأيسر = التالي
+    const pager = document.getElementById('pager' + k);
+    if (list.length <= PAGE_SIZE) {
+      pager.style.display = 'none';
+    } else {
+      pager.style.display = 'flex';
+      const from = startIdx + 1, to = startIdx + pageItems.length;
+      pager.innerHTML = `
+        <button type="button" class="pager-btn" onclick="changePage('${k}', -1)" ${pageState[k] <= 1 ? 'disabled' : ''} title="الصفحة السابقة">‹</button>
+        <span class="pager-info">صفحة ${pageState[k]} من ${totalPages} &nbsp;(${from}–${to} من ${list.length})</span>
+        <button type="button" class="pager-btn" onclick="changePage('${k}', 1)" ${pageState[k] >= totalPages ? 'disabled' : ''} title="الصفحة التالية">›</button>`;
+    }
+  }
+
+  function changePage(k, delta) {
+    pageState[k] += delta;
+    renderPage(k);
+    document.getElementById('section' + k).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  window.changePage = changePage;
+
+  function renderTable(data, tbodyId) {
+    const tbody = document.getElementById(tbodyId);
+
+    if (data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="ei">🗂️</div><p>لا توجد تحقيقات</p></div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(d => {
+      const typeBadge = d.InvestigationType === 'أ'
+        ? `<span class="type-badge type-a">نوع أ — جريمة</span>`
+        : `<span class="type-badge type-b">نوع ب — مخالفة</span>`;
+
+      const statusMap = { 'جارية':'s-open', 'صدر قرار':'s-decided', 'طعن':'s-appeal', 'مغلقة':'s-closed' };
+      const statusLabelMap = { 'جارية':'قيد التحقيق', 'صدر قرار':'مجلس إدارة', 'طعن':'طعن', 'مغلقة':'منتهية' };
+      const statusLabel = statusLabelMap[d.Status] || d.Status || 'قيد التحقيق';
+      const statusBadge = `<span class="status-badge ${statusMap[d.Status]||'s-open'}">${statusLabel}</span>`;
+
+      const employeeNames = d.EmployeeNames ? d.EmployeeNames.split(', ') : [];
+      const employeeCodes = d.EmployeeCodes ? d.EmployeeCodes.split(', ') : [];
+      const rowCount = Math.max(employeeNames.length, 1); // عدد الصفوف اللي هياخدها التحقيق ده (الأساسي + الموظفين الإضافيين)
+
+      const incidentDate = d.IncidentDate ? (() => { const m = String(d.IncidentDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}/${m[2]}/${m[1]}` : d.IncidentDate; })() : '—';
+
+      const countBadge = employeeNames.length > 1
+        ? `<span class="emp-count-badge">${employeeNames.length} موظفين</span>`
+        : '';
+
+      // التحقق من وضع القراءة فقط للمستخدم
+      const readonly = typeof isReadonlyUser === 'function' ? isReadonlyUser() : false;
+      const actionsHtml = `
+        <div style="display:flex;gap:6px;align-items:center;">
+          <a href="investigation_details.html?id=${d.Id}" class="btn btn-ghost btn-sm" style="padding: 0 8px; font-weight:700;">متابعة</a>
+          ${!readonly ? `
+            <a href="new_investigation.html?id=${d.Id}" class="btn btn-ghost btn-sm" style="padding: 0 8px; color: var(--amber-600); border-color: var(--amber-50);" title="تعديل">✏️ تعديل</a>
+            <button onclick="deleteInvestigation(${d.Id}, '${d.MemoNumber}')" class="btn btn-ghost btn-sm" style="padding: 0 8px; color: var(--red-600); border-color: var(--red-50); background:transparent;" title="حذف">🗑️ حذف</button>
+          ` : ''}
+          <a href="investigation_details.html?id=${d.Id}&print=1" target="_blank" class="btn btn-ghost btn-sm" style="padding: 0 8px;" title="طباعة تقرير">🖨️ تقرير</a>
+        </div>`;
+
+      // ── الصف الأساسي: رقم التحقيق / النوع / الواقعة / التاريخ / الحالة / الإجراءات بتاخد rowspan
+      //    عشان تبان زي عمود واحد ممتد فوق كل صفوف موظفي التحقيق ده (sub-table) ──
+      let html = `
+        <tr>
+          <td rowspan="${rowCount}" style="font-weight:800;color:var(--navy-700);vertical-align:middle;">${d.MemoNumber || '—'}</td>
+          <td style="font-weight:700;">${employeeNames[0] || '—'}</td>
+          <td rowspan="${rowCount}" style="vertical-align:middle;font-weight:700;color:var(--navy-700);">${d.ManagerName || 'غير مسند'}</td>
+          <td style="font-family:monospace;font-weight:700;color:var(--navy-600);">${employeeCodes[0] || '—'}</td>
+          <td rowspan="${rowCount}" style="vertical-align:middle;">${typeBadge}</td>
+          <td rowspan="${rowCount}" style="vertical-align:middle;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${d.MemoSummary || ''}">${d.MemoSummary || '—'}</td>
+          <td rowspan="${rowCount}" dir="ltr" style="vertical-align:middle;font-weight:600;">${incidentDate}</td>
+          <td rowspan="${rowCount}" style="vertical-align:middle;">${statusBadge}</td>
+          <td rowspan="${rowCount}" style="vertical-align:middle;">${actionsHtml}</td>
+        </tr>`;
+
+      // ── صفوف فرعية لباقي موظفي نفس التحقيق ──
+      for (let i = 1; i < employeeNames.length; i++) {
+        html += `
+        <tr class="sub-emp-row">
+          <td class="sub-emp-name">↳ ${employeeNames[i]}</td>
+          <td style="font-family:monospace;font-weight:600;color:var(--text-muted);">${employeeCodes[i] || '—'}</td>
+        </tr>`;
+      }
+
+      return html;
+    }).join('');
+  }
+
+  function filterTable(keepPage = false) {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const type   = document.getElementById('filterType').value;
+    const status = document.getElementById('filterStatus').value;
+
+    const filtered = allData.filter(d => {
+      // تنسيق التاريخ للبحث
+      const dateStr = d.IncidentDate ? (() => { const m = String(d.IncidentDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}/${m[2]}/${m[1]}` : d.IncidentDate; })() : '';
+
+      const matchSearch = !search || 
+        (d.MemoNumber && d.MemoNumber.toLowerCase().includes(search)) ||
+        (d.ManagerName && d.ManagerName.toLowerCase().includes(search)) ||
+        (d.EmployeeNames && d.EmployeeNames.toLowerCase().includes(search)) ||
+        (d.EmployeeCodes && d.EmployeeCodes.toLowerCase().includes(search)) ||
+        (d.MemoSummary && d.MemoSummary.toLowerCase().includes(search)) ||
+        dateStr.includes(search);
+
+      const matchType   = !type   || d.InvestigationType === type;
+      const matchStatus = !status || d.Status === status;
+      
+      return matchSearch && matchType && matchStatus;
+    });
+
+    renderKPIs(filtered);
+    renderTables(filtered, keepPage === true);
+
+    // لو اخترتي نوع معيّن في الفلتر، نخفي الجدول التاني
+    document.getElementById('sectionA').style.display = (type && type !== 'أ') ? 'none' : '';
+    document.getElementById('sectionB').style.display = (type && type === 'أ') ? 'none' : '';
+  }
+
+  function printStagnantReport() {
+    const stagnantList = allData.filter(d => {
+      const summonsCount = parseInt(d.SummonsCount) || 0;
+      const witnessesCount = parseInt(d.WitnessesCount) || 0;
+      const decisionsCount = parseInt(d.DecisionsCount) || 0;
+      const appealsCount = parseInt(d.AppealsCount) || 0;
+      const finalDecisionsCount = parseInt(d.FinalDecisionsCount) || 0;
+      const finalMemosCount = parseInt(d.FinalMemosCount) || 0;
+      const statementsCount = parseInt(d.StatementsCount) || 0;
+
+      return (summonsCount === 0 &&
+              witnessesCount === 0 &&
+              decisionsCount === 0 &&
+              appealsCount === 0 &&
+              finalDecisionsCount === 0 &&
+              finalMemosCount === 0 &&
+              statementsCount === 0);
+    });
+
+    if (stagnantList.length === 0) {
+      showToast('ℹ️ لا توجد ملفات متوقفة (جميع التحقيقات تم اتخاذ إجراءات فيها)');
+      return;
+    }
+
+    const todayStr = (() => { const n=new Date(); return `${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`; })();
+
+    let rowsHtml = stagnantList.map(d => {
+      const receiptDateStr = d.ReceiptDate ? (() => { const m = String(d.ReceiptDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}/${m[2]}/${m[1]}` : d.ReceiptDate; })() : (d.MemoDate ? (() => { const m = String(d.MemoDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}/${m[2]}/${m[1]}` : d.MemoDate; })() : '—');
+      return `
+        <tr>
+          <td style="border:1px solid #333;padding:8px;font-weight:800;text-align:center;">${d.MemoNumber || '—'}</td>
+          <td style="border:1px solid #333;padding:8px;font-weight:700;text-align:right;">${d.ManagerName || 'غير محدد'}</td>
+          <td style="border:1px solid #333;padding:8px;text-align:center;font-weight:600;" dir="ltr">${receiptDateStr}</td>
+        </tr>
+      `;
+    }).join('');
+
+    const reportHtml = `
+      <div style="padding:25px;direction:rtl;font-family:'Cairo',sans-serif;background:white;color:black;">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #000;padding-bottom:12px;margin-bottom:18px;">
+          <div>
+            <h3 style="margin:0;font-size:17px;font-weight:800;color:#1E3A8A;">شركة الصرف الصحي بالإسكندرية</h3>
+            <h4 style="margin:4px 0 0;font-size:14px;font-weight:700;color:#374151;">الإدارة العامة للشؤون القانونية — قسم التحقيقات</h4>
+          </div>
+          <div style="text-align:left;">
+            <div style="font-size:13px;font-weight:800;color:#1E3A8A;">تقرير الملفات التي لم يتخذ فيها أي إجراء</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">تاريخ التقرير: ${todayStr}</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:15px;background:#f8fafc;border:1.5px solid #cbd5e1;padding:10px 14px;border-radius:6px;font-size:13px;font-weight:700;color:#1e293b;">
+          📊 إجمالي عدد الملفات التي لم يتخذ فيها أي خطوة: ${stagnantList.length} ملف
+        </div>
+
+        <table style="width:100%;border-collapse:collapse;font-size:13px;border:2px solid #000;margin-top:10px;">
+          <thead>
+            <tr style="background:#e2e8f0;color:#0f172a;">
+              <th style="border:1px solid #000;padding:10px;width:30%;text-align:center;">رقم الملف</th>
+              <th style="border:1px solid #000;padding:10px;width:40%;text-align:right;">اسم المحامي المسؤول</th>
+              <th style="border:1px solid #000;padding:10px;width:30%;text-align:center;">تاريخ استلام الملف</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+
+        <div style="margin-top:35px;display:flex;justify-content:space-between;font-size:12px;font-weight:700;">
+          <div>مُعد التقرير: ....................</div>
+          <div>يعتمد، رئيس قسم التحقيقات: ....................</div>
+        </div>
+      </div>
+    `;
+
+    const printArea = document.getElementById('printStagnantArea');
+    if (printArea) {
+      printArea.innerHTML = reportHtml;
+      setTimeout(() => {
+        window.print();
+      }, 150);
+    }
+  }
+
+  async function deleteInvestigation(id, memoNumber) {
+    if (!confirm(`هل أنت متأكد من رغبتك في حذف وأرشفة التحقيق رقم ${memoNumber}؟`)) {
+      return;
+    }
+    try {
+      const response = await fetch(`/api/investigations/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'X-Username': localStorage.getItem('username') || ''
+        }
+      });
+      const result = await response.json();
+      if (result.success) {
+        showToast('✅ تم حذف وأرشفة التحقيق بنجاح');
+        loadInvestigations();
+      } else {
+        showToast('❌ فشل في حذف التحقيق: ' + result.message, true);
+      }
+    } catch (err) {
+      showToast('❌ خطأ في الاتصال بالخادم', true);
+    }
+  }
+
+  window.deleteInvestigation = deleteInvestigation;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (typeof initSidebar === 'function') initSidebar('investigations-dashboard');
+    loadInvestigations();
+
+    const reload = sessionStorage.getItem('reloadInvestigations');
+    if (reload === 'true') {
+      sessionStorage.removeItem('reloadInvestigations');
+      loadInvestigations();
+    }
+  });
+
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      loadInvestigations();
+    }
+  });
+</script>
+</body>
+</html>

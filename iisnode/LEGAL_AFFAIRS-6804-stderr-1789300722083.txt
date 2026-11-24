@@ -1,0 +1,170 @@
+(node:6804) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+❌ خطأ في الاستعلام: ConnectionError: Login failed for user 'sa'.
+    at C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\connection-pool.js:86:17
+    at Connection.onConnect (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:874:9)
+    at Object.onceWrapper (node:events:631:26)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:892:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+  code: 'ELOGIN',
+  originalError: ConnectionError: Login failed for user 'sa'.
+      at Login7TokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:186:19)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+    code: 'ELOGIN'
+  }
+}
+❌ خطأ في جلب الإشعارات: ConnectionError: Login failed for user 'sa'.
+    at C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\connection-pool.js:86:17
+    at Connection.onConnect (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:874:9)
+    at Object.onceWrapper (node:events:631:26)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:892:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+  code: 'ELOGIN',
+  originalError: ConnectionError: Login failed for user 'sa'.
+      at Login7TokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:186:19)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+    code: 'ELOGIN'
+  }
+}
+❌ خطأ في الاستعلام: ConnectionError: Login failed for user 'sa'.
+    at C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\connection-pool.js:86:17
+    at Connection.onConnect (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:874:9)
+    at Object.onceWrapper (node:events:631:26)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:892:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+  code: 'ELOGIN',
+  originalError: ConnectionError: Login failed for user 'sa'.
+      at Login7TokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:186:19)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+    code: 'ELOGIN'
+  }
+}
+❌ خطأ في جلب الجلسات: ConnectionError: Login failed for user 'sa'.
+    at C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\connection-pool.js:86:17
+    at Connection.onConnect (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:874:9)
+    at Object.onceWrapper (node:events:631:26)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:892:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+  code: 'ELOGIN',
+  originalError: ConnectionError: Login failed for user 'sa'.
+      at Login7TokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:186:19)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+    code: 'ELOGIN'
+  }
+}
+❌ خطأ في الاستعلام: ConnectionError: Login failed for user 'sa'.
+    at C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\connection-pool.js:86:17
+    at Connection.onConnect (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:874:9)
+    at Object.onceWrapper (node:events:631:26)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:892:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+  code: 'ELOGIN',
+  originalError: ConnectionError: Login failed for user 'sa'.
+      at Login7TokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:186:19)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+    code: 'ELOGIN'
+  }
+}
+❌ خطأ في جلب الإشعارات: ConnectionError: Login failed for user 'sa'.
+    at C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\connection-pool.js:86:17
+    at Connection.onConnect (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:874:9)
+    at Object.onceWrapper (node:events:631:26)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:892:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+  code: 'ELOGIN',
+  originalError: ConnectionError: Login failed for user 'sa'.
+      at Login7TokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:186:19)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+    code: 'ELOGIN'
+  }
+}
+❌ خطأ في الاستعلام: ConnectionError: Login failed for user 'sa'.
+    at C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\connection-pool.js:86:17
+    at Connection.onConnect (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:874:9)
+    at Object.onceWrapper (node:events:631:26)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:892:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+  code: 'ELOGIN',
+  originalError: ConnectionError: Login failed for user 'sa'.
+      at Login7TokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:186:19)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+    code: 'ELOGIN'
+  }
+}
+❌ خطأ في جلب الجلسات: ConnectionError: Login failed for user 'sa'.
+    at C:\inetpub\wwwroot\law\node_modules\mssql\lib\tedious\connection-pool.js:86:17
+    at Connection.onConnect (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:874:9)
+    at Object.onceWrapper (node:events:631:26)
+    at Connection.emit (node:events:509:28)
+    at Connection.emit (C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:1013:18)
+    at C:\inetpub\wwwroot\law\node_modules\tedious\lib\connection.js:892:14
+    at process.processTicksAndRejections (node:internal/process/task_queues:85:11) {
+  code: 'ELOGIN',
+  originalError: ConnectionError: Login failed for user 'sa'.
+      at Login7TokenHandler.onErrorMessage (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\handler.js:186:19)
+      at Readable.<anonymous> (C:\inetpub\wwwroot\law\node_modules\tedious\lib\token\token-stream-parser.js:19:33)
+      at Readable.emit (node:events:509:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushObjectMode (node:internal/streams/readable:540:3)
+      at Readable.push (node:internal/streams/readable:395:5)
+      at nextAsync (node:internal/streams/from:205:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+    code: 'ELOGIN'
+  }
+}

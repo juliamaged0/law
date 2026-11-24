@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام ميزان - إدارة القضايا القانونية</title>
+    <link rel="stylesheet" href="css/calender.css">
+    <script src="activity-logger.js"></script>
+</head>
+<body>
+
+    <div id="toastHub"></div>
+
+    <div class="calendar-page-wrapper">
+        <div class="calendar-header" style="display: none;"></div>
+
+        <div class="calendar-container">
+            
+            <div class="calendar-controls">
+                <div class="month-nav-container">
+                    <button class="btn-nav" id="prevMonth">&#9658;</button>
+                    <input type="month" id="monthPicker" class="month-picker">
+                    <button class="btn-nav" id="nextMonth">&#9668;</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <div class="color-legend">
+                        <span class="color-legend-item"><span class="color-box blue"></span> ابتدائي</span>
+                        <span class="color-legend-item"><span class="color-box yellow"></span> استئناف</span>
+                        <span class="color-legend-item"><span class="color-box red"></span> نقض</span>
+                        <span class="color-legend-item"><span class="color-box green"></span> إشكال في التنفيذ</span>
+                        <span class="color-legend-item"><span class="color-box purple"></span> التماس إعادة النظر</span>
+                    </div>
+                    <div>
+                        <button class="btn-view active" id="btnMonthly">شهري</button>
+                        <button class="btn-view" id="btnWeekly">جدول الأسبوع</button>
+                        <button class="btn-view" id="btnDaily">جلسات اليوم</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar-grid" id="calendarGrid">
+                <div class="calendar-header-day">الأحد</div>
+                <div class="calendar-header-day">الإثنين</div>
+                <div class="calendar-header-day">الثلاثاء</div>
+                <div class="calendar-header-day">الأربعاء</div>
+                <div class="calendar-header-day">الخميس</div>
+                <div class="calendar-header-day weekend">الجمعة</div>
+                <div class="calendar-header-day weekend">السبت</div>
+            </div>
+
+            <div class="agenda-view" id="agendaView"></div>
+        </div>
+    </div>
+
+    <div id="caseModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div id="modalCaseId" class="modal-title">تفاصيل الجلسة لقضية رقم: </div>
+                <button class="btn-close" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">المحكمة:</span>
+                        <span id="modalCourt" class="info-value">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">الدائرة:</span>
+                        <span id="modalCircuit" class="info-value">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">المحامي المسؤول:</span>
+                        <span id="modalLawyer" class="info-value">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">المدعي:</span>
+                        <span id="modalPlaintiff" class="info-value">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">المدعى عليه:</span>
+                        <span id="modalDefendant" class="info-value">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">درجة التقاضي:</span>
+                        <span id="modalStage" class="info-value">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">موضوع الدعوى:</span>
+                        <span id="modalDesc" class="info-value">-</span>
+                    </div>
+                </div>
+
+                <div id="dynamicStatusContainer" class="status-badge-container"></div>
+                <div id="dynamicActionContainer" class="status-badge-container" style="display:none; margin-top: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="sidebar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof initSidebar === 'function') {
+                initSidebar('calendar');
+            }
+            
+            let displayedDate = new Date();
+            const currentRealDate = new Date();
+            currentRealDate.setHours(0, 0, 0, 0);
+
+            const modal = document.getElementById('caseModal');
+            const closeBtn = document.getElementById('closeModalBtn');
+            const calendarGrid = document.getElementById('calendarGrid');
+            const agendaView = document.getElementById('agendaView');
+            const monthPicker = document.getElementById('monthPicker');
+            
+            // ============================================================
+            // جلب البيانات من قاعدة البيانات
+            // ============================================================
+            const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+            
+            function formatDisplayDate(v) {
+                if (!v) return '';
+                const s = String(v).trim();
+                const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+                if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+                const d = new Date(s);
+                if (!isNaN(d.getTime())) {
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const yyyy = d.getFullYear();
+                    return `${dd}/${mm}/${yyyy}`;
+                }
+                return s;
+            }
+            let allCases = [];
+            let allLitigation = [];
+
+            // جلب درجات التقاضي لتحديد نوع الدرجة لكل قضية
+            async function loadLitigationData() {
+                try {
+                    const response = await fetch(`${API_URL}/litigation-levels`);
+                    const result = await response.json();
+                    if (result.success) {
+                        allLitigation = result.data;
+                        console.log('✅ تم جلب درجات التقاضي:', allLitigation.length);
+                    }
+                } catch (error) {
+                    console.error('❌ خطأ في جلب درجات التقاضي:', error);
+                }
+            }
+
+async function loadCasesFromAPI() {
+    try {
+        await loadLitigationData();
+
+        let sessionsData = [];
+        let casesData = [];
+        
+        try {
+            const sessionsRes = await fetch(`${API_URL}/sessions/with-levels`);
+            const sessionsResult = await sessionsRes.json();
+            if (sessionsResult.success) {
+                sessionsData = sessionsResult.data || [];
+                console.log('✅ تم جلب الجلسات مع درجات التقاضي:', sessionsData.length);
+            }
+        } catch (e) {
+            console.log('⚠️ فشل جلب الجلسات مع درجات التقاضي:', e.message);
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/cases`);
+            const result = await response.json();
+            if (result.success) {
+                casesData = result.data || [];
+                console.log('✅ تم جلب القضايا:', casesData.length);
+            }
+        } catch (e) {
+            console.log('⚠️ فشل جلب القضايا:', e.message);
+        }
+
+        const casesMap = new Map();
+        casesData.forEach(c => {
+            if (c.Id) casesMap.set(String(c.Id), c);
+            if (c.CaseNumber) casesMap.set(String(c.CaseNumber), c);
+        });
+
+        const tempCases = [];
+        const addedMap = new Map();
+
+        sessionsData.forEach(s => {
+            const key = `${s.Id || s.sessionId || Math.random()}`;
+            if (addedMap.has(key)) return;
+            
+            let rawStage = s.LitigationStageType || s.Stage || 'initial';
+            let stageType = 'initial';
+            let stageText = 'ابتدائي';
+            let colorType = 'new-case'; // 🔵 أزرق
+            
+            if (rawStage === 'appeal' || rawStage === 'استئناف') {
+                stageType = 'appeal';
+                stageText = 'استئناف';
+                colorType = 'appealed'; // 🟡 أصفر
+            } else if (rawStage === 'cassation' || rawStage === 'نقض') {
+                stageType = 'cassation';
+                stageText = 'نقض';
+                colorType = 'cassation'; // 🔴 أحمر
+            } else if (rawStage === 'execution_objection' || rawStage === 'إشكال' || rawStage === 'إشكال في التنفيذ') {
+                stageType = 'execution_objection';
+                stageText = 'إشكال في التنفيذ';
+                colorType = 'execution-case'; // 🟢 أخضر
+            } else if (rawStage === 'reconsideration' || rawStage === 'التماس' || rawStage === 'التماس إعادة النظر') {
+                stageType = 'reconsideration';
+                stageText = 'التماس إعادة النظر';
+                colorType = 'reconsideration-case'; // 🟣 بنفسجي
+            }
+
+            const cMatch = s.CaseId ? casesMap.get(String(s.CaseId)) : (casesMap.get(String(s.CaseNumber)) || null);
+            const plaintiff = s.Plaintiff || (cMatch ? cMatch.Plaintiff : '') || 'شركة الصرف الصحي';
+            const defendant = s.Defendant || (cMatch ? cMatch.Defendant : '') || s.Opponent || '';
+            
+            const sessionObj = {
+                id: s.CaseNumber || s.id || 'ق-0000-2026',
+                court: s.CourtName || s.LitigationCourtName || s.court || 'محكمة غير محددة',
+                circuit: s.CircuitName || s.circuit || '',
+                lawyer: s.LawyerName || 'محامي غير محدد',
+                time: s.SessionTime || '09:00 ص',
+                date: s.SessionDate || s.launchDate || new Date().toISOString().split('T')[0],
+                status: s.Result ? 'منتهية' : 'قادمة',
+                stage: stageText,
+                stageType: stageType,
+                colorType: colorType,
+                desc: s.CaseSubject || s.Subject || s.Action || s.Notes || 'جلسة قضائية',
+                dayObj: new Date(s.SessionDate || s.launchDate || new Date()),
+                plaintiff: plaintiff,
+                defendant: defendant,
+                opponent: s.Opponent || defendant,
+                nextDate: s.NextSessionDate || '',
+                nextTime: s.NextSessionTime || '',
+                caseId: s.CaseId || s.id,
+                sessionId: s.Id,
+                litigationLevelId: s.LitigationLevelId || null,
+                isSession: true,
+                result: s.Result || null,
+                appealAction: s.AppealAction || null,
+                sessionNotes: s.SessionNotes || null
+            };
+            
+            addedMap.set(key, sessionObj);
+            tempCases.push(sessionObj);
+        });
+
+        // 2️⃣ تم إزالة القضايا التي ليس لها جلسات بناءً على طلب المستخدم (عرض الجلسات فقط)
+        
+        allCases = tempCases;
+        renderDynamicCalendar(displayedDate);
+        console.log('✅ تم تحميل البيانات:', allCases.length, 'عنصر');
+        
+        if (allCases.length === 0) {
+            useMockData();
+        }
+        
+    } catch (error) {
+        console.error('❌ خطأ في جلب البيانات:', error);
+        useMockData();
+    }
+}
+            // ============================================================
+            // بيانات وهمية (Fallback)
+            // ============================================================
+            function useMockData() {
+                allCases = [
+                    { id: 'ق-101-2025', court: 'محكمة استئناف الإسكندرية', circuit: 'الدائرة الأولى', lawyer: 'أ/ محمد مصطفى', attendingLawyer: 'أ/ محمد مصطفى', time: '10:00 ص', date: '2025-01-10', status: 'مغلقة', stage: 'ابتدائي', stageType: 'initial', colorType: 'closed', desc: 'نزاع عقود توريد', dayObj: new Date(2025, 0, 10), appellant: '', nextDate: '', nextTime: '', opponent: 'شركة المقاولات' },
+                    { id: 'ق-202-2025', court: 'محكمة الجيزة الابتدائية', circuit: 'الدائرة الثانية', lawyer: 'أ/ أحمد محمد', attendingLawyer: 'أ/ محمود علي', time: '09:00 ص', date: '2025-05-15', status: 'مغلقة', stage: 'ابتدائي', stageType: 'initial', colorType: 'closed', desc: 'مطالبة مالية', dayObj: new Date(2025, 4, 15), appellant: '', nextDate: '', nextTime: '', opponent: 'شركة التأمين' },
+                    { id: 'م-6110-2026', court: 'محكمة الإسكندرية الإدارية', circuit: 'الدائرة الثالثة', lawyer: 'أ/ محمد مصطفى', attendingLawyer: 'أ/ محمود علي', time: '09:30 ص', date: '2026-06-03', status: 'مغلقة', stage: 'ابتدائي', stageType: 'initial', colorType: 'closed', desc: 'نزاع تعويضات مقاولي شبكات الصرف', dayObj: new Date(2026, 5, 3), appellant: '', nextDate: '', nextTime: '', opponent: 'شركة المقاولات' },
+                    { id: 'م-7526-2026', court: 'محكمة شرق الإسكندرية', circuit: 'الدائرة الرابعة', lawyer: 'أ/ أحمد محمد', attendingLawyer: 'أ/ أحمد محمد', time: '10:00 ص', date: '2026-06-08', status: 'مفتوحة', stage: 'استئناف', stageType: 'appeal', colorType: 'appealed', desc: 'قضية التعدي على خطوط الطرد الرئيسية', dayObj: new Date(2026, 5, 8), appellant: 'الخصم', nextDate: '2026-06-22', nextTime: '11:00 ص', opponent: 'الخصم' },
+                    { id: 'ق-8940-2026', court: 'محكمة مجلس الدولة', circuit: 'الدائرة الخامسة', lawyer: 'أ/ سامح عبد العزيز', attendingLawyer: 'أ/ سامح عبد العزيز', time: '11:30 ص', date: '2026-06-15', status: 'مفتوحة', stage: 'ابتدائي', stageType: 'initial', colorType: 'new-case', desc: 'طعن موظف ضد قرار إداري', dayObj: new Date(2026, 5, 15), appellant: '', nextDate: '', nextTime: '', opponent: 'جهة إدارية' },
+                    { id: 'م-7526-2026 (استئناف)', court: 'محكمة الاستئناف العالي', circuit: 'الدائرة السادسة', lawyer: 'أ/ أحمد محمد', attendingLawyer: 'أ/ أحمد محمد', time: '11:00 ص', date: '2026-06-22', status: 'مفتوحة', stage: 'استئناف', stageType: 'appeal', colorType: 'next-appeal', desc: 'جلسة استئناف التعدي على خطوط الطرد الرئيسية', dayObj: new Date(2026, 5, 22), appellant: '', nextDate: '', nextTime: '', opponent: 'الخصم' },
+                    { id: 'ن-4567-2026', court: 'محكمة النقض', circuit: 'الدائرة السابعة', lawyer: 'أ/ خالد مرسي', attendingLawyer: 'أ/ خالد مرسي', time: '12:00 م', date: '2026-06-25', status: 'مفتوحة', stage: 'نقض', stageType: 'cassation', colorType: 'cassation', desc: 'طعن بالنقض في حكم استئناف', dayObj: new Date(2026, 5, 25), appellant: 'الشركة', nextDate: '', nextTime: '', opponent: 'الخصم' }
+                ];
+                renderDynamicCalendar(displayedDate);
+            }
+
+            let staticHeaders = '';
+            if (calendarGrid) {
+                staticHeaders = calendarGrid.innerHTML;
+            }
+
+            function initMonthPicker(dateObj) {
+                const year = dateObj.getFullYear();
+                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                if (monthPicker) monthPicker.value = `${year}-${month}`;
+            }
+
+            function renderDynamicCalendar(dateObj) {
+                const year = dateObj.getFullYear();
+                const month = dateObj.getMonth();
+
+                initMonthPicker(dateObj);
+                if (calendarGrid && staticHeaders) {
+                    calendarGrid.innerHTML = staticHeaders;
+                } else if (calendarGrid) {
+                    calendarGrid.innerHTML = '<div class="calendar-header-day">الأحد</div><div class="calendar-header-day">الإثنين</div><div class="calendar-header-day">الثلاثاء</div><div class="calendar-header-day">الأربعاء</div><div class="calendar-header-day">الخميس</div><div class="calendar-header-day weekend">الجمعة</div><div class="calendar-header-day weekend">السبت</div>';
+                }
+
+                const firstDayIndex = new Date(year, month, 1).getDay();
+                const totalDays = new Date(year, month + 1, 0).getDate();
+
+                for (let i = 0; i < firstDayIndex; i++) {
+                    const emptyCell = document.createElement('div');
+                    emptyCell.className = "calendar-day empty";
+                    if (calendarGrid) calendarGrid.appendChild(emptyCell);
+                }
+
+                for (let day = 1; day <= totalDays; day++) {
+                    const dayCell = document.createElement('div');
+                    dayCell.className = "calendar-day";
+                    dayCell.dataset.day = day;
+
+                    const currentCellDate = new Date(year, month, day);
+                    if (currentCellDate < currentRealDate) {
+                        dayCell.classList.add('past-day');
+                    }
+
+                    const dayNumberSpan = document.createElement('span');
+                    dayNumberSpan.className = "day-number";
+                    dayNumberSpan.innerText = day;
+                    dayCell.appendChild(dayNumberSpan);
+
+                    const casesOnThisDay = allCases.filter(c => c.dayObj.toDateString() === currentCellDate.toDateString());
+
+                    casesOnThisDay.forEach(c => {
+                        const caseBlock = document.createElement('div');
+                        
+                        if (c.colorType === 'execution-case') {
+                            caseBlock.className = "case-block execution-case";
+                            caseBlock.innerText = `${c.id} (إشكال)`;
+                        } else if (c.colorType === 'reconsideration-case') {
+                            caseBlock.className = "case-block reconsideration-case";
+                            caseBlock.innerText = `${c.id} (التماس)`;
+                        } else if (c.colorType === 'appealed' || c.colorType === 'next-appeal') {
+                            caseBlock.className = "case-block appealed-case";
+                            caseBlock.innerText = `${c.id} (استئناف)`;
+                        } else if (c.colorType === 'cassation') {
+                            caseBlock.className = "case-block cassation-case";
+                            caseBlock.innerText = `${c.id} (نقض)`;
+                        } else {
+                            caseBlock.className = "case-block";
+                            caseBlock.innerText = `${c.id} (ابتدائي)`;
+                        }
+
+                        caseBlock.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            showModalDetails(c);
+                        });
+
+                        dayCell.appendChild(caseBlock);
+                    });
+
+                    if (calendarGrid) calendarGrid.appendChild(dayCell);
+                }
+            }
+
+            if (monthPicker) {
+                monthPicker.addEventListener('change', function() {
+                    const selectedVal = this.value;
+                    if (!selectedVal) return;
+                    const [year, month] = selectedVal.split('-').map(Number);
+                    displayedDate = new Date(year, month - 1, 1);
+                    renderDynamicCalendar(displayedDate);
+                });
+            }
+
+            const prevMonthBtn = document.getElementById('prevMonth');
+            const nextMonthBtn = document.getElementById('nextMonth');
+            
+            if (prevMonthBtn) {
+                prevMonthBtn.addEventListener('click', function() {
+                    displayedDate.setMonth(displayedDate.getMonth() - 1);
+                    renderDynamicCalendar(displayedDate);
+                });
+            }
+
+            if (nextMonthBtn) {
+                nextMonthBtn.addEventListener('click', function() {
+                    displayedDate.setMonth(displayedDate.getMonth() + 1);
+                    renderDynamicCalendar(displayedDate);
+                });
+            }
+
+            // Search functionality
+            const searchBar = document.getElementById('searchBar');
+            if (searchBar) {
+                searchBar.addEventListener('input', function() {
+                    const query = this.value.trim().toLowerCase();
+                    if(query === "") {
+                        const monthlyBtn = document.getElementById('btnMonthly');
+                        if(monthlyBtn && monthlyBtn.classList.contains('active')){
+                            if (agendaView) agendaView.style.display = 'none';
+                            if (calendarGrid) calendarGrid.style.display = 'grid';
+                        }
+                        return;
+                    }
+
+                    const filtered = allCases.filter(c => 
+                        c.id.toLowerCase().includes(query) || 
+                        c.court.toLowerCase().includes(query) || 
+                        c.desc.toLowerCase().includes(query) ||
+                        (c.circuit && c.circuit.toLowerCase().includes(query))
+                    );
+                    
+                    if (calendarGrid) calendarGrid.style.display = 'none';
+                    if (agendaView) {
+                        agendaView.style.display = 'block';
+                        renderAgenda(filtered, `نتائج البحث عن: "${query}"`);
+                    }
+                });
+            }
+
+            const monthlyBtn = document.getElementById('btnMonthly');
+            const weeklyBtn = document.getElementById('btnWeekly');
+            const dailyBtn = document.getElementById('btnDaily');
+
+            if (monthlyBtn) {
+                monthlyBtn.addEventListener('click', function() {
+                    setActiveView(this);
+                    if (calendarGrid) calendarGrid.style.display = 'grid';
+                    if (agendaView) agendaView.style.display = 'none';
+                });
+            }
+
+            if (weeklyBtn) {
+                weeklyBtn.addEventListener('click', function() {
+                    setActiveView(this);
+                    if (calendarGrid) calendarGrid.style.display = 'none';
+                    if (agendaView) {
+                        agendaView.style.display = 'block';
+                        const today = new Date();
+                        const startOfWeek = new Date(today);
+                        startOfWeek.setDate(today.getDate() - today.getDay());
+                        const endOfWeek = new Date(startOfWeek);
+                        endOfWeek.setDate(startOfWeek.getDate() + 6);
+                        
+                        const weekCases = allCases.filter(c => {
+                            const d = new Date(c.date);
+                            return d >= startOfWeek && d <= endOfWeek;
+                        });
+                        renderAgenda(weekCases, `جلسات هذا الأسبوع (${formatDisplayDate(startOfWeek)} - ${formatDisplayDate(endOfWeek)})`);
+                    }
+                });
+            }
+
+            if (dailyBtn) {
+                dailyBtn.addEventListener('click', function() {
+                    setActiveView(this);
+                    if (calendarGrid) calendarGrid.style.display = 'none';
+                    if (agendaView) {
+                        agendaView.style.display = 'block';
+                        const today = new Date();
+                        const todayStr = today.toDateString();
+                        const todayCases = allCases.filter(c => c.dayObj.toDateString() === todayStr);
+                        renderAgenda(todayCases, `جلسات اليوم (${formatDisplayDate(today)})`);
+                    }
+                });
+            }
+
+            function setActiveView(btn) {
+                document.querySelectorAll('.btn-view').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+
+            function renderAgenda(casesList, title) {
+                if (!agendaView) return;
+                let html = `<h3 style="margin-bottom: 12px; color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 6px;">${title}</h3>`;
+                
+                if (casesList.length === 0) {
+                    html += `<div class="empty-state">لا توجد جلسات مجدولة مطابقة.</div>`;
+                } else {
+                    casesList.forEach((c, idx) => {
+                        let colorIndicator = '';
+                        if (c.colorType === 'closed') colorIndicator = '🔴';
+                        else if (c.colorType === 'appealed' || c.colorType === 'next-appeal') colorIndicator = '🟡';
+                        else if (c.colorType === 'cassation') colorIndicator = '🟢';
+                        else colorIndicator = '🔵';
+
+                        const resultBadge = c.result ? `<span>${c.result === 'لصالح الشركة' ? '✅' : '❌'} النتيجة: ${c.result}</span>` : '';
+                        
+                        html += `
+                        <div class="agenda-item">
+                            <div class="agenda-details">
+                                <span class="agenda-title">${colorIndicator} قضية رقم: ${c.id}</span>
+                                <div class="agenda-meta">
+                                    <span>🗓️ التاريخ: ${formatDisplayDate(c.date)}</span>
+                                    <span>⏰ الساعة: ${c.time}</span>
+                                    <span>⚖️ المحكمة: ${c.court}</span>
+                                    ${c.circuit ? `<span>🔄 الدائرة: ${c.circuit}</span>` : ''}
+                                    <span>📌 الدرجة: ${c.stage || 'ابتدائي'}</span>
+                                    ${resultBadge}
+                                </div>
+                            </div>
+                            <button class="agenda-btn" data-agenda-idx="${idx}">عرض التفاصيل</button>
+                        </div>
+                        `;
+                    });
+                }
+                agendaView.innerHTML = html;
+
+                agendaView.querySelectorAll('.agenda-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.agendaIdx, 10);
+                        showModalDetails(casesList[idx]);
+                    });
+                });
+            }
+
+            window.openCaseDetails = function(c) {
+                showModalDetails(c);
+            };
+
+            function showModalDetails(c) {
+                const {
+                    id: caseId, court, circuit, lawyer, desc,
+                    stage, plaintiff, defendant, opponent,
+                    result, appealAction, sessionNotes
+                } = c;
+
+                const modalCaseId = document.getElementById('modalCaseId');
+                const modalCourt = document.getElementById('modalCourt');
+                const modalCircuit = document.getElementById('modalCircuit');
+                const modalLawyer = document.getElementById('modalLawyer');
+                const modalPlaintiff = document.getElementById('modalPlaintiff');
+                const modalDefendant = document.getElementById('modalDefendant');
+                const modalStage = document.getElementById('modalStage');
+                const modalDesc = document.getElementById('modalDesc');
+                const statusContainer = document.getElementById('dynamicStatusContainer');
+                const actionContainer = document.getElementById('dynamicActionContainer');
+                
+                if (modalCaseId) modalCaseId.innerText = `تفاصيل الجلسة لقضية رقم: ${caseId}`;
+                if (modalCourt) modalCourt.innerText = court || '—';
+                if (modalCircuit) modalCircuit.innerText = circuit || '—';
+                if (modalLawyer) modalLawyer.innerText = lawyer || '—';
+                if (modalPlaintiff) modalPlaintiff.innerText = plaintiff || 'شركة الصرف الصحي';
+                if (modalDefendant) modalDefendant.innerText = defendant || opponent || '—';
+                if (modalStage) modalStage.innerText = stage || 'ابتدائي';
+                if (modalDesc) modalDesc.innerText = desc || '—';
+
+                const hasAction = (result && result !== '' && result !== 'لم تحسم') || appealAction || sessionNotes;
+
+                if (statusContainer) {
+                    if (hasAction) {
+                        statusContainer.style.borderRightColor = 'var(--danger-color)';
+                        let procText = result ? `النتيجة: ${result}` : '';
+                        if (appealAction && appealAction !== 'لا شيء') {
+                            procText += procText ? ` | الإجراء: ${appealAction}` : `الإجراء: ${appealAction}`;
+                        }
+                        statusContainer.innerHTML = `
+                            <div class="status-title" style="color: var(--danger-color);">
+                                <span>🔒</span> حالة الجلسة: منتهية
+                            </div>
+                            <p style="font-size: 13px; color: var(--text-dark); line-height: 1.6;">📌 <strong>الإجراء / النتيجة:</strong> ${procText || 'تم اتخاذ الإجراء وحسم الجلسة'}</p>
+                            ${sessionNotes ? `<p style="font-size: 12px; color: var(--text-light); margin-top: 6px;">📝 ملاحظات: ${sessionNotes}</p>` : ''}
+                            <p style="font-size: 12px; color: var(--text-light); margin-top: 6px;">درجة التقاضي: ${stage || 'ابتدائي'}</p>
+                        `;
+                    } else {
+                        statusContainer.style.borderRightColor = 'var(--secondary-color)';
+                        statusContainer.innerHTML = `
+                            <div class="status-title" style="color: var(--secondary-color);">
+                                <span>🟢</span> حالة الجلسة: جلسة قادمة
+                            </div>
+                            <p style="font-size: 13px; color: var(--text-dark);">الجلسة مدرجة في جدول المحكمة القادم. يرجى التأكد من اكتمال مذكرات الدفاع.</p>
+                            <p style="font-size: 12px; color: var(--text-light); margin-top: 6px;">درجة التقاضي: ${stage || 'ابتدائي'}</p>
+                        `;
+                    }
+                }
+
+                if (actionContainer) {
+                    actionContainer.style.display = 'none';
+                    actionContainer.innerHTML = '';
+                }
+
+                if (modal) modal.style.display = 'flex';
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    if (modal) modal.style.display = 'none';
+                });
+            }
+
+            if (modal) {
+                window.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+
+            // ============================================================
+            // 🟢 دالة عرض الإشعارات (Toast)
+            // ============================================================
+            function spawnToast(message) {
+                const hub = document.getElementById('toastHub');
+                if (!hub) return;
+                const toast = document.createElement('div');
+                toast.className = 'toast-item';
+                toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
+                hub.appendChild(toast);
+                setTimeout(() => toast.classList.add('show'), 50);
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 400);
+                }, 3500);
+            }
+
+            // ============================================================
+            // 🟢 دالة إضافة درجة التقاضي إلى التقويم
+            // ============================================================
+            function addLitigationToCalendar(data) {
+                console.log('📥 إضافة درجة تقاضي إلى التقويم:', data);
+                
+                let colorType = 'new-case';
+                let stageText = data.stage || 'ابتدائي';
+                
+                if (data.status === 'closed') {
+                    colorType = 'closed';
+                } else if (data.stageType === 'appeal') {
+                    colorType = 'appealed';
+                } else if (data.stageType === 'cassation') {
+                    colorType = 'cassation';
+                } else if (data.stageType === 'initial') {
+                    colorType = 'new-case';
+                }
+                
+                const newCase = {
+                    id: data.caseNumber,
+                    court: data.court || data.courtName || 'محكمة غير محددة',
+                    circuit: data.circuit || '',
+                    lawyer: data.lawyerName || 'محامي غير محدد',
+                    attendingLawyer: data.lawyerName || 'محامي غير محدد',
+                    time: '09:00 ص',
+                    date: data.launchDate || new Date().toISOString().split('T')[0],
+                    status: data.status === 'closed' ? 'مغلقة' : 'مفتوحة',
+                    stage: stageText,
+                    stageType: data.stageType || 'initial',
+                    colorType: colorType,
+                    isNextAppeal: data.stageType === 'appeal',
+                    desc: data.caseName || data.notes || 'قضية جديدة',
+                    dayObj: new Date(data.launchDate || new Date()),
+                    appellant: data.requestedBy || '',
+                    nextDate: '',
+                    nextTime: '',
+                    caseId: data.caseId || data.caseNumber,
+                    opponent: data.opponent || '',
+                    isNew: true
+                };
+                
+                const exists = allCases.some(c => c.id === newCase.id);
+                if (!exists) {
+                    allCases.push(newCase);
+                    renderDynamicCalendar(displayedDate);
+                    
+                    const colorEmoji = colorType === 'closed' ? '🔴' : (colorType === 'cassation' ? '🟢' : (colorType === 'appealed' ? '🟡' : '🔵'));
+                    spawnToast(`${colorEmoji} تم إضافة درجة تقاضي جديدة: ${data.caseNumber} (${stageText})`);
+                } else {
+                    console.log('⚠️ القضية موجودة بالفعل في التقويم:', data.caseNumber);
+                }
+            }
+
+            // ============================================================
+            // 🟢 استقبال بيانات درجات التقاضي من litigation-level.html
+            // ============================================================
+            function receiveLitigationData() {
+                try {
+                    const channel = new BroadcastChannel('case_channel');
+                    channel.onmessage = function(event) {
+                        const data = event.data;
+                        console.log('📥 استلام بيانات من درجات التقاضي:', data);
+                        
+                        if (data.type === 'newLitigation') {
+                            addLitigationToCalendar(data);
+                        } else if (data.type === 'caseSaved' && data.caseId) {
+                            setTimeout(() => {
+                                loadCasesFromAPI();
+                                spawnToast('✅ تم تحديث التقويم بالقضية الجديدة');
+                            }, 500);
+                        }
+                    };
+                } catch (e) {
+                    console.log('⚠️ BroadcastChannel غير مدعوم');
+                }
+                
+                const newLitigation = localStorage.getItem('newLitigationData');
+                if (newLitigation) {
+                    try {
+                        const data = JSON.parse(newLitigation);
+                        const alreadyAdded = allCases.some(c => c.id === data.caseNumber);
+                        if (!alreadyAdded) {
+                            addLitigationToCalendar(data);
+                        }
+                        localStorage.removeItem('newLitigationData');
+                    } catch (e) {}
+                }
+            }
+
+            // ============================================================
+            // 🚀 تشغيل التطبيق
+            // ============================================================
+            
+            // تحميل البيانات من API
+            loadCasesFromAPI();
+            
+            // استقبال البيانات من درجات التقاضي
+            receiveLitigationData();
+            
+            console.log('✅ التقويم جاهز مع نظام الألوان: أزرق (ابتدائي/جديد)، أصفر (استئناف)، أخضر (نقض)، أحمر (مغلق)');
+        });
+
+        // في calendar.html - داخل DOMContentLoaded
+
+// استقبال إشعارات إضافة الجلسات
+try {
+    const sessionChannel = new BroadcastChannel('case_channel');
+    sessionChannel.onmessage = function(event) {
+        const data = event.data;
+        console.log('📥 استلام إشعار من الجلسات:', data);
+        
+        if (data.type === 'sessionAdded' || data.type === 'newLitigation') {
+            // تحديث التقويم
+            setTimeout(() => {
+                loadCasesFromAPI();
+                const stageEmoji = data.stageType === 'appeal' ? '🟡' : (data.stageType === 'cassation' ? '🟢' : '🔵');
+                spawnToast(`${stageEmoji} تم تحديث التقويم: ${data.caseNumber} (${data.stage})`);
+            }, 300);
+        }
+    };
+} catch (e) {
+    console.log('⚠️ BroadcastChannel غير مدعوم');
+}
+
+// الاستماع للتغييرات في localStorage
+window.addEventListener('storage', function(e) {
+    if (e.key === 'newLitigationData' || e.key === 'newSessionData') {
+        setTimeout(() => loadCasesFromAPI(), 500);
+    }
+});
+
+// في calendar.html - إضافة هذه الدالة
+
+function refreshCalendar() {
+    loadCasesFromAPI();
+    spawnToast('🔄 تم تحديث التقويم');
+}
+
+// استدعاء عند العودة إلى الصفحة
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        // تحديث البيانات عند العودة للصفحة
+        loadCasesFromAPI();
+    }
+});
+
+    </script>
+</body>
+</html>

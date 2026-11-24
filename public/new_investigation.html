@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحقيق جديد — الشؤون القانونية</title>
+  <script src="sidebar.js"></script>
+  <style>
+    /* ── نفس الأنماط السابقة ── */
+    .form-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .form-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .section-header {
+      background: linear-gradient(135deg, var(--navy-800), var(--navy-700));
+      padding: 13px 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-header h3 { font-size: 14px; font-weight: 800; color: white; }
+    .section-body { padding: 22px; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } }
+    .full { grid-column: span 2; }
+    @media (max-width: 700px) { .full { grid-column: span 1; } }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 11.5px; font-weight: 700; color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .form-control {
+      width: 100%; height: 40px;
+      background: var(--surface-2); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 0 12px;
+      font-size: 13px; font-family: 'Cairo', sans-serif;
+      color: var(--text-primary); outline: none;
+      transition: all 0.2s; box-sizing: border-box;
+    }
+    .form-control:focus {
+      border-color: var(--navy-600); background: white;
+      box-shadow: 0 0 0 3px rgba(30,73,118,0.1);
+    }
+    .form-control[readonly] {
+      background: #f1f5f9;
+      cursor: default;
+    }
+    textarea.form-control { height: auto; padding: 10px 12px; resize: vertical; min-height: 80px; }
+    .dup-alert {
+      display: none;
+      background: #FEF3C7; border: 1.5px solid #F59E0B;
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 13px; font-weight: 700; color: #92400E;
+      margin-top: 10px; gap: 10px; align-items: flex-start;
+    }
+    .dup-alert.show { display: flex; }
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 10px; padding: 24px;
+      text-align: center; cursor: pointer;
+      transition: all 0.2s; background: var(--surface-2);
+    }
+    .upload-zone:hover { border-color: var(--navy-600); background: #EEF2FF; }
+    .upload-zone input { display: none; }
+    .upload-zone .uz-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-zone .uz-text { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+    .upload-zone .uz-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .file-preview {
+      display: flex; align-items: center; gap: 10px;
+      background: #DCFCE7; border: 1px solid #86EFAC;
+      border-radius: 8px; padding: 10px 14px; margin-top: 10px;
+      font-size: 13px; font-weight: 700; color: #15803D;
+    }
+    .summary-bar {
+      background: var(--gold-100);
+      border: 1.5px solid var(--gold-300);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .summary-bar span { font-size: 13px; font-weight: 700; color: #92750A; }
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #059669; color: white;
+      padding: 12px 24px; border-radius: 12px;
+      font-size: 13px; font-weight: 700; z-index: 9999;
+      transition: transform 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #DC2626; }
+
+    .employee-card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .employee-card .emp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .employee-card .emp-header .emp-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--navy-700);
+    }
+    .employee-card .emp-header .remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #DC2626;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .employee-card .emp-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 700px) {
+      .employee-card .emp-fields { grid-template-columns: 1fr; }
+    }
+    .employee-card .emp-fields .full { grid-column: span 2; }
+    @media (max-width: 700px) {
+      .employee-card .emp-fields .full { grid-column: span 1; }
+    }
+    .employee-card select.form-control {
+      height: 42px;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 7px; padding: 0 18px; height: 40px;
+      border-radius: var(--radius-sm); font-size: 13px; font-weight: 700;
+      font-family: 'Cairo', sans-serif; cursor: pointer; text-decoration: none;
+      transition: var(--transition); border: none; line-height: 1;
+    }
+    .btn-primary {
+      background: var(--navy-700); color: white;
+    }
+    .btn-primary:hover { background: var(--navy-600); }
+    .btn-ghost {
+      background: white; color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--surface-2); color: var(--navy-700); }
+  </style>
+</head>
+<body>
+<div class="page-body">
+<div class="form-wrapper">
+
+  <!-- ── القسم 1: بيانات المذكرة ── -->
+  <div class="form-section">
+    <div class="section-header">
+      <span style="font-size:18px;">📄</span>
+      <h3>بيانات مذكرة التحقيق</h3>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">رقم الملف</label>
+          <input type="text" class="form-control" id="memoNumber" placeholder="مثال: ملف-2026-115">
+        </div>
+        <div class="form-group">
+          <label class="form-label">تاريخ المذكرة</label>
+          <input type="date" class="form-control" id="memoDate">
+        </div>
+        <div class="form-group">
+          <label class="form-label">تاريخ استلام المحامي للملف</label>
+          <input type="date" class="form-control" id="receiptDate">
+        </div>
+        <div class="form-group">
+          <label class="form-label">نوع التحقيق</label>
+          <select class="form-control" id="invType">
+            <option value="">— اختر —</option>
+            <option value="أ">نوع أ — جريمة (سرقة / إتلاف / ...)</option>
+            <option value="ب">نوع ب — مخالفة (غياب / تأخر / ...)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">اسم المحامي المسؤول</label>
+          <select class="form-control" id="managerName">
+            <option value="">— اختر المحامي المسؤول —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">القيمة المادية للتحقيق (جنيه)</label>
+          <input type="number" class="form-control" id="materialValue" min="0" step="0.01" placeholder="مثال: 15000.00">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">ملخص وقائع المذكرة / الملف</label>
+          <textarea class="form-control" id="memoSummary" rows="3" placeholder="اكتب هنا ملخص ما جاء في الملف..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">رفع ملف المذكرة (PDF / صورة)</label>
+          <div class="upload-zone" onclick="document.getElementById('memoFile').click()">
+            <input type="file" id="memoFile" accept=".pdf,.jpg,.jpeg,.png" onchange="showFilePreview(this)">
+            <div class="uz-icon">📎</div>
+            <div class="uz-text">اضغط لرفع ملف المذكرة</div>
+            <div class="uz-hint">PDF أو صورة — حجم أقصى 10MB</div>
+          </div>
+          <div class="file-preview" id="filePreview" style="display:none;">
+            <span>✅</span>
+            <span id="fileName"></span>
+            <button onclick="clearFile()" style="margin-right:auto;background:none;border:none;cursor:pointer;color:#DC2626;font-weight:700;">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── القسم 2: بيانات الموظف / الموظفين ── -->
+  <div class="form-section">
+    <div class="section-header">
+      <span style="font-size:18px;">👤</span>
+      <h3>بيانات الموظف / الموظفين المحالين للتحقيق</h3>
+    </div>
+    <div class="section-body">
+
+      <div id="employeesContainer"></div>
+
+      <div class="dup-alert" id="dupAlert">
+        <span style="font-size:20px;">⚠️</span>
+        <div>
+          <div style="font-size:13px;font-weight:800;margin-bottom:4px;">تحذير: تحقيق مكرر على نفس الواقعة!</div>
+          <div id="dupAlertText" style="font-size:12px;font-weight:600;"></div>
+        </div>
+      </div>
+
+      <button type="button" onclick="addEmployee()" class="btn btn-ghost" style="margin-top:14px;">
+        ＋ إضافة موظف آخر
+      </button>
+    </div>
+  </div>
+
+  <!-- ── القسم 3: تفاصيل الواقعة ── -->
+  <div class="form-section">
+    <div class="section-header">
+      <span style="font-size:18px;">📋</span>
+      <h3>تفاصيل الواقعة</h3>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">تاريخ الواقعة</label>
+          <input type="date" class="form-control" id="incidentDate" onchange="checkDuplicate()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">مكان الواقعة</label>
+          <input type="text" class="form-control" id="incidentPlace" placeholder="مثال: مخزن المعدات — مبنى الإدارة">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">وصف الواقعة بالتفصيل</label>
+          <textarea class="form-control" id="incidentDesc" rows="3" placeholder="اكتب هنا وصفاً تفصيلياً للواقعة..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Action Bar ── -->
+  <div class="summary-bar">
+    <span>⚡ سيتم إنشاء سجل التحقيق وتفعيل مسار الاستدعاءات تلقائياً</span>
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn btn-ghost" onclick="resetForm()">إعادة تعيين</button>
+      <button type="button" class="btn btn-primary" onclick="submitInvestigation()">💾 حفظ وإنشاء التحقيق</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const editId = new URLSearchParams(window.location.search).get('id') || null;
+  let employeesDB = [];
+  let empCount = 0;
+  let existingInvestigations = [];
+
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // ── جلب المحامين ──
+  async function loadLawyers() {
+    try {
+      const response = await fetch('/api/lawyers');
+      const result = await response.json();
+      const select = document.getElementById('managerName');
+      if (result.success && result.data) {
+        let options = '<option value="">— اختر المحامي المسؤول —</option>';
+        result.data.forEach(l => {
+          options += `<option value="${l.FullName}">${l.FullName}</option>`;
+        });
+        select.innerHTML = options;
+      }
+    } catch (e) {
+      console.error('❌ خطأ في تحميل قائمة المحامين:', e);
+    }
+  }
+
+  // ── جلب الموظفين ──
+  async function loadEmployees() {
+    try {
+      const response = await fetch('/api/employees');
+      const result = await response.json();
+      if (result.success) {
+        employeesDB = result.data;
+        if (editId) {
+          await loadInvestigationDetails(editId);
+        } else {
+          addEmployee();
+        }
+      } else {
+        showToast('❌ فشل في تحميل الموظفين', true);
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم', true);
+    }
+  }
+
+  // ── جلب التحقيقات السابقة للتحقق من التكرار ──
+  async function loadExistingInvestigations() {
+    try {
+      const response = await fetch('/api/investigations');
+      const result = await response.json();
+      if (result.success) {
+        existingInvestigations = result.data.map(inv => ({
+          empCode: inv.EmployeeCodes ? inv.EmployeeCodes.split(', ')[0] : '',
+          incidentDate: inv.IncidentDate,
+          id: inv.MemoNumber
+        }));
+      }
+    } catch (error) { /* تجاهل */ }
+  }
+
+  function getEmployeeOptions(selectedCode = '', excludeCodes = []) {
+    let options = '<option value="">— اختر موظفاً —</option>';
+    employeesDB.forEach(emp => {
+      // نخفي أي موظف تم اختياره بالفعل في بطاقة أخرى، عدا موظف البطاقة الحالية نفسها
+      if (excludeCodes.includes(emp.employeeCode) && emp.employeeCode !== selectedCode) return;
+      const sel = (emp.employeeCode === selectedCode) ? 'selected' : '';
+      options += `<option value="${emp.employeeCode}" ${sel}>${emp.employeeCode} - ${emp.employeeName}</option>`;
+    });
+    return options;
+  }
+
+  // ── الأكواد المستخدمة بالفعل في بطاقات الموظفين الأخرى ──
+  function getUsedEmployeeCodes(excludeSelect = null) {
+    return Array.from(document.querySelectorAll('.emp-select'))
+      .filter(sel => sel !== excludeSelect)
+      .map(sel => sel.value)
+      .filter(Boolean);
+  }
+
+  // ── إعادة بناء كل قوائم اختيار الموظفين بحيث لا يتكرر نفس الموظف في أكثر من بطاقة ──
+  function refreshEmployeeSelects() {
+    document.querySelectorAll('.emp-select').forEach(sel => {
+      const currentVal = sel.value;
+      const exclude = getUsedEmployeeCodes(sel);
+      sel.innerHTML = getEmployeeOptions(currentVal, exclude);
+    });
+  }
+
+  function getEmployeeByCode(code) {
+    return employeesDB.find(emp => emp.employeeCode === code) || null;
+  }
+
+  function addEmployee(selectedCode = '') {
+    empCount++;
+    const container = document.getElementById('employeesContainer');
+    const div = document.createElement('div');
+    div.className = 'employee-card';
+    div.id = `emp-${empCount}`;
+
+    const emp = getEmployeeByCode(selectedCode);
+    const nameVal    = emp ? emp.employeeName : '';
+    const jobGradeVal = emp ? emp.jobGrade    : '';  // <-- الدرجة الوظيفية
+    const workAreaVal = emp ? emp.workArea    : '';  // <-- الحقل الجديد
+
+    div.innerHTML = `
+      <div class="emp-header">
+        <span class="emp-title">موظف ${empCount}</span>
+        ${empCount > 1 ? `<button class="remove-btn" onclick="removeEmployee(${empCount})">✕ حذف</button>` : ''}
+      </div>
+      <div class="emp-fields">
+        <div class="form-group">
+          <label class="form-label">🔍 البحث السريع بكود الموظف</label>
+          <input type="text" class="form-control emp-search-code" placeholder="أدخل كود الموظف..." oninput="onEmpCodeSearch(this)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">👤 البحث السريع باسم الموظف</label>
+          <input type="text" class="form-control emp-search-name" placeholder="اكتب جزءاً من اسم الموظف..." oninput="onEmpNameSearch(this)">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">اختر الموظف من القائمة</label>
+          <select class="form-control emp-select" data-emp-id="${empCount}" onchange="onEmployeeSelect(this)">
+            ${getEmployeeOptions(selectedCode, getUsedEmployeeCodes())}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الاسم</label>
+          <input type="text" class="form-control emp-name" value="${nameVal}" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الكود الوظيفي</label>
+          <input type="text" class="form-control emp-code" value="${selectedCode}" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الدرجة الوظيفية</label>
+          <input type="text" class="form-control emp-jobgrade" value="${jobGradeVal}" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">منطقة العمل</label>
+          <input type="text" class="form-control emp-workarea" value="${workAreaVal}" readonly>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(div);
+    refreshEmployeeSelects();
+    checkDuplicate();
+  }
+
+  function onEmpCodeSearch(input) {
+    const code = input.value.trim();
+    if (!code) return;
+    const card = input.closest('.employee-card');
+    if (!card) return;
+    const select = card.querySelector('.emp-select');
+    const emp = employeesDB.find(e => e.employeeCode === code || e.employeeCode.toString() === code);
+    if (emp) {
+      select.value = emp.employeeCode;
+      onEmployeeSelect(select);
+    }
+  }
+
+  function onEmpNameSearch(input) {
+    const term = input.value.trim().toLowerCase();
+    if (!term) return;
+    const card = input.closest('.employee-card');
+    if (!card) return;
+    const select = card.querySelector('.emp-select');
+    
+    // تطبيع الحروف العربية لتسهيل البحث
+    const norm = s => String(s || '').replace(/[إأآا]/g, 'ا').replace(/[ىي]/g, 'ي').replace(/[ةه]/g, 'ه').toLowerCase();
+    const targetNorm = norm(term);
+
+    const emp = employeesDB.find(e => norm(e.employeeName).includes(targetNorm));
+    if (emp) {
+      select.value = emp.employeeCode;
+      onEmployeeSelect(select);
+    }
+  }
+
+  function removeEmployee(n) {
+    const el = document.getElementById(`emp-${n}`);
+    if (el) el.remove();
+    refreshEmployeeSelects();
+    checkDuplicate();
+  }
+
+  function onEmployeeSelect(selectEl) {
+    const code = selectEl.value;
+    const card = selectEl.closest('.employee-card');
+    if (!card) return;
+
+    const nameField    = card.querySelector('.emp-name');
+    const codeField    = card.querySelector('.emp-code');
+    const jobGradeField = card.querySelector('.emp-jobgrade'); // <-- الدرجة الوظيفية
+    const workAreaField = card.querySelector('.emp-workarea'); // <-- الحقل الجديد
+
+    if (code) {
+      const emp = getEmployeeByCode(code);
+      if (emp) {
+        nameField.value    = emp.employeeName;
+        codeField.value    = emp.employeeCode;
+        jobGradeField.value = emp.jobGrade || '';  // <-- تعبئة الدرجة الوظيفية
+        workAreaField.value = emp.workArea || '';  // <-- تعبئة منطقة العمل
+      } else {
+        clearEmployeeFields(card);
+      }
+    } else {
+      clearEmployeeFields(card);
+    }
+    refreshEmployeeSelects();
+    checkDuplicate();
+  }
+
+  function clearEmployeeFields(card) {
+    card.querySelector('.emp-name').value    = '';
+    card.querySelector('.emp-code').value    = '';
+    card.querySelector('.emp-jobgrade').value = ''; // <-- مسح الدرجة الوظيفية
+    card.querySelector('.emp-workarea').value = ''; // <-- مسح منطقة العمل
+  }
+
+  function checkDuplicate() {
+    const incidentDate = document.getElementById('incidentDate').value;
+    const codes = Array.from(document.querySelectorAll('.emp-code')).map(i => i.value.trim()).filter(Boolean);
+
+    const dups = [];
+    codes.forEach(code => {
+      existingInvestigations.forEach(inv => {
+        if (inv.empCode === code && inv.incidentDate === incidentDate) {
+          dups.push(`الموظف كود ${code} — موجود بالفعل في تحقيق رقم ${inv.id} بنفس تاريخ الواقعة`);
+        }
+      });
+    });
+
+    const alert    = document.getElementById('dupAlert');
+    const alertText = document.getElementById('dupAlertText');
+    if (dups.length > 0) {
+      alertText.innerHTML = dups.join('<br>');
+      alert.classList.add('show');
+    } else {
+      alert.classList.remove('show');
+    }
+  }
+
+  function showFilePreview(input) {
+    if (input.files && input.files[0]) {
+      document.getElementById('fileName').textContent = input.files[0].name;
+      document.getElementById('filePreview').style.display = 'flex';
+    }
+  }
+
+  function clearFile() {
+    document.getElementById('memoFile').value = '';
+    document.getElementById('filePreview').style.display = 'none';
+  }
+
+  function resetForm() {
+    document.getElementById('memoNumber').value  = '';
+    document.getElementById('memoDate').value    = new Date().toISOString().split('T')[0];
+    if (document.getElementById('receiptDate')) document.getElementById('receiptDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('invType').value     = '';
+    document.getElementById('managerName').value = '';
+    document.getElementById('memoSummary').value = '';
+    document.getElementById('materialValue').value = '';
+    document.getElementById('incidentDate').value  = '';
+    document.getElementById('incidentPlace').value = '';
+    document.getElementById('incidentDesc').value  = '';
+    clearFile();
+    document.getElementById('employeesContainer').innerHTML = '';
+    empCount = 0;
+    addEmployee();
+    document.getElementById('dupAlert').classList.remove('show');
+  }
+
+  async function loadInvestigationDetails(id) {
+    try {
+      const response = await fetch(`/api/investigations/${id}`);
+      const result = await response.json();
+      if (result.success) {
+        const inv = result.data.investigation;
+        const emps = result.data.employees;
+
+        document.getElementById('memoNumber').value = inv.MemoNumber;
+        document.getElementById('memoDate').value = inv.MemoDate ? inv.MemoDate.split('T')[0] : '';
+        if (document.getElementById('receiptDate')) {
+          document.getElementById('receiptDate').value = inv.ReceiptDate ? inv.ReceiptDate.split('T')[0] : (inv.MemoDate ? inv.MemoDate.split('T')[0] : '');
+        }
+        document.getElementById('invType').value = inv.InvestigationType;
+        document.getElementById('managerName').value = inv.ManagerName || '';
+        document.getElementById('memoSummary').value = inv.MemoSummary || '';
+        document.getElementById('materialValue').value = (inv.MaterialValue !== null && inv.MaterialValue !== undefined) ? inv.MaterialValue : '';
+        document.getElementById('incidentDate').value = inv.IncidentDate ? inv.IncidentDate.split('T')[0] : '';
+        document.getElementById('incidentPlace').value = inv.IncidentPlace || '';
+        document.getElementById('incidentDesc').value = inv.IncidentDescription || '';
+
+        // Change layout title and buttons
+        document.title = "تعديل التحقيق — الشؤون القانونية";
+        
+        // Wait a small timeout to let sidebar init titles
+        setTimeout(() => {
+          const titleEl = document.querySelector('.topbar-page-title');
+          if (titleEl) titleEl.textContent = "تعديل تحقيق";
+          const crumbEl = document.querySelector('.topbar-breadcrumbs');
+          if (crumbEl) crumbEl.textContent = "الرئيسية ← التحقيقات ← تعديل تحقيق";
+        }, 150);
+
+        const btnSave = document.querySelector('.btn-primary[onclick="submitInvestigation()"]');
+        if (btnSave) {
+          btnSave.innerHTML = "💾 حفظ التعديلات";
+        }
+
+        // Add employees
+        document.getElementById('employeesContainer').innerHTML = '';
+        empCount = 0;
+        emps.forEach(emp => {
+          addEmployee(emp.EmployeeCode);
+        });
+      } else {
+        showToast('❌ فشل في تحميل تفاصيل التحقيق', true);
+      }
+    } catch (err) {
+      showToast('❌ خطأ في الاتصال بالخادم', true);
+    }
+  }
+
+  async function submitInvestigation() {
+    const memoNumber   = document.getElementById('memoNumber').value.trim();
+    const memoDate     = document.getElementById('memoDate').value;
+    const receiptDate  = document.getElementById('receiptDate') ? document.getElementById('receiptDate').value : memoDate;
+    const invType      = document.getElementById('invType').value;
+    const managerName  = document.getElementById('managerName').value.trim();
+    const memoSummary  = document.getElementById('memoSummary').value.trim();
+    const materialValueRaw = document.getElementById('materialValue').value.trim();
+    const materialValue = materialValueRaw === '' ? null : parseFloat(materialValueRaw);
+    if (materialValue !== null && (isNaN(materialValue) || materialValue < 0)) {
+      showToast('❌ القيمة المادية يجب أن تكون رقماً صحيحاً غير سالب', true);
+      return;
+    }
+    const incidentDate = document.getElementById('incidentDate').value;
+    const incidentPlace = document.getElementById('incidentPlace').value.trim();
+    const incidentDesc  = document.getElementById('incidentDesc').value.trim();
+
+    const employeeCards = document.querySelectorAll('.employee-card');
+    const employees = [];
+    employeeCards.forEach(card => {
+      const code = card.querySelector('.emp-code').value.trim();
+      if (code) {
+        employees.push({
+          code: code,
+          name: card.querySelector('.emp-name').value.trim(),
+          jobGrade: card.querySelector('.emp-jobgrade').value.trim(), // <-- إرسال الدرجة الوظيفية
+          workArea: card.querySelector('.emp-workarea').value.trim() // <-- إرسال منطقة العمل
+        });
+      }
+    });
+
+    if (!memoNumber || !memoDate || !invType || !managerName || !incidentDate || employees.length === 0) {
+      showToast('❌ يرجى تعبئة الحقول المطلوبة', true);
+      return;
+    }
+
+    const payload = {
+      memoNumber,
+      memoDate,
+      receiptDate,
+      investigationType: invType,
+      managerName,
+      memoSummary,
+      materialValue,
+      incidentDate,
+      incidentPlace,
+      incidentDescription: incidentDesc,
+      employees: employees,
+      status: 'جارية',
+      summons: []
+    };
+
+    try {
+      const apiUrl = editId ? `/api/investigations/${editId}` : '/api/investigations';
+      const apiMethod = editId ? 'PUT' : 'POST';
+      const username = localStorage.getItem('username') || '';
+
+      const response = await fetch(apiUrl, {
+        method: apiMethod,
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Username': username
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      if (result.success) {
+        showToast(editId ? '✅ تم تعديل التحقيق بنجاح! جارٍ الانتقال للتفاصيل...' : '✅ تم إنشاء التحقيق بنجاح! جارٍ الانتقال للتفاصيل...');
+        sessionStorage.setItem('reloadInvestigations', 'true');
+        setTimeout(() => {
+          window.location.href = `investigation_details.html?id=${editId || result.investigationId}`;
+        }, 1500);
+      } else {
+        showToast('❌ فشل في العملية: ' + result.message, true);
+      }
+    } catch (error) {
+      showToast('❌ خطأ في الاتصال بالخادم', true);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    if (typeof initSidebar === 'function') initSidebar('new-investigation');
+    document.getElementById('memoDate').value = new Date().toISOString().split('T')[0];
+    if (document.getElementById('receiptDate')) document.getElementById('receiptDate').value = new Date().toISOString().split('T')[0];
+    await loadLawyers();
+    await loadExistingInvestigations();
+    await loadEmployees();
+  });
+</script>
+</body>
+</html>

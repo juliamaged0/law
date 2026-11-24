@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المحامون — الشؤون القانونية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/all.min.css">
+  <style>
+    :root {
+      --navy-900: #0a1628;
+      --navy-800: #0f2240;
+      --navy-700: #1a3a5c;
+      --navy-600: #1e4976;
+      --gold-500: #D4AF37;
+      --gold-400: #E8C84A;
+      --gold-300: #F2DC8A;
+      --gold-100: #FDF8E8;
+      --bg-page: #F4F6FA;
+      --surface: #FFFFFF;
+      --border: #E4EAF2;
+      --text-primary: #0F172A;
+      --text-muted: #94A3B8;
+      --red-600: #DC2626;
+      --green-600: #16A34A;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      direction: rtl;
+      background: var(--bg-page);
+      min-height: 100vh;
+    }
+
+    .page-body {
+      padding: 24px 28px;
+      flex: 1;
+    }
+
+    /* ===== Stats ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      padding: 18px 22px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(10, 22, 40, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(10, 22, 40, 0.10);
+    }
+
+    .stat-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .stat-icon-wrap.navy {
+      background: rgba(26, 58, 92, 0.10);
+    }
+    .stat-icon-wrap.green {
+      background: rgba(22, 163, 74, 0.12);
+    }
+    .stat-icon-wrap.gold {
+      background: rgba(212, 175, 55, 0.14);
+    }
+    .stat-icon-wrap.amber {
+      background: rgba(245, 158, 11, 0.14);
+    }
+    .stat-icon-wrap.red {
+      background: rgba(220, 38, 38, 0.12);
+    }
+
+    .stat-num {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--navy-800);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ===== شريط الفلتر والطباعة ===== */
+    .filter-print-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 14px 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(10, 22, 40, 0.05);
+      margin-bottom: 24px;
+    }
+
+    .filter-print-bar .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-print-bar .filter-group label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .filter-print-bar select,
+    .filter-print-bar input {
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-page);
+      outline: none;
+      transition: var(--transition);
+      min-width: 120px;
+    }
+
+    .filter-print-bar select:focus,
+    .filter-print-bar input:focus {
+      border-color: var(--navy-600);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 73, 118, 0.08);
+    }
+
+    .filter-print-bar .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .filter-print-bar .search-wrap input {
+      width: 100%;
+      padding-right: 36px;
+      min-width: unset;
+    }
+
+    .filter-print-bar .search-wrap .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .btn-print-report {
+      background: var(--navy-800);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: auto;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .btn-print-report:hover {
+      background: var(--navy-700);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10, 22, 40, 0.20);
+    }
+
+    /* ===== Form Card ===== */
+    .form-card {
+      background: var(--surface);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 16px rgba(10, 22, 40, 0.06);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .form-card:hover {
+      box-shadow: 0 8px 28px rgba(10, 22, 40, 0.10);
+    }
+
+    .form-card-header {
+      padding: 18px 24px;
+      background: var(--navy-800);
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .form-card-header span {
+      font-size: 20px;
+    }
+
+    .form-card-body {
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+
+    .form-control {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--navy-600);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 73, 118, 0.08);
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 14px center;
+    }
+
+    /* ===== Lawyers Grid ===== */
+    .lawyers-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .lawyers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lawyers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .lawyer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 12px rgba(10, 22, 40, 0.05);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lawyer-card:hover {
+      box-shadow: 0 8px 24px rgba(10, 22, 40, 0.10);
+      transform: translateY(-1px);
+    }
+
+    .lawyer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy-700), var(--navy-600));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .lawyer-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lawyer-info .name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lawyer-info .details {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+    }
+
+    .lawyer-info .details span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .lawyer-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+      height: 36px;
+      padding: 0 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--navy-800);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--navy-700);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(10, 22, 40, 0.20);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      padding: 0 8px;
+    }
+    .btn-ghost:hover {
+      background: var(--bg-page);
+      color: var(--navy-600);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--red-600);
+      padding: 0 8px;
+    }
+    .btn-danger:hover {
+      background: #FEF2F2;
+    }
+    .btn-danger.is-disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* ===== زر تفعيل / إلغاء تفعيل المحامي ===== */
+    .btn-toggle-status {
+      background: transparent;
+      padding: 0 10px;
+      border: 1.5px solid transparent;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .btn-toggle-status.status-active {
+      color: var(--green-600);
+      background: rgba(22, 163, 74, 0.10);
+      border-color: rgba(22, 163, 74, 0.25);
+    }
+    .btn-toggle-status.status-active:hover {
+      background: rgba(22, 163, 74, 0.18);
+    }
+    .btn-toggle-status.status-inactive {
+      color: var(--red-600);
+      background: rgba(220, 38, 38, 0.08);
+      border-color: rgba(220, 38, 38, 0.22);
+    }
+    .btn-toggle-status.status-inactive:hover {
+      background: rgba(220, 38, 38, 0.16);
+    }
+
+    .btn-sm {
+      height: 30px;
+      font-size: 12px;
+      padding: 0 8px;
+    }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy-800);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 8px 32px rgba(10, 22, 40, 0.25);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.error {
+      background: var(--red-600);
+    }
+
+    /* ===== Print Modal ===== */
+    .print-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(6px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1500;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .print-modal-overlay.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .print-modal-content {
+      background: var(--surface);
+      width: 90%;
+      max-width: 540px;
+      border-radius: 20px;
+      padding: 30px 35px;
+      box-shadow: 0 20px 60px rgba(10, 22, 40, 0.20);
+      border: 1px solid var(--border);
+      transform: scale(0.95) translateY(20px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .print-modal-overlay.is-visible .print-modal-content {
+      transform: scale(1) translateY(0);
+    }
+
+    .print-modal-content .modal-icon {
+      font-size: 36px;
+      display: block;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .print-modal-content h3 {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .print-modal-content .sub-text {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .print-field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 500px) {
+      .print-field-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .print-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .print-field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .print-field select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-page);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .print-field select:focus {
+      border-color: var(--navy-600);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 73, 118, 0.08);
+    }
+
+    .print-check-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 6px;
+    }
+
+    .print-check-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .print-check-row label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--navy-800);
+      cursor: pointer;
+    }
+
+    .print-hint {
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text-primary);
+      margin: 12px 0 16px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .modal-actions .btn {
+      padding: 10px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .modal-actions .btn-cancel {
+      background: var(--bg-page);
+      color: var(--text-primary);
+    }
+
+    .modal-actions .btn-cancel:hover {
+      background: var(--border);
+    }
+
+    .modal-actions .btn-confirm {
+      background: var(--navy-800);
+      color: #ffffff;
+    }
+
+    .modal-actions .btn-confirm:hover {
+      background: var(--navy-700);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10, 22, 40, 0.20);
+    }
+
+    .modal-actions .btn-danger {
+      background: var(--red-600);
+      color: #ffffff;
+    }
+
+    .modal-actions .btn-danger:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.25);
+    }
+
+    /* ===== Confirm Modal ===== */
+    .confirm-modal-content {
+      max-width: 440px;
+      text-align: center;
+    }
+
+    .confirm-modal-content .modal-icon.danger {
+      color: var(--red-600);
+    }
+
+    .confirm-modal-content .confirm-message {
+      font-size: 14.5px;
+      color: #475569;
+      line-height: 1.8;
+      white-space: pre-line;
+      margin-bottom: 22px;
+    }
+
+    /* ===== طباعة التقرير ===== */
+    .print-report-area {
+      display: none;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printReportArea,
+      #printReportArea * {
+        visibility: visible;
+      }
+      #printReportArea {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        background: white;
+        padding: 15px 20px;
+        font-family: 'Cairo', 'Segoe UI', sans-serif;
+        direction: rtl;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .print-sheet {
+        padding: 5px 8px;
+        color: #000000;
+      }
+      .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 3px solid #000000;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+      .print-title-ar {
+        font-weight: 800;
+        font-size: 17px;
+        text-align: right;
+        color: #000000;
+      }
+      .print-sub-ar {
+        font-weight: 700;
+        font-size: 11px;
+        margin-top: 2px;
+        text-align: right;
+        color: #000000;
+      }
+      .print-title-en {
+        font-weight: 700;
+        font-size: 12px;
+        text-align: left;
+        color: #000000;
+      }
+      .print-sub-en {
+        font-weight: 600;
+        font-size: 10px;
+        margin-top: 2px;
+        text-align: left;
+        color: #000000;
+      }
+      .print-report-title {
+        text-align: center;
+        font-weight: 800;
+        font-size: 18px;
+        color: #000000;
+        margin-bottom: 6px;
+        letter-spacing: 1px;
+      }
+      .print-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 10px;
+        border-bottom: 2px dashed #000000;
+        padding-bottom: 6px;
+        flex-wrap: wrap;
+        gap: 3px;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9px;
+        margin-bottom: 8px;
+        border: 2px solid #000000;
+      }
+      .print-table th {
+        background: #e0e0e0 !important;
+        color: #000000 !important;
+        border: 1px solid #000000;
+        padding: 5px 4px;
+        font-weight: 800;
+        text-align: center;
+        font-size: 8.5px;
+        white-space: nowrap;
+      }
+      .print-table td {
+        border: 1px solid #000000;
+        padding: 4px 5px;
+        text-align: center;
+        font-size: 8.5px;
+        vertical-align: middle;
+        color: #000000;
+      }
+      .print-table .sub-row td {
+        background: #ffffff !important;
+        border-color: #000000;
+        padding: 3px 5px;
+        font-size: 7.5px !important;
+        color: #000000;
+        border-bottom: 1px dashed #999999;
+      }
+      .print-table .sub-row td:first-child {
+        padding-right: 18px;
+        text-align: right;
+        font-weight: 600;
+        color: #000000;
+      }
+      .print-table .case-divider td {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        height: 6px;
+        border-bottom: 2px solid #cccccc;
+      }
+      .print-badge {
+        display: inline;
+        padding: 0;
+        border: none;
+        background: transparent !important;
+        color: #000000 !important;
+        font-weight: 400;
+        font-size: inherit;
+      }
+      .print-footer {
+        text-align: center;
+        font-size: 8.5px;
+        color: #000000;
+        margin-top: 10px;
+        border-top: 2px solid #000000;
+        padding-top: 8px;
+      }
+      .print-table .text-wrap {
+        word-wrap: break-word;
+        white-space: normal;
+        max-width: 80px;
+      }
+      .no-icon {
+        display: none;
+      }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .page-body {
+        padding: 14px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 14px 16px;
+      }
+
+      .form-card-body {
+        padding: 16px;
+      }
+
+      .lawyer-card {
+        flex-wrap: wrap;
+        padding: 14px;
+      }
+
+      .lawyer-info .details {
+        font-size: 10.5px;
+        gap: 4px 8px;
+      }
+
+      .lawyer-actions {
+        margin-right: auto;
+      }
+
+      .toast {
+        bottom: 20px;
+        padding: 10px 20px;
+        font-size: 12px;
+        width: calc(100% - 40px);
+        text-align: center;
+      }
+
+      .filter-print-bar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 16px;
+      }
+
+      .filter-print-bar .filter-group {
+        justify-content: center;
+      }
+
+      .btn-print-report {
+        margin-right: 0;
+        justify-content: center;
+      }
+
+      .filter-print-bar .search-wrap {
+        min-width: unset;
+      }
+
+      .print-modal-content {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* حقل تاريخ مخصص بصيغة يوم/شهر/سنة */
+    .date-field-wrap { position: relative; display: inline-block; width: 100%; }
+    .date-field-wrap input[type="date"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    .date-field-wrap input[type="text"].date-display {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        cursor: pointer;
+        pointer-events: auto;
+        direction: ltr;
+        text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- المحتوى الرئيسي -->
+  <div class="page-body">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrap navy">👨‍⚖️</div>
+        <div>
+          <div class="stat-num" id="totalLawyers">0</div>
+          <div class="stat-label">إجمالي المحامين</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap green">✅</div>
+        <div>
+          <div class="stat-num" id="activeLawyers">0</div>
+          <div class="stat-label">نشطون</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap red">⛔</div>
+        <div>
+          <div class="stat-num" id="inactiveLawyers">0</div>
+          <div class="stat-label">غير نشطين</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap gold">📋</div>
+        <div>
+          <div class="stat-num" id="totalCases">0</div>
+          <div class="stat-label">قضايا مكلف بها</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap amber">🏛️</div>
+        <div>
+          <div class="stat-num" id="gradeCount">0</div>
+          <div class="stat-label">درجات وظيفية</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== شريط الفلتر والطباعة ===== -->
+    <div class="filter-print-bar">
+      <div class="filter-group">
+        <label>الحالة:</label>
+        <select id="filterStatus">
+          <option value="">الكل</option>
+          <option value="active">نشط</option>
+          <option value="inactive">غير نشط</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>الدرجة:</label>
+        <select id="filterGrade">
+          <option value="">الكل</option>
+          <option value="محام">محام</option>
+          <option value="محام أول">محام أول</option>
+          <option value="محام ممتاز">محام ممتاز</option>
+          <option value="مدير إدارة قانونية">مدير إدارة قانونية</option>
+        </select>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="بحث في المحامين..." />
+      </div>
+      <button class="btn-print-report" onclick="openPrintModal()">
+        <i class="fa-solid fa-print"></i> طباعة تقرير
+      </button>
+    </div>
+
+    <!-- Lawyers Grid -->
+    <div class="lawyers-grid">
+
+      <!-- Add Form -->
+      <div class="form-card" id="lawyerFormCard" style="position:sticky;top:80px;">
+        <div class="form-card-header">
+          <span id="lawyerFormIcon">➕</span>
+          <h3 id="lawyerFormTitle" style="font-size:16px;font-weight:800;">إضافة محامي جديد</h3>
+        </div>
+        <div class="form-card-body">
+          <form id="lawyerForm" onsubmit="saveLawyer(event)">
+            <div class="form-group">
+              <label class="form-label">الكود الوظيفي</label>
+              <input type="text" class="form-control" id="lawyerCode" required placeholder="مثال: 2044">
+            </div>
+            <div class="form-group">
+              <label class="form-label">الاسم الكامل</label>
+              <input type="text" class="form-control" id="lawyerName" required placeholder="الاسم رباعياً">
+            </div>
+            <div class="form-group">
+              <label class="form-label">الدرجة الوظيفية</label>
+              <select class="form-control" id="lawyerGrade">
+                <option value="محام">محام</option>
+                <option value="محام أول">محام أول</option>
+                <option value="محام ممتاز">محام ممتاز</option>
+                <option value="مدير إدارة قانونية">مدير إدارة قانونية</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">تاريخ التعيين</label>
+              <div class="date-field-wrap">
+                <input type="text" class="date-display form-control" id="lawyerHireDate_display" placeholder="dd/mm/yyyy" readonly />
+                <input type="date" class="form-control" id="lawyerHireDate">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">تاريخ الميلاد</label>
+              <div class="date-field-wrap">
+                <input type="text" class="date-display form-control" id="lawyerBirthDate_display" placeholder="dd/mm/yyyy" readonly />
+                <input type="date" class="form-control" id="lawyerBirthDate">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">الرقم القومي</label>
+              <input type="text" class="form-control" id="lawyerNationalId" placeholder="14 رقم">
+            </div>
+            <div class="form-group">
+              <label class="form-label">رقم الموبايل</label>
+              <input type="tel" class="form-control" id="lawyerMobile" placeholder="01xxxxxxxxx">
+            </div>
+            <div class="form-group">
+              <label class="form-label">البريد الإلكتروني</label>
+              <input type="email" class="form-control" id="lawyerEmail" placeholder="example@domain.com">
+            </div>
+            <button type="submit" id="lawyerFormSubmitBtn" class="btn btn-primary" style="width:100%;margin-top:6px;">💾 حفظ المحامي</button>
+            <button type="button" id="lawyerFormCancelBtn" class="btn btn-ghost" style="width:100%;margin-top:6px;display:none;" onclick="cancelEditLawyer()">✖️ إلغاء التعديل</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Lawyers List -->
+      <div class="lawyers-list" id="lawyersList">
+        <div style="text-align:center;padding:40px;color:var(--text-muted);">جاري تحميل المحامين...</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== Print Modal ===== -->
+  <div class="print-modal-overlay" id="printModal">
+    <div class="print-modal-content">
+      <span class="modal-icon">🖨️</span>
+      <h3>خيارات طباعة تقرير المحامين</h3>
+      <p class="sub-text">سيتم طباعة قائمة المحامين حسب الفلاتر المحددة</p>
+
+      <div class="print-field-row">
+        <div class="print-field">
+          <label>الحالة</label>
+          <select id="printFilterStatus">
+            <option value="">الكل</option>
+            <option value="active">نشط فقط</option>
+            <option value="inactive">غير نشط فقط</option>
+          </select>
+        </div>
+        <div class="print-field">
+          <label>الدرجة الوظيفية</label>
+          <select id="printFilterGrade">
+            <option value="">الكل</option>
+            <option value="محام">محام</option>
+            <option value="محام أول">محام أول</option>
+            <option value="محام ممتاز">محام ممتاز</option>
+            <option value="مدير إدارة قانونية">مدير إدارة قانونية</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="print-check-row">
+        <label>
+          <input type="checkbox" id="printUseCurrentFilter" checked>
+          استخدام الفلتر الحالي
+        </label>
+        <label>
+          <input type="checkbox" id="printIncludeDetails" checked>
+          عرض التفاصيل الكاملة
+        </label>
+      </div>
+
+      <div class="print-hint" id="printCountHint">📊 عدد المحامين: 0</div>
+
+      <div class="modal-actions">
+        <button class="btn btn-cancel" onclick="closePrintModal()">إلغاء</button>
+        <button class="btn btn-confirm" onclick="generatePrintReport()">
+          <i class="fa-solid fa-print"></i> طباعة التقرير
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Confirm Modal ===== -->
+  <div class="print-modal-overlay" id="confirmModal">
+    <div class="print-modal-content confirm-modal-content">
+      <span class="modal-icon" id="confirmModalIcon">❓</span>
+      <h3 id="confirmModalTitle">تأكيد العملية</h3>
+      <p class="confirm-message" id="confirmModalMessage"></p>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" id="confirmModalCancelBtn">إلغاء</button>
+        <button class="btn btn-confirm" id="confirmModalOkBtn">تأكيد</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Print Area ===== -->
+  <div id="printReportArea" class="print-report-area"></div>
+
+  <!-- ===== Sidebar Script ===== -->
+  <script src="sidebar.js"></script>
+  <script src="activity-logger.js"></script>
+  <script src="permissions-guard.js"></script>
+
+  <script>
+    const API_URL = window.location.origin.startsWith('http') ? `${window.location.origin}/api` : 'http://localhost:9000/api';
+
+    let allLawyers = [];
+    let currentFilteredLawyers = [];
+
+    // ============================================================
+    // Toast System
+    // ============================================================
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (isError ? ' error' : '');
+      void t.offsetWidth;
+      t.classList.add('show');
+      clearTimeout(t._hideTimer);
+      t._hideTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ============================================================
+    // نافذة تأكيد مخصصة (بديل عن confirm() الافتراضية للمتصفح)
+    // ============================================================
+    function showConfirmModal({
+      title = 'تأكيد العملية',
+      message = '',
+      icon = '❓',
+      confirmText = 'تأكيد',
+      cancelText = 'إلغاء',
+      danger = false
+    } = {}) {
+      return new Promise((resolve) => {
+        const overlay = document.getElementById('confirmModal');
+        const iconEl = document.getElementById('confirmModalIcon');
+        const titleEl = document.getElementById('confirmModalTitle');
+        const msgEl = document.getElementById('confirmModalMessage');
+        const okBtn = document.getElementById('confirmModalOkBtn');
+        const cancelBtn = document.getElementById('confirmModalCancelBtn');
+
+        iconEl.textContent = icon;
+        iconEl.classList.toggle('danger', !!danger);
+        titleEl.textContent = title;
+        msgEl.textContent = message;
+        okBtn.textContent = confirmText;
+        cancelBtn.textContent = cancelText;
+        okBtn.className = 'btn ' + (danger ? 'btn-danger' : 'btn-confirm');
+
+        function cleanup(result) {
+          overlay.classList.remove('is-visible');
+          okBtn.removeEventListener('click', onOk);
+          cancelBtn.removeEventListener('click', onCancel);
+          overlay.removeEventListener('click', onOverlayClick);
+          document.removeEventListener('keydown', onKeydown);
+          resolve(result);
+        }
+        function onOk() { cleanup(true); }
+        function onCancel() { cleanup(false); }
+        function onOverlayClick(e) { if (e.target === overlay) cleanup(false); }
+        function onKeydown(e) { if (e.key === 'Escape') cleanup(false); }
+
+        okBtn.addEventListener('click', onOk);
+        cancelBtn.addEventListener('click', onCancel);
+        overlay.addEventListener('click', onOverlayClick);
+        document.addEventListener('keydown', onKeydown);
+
+        overlay.classList.add('is-visible');
+      });
+    }
+
+    // ============================================================
+    // Load Lawyers
+    // ============================================================
+    async function loadLawyers() {
+      try {
+        const response = await fetch(`${API_URL}/lawyers`);
+        const result = await response.json();
+        if (result.success) {
+          allLawyers = result.data || [];
+          currentFilteredLawyers = [...allLawyers];
+          renderLawyers(allLawyers);
+          updateStats(allLawyers);
+        } else {
+          console.error('❌ فشل جلب المحامين:', result.message);
+          useMockLawyers();
+        }
+      } catch (error) {
+        console.error('❌ خطأ في الاتصال:', error);
+        useMockLawyers();
+      }
+    }
+
+    function useMockLawyers() {
+      allLawyers = [
+        { Id: 1, Code: '2044', FullName: 'جوليا ماجد عدلي', Grade: 'محام ممتاز', HireDate: '2010-05-15', BirthDate: '1985-03-12',
+          NationalId: '28503121234567', Mobile: '01223456789', Email: 'julia@law.com', IsActive: true, CasesCount: 12 },
+        { Id: 2, Code: '1025', FullName: 'أحمد محمود عبد الكريم', Grade: 'مدير إدارة قانونية', HireDate: '2005-09-01',
+          BirthDate: '1978-11-20', NationalId: '27811203456789', Mobile: '01009876543', Email: 'ahmed@law.com',
+          IsActive: true, CasesCount: 8 },
+        { Id: 3, Code: '3012', FullName: 'مينا جرجس مرقص', Grade: 'محام أول', HireDate: '2015-02-10', BirthDate: '1990-07-25',
+          NationalId: '29007215678901', Mobile: '01112345678', Email: 'mina@law.com', IsActive: false, CasesCount: 3 },
+        { Id: 4, Code: '4567', FullName: 'رانيا محمد فوزي', Grade: 'محام', HireDate: '2018-08-20', BirthDate: '1992-04-15',
+          NationalId: '29204159876543', Mobile: '01098765432', Email: 'rania@law.com', IsActive: true, CasesCount: 5 }
+      ];
+      currentFilteredLawyers = [...allLawyers];
+      renderLawyers(allLawyers);
+      updateStats(allLawyers);
+    }
+
+    // ============================================================
+    // Render Lawyers
+    // ============================================================
+    function renderLawyers(lawyers) {
+      const container = document.getElementById('lawyersList');
+      if (!container) return;
+
+      // تطبيق الفلاتر
+      const statusFilter = document.getElementById('filterStatus')?.value || '';
+      const gradeFilter = document.getElementById('filterGrade')?.value || '';
+      const searchTerm = document.getElementById('searchInput')?.value || '';
+
+      let filtered = lawyers;
+
+      if (statusFilter === 'active') {
+        filtered = filtered.filter(l => l.IsActive === true);
+      } else if (statusFilter === 'inactive') {
+        filtered = filtered.filter(l => l.IsActive === false);
+      }
+
+      if (gradeFilter) {
+        filtered = filtered.filter(l => l.Grade === gradeFilter);
+      }
+
+      if (searchTerm) {
+        const s = searchTerm.toLowerCase();
+        filtered = filtered.filter(l =>
+          (l.FullName || '').toLowerCase().includes(s) ||
+          (l.Code || '').toLowerCase().includes(s) ||
+          (l.Grade || '').toLowerCase().includes(s) ||
+          (l.Mobile || '').toLowerCase().includes(s) ||
+          (l.Email || '').toLowerCase().includes(s)
+        );
+      }
+
+      currentFilteredLawyers = filtered;
+
+      if (filtered.length === 0) {
+        container.innerHTML =
+          `<div style="text-align:center;padding:40px;color:var(--text-muted);">لا يوجد محامون مطابقون للبحث</div>`;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(l => {
+        const status = l.IsActive ? '✅ نشط' : '⛔ غير نشط';
+        const statusColor = l.IsActive ? 'var(--green-600)' : 'var(--red-600)';
+        const avatar = l.FullName ? l.FullName.trim().split(' ').slice(0, 2).map(w => w[0]).join('') : 'م';
+        const hireDate = l.HireDate ? (() => { const m = String(l.HireDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}/${m[2]}/${m[1]}` : '—'; })() : '—';
+        const birthDate = l.BirthDate ? (() => { const m = String(l.BirthDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}/${m[2]}/${m[1]}` : '—'; })() : '—';
+
+        html += `
+            <div class="lawyer-card" data-id="${l.Id}">
+              <div class="lawyer-avatar">${avatar}</div>
+              <div class="lawyer-info">
+                <div class="name">${l.FullName}</div>
+                <div class="details">
+                  <span>كود: ${l.Code || '—'}</span>
+                  <span>الدرجة: ${l.Grade || '—'}</span>
+                  <span style="color:${statusColor};">${status}</span>
+                  <span>📁 ${l.CasesCount || 0} قضية</span>
+                  <span>📅 ${hireDate}</span>
+                </div>
+              </div>
+              <div class="lawyer-actions">
+                <button class="btn btn-toggle-status btn-sm ${l.IsActive ? 'status-active' : 'status-inactive'}"
+                        onclick="toggleLawyerStatus(${l.Id}, ${l.IsActive ? 'true' : 'false'})"
+                        title="${l.IsActive ? 'اضغط لإلغاء التفعيل' : 'اضغط للتفعيل'}">
+                  ${l.IsActive ? '🟢 نشط' : '🔴 غير نشط'}
+                </button>
+                ${(typeof PermGuard === 'undefined' || PermGuard.canEdit('lawyers')) ? `<button class="btn btn-ghost btn-sm" onclick="editLawyer(${l.Id})">✏️</button>` : ''}
+                ${(typeof PermGuard === 'undefined' || PermGuard.canDelete('lawyers')) ? `<button class="btn btn-danger btn-sm ${l.IsActive ? 'is-disabled' : ''}"
+                        onclick="deleteLawyer(${l.Id})"
+                        title="${l.IsActive ? 'لازم تلغي تفعيل المحامي أولاً عشان تقدر تحذفه' : 'حذف المحامي من الصفحة'}">🗑️</button>` : ''}
+              </div>
+            </div>
+          `;
+      });
+      container.innerHTML = html;
+    }
+
+    // ============================================================
+    // Update Stats
+    // ============================================================
+    function updateStats(lawyers) {
+      document.getElementById('totalLawyers').textContent = lawyers.length;
+      document.getElementById('activeLawyers').textContent = lawyers.filter(l => l.IsActive).length;
+      document.getElementById('inactiveLawyers').textContent = lawyers.filter(l => !l.IsActive).length;
+      const totalCases = lawyers.reduce((sum, l) => sum + (l.CasesCount || 0), 0);
+      document.getElementById('totalCases').textContent = totalCases;
+
+      const grades = new Set(lawyers.map(l => l.Grade).filter(g => g));
+      document.getElementById('gradeCount').textContent = grades.size;
+    }
+
+    // ============================================================
+    // Apply Filters
+    // ============================================================
+    function applyFilters() {
+      renderLawyers(allLawyers);
+    }
+
+    // ============================================================
+    // Add / Update Lawyer
+    // ============================================================
+    let editingLawyerId = null;
+
+    async function saveLawyer(e) {
+      e.preventDefault();
+      const isEditingCheck = editingLawyerId !== null;
+      if (typeof PermGuard !== 'undefined') {
+        if (isEditingCheck && !PermGuard.canEdit('lawyers')) {
+          PermGuard.denyAction('ليس لديك صلاحية تعديل بيانات المحامين.');
+          return;
+        }
+        if (!isEditingCheck && !PermGuard.canAdd('lawyers')) {
+          PermGuard.denyAction('ليس لديك صلاحية إضافة محامي جديد.');
+          return;
+        }
+      }
+      const data = {
+        code: document.getElementById('lawyerCode').value.trim(),
+        fullName: document.getElementById('lawyerName').value.trim(),
+        grade: document.getElementById('lawyerGrade').value,
+        hireDate: document.getElementById('lawyerHireDate').value,
+        birthDate: document.getElementById('lawyerBirthDate').value,
+        nationalId: document.getElementById('lawyerNationalId').value.trim(),
+        mobile: document.getElementById('lawyerMobile').value.trim(),
+        email: document.getElementById('lawyerEmail').value.trim(),
+        isActive: true
+      };
+
+      if (!data.code || !data.fullName) {
+        showToast('⚠️ الكود والاسم مطلوبان', true);
+        return;
+      }
+
+      const isEditing = editingLawyerId !== null;
+      const url = isEditing ? `${API_URL}/lawyers/${editingLawyerId}` : `${API_URL}/lawyers`;
+      const method = isEditing ? 'PUT' : 'POST';
+
+      try {
+        const response = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+          showToast(isEditing ? '✅ تم تحديث بيانات المحامي بنجاح' : '✅ تم حفظ المحامي بنجاح');
+          cancelEditLawyer();
+          loadLawyers();
+        } else {
+          showToast('❌ ' + result.message, true);
+        }
+      } catch (error) {
+        showToast('❌ خطأ في الاتصال: ' + error.message, true);
+      }
+    }
+
+    // ============================================================
+    // Edit / Delete
+    // ============================================================
+    function editLawyer(id) {
+      if (typeof PermGuard !== 'undefined' && !PermGuard.canEdit('lawyers')) {
+        PermGuard.denyAction('ليس لديك صلاحية تعديل بيانات المحامين.');
+        return;
+      }
+      const lawyer = allLawyers.find(l => l.Id === id);
+      if (lawyer) {
+        editingLawyerId = id;
+        document.getElementById('lawyerCode').value = lawyer.Code || '';
+        document.getElementById('lawyerName').value = lawyer.FullName || '';
+        document.getElementById('lawyerGrade').value = lawyer.Grade || 'محام';
+        document.getElementById('lawyerHireDate').value = lawyer.HireDate || '';
+        document.getElementById('lawyerBirthDate').value = lawyer.BirthDate || '';
+        syncDateDisplay('lawyerHireDate');
+        syncDateDisplay('lawyerBirthDate');
+        document.getElementById('lawyerNationalId').value = lawyer.NationalId || '';
+        document.getElementById('lawyerMobile').value = lawyer.Mobile || '';
+        document.getElementById('lawyerEmail').value = lawyer.Email || '';
+
+        document.getElementById('lawyerFormIcon').textContent = '✏️';
+        document.getElementById('lawyerFormTitle').textContent = 'تعديل بيانات المحامي';
+        document.getElementById('lawyerFormSubmitBtn').textContent = '💾 حفظ التعديلات';
+        document.getElementById('lawyerFormCancelBtn').style.display = 'block';
+
+        showToast('📝 تم تحميل بيانات المحامي للتعديل');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function cancelEditLawyer() {
+      editingLawyerId = null;
+      document.getElementById('lawyerForm').reset();
+      syncDateDisplay('lawyerHireDate');
+      syncDateDisplay('lawyerBirthDate');
+      document.getElementById('lawyerFormIcon').textContent = '➕';
+      document.getElementById('lawyerFormTitle').textContent = 'إضافة محامي جديد';
+      document.getElementById('lawyerFormSubmitBtn').textContent = '💾 حفظ المحامي';
+      document.getElementById('lawyerFormCancelBtn').style.display = 'none';
+    }
+
+    // ============================================================
+    // تفعيل / إلغاء تفعيل محامي
+    // ============================================================
+    async function toggleLawyerStatus(id, currentlyActive) {
+      if (typeof PermGuard !== 'undefined' && !PermGuard.canEdit('lawyers')) {
+        PermGuard.denyAction('ليس لديك صلاحية تعديل حالة المحامين.');
+        return;
+      }
+      const newStatus = !currentlyActive;
+      const confirmMsg = newStatus
+        ? 'هل تريد تفعيل هذا المحامي؟'
+        : 'هل تريد إلغاء تفعيل هذا المحامي؟ (لن يظهر كخيار لتعيين قضايا جديدة له)';
+      const ok = await showConfirmModal({
+        title: newStatus ? 'تفعيل المحامي' : 'إلغاء تفعيل المحامي',
+        message: confirmMsg,
+        icon: newStatus ? '✅' : '⛔',
+        confirmText: newStatus ? 'تفعيل' : 'إلغاء التفعيل',
+        danger: !newStatus
+      });
+      if (!ok) return;
+
+      try {
+        const response = await fetch(`${API_URL}/lawyers/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isActive: newStatus })
+        });
+        const result = await response.json();
+        if (result.success) {
+          showToast(newStatus ? '✅ تم تفعيل المحامي' : '⛔ تم إلغاء تفعيل المحامي');
+          loadLawyers();
+        } else {
+          showToast('❌ ' + result.message, true);
+        }
+      } catch (error) {
+        showToast('❌ تعذر الاتصال بالخادم: ' + error.message, true);
+      }
+    }
+
+    async function deleteLawyer(id) {
+      if (typeof PermGuard !== 'undefined' && !PermGuard.canDelete('lawyers')) {
+        PermGuard.denyAction('ليس لديك صلاحية حذف المحامين.');
+        return;
+      }
+      const lawyer = allLawyers.find(l => l.Id === id);
+      if (lawyer && lawyer.IsActive) {
+        showToast('⚠️ لازم تلغي تفعيل المحامي أولاً (زر نشط/غير نشط) قبل حذفه', true);
+        return;
+      }
+      const ok = await showConfirmModal({
+        title: 'حذف المحامي',
+        message: 'هل أنت متأكد من حذف هذا المحامي من صفحة المحامين؟\nسيتم نقله إلى الأرشيف، وبياناته هتفضل محفوظة في أي قضية أو جلسة مرتبطة بيه — وتقدر تسترجعه من صفحة الأرشيف في أي وقت.',
+        icon: '🗑️',
+        confirmText: 'حذف',
+        danger: true
+      });
+      if (!ok) return;
+      try {
+        const response = await fetch(`${API_URL}/lawyers/${id}`, { method: 'DELETE' });
+        const result = await response.json();
+        if (result.success) {
+          showToast('✅ تم حذف المحامي');
+          if (editingLawyerId === id) cancelEditLawyer();
+          loadLawyers();
+        } else {
+          showToast('⚠️ ' + result.message, true);
+        }
+      } catch (error) {
+        showToast('❌ تعذر الاتصال بالخادم، حاول مرة أخرى: ' + error.message, true);
+      }
+    }
+
+    // ============================================================
+    // Print Functions
+    // ============================================================
+    function openPrintModal() {
+      document.getElementById('printFilterStatus').value = document.getElementById('filterStatus')?.value || '';
+      document.getElementById('printFilterGrade').value = document.getElementById('filterGrade')?.value || '';
+      document.getElementById('printUseCurrentFilter').checked = true;
+      document.getElementById('printIncludeDetails').checked = true;
+      updatePrintCount();
+      document.getElementById('printModal').classList.add('is-visible');
+    }
+
+    function closePrintModal() {
+      document.getElementById('printModal').classList.remove('is-visible');
+    }
+
+    function updatePrintCount() {
+      const useCurrent = document.getElementById('printUseCurrentFilter')?.checked || false;
+      let count = 0;
+
+      if (useCurrent) {
+        count = currentFilteredLawyers.length;
+      } else {
+        const status = document.getElementById('printFilterStatus')?.value || '';
+        const grade = document.getElementById('printFilterGrade')?.value || '';
+
+        count = allLawyers.filter(l => {
+          if (status === 'active' && l.IsActive !== true) return false;
+          if (status === 'inactive' && l.IsActive !== false) return false;
+          if (grade && l.Grade !== grade) return false;
+          return true;
+        }).length;
+      }
+
+      document.getElementById('printCountHint').textContent = `📊 عدد المحامين: ${count}`;
+    }
+
+    document.addEventListener('change', function(e) {
+      if (['printFilterStatus', 'printFilterGrade', 'printUseCurrentFilter'].includes(e.target.id)) {
+        updatePrintCount();
+      }
+    });
+
+    function buildPrintFilterSummary(status, grade, useCurrent) {
+      const parts = [];
+      parts.push(`الحالة: ${status === 'active' ? 'نشط' : status === 'inactive' ? 'غير نشط' : 'الكل'}`);
+      parts.push(`الدرجة: ${grade || 'الكل'}`);
+      if (useCurrent) parts.push('(تطبيق الفلتر الحالي)');
+      return parts.join('   |   ');
+    }
+
+    function generatePrintReport() {
+      const useCurrent = document.getElementById('printUseCurrentFilter')?.checked || false;
+      const includeDetails = document.getElementById('printIncludeDetails')?.checked || false;
+
+      let dataToPrint = [];
+
+      if (useCurrent) {
+        dataToPrint = currentFilteredLawyers;
+      } else {
+        const status = document.getElementById('printFilterStatus')?.value || '';
+        const grade = document.getElementById('printFilterGrade')?.value || '';
+
+        dataToPrint = allLawyers.filter(l => {
+          if (status === 'active' && l.IsActive !== true) return false;
+          if (status === 'inactive' && l.IsActive !== false) return false;
+          if (grade && l.Grade !== grade) return false;
+          return true;
+        });
+      }
+
+      const todayStr = (() => { const n=new Date(); return `${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`; })();
+
+      const statusFilter = document.getElementById('printFilterStatus')?.value || '';
+      const gradeFilter = document.getElementById('printFilterGrade')?.value || '';
+
+      const filterSummary = buildPrintFilterSummary(statusFilter, gradeFilter, useCurrent);
+
+      let rowsHtml = '';
+      if (dataToPrint.length === 0) {
+        rowsHtml = `<tr><td colspan="${includeDetails ? '10' : '8'}" style="text-align:center;padding:20px;color:#000000;">لا يوجد محامون مطابقون</td></tr>`;
+      } else {
+        dataToPrint.forEach((l, index) => {
+          const statusText = l.IsActive ? 'نشط' : 'غير نشط';
+          const hireDate = l.HireDate ? (() => { const m = String(l.HireDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}/${m[2]}/${m[1]}` : '—'; })() : '—';
+          const birthDate = l.BirthDate ? (() => { const m = String(l.BirthDate).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}/${m[2]}/${m[1]}` : '—'; })() : '—';
+
+          rowsHtml += `
+            <tr>
+              <td style="font-weight:900;text-align:right;font-size:9px;">${l.Code || '—'}</td>
+              <td style="text-align:right;font-size:9px;font-weight:700;">${l.FullName || '—'}</td>
+              <td style="font-size:9px;">${l.Grade || '—'}</td>
+              <td style="font-size:9px;">${statusText}</td>
+              <td style="font-size:9px;">${l.CasesCount || 0}</td>
+              ${includeDetails ? `
+                <td style="font-size:8.5px;">${hireDate}</td>
+                <td style="font-size:8.5px;">${birthDate}</td>
+                <td style="font-size:8.5px;">${l.NationalId || '—'}</td>
+                <td style="font-size:8.5px;direction:ltr;">${l.Mobile || '—'}</td>
+                <td style="font-size:8.5px;text-align:right;max-width:60px;word-wrap:break-word;">${l.Email || '—'}</td>
+              ` : ''}
+            </tr>
+          `;
+
+          if (index < dataToPrint.length - 1) {
+            rowsHtml += `
+              <tr class="case-divider">
+                <td colspan="${includeDetails ? '10' : '8'}"></td>
+              </tr>
+            `;
+          }
+        });
+      }
+
+      const colCount = includeDetails ? 10 : 8;
+
+      const reportHtml = `
+        <div class="print-sheet">
+          <div class="print-header">
+            <div>
+              <div class="print-title-ar">شركة الصرف الصحى بالإسكندرية</div>
+              <div class="print-sub-ar">الإدارة العامة للشئون القانونية</div>
+            </div>
+            <div style="text-align:left;">
+              <div class="print-title-en">Alexandria Sanitary Drainage Company</div>
+              <div class="print-sub-en">Legal Affairs Department</div>
+            </div>
+          </div>
+
+          <div class="print-report-title">تقرير المحامين المفصل</div>
+
+          <div class="print-meta">
+            <span>تاريخ الطباعة: ${todayStr}</span>
+            <span>${filterSummary}</span>
+            <span>عدد المحامين: ${dataToPrint.length}</span>
+          </div>
+
+          <table class="print-table">
+            <thead>
+              <tr>
+                <th style="width:10%;">الكود</th>
+                <th style="width:18%;">الاسم</th>
+                <th style="width:12%;">الدرجة</th>
+                <th style="width:10%;">الحالة</th>
+                <th style="width:10%;">عدد القضايا</th>
+                ${includeDetails ? `
+                  <th style="width:10%;">تاريخ التعيين</th>
+                  <th style="width:10%;">تاريخ الميلاد</th>
+                  <th style="width:12%;">الرقم القومي</th>
+                  <th style="width:12%;">الموبايل</th>
+                  <th style="width:12%;">البريد الإلكتروني</th>
+                ` : ''}
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+
+          <div class="print-footer">
+            هذا التقرير صادر عن نظام إدارة الشؤون القانونية — شركة الصرف الصحي بالإسكندرية
+          </div>
+        </div>
+      `;
+
+      document.getElementById('printReportArea').innerHTML = reportHtml;
+      closePrintModal();
+      setTimeout(() => window.print(), 300);
+    }
+
+    // ============================================================
+    // Init
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof PermGuard !== 'undefined' && !PermGuard.blockPageIfNoAccess('lawyers')) return;
+
+      if (typeof PermGuard !== 'undefined' && !PermGuard.canAdd('lawyers') && !PermGuard.canEdit('lawyers')) {
+        const formCard = document.getElementById('lawyerFormCard');
+        if (formCard) formCard.style.display = 'none';
+      }
+
+      if (typeof initSidebar === 'function') {
+        initSidebar('lawyers');
+      } else {
+        console.warn('⚠️ sidebar.js لم يتم تحميله بشكل صحيح');
+      }
+
+      loadLawyers();
+      wireCustomDateField('lawyerHireDate');
+      wireCustomDateField('lawyerBirthDate');
+
+      // ربط أحداث الفلتر
+      document.getElementById('filterStatus')?.addEventListener('change', applyFilters);
+      document.getElementById('filterGrade')?.addEventListener('change', applyFilters);
+      document.getElementById('searchInput')?.addEventListener('input', applyFilters);
+
+      updatePrintCount();
+    });
+
+    function formatDisplayDate(v) {
+        if (!v) return '';
+        const s = String(v).trim();
+        const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        }
+        return s;
+    }
+    function syncDateDisplay(nativeId) {
+        const native = document.getElementById(nativeId);
+        const display = document.getElementById(nativeId + '_display');
+        if (!native || !display) return;
+        display.value = native.value ? formatDisplayDate(native.value) : '';
+    }
+    function wireCustomDateField(nativeId) {
+        const native = document.getElementById(nativeId);
+        const display = document.getElementById(nativeId + '_display');
+        if (!native || !display) return;
+        const openPicker = () => {
+            if (typeof native.showPicker === 'function') {
+                try { native.showPicker(); } catch (e) { native.focus(); }
+            } else {
+                native.focus();
+            }
+        };
+        display.addEventListener('click', openPicker);
+        native.addEventListener('input', () => syncDateDisplay(nativeId));
+        native.addEventListener('change', () => syncDateDisplay(nativeId));
+        syncDateDisplay(nativeId);
+    }
+  </script>
+
+</body>
+</html>
